@@ -54,70 +54,298 @@
 %\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 \begin{problem} 
 \end{problem}
-\begin{solution} 
+\begin{solution} Denote $D(s,t)=B(t)-B(s)$, then $\{D(s_i, t_i)\}$ are independent if intervals $(s_i, t_i)$ are disjoint. Further, $D(s,t)\sim \mathcal{N}(0, \sigma^2(t-s))$. We have
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[B(t_1)B(t_2)B(t_3)\right] &= \mathbb{E}\left[B(t_1)[B(t_1)+D(t_1, t_2)][B(t_1)+D(t_1, t_2)+D(t_2,t_3)]\right] \\
+    &~~~~(\text{Denote $B(t_1), D(t_1, t_2), D(t_2,t_3)$ as $b_1, b_2, b_3$.})\\
+    &= \mathbb{E}\left[b_1^3 + 2b_1^2b_2 + b_1b_2^2+b_1^2b_3+b_1b_2b_3\right]\\
+    &= \mathbb{E}\left[B(t_1)^3\right] = 0
+  \end{split}
+\end{equation}
+Because for normal RVs with mean zero, the odd-order moments are all zero.
 \end{solution}
 
 \noindent\rule{16cm}{0.4pt}
 %\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 \begin{problem} 
 \end{problem}
-\begin{solution} 
+\begin{solution} (a) By relevant theories about passage time covered in lecture, we have
+\begin{equation}
+  \mathbb{P}\left(T_a \leq t\right) = \frac{2}{\sqrt{2\pi}} \int_{\frac{|a|}{\sqrt{t}}}^{\infty} e^{\frac{-y^2}{2}} dy
+\end{equation}
+Hence
+\begin{equation}
+  \mathbb{P}\left(T_a < \infty\right) = \frac{2}{\sqrt{2\pi}} \int_{0}^{\infty} e^{\frac{-y^2}{2}} dy
+\end{equation}
+To calculate expectation, we use
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[T_a\right] &= \int_{0}^{\infty} (1-\mathbb{P}\left(T_a\leq t\right))dt \\
+    &= \frac{2}{\sqrt{2\pi}}\int_0^{\infty} \int_{0}^{\frac{|a|}{\sqrt{t}}}e^{\frac{-y^2}{2}}dydt \\
+    &= \frac{2}{\sqrt{2\pi}}\int_0^{\infty} \int_{0}^{\frac{a^2}{y^2}}e^{\frac{-y^2}{2}}dt dy\\
+    &\geq a^2 \int_0^1 \frac{1}{y^2} e^{\frac{-y^2}{2}}dy \geq a^2 e^{\frac{1}{2}}\int_0^1 \frac{1}{y^2} dy = \infty
+  \end{split}
+\end{equation}
+(b) 
+\begin{equation}
+  \begin{split}
+    \mathbb{P}\left(T_1<T_{-1}<T_2\right) &= \mathbb{P}\left(T_1<T_{-1}\right)\mathbb{P}\left(T_{-1}<T_2|T_1<T_{-1}\right) \\
+    &=\mathbb{P}\left(\text{Up 1 before down 1 (at 0)}\right)\mathbb{P}\left(\text{Down 2 before up 1 (at 1)}\right) \\
+    &= \frac{1}{2} \cdot \frac{1}{3} = \frac{1}{6}
+  \end{split}
+\end{equation}
 \end{solution}
 
 \noindent\rule{16cm}{0.4pt}
 %\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 \begin{problem} 
 \end{problem}
-\begin{solution} 
+\begin{solution} (a) Denote $X_i$ the binary movements in each step. $X_i=1~w.p.$ $p=\frac{1}{2}(1+\mu\sqrt{\Delta t})$. $X_i=-1$ with $1-p$. Denote $X(t)$ be the position at time $t$. Then
+\begin{equation}
+  X(t) = \sqrt{\Delta t} \sum_{i=1}^{\lfloor \frac{t}{\Delta t} \rfloor} X_i
+\end{equation}
+\end{solution}
+And $\mathbb{E}\left[X_i\right]=2p-1 = \mu \sqrt{\Delta t}$, $X_i^2\equiv 1$ hence $\mathrm{\mathbb{V}ar}\left[X_i\right]=1-\mu^2 \Delta t$. $\Rightarrow$
+\begin{equation}
+  \begin{split}
+    & \mathbb{E}\left[X(t)\right] = \sqrt{\Delta t} \left\lfloor \frac{t}{\Delta t} \right\rfloor \cdot \mu\sqrt{\Delta t} \xrightarrow{\Delta t \to 0} \mu t \\
+    & \mathrm{\mathbb{V}ar}\left[X(t)\right] = \Delta t \left\lfloor \frac{t}{\Delta t} \right\rfloor \cdot (1-\mu^2) \xrightarrow{\Delta t \to 0}  t
+  \end{split}
+\end{equation}
+(b) In gambler's ruin problem, the probability of up $A$ before down $B$ is 
+\begin{equation}
+  \mathbb{P}\left(\text{Up A before down B}\right) = \frac{1-(q/p)^B}{1-(q/p)^{A+B}}
+\end{equation}
+$A, B$ are the \textbf{counts}. In this problem, $\frac{q}{p}=\frac{1-\mu\sqrt{\Delta t}}{1+\mu\sqrt{\Delta t}}$, $\frac{A}{\sqrt{\Delta t}}, \frac{B}{\sqrt{\Delta t}}$ are counts. Hence
+\begin{equation}
+  \begin{split}
+    \mathbb{P}\left(\text{Up A before down B}\right) &= \lim\limits_{\Delta t \to 0\rightarrow\infty}\frac{1-\left(\frac{1-\mu\sqrt{\Delta t}}{1+\mu\sqrt{\Delta t}}\right)^{\frac{B}{\sqrt{\Delta t}}}}{1-\left(\frac{1-\mu\sqrt{\Delta t}}{1+\mu\sqrt{\Delta t}}\right)^{\frac{A+B}{\sqrt{\Delta t}}}} \\
+    &= \frac{1-e^{-2\mu B}}{1-e^{-2\mu(A+B)}}
+  \end{split}
+\end{equation}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} $\{Y(t)\}$ is a continuous martingale if for $s<t$,
+$$
+\mathbb{E}\left[Y(t)|Y(u), 0\leq u\leq s\right] = Y(s)
+$$
+\end{problem}
+\begin{solution} (a) (Standard Brownian Motion)
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[B(t)|B(u), \text{for }0\leq u\leq s\right] &= \mathbb{E}\left[B(s)+B(t)-B(s)|B(u), 0\leq u\leq s\right] \\
+    &= \mathbb{E}\left[B(s)|B(u), 0\leq u\leq s\right] + \mathbb{E}\left[B(t)-B(s)|B(u), 0\leq u\leq s\right]\\
+    &= B(s) + \mathbb{E}\left[B(t)-B(s)|B(u), 0\leq u\leq s\right]\\
+    &= B(s) + \mathbb{E}\left[B(t)-B(s)\right] \\
+    &= B(s) + 0
+  \end{split}
+\end{equation}
+(b) $Y(t)=B(t)^2 - t$. Firstly we compute
+\begin{equation}
+  \mathbb{E}\left[B^2(t)|B(u), 0\leq u\leq s\right] = \mathbb{E}\left[B^2(t)|B(s)\right] = B^2(s) + t-s
+\end{equation}
+Since $B(t)|B(s)\sim \mathcal{N}(B(s), t-s)$, $\Rightarrow$ $\mathbb{E}\left[B^2(t)-t|B(u), 0\leq u\leq s\right]=B^2(s)-s$. So
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[Y(t)|Y(u), 0\leq u\leq s\right] &= \mathbb{E}\left[\mathbb{E}\left[Y(t)|B(u), 0\leq u\leq s\right]|Y(u), 0\leq u\leq s\right] \\
+    &= \mathbb{E}\left[B(s)^2-s|B(u)^2, 0\leq u\leq s\right] \\
+    &= B^2(s)-s
+  \end{split}
+\end{equation}
+(c) $Y(t)=\exp\{cB(t)-\frac{ct^2}{2}\}$. 
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[Y(t)|Y(u), 0\leq u\leq s\right] &= e^{\frac{-c^2t}{2}} \mathbb{E}\left[e^{cB(t)}|B(u), 0\leq u\leq s\right]\\
+    &= e^{\frac{-c^2t}{2}} \mathbb{E}\left[e^{cB(t)}|B(s)\right]~~(\dag)
+  \end{split}
+\end{equation}
+We know that $B(t)|B(s)\sim \mathcal{N}(B(s), t-s)$. So
+\begin{equation}
+  \begin{split}
+    (\dag) &= e^{\frac{-c^2t}{2}} e^{cB(s)+\frac{(t-s)c^2}{2}} \\
+    &= e^{\frac{-c^2s}{2}+cB(s)} = Y(s)
+  \end{split}
+\end{equation}
 \end{solution}
 
 \noindent\rule{16cm}{0.4pt}
 %\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 \begin{problem} 
 \end{problem}
-\begin{solution} 
+\begin{solution} (1) By \textbf{Martingale Stopping Time Thm.}, 
+$$
+\mathbb{E}\left[B(T)\right] = \mathbb{E}\left[B(0)\right] = 0
+$$
+Hence
+\begin{equation}
+  \begin{split}
+    & 0 = \mathbb{E}\left[B(T)\right] = \mathbb{E}\left[\frac{x-\mu T}{\sigma}\right]\\
+    \Rightarrow & \mathbb{E}\left[T\right] = \frac{x}{\mu}
+  \end{split}
+\end{equation}
+(2) $\{B^2(T)-T\}$ forms a martingale. By Martingale stopping time thm, 
+\begin{equation}
+  \begin{split}
+    & \mathbb{E}\left[B^2(T)-T\right] = \mathbb{E}\left[B^2(0)\right] = 0 \\
+    \Rightarrow & \mathbb{E}\left[\frac{(x-\mu T)^2}{\sigma^2}-T\right] = 0 \\
+    \Rightarrow & \mathbb{E}\left[(x-\mu T)^2\right] = \sigma^2\mathbb{E}\left[T\right] = \frac{\sigma^2 x}{\mu}
+  \end{split}
+\end{equation}
+That is, $\mathbb{E}\left[(\mu \mathbb{E}\left[T\right]-\mu T)^2\right] = \sigma^2 x/\mu$. $\Rightarrow$ $\mathrm{\mathbb{V}ar}\left[\mu T\right] = \sigma^2 x/\mu$. \\
+I.e. $\mathrm{\mathbb{V}ar}\left[T\right] = \sigma^2 x/\mu^3$
 \end{solution}
 
 \noindent\rule{16cm}{0.4pt}
 %\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 \begin{problem} 
 \end{problem}
-\begin{solution} 
+\begin{solution} (a) Clearly $\{Y(t)\}$ is Gaussian. And $\mathbb{E}\left[Y(t)\right] = t \mathbb{E}\left[B(\frac{1}{t})\right]=0$. And that (assume $s\leq t$)
+\begin{equation}
+  \begin{split}
+    \mathrm{\mathbb{C}ov}\left[Y(s), Y(t)\right] &= \mathrm{\mathbb{C}ov}\left[sB\left(\frac{1}{s}\right), tB\left(\frac{1}{t}\right)\right] \\
+    &= st \cdot \mathrm{\mathbb{C}ov}\left[B\left(\frac{1}{s}\right), B\left(\frac{1}{t}\right)\right] = s
+  \end{split}
+\end{equation}
+Therefore, we conclude that $Y(t)$ is Standard Brownian motion. \\
+(b) $Y(t)=\frac{B(a^2 t)}{a}$. 
+\begin{equation}
+  \mathbb{E}\left[Y(t)\right] = \frac{1}{a} \mathbb{E}\left[B(a^2t)\right] = 0
+\end{equation}
+For $s\leq t$, 
+\begin{equation}
+  \mathrm{\mathbb{C}ov}\left[Y(s), Y(t)\right] = \frac{1}{a^2}\mathrm{\mathbb{C}ov}\left[B\left(a^2 s\right), B\left(a^2 t\right)\right] = \frac{1}{a^2} \cdot a^2s = s
+\end{equation}
+Which, add to the fact that $\{Y(t)\}$ is Gaussian, finished the proof. \\
+(c) $\mathbb{E}\left[Y(t)\right]=(t+1)\mathbb{E}\left[Z\left(\frac{t}{t+1}\right)\right]=0$.
+\begin{equation}
+  \begin{split}
+    \mathrm{\mathbb{C}ov}\left[Y(s), Y(t)\right] &= (s+1)(t+1)\mathrm{\mathbb{C}ov}\left[Z\left(\frac{s}{s+1}\right), Z\left(\frac{t}{t+1}\right)\right] \\
+    &= (s+1)(t+1)\frac{s}{s+1}\left[1-\frac{t}{t+1}\right] \\
+    &= s
+  \end{split}
+\end{equation}
+Finished the proof.
 \end{solution}
 
 \noindent\rule{16cm}{0.4pt}
 %\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 \begin{problem} 
 \end{problem}
-\begin{solution} 
+\begin{proof} Denote $N$ the number of iterations until getting $X$. Denote $P_0 = \mathbb{P}\left(U\leq \frac{f(Y)}{cg(Y)}\right)$.
+\begin{equation}
+  \begin{split}
+    \mathbb{P}\left(X\leq x\right) &= \mathbb{P}\left(Y_N \leq x\right) \\
+    &= \mathbb{P}\left(Y\leq x\middle|U\leq \frac{f(Y)}{cg(Y)}\right) \\
+    &= \frac{1}{P_0} \cdot \mathbb{P}\left(Y\leq x, U\leq \frac{f(Y)}{cg(Y)}\right) \\
+    &= \frac{1}{P_0} \int_{-\infty}^x \mathbb{P}\left(Y\leq x, U\leq \frac{f(Y)}{cg(Y)}\middle |Y=y\right)g(y)dy \\
+    &= \frac{1}{P_0} \int_{-\infty}^x\frac{f(y)}{cg(y)}g(y)dy \\
+    &= \frac{1}{P_0} \int_{-\infty}^x\frac{f(y)}{c}dy
+  \end{split}
+\end{equation}
+On letting $x\to \infty$, $LHS=1=\frac{1}{cP_0}$, indicating that $P_0 = 1/c$. Hence
+\begin{equation}
+  \mathbb{P}\left(X\leq x\right) = \int_{-\infty}^x f(y)dy
+\end{equation}
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} (a) We hope to change the RVs in density function. $(X,Y)\to (R^2, \Theta)$. We have
+\begin{equation}
+  \begin{split}
+    f_{R^2, \Theta}(d, \theta) &= f_{X,Y}(x,y)|\bm{J}|^{-1} \\
+    &= \frac{1}{2 \pi} e^{-(x^2+y^2)/2} 
+    \begin{vmatrix}
+      2x & 2y \\
+      \frac{-y}{x^2+y^2} & \frac{x}{x^2+y^2} \\
+    \end{vmatrix}^{-1} \\
+    &= \frac{1}{2\pi} \cdot \frac{1}{2}e^{-2d}
+  \end{split}
+\end{equation}
+It is clear that $R^2, \Theta$ are independent. Where $R^2 \sim \text{Exp}(\frac{1}{2})$. And $\Theta\sim \text{Unif}(0,2\pi)$ \\
+(b) We can invert polar coordinates to rectangular. By previous results, $-c\log(U)\sim\text{Exp}(1/c)$. Hence $X,Y$ can be obtained by
+\begin{equation}
+  \begin{cases}
+    & X = \sqrt{R^2} \cos\Theta \sim (-2\log U)^{1/2} \cos (2\pi V)\\
+    & Y = \sqrt{R^2} \sin\Theta \sim (-2\log U)^{1/2} \sin (2\pi V)
+  \end{cases}
+\end{equation}
+Where $U,V$ are uniforms on $[0,1]$.
 \end{solution}
 
 \noindent\rule{16cm}{0.4pt}
 %\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 \begin{problem} 
 \end{problem}
-\begin{solution} 
-\end{solution}
+\begin{proof} (1) We proceed by induction. For $n=1$, increasing function $f(\cdot), g(\cdot)$, we have
+\begin{equation}
+  \begin{split}
+    & (f(X)-f(Y))(g(X)-g(Y)) \geq 0 \\
+    \Rightarrow & \mathbb{E}\left[(f(X)-f(Y))(g(X)-g(Y))\right] \geq 0\\
+    \Rightarrow & \mathbb{E}\left[f(X)g(X)\right] + \mathbb{E}\left[f(Y)g(Y)\right] \geq \mathbb{E}\left[f(X)g(Y)\right] + \mathbb{E}\left[f(Y)g(X)\right]
+  \end{split}
+\end{equation}
+Suppose $X, Y$ are i.i.d, we conclude that
+\begin{equation}
+  2\mathbb{E}\left[f(X)g(X)\right] \geq 2\mathbb{E}\left[f(X)\right]\mathbb{E}\left[g(X)\right]
+\end{equation}
+as desired. \\
+Then assume this holds for $\bm{X}^{[n-1]}$ with $n-1$ elements. For $n$:
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[f(\bm{X}^{[n]})g(\bm{X}^{[n]})|X_n=x\right] &= \mathbb{E}\left[f(\bm{X}^{[n-1]},x)g(\bm{X}^{[n-1]},x)\right] \\
+    &\geq \mathbb{E}\left[f(\bm{X}^{[n-1]},x)\right]\mathbb{E}\left[g(\bm{X}^{[n-1]},x)\right]~~~~\text{(By hypothesis.)}\\
+    &= \mathbb{E}\left[f(\bm{X}^{[n]})|X_n=x\right]\mathbb{E}\left[g(\bm{X}^{[n]})|X_n=x\right]
+  \end{split}
+\end{equation}
+So
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[f(\bm{X}^{[n]})g(\bm{X}^{[n]})\right] &= \mathbb{E}\left[\mathbb{E}\left[f(\bm{X}^{[n]})g(\bm{X}^{[n]})\middle|X_n\right]\right] \\
+    &\geq \mathbb{E}\left[\mathbb{E}\left[f(\bm{X}^{[n]})\middle|X_n\right]\mathbb{E}\left[g(\bm{X}^{[n]})\middle|X_n\right]\right] \\
+    &\geq \mathbb{E}\left[f(\bm{X}^{[n]})\right]\mathbb{E}\left[g(\bm{X}^{[n]})\right]
+  \end{split}
+\end{equation}
+Finished the proof. \\
+(b) WLOG suppose $k\nearrow$ with every dimension, then $-k(1-U_1, ..., 1-U_n)\nearrow$. By the result of (a) $\Rightarrow$
+\begin{equation}
+  \begin{split}
+    & \mathrm{\mathbb{C}ov}\left[k(U_1, ..., U_n), -k(1-U_1, ..., 1-U_n)\right] \geq 0\\
+    \Rightarrow & \mathrm{\mathbb{C}ov}\left[k(U_1, ..., U_n), k(1-U_1, ..., 1-U_n)\right] \leq 0
+  \end{split}
+\end{equation}
+For $k\searrow$, exactly symmetric statement.
+\end{proof}
 
 \noindent\rule{16cm}{0.4pt}
 %\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 \begin{problem} 
 \end{problem}
-\begin{solution} 
-\end{solution}
-
-\noindent\rule{16cm}{0.4pt}
-%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-\begin{problem} 
-\end{problem}
-\begin{solution} 
-\end{solution}
-
-\noindent\rule{16cm}{0.4pt}
-%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-\begin{problem} 
-\end{problem}
-\begin{solution} 
+\begin{solution} (a). Sampling $F$ is as if sampling from $F_i$, respectively, with probability $P_i$. Hence we sample another indicator to determine which $F_i$ to sample from. \\
+In particular, draw $U\sim\text{Unif}[0,1]$. Sample from $F_i$ if 
+$$
+\sum_{j=1}^{i-1} P_j < U \leq \sum_{j=1}^{i} P_j 
+$$
+(b) Note that $F(\cdot)$ can be rewritten as
+\begin{equation}
+  \begin{split}
+    & F(x) = \frac{1}{3}F_1(x) + \frac{2}{3}F_2(x) \\
+    & F_1(x)=1-e^{-2x} \\
+    & F_2(x)=\min\{x,1\}
+  \end{split}
+\end{equation}
+For $0<x<\infty$. So $X=\frac{1}{3}X_1+\frac{2}{3}X_2$ $X_1\sim$Exp(2), and $X_2\sim$Unif(0,1). The sample is therefore obtained by
+\begin{equation}
+  X = \begin{cases}
+  \frac{-\log U_2}{2} & U_1 < \frac{1}{3} \\
+  U_3 & U_1 \geq \frac{1}{3}
+  \end{cases}
+\end{equation}
+Where $U_1, U_2, U_2$ are unifrom(0,1).
 \end{solution}
 
 \noindent\rule{16cm}{0.4pt}
