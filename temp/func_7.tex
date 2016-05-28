@@ -1,0 +1,280 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz}
+
+\pagestyle{headings}
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+\DeclareMathOperator{\wlim}{w-lim}
+\DeclareMathOperator{\slim}{s-lim}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+
+\title{\textbf{Functional Analysis Assignment VII}}
+\author{YANG, Ze (5131209043)}
+
+\begin{document}
+\maketitle
+
+\begin{problem} Show that both Laplace equation
+$$
+\Delta u = \sum_{i=0}^n \partial_{x_i x_i} u = 0
+$$
+And wave equation
+$$
+\square u = \partial_{x_0 x_0} u - \sum_{i=1}^n \partial_{x_i x_i} u = 0
+$$
+can be written into the positive symmetric system
+$$
+L \bm{U} = \sum_{j=0}^n A_j \partial_{x_j}\bm{U} + B \bm{U} = f
+$$
+Where $A_j(j=0,...,n)$ are symmetric matrix functions and $B$ is a square matrix satisfying
+$$
+B + B^{\top} - \sum_{j=0}^n \partial_{x_j}A_j > kI~~~~\text{For a constant $k>0$.}
+$$
+\end{problem}
+\begin{proof} 
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} Show that a weakly sequentially compact set is bounded. 
+\end{problem}
+\begin{proof} Let $K\subset X$ be a subset of normed space. Let $\{x_n\}\subset K$ and $x_n \rightharpoonup x\in K$. Then by the third part of \textit{Principle o f uniform boundedness}: there exists constant $c>0$
+$$
+\left\|x_n\right\| \leq c~~(\dag)
+$$
+Assume $K$ is unbounded, then we can pick $\{x_n\}\in K$ such that $\left\|x_n\right\|\geq n$. Since $K$ is weakly sequentially compact, there exists a weakly convergent subsequence $\{x_{n_k}\}\subset \{x_n\}$, and 
+$$
+\left\|x_{n_k}\right\| \geq n_k
+$$
+Contradicts $(\dag)$. Hence $K$ is bounded.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} Show that if the sequence $\{u_n\}$ is weak* convergent to $u$,
+$$
+\left\|u\right\| \leq \liminf\limits_{} \left\|u_n\right\|
+$$
+\end{problem}
+\begin{proof} Since $u_n \rightharpoonup u$, we have $|u(x)|=\lim\limits_{n\rightarrow\infty}|u_n(x)|$, for $\forall x\in X$. \\
+By definiton, we can find $x_0 \in X$, such that $|u(x_0)|=\left\|u\right\|$ and $\left\|x_0\right\|=1$. Therefore
+\begin{equation}
+	\begin{split}
+		\left\|u\right\| &= |u(x_0)| = \lim\limits_{n\rightarrow\infty}|u_n(x_0)| \\
+		& \leq \liminf\limits_{n\rightarrow\infty} \left\|u_n\right\| \left\|x_0\right\| \\
+		& =\liminf\limits_{n\rightarrow\infty} \left\|u_n\right\|
+	\end{split}
+\end{equation}
+Which finished the proof.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} Show that the norm of bounded linear map is sub-additive, that is
+$$
+\left\|\bm{M} + \bm{K}\right\| \leq \left\|\bm{M}\right\| + \left\|\bm{K}\right\|
+$$
+\end{problem}
+\begin{proof} By definition
+\begin{equation}
+	\begin{split}
+		\left\|\bm{M}+ \bm{K}\right\| &= \sup\limits_{\left\|x\right\|=1} \left\|(\bm{M}+\bm{K})x\right\| \\
+		&\leq  \sup\limits_{\left\|x\right\|=1} \left(\left\|\bm{M}x\right\| + \left\|\bm{K}x\right\|\right) \\
+		&\leq \sup\limits_{\left\|x\right\|=1} \left\|\bm{M}x\right\| + \sup\limits_{\left\|x\right\|=1} \left\|\bm{K}x\right\| = \left\|\bm{M}\right\| + \left\|\bm{K}\right\|
+	\end{split}
+\end{equation}
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} Let $X$ and $U$ be Banach spaces, $U$ reflexive. Let $\bm{M}$ be a bounded linear map: $X \to U$. Let $x_n$ be a sequence in $X$, $x_n \rightharpoonup x$. Then, $\bm{M}x_n \rightharpoonup \bm{M}x$.
+\end{problem}
+\begin{proof} It suffice to show that $\lim\limits_{n\rightarrow\infty}\xi(\bm{M}x_n) = \xi(\bm{M}x)$ for all $\xi \in U'$ \\
+For any $\xi \in U'$, we have
+\begin{equation}
+	\begin{split}
+		\lim\limits_{n\rightarrow\infty} \xi(\bm{M}x_n) - \xi(\bm{M}x)
+		&= \lim\limits_{n\rightarrow\infty}\xi(\bm{M}x_n - \bm{M}x) \\
+		&= \lim\limits_{n\rightarrow\infty}\xi(\bm{M}(x_n - x)) \\
+		&= \lim\limits_{n\rightarrow\infty}(\xi \circ \bm{M})(x_n - x)~~~(\triangle)\\
+	\end{split}
+\end{equation}
+The quantity $(\triangle)$ is zero. Because $(\xi \circ \bm{M}):=\ell \in X'$, and due to the weak convergence of $\{x_n\}$, $\ell(x)=\lim\limits_{n\rightarrow\infty}\ell(x_n)$. Hence, we have $\lim\limits_{n\rightarrow\infty} \xi(\bm{M}x_n) = \xi(\bm{M}x)$ for all $\xi \in U'$. Finished the proof.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} If $\bm{I}$ is identity map: $X\to X$, show $\bm{I}'$ is identity map: $X' \to X'$.
+\end{problem}
+\begin{proof} Since $\bm{I}: X \to X$, $\bm{I}(x)=x$ for all $x\in X$. By definition of transpose, $\bm{I}':X'\to X'$ such that for any $\ell \in X'$
+\begin{equation}
+	\bm{I}'\ell(x) = \ell(\bm{I}x) = \ell(x)
+\end{equation}
+Therefore $\bm{I}'\ell = \ell$, which implies that $\bm{I}'$ is identity map on $X'$.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} $\bm{M}^*$ is adjoint operator on Hilbert space, show thm.5 is valid for it, that is
+\begin{itemize}
+		\item[1.] $\bm{M}^*$ is bounded, and $\left\|\bm{M}^*\right\|=\left\|\bm{X}\right\|$.
+		\item[2.] The nullspace of $\bm{M}^*$ is the annihilator of the range of $\bm{M}$. That is, $N_{\bm{M}^*}=R^{\bot}_{\bm{M}}$.
+		\item[3.] The nullspace of $\bm{M}$ is the annihilator of the range of $\bm{M}^*$. $N_{\bm{M}} = R^{\bot}_{\bm{M}^*}$.
+		\item[4.] $(\bm{M}+\bm{N})^* = \bm{M}^* + \bm{N}^*$.
+\end{itemize}	
+\end{problem}
+\begin{proof} (1) Consider linear functional with respect to $\ell_y(x)=\langle \bm{M}x, y \rangle$, for fixed $y\in H$. By (\textbf{Riesz}), there exists unique $z\in H$, such that
+$$
+\ell_y(x) = \langle \bm{M}x, y \rangle = \langle x, z \rangle
+$$
+Now define $M^*: H\to H$ as $\bm{M}^*y = z~~(\triangle)$. This exactly is the defining property of adjoint of bounded linear map $\bm{M}$. So it suffices to verify the theorem on $\bm{M}^*$ defined by $(\triangle)$. \\
+For any $x\in H$, 
+\begin{equation}
+	\begin{split}
+		\left\|\bm{M}^*x\right\|^2 &= |\langle \bm{M}^*x, \bm{M}^*x \rangle|  = |\langle \bm{M}(\bm{M}^*x), x \rangle| \\
+		&= |\ell_x(\bm{M}^* x)| \leq \left\|\ell_x\right\| \left\|\bm{M}^* x\right\| \\
+		\Rightarrow & \left\|\bm{M}^*x\right\| \leq \left\|\ell_x\right\| \leq \left\|\bm{M}\right\| \left\|x\right\|
+	\end{split}
+\end{equation}
+Hence by definition, we have $\left\|M^*\right\| \leq \left\|M\right\|$. Since $\bm{M}$ is bounded linear map, $\bm{M}^*$ too. \\
+Now we show $\left\|\bm{M}\right\|= \left\|\bm{M}^*\right\|$. Consider
+\begin{equation}
+	|\langle \bm{M}x, y \rangle| = |\langle x, \bm{M}^*y \rangle| \leq \left\|x\right\| \left\|M^*\right\| \left\|y\right\|
+\end{equation}
+So 
+$$
+\bm{M}^* = \sup\limits_{\left\|x\right\|=\left\|y\right\|=1} |\langle \bm{M}x, y\rangle| = \sup\limits_{\left\|x\right\|=1} \left\|\bm{M}x\right\| = \left\|\bm{M}\right\|
+$$
+Finished the proof. \\
+(2) $\forall y\in N_{\bm{M}^*}$, $\langle x, \bm{M}^*y \rangle=0$ for all $x\in H$. Hence $\langle \bm{M}x, y \rangle=0$ $\Rightarrow$ $y\in R^{\bot}_{\bm{M}}$. \\
+On the other hand, $\forall y\in R_{\bm{M}}^{\bot}$, $0=\langle \bm{M}x, y \rangle=\langle x, \bm{M}^*y \rangle$. $\Rightarrow$ $y\in  N_{\bm{M}^*}$. We conclude that $N_{\bm{M}^*}=R_{\bm{M}}^{\bot}$. \\
+(3) $\forall x\in N_{\bm{M}}$, $\langle \bm{M}x, y \rangle=0$ for all $y\in H$. $\Rightarrow$ $\langle x, \bm{M}^*y \rangle=0$. So $N_{\bm{M}}\subseteq R^{\bot}_{\bm{M}^*}$. \\
+On the other hand, $\forall x\in R_{\bm{M}^*}^{\bot}$, $0=\langle x, \bm{M}^*y \rangle=\langle \bm{M}x, y \rangle$. And $\left\|\bm{M}x\right\|=\sup\limits_{\left\|y\right\|=1}|\langle \bm{M}x, y \rangle|$. $\Rightarrow \bm{M}x=0$, $x\in N_{\bm{M}}$. So $N_{\bm{M}}\supseteq R^{\bot}_{\bm{M}^*}$. We conclude that $N_{\bm{M}}=R_{\bm{M}^*}^{\bot}$. \\
+(4) By bilinearity of inner product,
+\begin{equation}
+	\begin{split}
+		\langle (\bm{M+N})x, y \rangle &= \langle \bm{M}x, y \rangle + \langle \bm{N}x, y \rangle\\
+		&= \langle x, \bm{M}^*y \rangle + \langle x, \bm{N}^*y \rangle\\
+		&= \langle x, (\bm{M}^* + \bm{N}^*)y \rangle
+	\end{split}
+\end{equation}
+Therefore, we have $(\bm{M}+\bm{N})^* = \bm{M}^* + \bm{N}^*$.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} (\textit{Ex.6}) Show that if $\wlim\limits_{n\rightarrow\infty} \bm{M}_n = \bm{M}$, then $\wlim\limits_{n\rightarrow\infty} \bm{M}'_n = \bm{M}'$, provided that $X$ is reflexive. \\
+(\textit{Ex.7}) (\textit{Thm.6}) Let $X,U$ be Banach spaces, $\bm{M}_n$ a sequence of linear maps: $X\to U$, uniformly bounded in norm:
+$$
+|\bm{M}_n| \leq c ~~~~ \text{for all $n$.}
+$$
+Suppose further that $\slim\limits_{n\rightarrow\infty}\bm{M}_n x$ exists for a \textit{dense set} of $x$ in $X$. Then $\{\bm{M}_n\}$ converges strongly. I.e. the $\slim\limits_{n\rightarrow\infty}\bm{M}_n x$ exists for all $x\in X$. Show the thm above and formulate analogous theorem for weak convergence.
+\end{problem}
+\begin{proof} $\bm{M}: X\to U$ weakly converges. By definition, $\forall x\in X$ and $\ell\in U'$, we have
+$$
+\ell(\bm{M}x) = \lim\limits_{n\rightarrow\infty} \ell(\bm{M}_n x)
+$$
+Since $X$ is reflexive, and by definition of transpose,
+$$
+\ell(\bm{M}_nx) = (\bm{M}_n'\ell) x
+$$
+Since $X$ is reflexive, $\wlim\limits_{n\rightarrow\infty}\bm{M}'$ exists. Denote $\bm{M}'_n \rightharpoonup \bm{N}'$. For any $x\in X$, $\ell\in U$. So we have
+\begin{equation}
+	(\bm{N}'\ell)x = \lim\limits_{n\rightarrow\infty} (\bm{M}_n'\ell) x = \lim\limits_{n\rightarrow\infty} \ell(\bm{M}_nx) = \ell(\bm{M}x) = (\bm{M}'\ell)x
+\end{equation}
+Hence $\bm{N}'=\bm{M}'$, i.e. $\bm{M}_n' \rightharpoonup \bm{M}'$.
+\end{proof}
+
+~\\
+
+\begin{proof} (1) Denote $E$ the set in which $\slim\limits_{n\rightarrow\infty} \bm{M}_n x$ exists. $E$ is dense in $X$. \\
+$\forall \epsilon>0$, for any $x\in X$, since $E$ dense, $\exists \tilde{x}\in E$, s.t. $\left\|x-\tilde{x}\right\|<\epsilon/4c$. \\
+Since $\slim\limits_{n\rightarrow\infty}\bm{M}_n x$ exists in $E$, it is Cauchy sequence. $\exists N >0$, for all $n,m>N$ we have
+$$
+\left\|(\bm{M}_n- \bm{M}_m)\tilde{x}\right\| < \frac{\epsilon}{2}
+$$
+So
+\begin{equation}
+	\begin{split}
+		\left\|(\bm{M}_n - \bm{M}_m)x\right\| &\leq \left\|(\bm{M}_n - \bm{M}_m)\tilde{x}\right\| + \left\|(\bm{M}_n - \bm{M}_m)(x-\tilde{x})\right\| \\
+		&\leq \frac{\epsilon}{2} + \left\|\bm{M}_n - \bm{M}_m\right\|\left\|x-\tilde{x}\right\| \\
+		&\leq \frac{\epsilon}{2} + 2c \cdot \frac{\epsilon}{4c} \\
+		& = \epsilon
+	\end{split}
+\end{equation}
+So $\{\bm{M}_nx\}$ is Cauchy sequence for all $x\in X$, which stongly convergent. Finished the proof. \\
+
+~\\
+(b) Analogous theorem: $X,U$ Banach spaces. $\bm{M}_n: X \to U$, are uniformly bounded in norm, i.e. $\left\|\bm{M}_n\right\|\leq c$ for all $n$. And $\wlim\limits_{}\bm{M}_n x$ exists for $x\in E$ which is dense in $X$. Then, $\bm{M}_n$ converges weakly, i.e. $\wlim\limits_{}\bm{M}_n x$ exists for all $x\in X$. \\
+\textit{Proof.} For any fixed $\ell \in U'$, $\forall \epsilon>0$, any $x\in X$, there exists $\tilde{x}\in E$, such that
+$$
+\left\|x - \tilde{x}\right\| < \frac{\epsilon}{4c \left\|\ell\right\|}
+$$
+Since $\bm{M}_n x$ weakly convergent on $E$, $\exists N$, for any $n,m\geq N$:
+$$
+\left\|\ell(\bm{M}_n\tilde{x})-\ell(\bm{M}_m\tilde{x})\right\| < \frac{\epsilon}{2}
+$$
+Hence
+\begin{equation}
+	\begin{split}
+		\left\|\ell(\bm{M}_n x)-\ell(\bm{M}_m x)\right\| &\leq \left\|\ell((\bm{M}_n-\bm{M}_m)\tilde{x})\right\| + \left\|\ell((\bm{M}_n-\bm{M}_m)(x-\tilde{x}))\right\|  \\
+		&\leq \frac{\epsilon}{2} + \left\|\ell\right\| \left\|\bm{M}_n-\bm{M}_m\right\| \left\|x-\tilde{x}\right\| \\
+		&\leq \frac{\epsilon}{2} + \left\|\ell\right\|\cdot 2c\cdot\frac{\epsilon}{4c \left\|\ell\right\|} \\
+		&= \epsilon
+ 	\end{split}
+\end{equation}
+So $\{\ell(\bm{M}_nx)\}$ is Cauchy sequence for all $x\in X$ and $\ell \in U'$, implies that $\{\bm{M}_n\}$ converges weakly.
+\end{proof}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} Show that in a complex Hilbert space $(\bm{NM})^* = \bm{M}^* \bm{N}^*$
+\end{problem}
+\begin{proof} It is clear by definition.
+\begin{equation}
+	\begin{split}
+		\langle \bm{NM}x, y \rangle = \langle \bm{M}x, \bm{N}^* y \rangle = \langle x,  \bm{M}^*\bm{N}^*y\rangle
+	\end{split}
+\end{equation}
+Hence $(\bm{NM})^* = \bm{M}^*\bm{N}^*$.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+
+
+\end{document}
