@@ -1,0 +1,325 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+
+\title{\textbf{Functional Analysis Assignment IV}}
+\author{YANG, Ze (5131209043)}
+
+\begin{document}
+\maketitle
+
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} Let $X$ be a linear space over $\mathbb{R}$ with metric $d$ satisfying
+$$d(x+z,y+z)=d(x,y)~~\text{and}~~d(ax,ay)=|a|d(x,y)~~\text{for all $x,y,z\in X, a\in \mathbb{R}$}$$
+Define
+$$\|x\|=d(x,0)$$
+Show that $\|\cdot\|$ is a norm on $X$.
+\end{problem}
+\begin{proof} It suffices to check defining properties of norm.
+\begin{itemize}
+	\item[] \textit{Positivity} is clear. Since $d(x,0)\geq 0$, $d(x,0)=0 \iff x=0$.
+	\item[] \textit{Homogeneity}: $\|ax\|=d(ax,0)=|a|d(x,0)=|a|\|x\|$.
+	\item[] \textit{Triangle Ineq.}:
+	\begin{equation}
+		\begin{split}
+		    \|x+y\| &= d(x+y, 0) = d(x+y, -y+y) \\
+		    &= d(x,-y) \leq d(x,0)+d(0,-y) \\
+		    &= d(x,0) + |-1|\cdot d(y,0) = \|x\| + \|y\|
+		\end{split}
+	\end{equation}
+\end{itemize}
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} Given $f\in \mathcal{C}(a,b)$, define its support as
+$$\text{supp}f:=\overline{\{x|x\in(a,b), f(x)\ne 0\}}$$
+i.e. the closure of the set where $f$ is non-zero. Let $X$ be the space of all real-valued, continous functions $f$ with compact support and the norm is defined as
+$$\|f\|:= \max\limits_{x\in (a,b)}|f(x)|$$
+Show that $X$ is not a complete normed linear space.
+\end{problem}
+\begin{proof} Let $\phi$ be continuous function, $\text{supp}\phi = [0,1]$. $\phi_k$ be the horizontal translation of $\phi$, i.e. 
+$$\phi_k(x)=\phi(x-k)$$
+It is easy to find that $\text{supp}\phi_k = [k,k+1]$.  \\
+Now define $f_n:=\sum_{k=1}^n \frac{1}{k}\phi_k$, for any fixed $k$, clearly $f_k$ is continuous. $\text{supp}f_k=[1,k+1]$ is compact. Moreover for $n\leq m$
+\begin{equation}
+	\begin{split}
+		\|f_n - f_m\| &= \max\limits_{x\in [0,m]} \left|\sum_{k=n}^m \frac{1}{k}\phi_k\right| \\
+		&\leq \frac{m-n}{n} \max\limits_{k}\{\max\limits_{x}\phi_k(x)\} \\
+		&\xrightarrow{m,n\to \infty} 0
+	\end{split}
+\end{equation}
+Hence $\{f_n\}$ is a Cauchy sequence. $f_n \to f = \sum_{n\geq 1}\frac{1}{n}\phi_n$. However $\text{supp}f=[1, \infty)$, is not compact. So $X$ is not complete.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} Let $\Omega \in \mathbb{R}^n$ be a Lebesgue measurable set. Show that $\mathcal{L}^p(\Omega)~(1<p<\infty)$ is a uniformly convex space.
+\end{problem}
+\begin{proof} We first state a lemma.\\
+\textit{Lemma.}(\textbf{Clarkson's First Ineq.}) For $p\geq 2$, there exists a constant $c>0$, such that for all $a,b\in \mathbb{R}$:
+\begin{equation}
+	\left|\frac{a+b}{2}\right|^p + \left|\frac{a-b}{2}\right|^p \leq \frac{|a|^p}{2} + \frac{|b|^p}{2}
+\end{equation}
+\textit{Proof of Lemma.} Define
+\begin{equation}
+	\phi(x) = (x^2+1)^{\frac{p}{2}} - x^p - 1~~x\geq 0
+\end{equation}
+It can be seen easily $\phi(0)=0$ and calculate first derivative yields $\phi \nearrow$ on $[0, \infty)$. Hence letting $x=\alpha/\beta$, $\alpha, \beta \in \mathbb{R}^+\cup\{0\}$, $\phi(x)\geq 0$ implies
+\begin{equation}
+	x^p + 1 \leq (x^2+1)^{\frac{p}{2}} \Rightarrow \alpha^p + \beta^p \leq (\alpha^2 + \beta^2)^{\frac{p}{2}}
+\end{equation}
+Now let $\alpha:=\left|\frac{a+b}{2}\right|$, $\beta:=\left|\frac{a-b}{2}\right|$ for $a,b \in \mathbb{R}$. equation (5) implies
+\begin{equation}
+	\begin{split}
+		\left|\frac{a+b}{2}\right|^p + \left|\frac{a-b}{2}\right|^p &\leq \left[\left(\frac{a+b}{2}\right)^2 + \left(\frac{a-b}{2}\right)^2\right]^{\frac{p}{2}} \\
+		&= \left(\frac{a^2+b^2}{2}\right)^{\frac{p}{2}} \leq \frac{|a|^p}{2} + \frac{|b|^p}{2}
+	\end{split}
+\end{equation}
+The last leq follows that $x\mapsto x^{\frac{p}{2}}$ is a convex function when $p\geq 2$. Which proves the lemma. \\
+Now for any fixed $x\in \Omega$, let $a:=f(x), b:=g(x)$, $f,g \in \mathcal{L}^p$; $\left\|f\right\|=\left\|g\right\|=1$. Integrate for both sides on $\Omega$ $\Rightarrow$
+\begin{equation}
+	\begin{split}
+		\left\|\frac{f+g}{2}\right\|^p_p  &\leq \left(\frac{\left\|f\right\|_p + \left\|g\right\|_p}{2}\right)^p - \left\|\frac{f-g}{2}\right\|^p_p \\
+		\left\|\frac{f+g}{2}\right\|_p  &\leq \left(1 - \left\|\frac{f-g}{2}\right\|^p_p\right)^{\frac{1}{p}} \\
+		&= 1- \left(1-\left(1 - \left\|\frac{f-g}{2}\right\|^p_p\right)^{\frac{1}{p}}\right) \\
+		&= 1- \epsilon(\left\|f-g\right\|_p)
+	\end{split}
+\end{equation}
+Where $\epsilon(r)=1-(1-r^p)^{1/p}$ is increasing with $\epsilon(0)=0$.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} Show that a uniformly convex normed linear space must be strictly convex.
+\end{problem}
+\begin{proof} Consider $\left\|x\right\|=\left\|y\right\|=1$, $0< \lambda <1$,
+\begin{equation}
+	\begin{split}
+		\left\|\lambda x + (1- \lambda)y\right\| &= \left\|\lambda(x+y)+(1-2 \lambda)y\right\| \\
+		&\leq 2 \lambda \left\|\frac{x+y}{2}\right\| + 1-2 \lambda \\
+		&\leq 2 \lambda (1- \epsilon(\left\|x-y\right\|)) + 1-2 \lambda \\
+		&= 1- 2 \lambda \epsilon(\left\|x-y\right\|) \\
+		&<1~~\text{for $x\ne y$}
+	\end{split}
+\end{equation}
+Which finished the proof.\\
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} Let $H$ be a Hilbert space and $A, B$ are linear maps $H \to H$. Suppose that $A$ and $B$ satisfy
+$$\langle x, Ay \rangle = \langle x, By \rangle~~\text{for all $x,y\in H$}$$
+Show that $A=B$. If $H$ is a convex Hilbert space and $A,B$ satisfy
+$$\langle x, Ax \rangle = \langle x, Bx \rangle~~\text{for all $x\in H$}$$
+Show that $A=B$. What can we say about $A, B$ for real Hilbert spaces?
+\end{problem}
+\begin{proof} (a.)
+$$\langle x,Ay-By \rangle =0$$
+(b.)
+$$\langle x, Ax-Bx \rangle = 0$$
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} \textit{Exercise.4} Show that every finite-dimensional subspaces of a normed linear space is closed. (Hint: Use the fact that all norms are equivalent on finite-dimensional spaces to show that every finite dimensional subspaces is complete). \\
+\textit{Exercise.5} Show the norms of (a), (c), (d), (e) are not strictly subadditive. Show (b), (f) are not subadditive for $p=1$. The normed space below are all complete.
+\begin{itemize}
+	\item[\textit{a.}] The space of all vectors with infinite components, 
+	$$\ell^{\infty}:=\left\{x: x=(a_1, a_2, ...)~~\text{$a_j$ complex; $|a_j|$ bounded.}\right\}$$
+	$$\|x\|_{\infty}:=\sup\limits_{j}|a_j|$$
+
+	\item[\textit{b.}] The space of all vectors with infinite components, 
+	$$\ell^{p}:=\left\{x: x=(a_1, a_2, ...)~~\text{$p\geq 1$; $\sum|a_j|^p<\infty$.}\right\}$$
+	$$\|x\|_{p}:=\left(\sum|a_j|^p\right)^{\frac{1}{p}}$$
+
+	\item[\textit{c.}] $S$ is an abstract set, $X$ the space of all complex-valued functions $f$ that are bounded. The norm is
+	$$\|f\|_{\infty}:=\sup\limits_{s\in S}|f(s)|$$
+
+	\item[\textit{d.}] $Q$ a topological space, $X$ the space of all complex valued, continuous, bounded functions $f$ on $Q$. The norm is
+	$$\|f\|:=\sup\limits_{q\in Q}|f(q)|$$
+
+	\item[\textit{e.}] $Q$ topological space, $X$ the space of all complex-valued, continuous functions $f$ with compact support. The norm is
+	$$\|f\|_{max} := \max\limits_{q\in Q}|f(q)|$$
+
+	\item[\textit{f.}] $D$ some domain in $\mathbb{R}^n$, $X$ the space of continuous functions $f$ with compact support. The norm is
+	$$\|f\|_p := \left(\int_D |f(x)|^p dx\right)^{\frac{1}{p}}$$
+\end{itemize}
+\end{problem}
+\begin{proof} Exercise 4. Suppose $(X, \left\|\cdot\right\|)$ is a normed inear space.
+$Y \subset X$ is a subspace of $X$, $\dim Y =n<\infty$. By problem (2) in last homework, any two norms on finite dimensional linear space, in particular, $Y$, are equivalent. \\
+\textit{Claim.} $Y$ is complete with respect to $\left\|\cdot\right\|$ associated with $X$. \\
+\textit{Proof of Claim.} Since all norms are equivalent on $Y$, it suffices to show that $Y$ is complete with respect to
+$$\left\|x\right\|_1 = \sum_{j=1}^n |x^{[j]}|,~~\text{where }x=\sum_{j=1}^n x^{[j]}e_j$$
+For Cauchy sequence $\{x_n\}$, $\forall \epsilon$, exist $N$, whenever $n,m>n$ $\Rightarrow$
+\begin{equation}
+	\left\|x_n-x_m\right\|_1 = \sum_{j=1}^n |x_n^{[j]}-x_m^{[j]}| < \epsilon
+\end{equation}
+Hence $|x_n^{[j]}-x_m^{[j]}| < \epsilon$ for $j=1,2,...,n$. So $\{x_n^{[j]}\}$ is a Cauchy sequence of real numbers. By completeness of $\mathbb{R}$, $x_n^{[j]}\to x_j$. Therefore we conclude that $x_n \to x=(x_1, ..., x_n) \in Y$, finished the proof.\\
+Exercise 5.
+\begin{itemize}
+	\item[\textit{a.}] Let $x=(1,1,0,0,...), y=(0,1,1,0,...)$, $x$ and $y$ are not multiples of each other, $x+y=(1,2,1,0,...)$. And we have
+	$$\left\|x\right\|_{\infty}+\left\|y\right\|_{\infty}=2=\left\|x+y\right\|_{\infty}$$
+	\item[\textit{b.}] For $p=1$, $\left\|x\right\|=\sum |a_j|$. Let $x=(1,0,0,...), y=(0,1,0,...), x+y=(1,1,0,...)$. Clearly $\left\|x+y\right\|=\left\|x\right\|+\left\|y\right\|$.
+	\item[\textit{c, d, e.}] are similar. Let $f$ be a complex-valued, continuous function supported on $[0,1]$, imaginary part is zero, real part is positive, attains maximum at $f(\frac{3}{4})=1$. $g$ be another function of same flavour, but supported on $[\frac{1}{2}, \frac{3}{2}]$, attains maximum at $g(\frac{3}{4})=1$. Obviously, for the sup norm defined in $c,d,e$, we all have
+	$$\left\|f+g\right\|_{\infty} = (f+g)\left(\frac{3}{4}\right) = 2 = \left\|f\right\|_{\infty} + \left\|g\right\|_{\infty}$$
+	\item[\textit{f.}] For $p=1$ we have $\left\|f\right\|_{\mathcal{L}^1} = \int |f|$. Let $f$ be continuous, positive function supported on $[0,1]$, integrates to 1, $g$ be horizontal translation of $f$ supported on $[2,3]$. We have $\left\|f+g\right\|_{\mathcal{L}^1}=2=\left\|f\right\|_{\mathcal{L}^1}+\left\|g\right\|_{\mathcal{L}^1}$.
+\end{itemize}
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} \textit{Exercise.1} Show that a norm that satisfies \textit{parallelogram identity}
+$$\|x+y\|^2 + \|x-y\|^2 = 2 \|x\|^2 + 2 \|y\|^2$$
+is induced by a scalar product. \\
+\textit{Exercise.2} Show that the scalar product depends continuously on its factors; that is, if $x_n \to x, y_n \to y$ in the sense of $\|x_n - x\|\to 0, \|y_n - y\|\to 0$, then $\langle x_n, y_n \rangle \to \langle x, y \rangle$. (Use Schwarz ineq.)
+\end{problem}
+\begin{proof} We first do exercise 2 for the preparation of exercise 1. \\
+By symmetry, we only prove continuity wrt one factor, say $y$.
+\begin{equation}
+	\begin{split}
+		|\langle x,y \rangle - \langle x,z \rangle| &= |\langle x, y-z \rangle| \\
+		&\leq \left\|x\right\| \left\|y-z\right\|
+	\end{split}
+\end{equation}
+Due to (Cauchy-Schwartz). Hence for fixed $x$, whenever $\left\|y-z\right\|<\epsilon$, we have $|\langle x,y \rangle- \langle x,z \rangle|\leq c_x \epsilon$, $c_x$ is constant. Which proves the continuity. $\blacksquare$ \\
+\textit{Claim.} The norm $\left\|\cdot\right\|$ that supports parallelogram identity is induced by
+$$\langle x,y \rangle=\frac{\left\|x+y\right\|^2-\left\|x-y\right\|^2}{4}$$
+Now it suffices to use the parallelogram identity to show that $\langle \cdot, \cdot \rangle$ is an inner product.
+\begin{itemize}
+	\item[] \textit{Symmetry} is clear, $\langle x,y \rangle=\langle y,x \rangle$ by its definition.
+	\item[] \textit{Positivity}: $\langle x,x \rangle=\left\|2x\right\|^2/4 \geq 0$. And $\langle x,x \rangle=0 \iff \left\|x\right\|^2=0 \iff x=0$.
+\end{itemize}
+We now work on Bilinearly.\\
+(\textit{Step.1}) Show $\langle x+y,z \rangle=\langle x,z \rangle+\langle y,z \rangle$.
+By the identity,
+\begin{equation}
+	\begin{split}
+		& \left\|(x+z)+y\right\|^2 + \left\|(x+z)-y\right\|^2 = 2 \left\|x+z\right\|^2 + 2\left\|y\right\|^2\\
+		& \left\|x+(y+z)\right\|^2 + \left\|x-(y+z)\right\|^2 = 2 \left\|x\right\|^2 + 2 \left\|y+z\right\|^2 \\
+		\Rightarrow & \left\|x+y+z\right\|^2 = \left\|x\right\|^2 + \left\|y\right\|^2 + \left\|x+z\right\|^2 + \left\|y+z\right\|^2 - \frac{1}{2} \left\|x+z-y\right\|^2 - \frac{1}{2}\left\|x-y-z\right\|
+	\end{split}
+\end{equation}
+Similarly
+\begin{equation}
+	\begin{split}
+		& \left\|(x-z)+y\right\|^2 + \left\|(x-z)-y\right\|^2 = 2 \left\|x-z\right\|^2 + 2\left\|y\right\|^2\\
+		& \left\|x+(y-z)\right\|^2 + \left\|x-(y-z)\right\|^2 = 2 \left\|x\right\|^2 + 2 \left\|y-z\right\|^2 \\
+		\Rightarrow & \left\|x+y-z\right\| = \left\|x\right\|^2 + \left\|y\right\|^2 + \left\|x-z\right\|^2 + \left\|y-z\right\|^2 - \frac{1}{2} \left\|x-z-y\right\|^2 - \frac{1}{2}\left\|x+z-y\right\|
+	\end{split}
+\end{equation}
+Hence
+\begin{equation}
+	\begin{split}
+		\langle x+y,z \rangle &= \frac{1}{4}\left(\left\|x+y+z\right\|-\left\|x+y-z\right\|\right) \\
+		& = \frac{1}{4}\left(\left\|x+z\right\|^2 + \left\|y+z\right\|^2 - \left\|x-z\right\|^2 - \left\|y-z\right\|^2\right) \\
+		& = \langle x,z \rangle + \langle y,z \rangle
+	\end{split}
+\end{equation}
+(\textit{Step.2}) We show \textit{Homogeneity} for integers. Take $y=x$, we obtain $\langle 2x, z \rangle = 2 \langle x,z \rangle$. By definition it is clear that $\langle -x,z \rangle=-\langle x,z \rangle$. So by induction we conclude that $\langle kx,z \rangle = k \langle x,z \rangle$ for all $k\in \mathbb{N}$. \\
+Now consider $\forall \frac{p}{q}\in \mathbb{Q}$,
+\begin{equation}
+	q\langle \frac{p}{q}x,y \rangle = \langle px, y \rangle = p \langle x,y \rangle \Rightarrow \langle \frac{p}{q}x,y \rangle = \frac{p}{q} \langle x,y \rangle
+\end{equation}
+(\textit{Step.3}) For $\lambda \in \mathbb{R}$, we can find a series of rational $r_n \to \lambda$, for each $r_n$ we have $\langle r_n x, y \rangle=r_n \langle x,y \rangle$. Take limit on both sides, and by result of exercise 2: $\langle \cdot, y \rangle$ is continuous. Hence $\langle \lambda x, y \rangle = \lambda \langle x,y \rangle$. \\
+(\textit{Bilinearity}) Combining step 1 and 2 together we get the linearity w.r.t. $x$. Argue in the same way it is easy to obtain linearity w.r.t. $y$. Which finished the proof.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} Show $\ell^2$ is complete. Where
+$$\ell^2 := \left\{x=(a^{[1]}, a^{[2]}, ...), \sum |a^{[j]}|^2 < \infty \right\}$$
+$$\left\|x\right\|_2=\left(\sum |a^{[j]}|^2\right)^{\frac{1}{2}}$$
+\end{problem}
+\begin{proof} Suppose $\{x_n\}=\{(a_{n}^{[1]}, a_{n}^{[2]},...)\}$ is a Cauchy, that is, for fixed $\epsilon$, exists $N$, whenever $m,n>N$
+\begin{equation}
+	\left\|x_n - x_m\right\|_2 = \left(\sum_{j} |a_n^{[j]}-a_m^{[j]}|^2\right)^{1/2} < \epsilon
+\end{equation}
+The elements in summation are positive, hence $|a_n^{[j]}-a_m^{[j]}|^2<\epsilon^2$, so $\{a^{[j]}_n\}$ are also Cauchy for any $j\geq 1$. Denote $a^{[j]}_n \to a_j$, we have $x_n \to x=(a_1, a_2, ...)$ by letting $m\to \infty$ in equation (14). Moreover,
+\begin{equation}
+	\begin{split}
+		\left\|x\right\|_2 &= \left\|x - x_n + x_n\right\|_2 \\
+		&\leq \left\|x-x_n\right\|_2 + \left\|x_n\right\|_2 \\
+		&\leq \epsilon + \left\|x_n\right\|_2
+	\end{split}
+\end{equation}
+So $\left\|x\right\|_2^2 \leq (\epsilon+\left\|x_n\right\|)^2 < \infty$, since $\left\|x_n\right\|_2^2 < \infty$, implies that $x\in \ell^2$.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} (\textit{Lemma.5}) 
+\begin{itemize}
+	\item[\textit{i.}] The nullspace of a linear functional that is not $\equiv 0$ is a linear subspace of codimension $1$.
+	\item[\textit{ii.}] If two linear functionals $\ell$ and $m$ have the same nullspace, then they are constant multiples of each other.
+	$$\ell=cm$$
+	\item[\textit{iii.}] The nullspace of a linear functional that is bounded in the sense of
+	$$|\ell(x)|\leq c \|x\|$$
+	is a closed subspace.
+\end{itemize}
+\end{problem}
+\begin{proof} (\textit{i.}) Denote $\ell(x): X\to \mathbb{R}$ the linear functional. $N_{\ell}$ the null space of it. $\ell$ is not $\equiv 0$ $\Rightarrow \exists x_0 \in X$, such that $\ell(x_0)\ne 0$.\\
+Consider $[y]=y+N_{\ell}\in X/N_{\ell}$, $y_1 \sim y_2$ if $\ell(y_1)=\ell(y_2)$. Note that
+\begin{equation}
+	\ell\left(\frac{\ell(y)}{\ell(x_0)}x_0-y\right) = \frac{\ell(y)}{\ell(x_0)} \ell(x_0) - \ell(y) = 0
+\end{equation}
+We have 
+\begin{equation}
+	[y]= \frac{\ell(y)}{\ell(x_0)}\left(x_0 + N_{\ell}\right)
+\end{equation}	
+So $\text{codim}N_{\ell} = \dim X/N_{\ell} = \dim\{x_0 + N_{\ell}\} = 1$. \\
+(\textit{ii}). Denote these two functionals $\ell$ and $m$. If $\ell \equiv m \equiv 0$, the conclusion is trivial. Otherwise it is a direct result of $(i.)$. \\
+To argue, suppose $\ell(x_0)\ne 0$, then for all $x\in X$,
+\begin{equation}
+	\ell\left(\frac{\ell(x)}{\ell(x_0)}x_0-x\right) = 0 = m\left(\frac{\ell(x)}{\ell(x_0)}x_0-x\right)
+\end{equation}
+Since they have same null space. $\Rightarrow$
+\begin{equation}
+	\frac{\ell(x)}{\ell(x_0)} m(x_0) - m(x) = 0 \Rightarrow \ell(x) = \frac{\ell(x_0)}{m(x_0)}\cdot m(x)
+\end{equation}
+(\textit{iii}). Let $\{x_n\}$ be a convergent sequence in $N_{\ell} \subset X$, $x_n \to x \in X$ in the sense that $\left\|x_n - x\right\| \to 0$ as $n\to \infty$.
+\begin{equation}
+	|\ell(x) - \ell(x_n)| = |\ell(x-x_n)| \leq c \left\|x-x_n\right\| \to 0
+\end{equation}
+Hence $\ell(x)=0$, implies that $x\in N_{\ell}$. Hence $N_{\ell}$ is closed.
+\end{proof}
+
+\end{document}

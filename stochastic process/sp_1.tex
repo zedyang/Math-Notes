@@ -1,0 +1,331 @@
+\documentclass[a4paper, 11pt]{article}   	
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in}	
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{booktabs}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\title{\textbf{Stochastic Process Assignment I}}
+\author{YANG, Ze (5131209043)}
+
+\begin{document}
+\maketitle
+\begin{itemize}
+	\item[\textbf{Problem.1}] Denote $A_i:=\{\text{The player fails at $i^{th}$ round}\}$. Then clearly $\{A_i: i\geq 1\}$ are (mutually) independent. $E_i:=\{\text{The first player wins at $i^{th}$ round}\}$, $i$ odd, are disjoint. We have
+	$$E_n = \left(\bigcap_{i=1}^{n-1}A_i\right) \cap A_n^{\complement};~~~~E=\bigcup_{n\geq 1, \text{odd}}E_n$$
+	Hence,
+	$$\mathbb{P}\left(E\right)=\sum_{n\geq 1, \text{odd}}p(1-p)^{n-1}=\frac{p}{1-(1-p)^2}=\frac{1}{2-p}$$
+	$$\mathbb{P}\left(E^{\complement}\right)=\frac{1-p}{2-p}$$
+\end{itemize}
+
+\begin{itemize}
+	\item[\textbf{Problem.2}] Let $S_{n,m}$ be a string consisting of $n$ copies of $A$ and $m$ copies of $B$ which represents the stack of votes. Say, a possible version of $S_{3,2}$ can be $S_*=AABAB$.\\
+	Denote $S^{[k]}_{n,m}$ be the prefix of $S_{n,m}$ that has $k$ characters. For example, the above $S_{*}$ has prefixes: $S_*^{[1]}=A$, $S_*^{[2]}=AA$, $S_*^{[3]}=AAB$, $S_*^{[4]}=AABA$, $S_*^{[5]}=AABAB$.\\
+	Then we have a equivalent problem:
+	\begin{equation}
+		\begin{split}
+			E &:= \{\text{$A$ always in the lead}\} \\
+			&\iff \{\text{$k^{th}$ prefix of $S_{n,m}$ contains more $A$ than $B$, $\forall 1\leq k \leq (n+m)$}\}
+		\end{split}
+	\end{equation}
+	Denote $K(n,m)$ be the number of solutions (i.e. the string $S_{n,m}$) that solve the problem. Observing that we can recursively remove the last character of $S_{n,m}$, we have:
+	$$K(n,m)=K(n-1, m)+K(n,m-1)$$
+	$$P_{n,m}=\frac{K(n,m)}{\binom{m+n}{n}}~~(\dagger)$$
+	Which implies that this problem has a \textit{Dynamic Programming} solution. Trivially, $K(n,0)=1$ for all $n\geq 1$. The value of $K(n,m)$ for all $0\leq n,m\leq 6$ are given in following matrix, with $\bm{K}_{ij}=K(i,j)$.
+	$$m:~\begin{array}{ccccccc}0 & 1 & ~2 & ~3 & ~4 & ~5 & ~6\end{array}~~~~~~~~~~$$
+	$$
+	\bm{K}=\left( \begin{array}{ccccccc}
+	0 &  &  &  &  &  &\\
+	1 & 0 &  &  &  &  &\\
+	1 & 1 & 0 &  &  &  &\\
+	1 & 2 & 2 & 0 &  &  &\\
+	1 & 3 & 5 & 5 & 0 &  &\\
+	1 & 4 & 9 & 14 & 14 & 0 &\\
+	1 & 5 & 14 & 28 & 42 & 42 & 0\end{array} \right)
+	\begin{array}{c}
+	0\\
+	1\\
+	2\\
+	3\\
+	4\\
+	5\\
+	6
+	\end{array}~:n
+	$$
+	By $(\dagger)$:
+	$$P_{2,1}=1;~~P_{3,1}=\frac{1}{2};~~P_{3,2}=\frac{1}{5};~~P_{4,2}=\frac{1}{3};~~P_{4,3}=\frac{1}{7};~~P_{5,3}=\frac{1}{4}$$
+	Look at the first column,
+	$$P_{n,1}=\frac{n-1}{\binom{1+n}{n}}=\frac{n-1}{n+1}$$
+	Look at the second column, by the algorithm, we know $K(n,2)=\sum_{j=3}^n K(j,1)$ for $n\geq3$,
+	$$P_{n,2}=\frac{\sum_{j=3}^n (j-1)}{\binom{2+n}{n}}=\frac{\frac{1}{2}(n+1)(n-2)}{\frac{1}{2}(n+2)(n+1)}=\frac{n-2}{n+2}$$
+	\begin{itemize}
+		\item[\textit{Claim}.] $P_{n,m}=\frac{n-m}{n+m}$.
+		\item[\textit{Proof of Claim}.] (\textbf{by induction}) Suppose $P_{n,m-1}=\frac{n-m+1}{n+m-1}$, $P_{n-1,m}=\frac{n-1-m}{n-1+m}$. We choose the \textit{boundary cases} as the second column and the diagonal in $\bm{K}$, which is already ensured by $P_{n,1}=\frac{n-1}{n+1}$ and $P_{n,n}=0$, $\forall n\geq 1$. Therefore
+		\begin{equation}
+			\begin{split}
+				P_{n,m}&=\mathbb{P}\left(E|\{\text{last char is A}\}\right)\mathbb{P}\left(\text{last char is A}\right)\\
+				&~~~~+\mathbb{P}\left(E|\{\text{last char is B}\}\right)\mathbb{P}\left(\text{last char is B}\right)\\
+				&=P_{n-1,m}\frac{n}{m+n}+P_{n,m-1}\frac{m}{m+n}\\
+				&=\frac{n-1-m}{n-1+m}\frac{n}{m+n} + \frac{n-m+1}{n+m-1}\frac{m}{m+n}\\
+				&=\frac{(m+n)(m-n)+m-n}{(m+n-1)(m+n)}=\frac{m-n}{m+n}~~\blacksquare
+			\end{split}
+		\end{equation}
+	\end{itemize}
+\end{itemize}
+
+
+\begin{itemize}
+	\item[\textbf{Problem.3}] Denote $A_i:=\{\text{Person $i$ get his hat correctly.}\}$, note that $\{A_i: 0\leq i\leq n\}$ are \textit{not} disjoint. 
+	$$A:=\{\text{At least one person get his hat.}\}=\bigcup_{i=1}^{n} A_i$$
+	\begin{equation}
+		\begin{split}
+			\mathbb{P}\left(A\right)&= \mathbb{P}\left(\bigcup_{i=1}^{n}A_i\right)\\
+			&=\sum_{i=1}^n \mathbb{P}\left(A_i\right)+(-1)^{2-1}\sum_{i_1< i_2} \mathbb{P}\left(A_{i_1}\cap A_{i_2}\right)+...\\
+			&~~~~+(-1)^{k-1} \sum_{i_1<...<i_k}\mathbb{P}\left(\bigcap_{j=1}^{k} A_{i_j}\right)+...\\
+			&~~~~+(-1)^{n-1} \mathbb{P}\left(\bigcap_{j=1}^{n} A_{i_j}\right)
+		\end{split}
+	\end{equation}
+	We look into the representative term $\sum_{i_1<...<i_k}\mathbb{P}\left(\bigcap_{j=1}^{k} A_{i_j}\right)$. There are $\binom{n}{k}$ choices of men (who pick hat correctly) inside the summation. For each choice of $\{i_j: 1\leq j\leq k\}$, there are $n$-permutations of possible outcomes, in which $k$ hats are already matched. So among all cases, there $(n-k)$-permutations of feasible outcomes.
+	$$\sum_{i_1<...<i_k}\mathbb{P}\left(\bigcap_{j=1}^{k} A_{i_j}\right)=\binom{n}{k}\frac{(n-k)!}{n!}=\frac{1}{k!}$$
+	Therefore
+	$$\mathbb{P}\left(A^{\complement}\right)=1- \mathbb{P}\left(A\right)=1-\frac{1}{1!}+\frac{1}{2!}+...+(-1)^n\frac{1}{n!}\xrightarrow{n\to \infty}\frac{1}{e}~~~\blacksquare$$
+\end{itemize}
+
+\begin{itemize}
+	\item[\textbf{Problem.4}] Denote $W:=\{\text{This is a woman.}\}$
+	\begin{equation}
+		\begin{split}
+			\mathbb{P}\left(C|W\right)&=\frac{\mathbb{P}\left(W|C\right)\mathbb{P}\left(C\right)}{\mathbb{P}\left(W\right)}=\frac{\mathbb{P}\left(W|C\right)\mathbb{P}\left(C\right)}{\mathbb{P}\left(W|A\right)\mathbb{P}\left(A\right)+\mathbb{P}\left(W|B\right)\mathbb{P}\left(B\right)+\mathbb{P}\left(W|C\right)\mathbb{P}\left(C\right)}\\
+			&=\frac{0.7\cdot \frac{4}{9}}{0.5\cdot \frac{2}{9}+0.6\cdot \frac{1}{3}+0.7\cdot \frac{4}{9}}=\frac{1}{2}
+		\end{split}
+	\end{equation}
+\end{itemize}
+
+\begin{itemize}
+	\item[\textbf{Problem.5}] (a)
+	\begin{equation}
+		1=\int_{\mathbb{R}}f(x)dx=\int_{0}^2 c(4x-2x^2)dx = c\cdot\frac{8}{3} ~~~\Rightarrow~ c=\frac{3}{8}
+	\end{equation}
+	(b) \begin{equation}
+		\mathbb{P}\left(\frac{1}{2}<X<\frac{3}{2}\right)=\int_{\frac{1}{2}}^{\frac{3}{2}} \frac{3}{8}(4x-2x^2)dx=\frac{11}{16}
+	\end{equation}
+\end{itemize}
+
+\begin{itemize}
+	\item[\textbf{Problem.6}] (a) 
+	\begin{equation}
+		\begin{split}
+			\mathbb{P}\left(Y=j\right)&=\sum_{i=0}^j \binom{j}{i}\frac{e^{-2\lambda}\lambda^j}{j!}=\frac{e^{-2\lambda}}{j!}\sum_{i=0}^j \binom{j}{i}\lambda^{j-i}\lambda^{j}\\
+			& = \frac{e^{-2\lambda}(2\lambda)^{j}}{j!}
+		\end{split}
+	\end{equation}
+	(b) 
+	\begin{equation}
+		\begin{split}
+			\mathbb{P}\left(X=i\right)&=\sum_{j=i}^{\infty} \binom{j}{i}\frac{e^{-2\lambda}\lambda^j}{j!}=\sum_{j=i}^{\infty} \frac{j!}{i!(j-i)!}\frac{e^{-2\lambda}\lambda^j}{j!}\\
+			&=\sum_{j=i}^{\infty} \frac{e^{-\lambda}\lambda^i}{i!}\frac{e^{-\lambda}\lambda^{(j-i)}}{(j-i)!}~~(\text{Let $t:=j-i$})\\
+			&=\frac{e^{-\lambda}\lambda^i}{i!}\sum_{t=0}^{\infty} \frac{e^{-\lambda}\lambda^t}{t!}=\frac{e^{-\lambda}\lambda^i}{i!}
+		\end{split}
+	\end{equation}
+	(c) 
+	\begin{equation}
+	 	\begin{split}
+	 		\mathbb{P}\left(Y-X=k\right)&=\mathbb{P}\left(X=i,Y=i+k\right)\\
+	 		&=\sum_{i=0}^{\infty}\binom{i+k}{i}\frac{e^{-2\lambda}\lambda^{i+k}}{(i+k)!}\\
+	 		&=\sum_{i=0}^{\infty} \frac{e^{-\lambda}\lambda^i}{i!}\frac{e^{-\lambda}\lambda^{k}}{k!}\\
+	 		&=\frac{e^{-\lambda}\lambda^{k}}{k!}\sum_{i=0}^{\infty} \frac{e^{-\lambda}\lambda^i}{i!}=\frac{e^{-\lambda}\lambda^{k}}{k!}
+	 	\end{split}
+	\end{equation} 
+\end{itemize}
+
+\begin{itemize}
+	\item[\textbf{Problem.7}] (a) Since $\{X_i: 1\leq i\leq 10\}$ are independent Possion with mean $1$. But for Possion RV, $\mathbb{E}\left[X\right]=\lambda=1=:\mu$. Hence the distribution is fully parametrized. $\{X_i\}\sim \text{i.i.d~Possion(1)}$. So $S_{10}:=\sum_{1}^{10} X_i\sim \text{Possion}(10)$. By Markov
+	\begin{equation}
+		\mathbb{P}\left(S_{10}\geq 15\right) \leq \frac{\mathbb{E}\left[S_{10}\right]}{15}=\frac{2}{3}
+	\end{equation}
+	(2) $\mathrm{\mathbb{V}ar}\left[X\right]=\lambda=1=:\sigma^2$. By CLT: $\frac{S_n}{n} \xrightarrow{D} W\sim\mathcal{N}(\mu, \frac{\sigma^2}{n})$. I.e. $\frac{(S_n/n)-1}{1/\sqrt{n}}\xrightarrow{a}Z\sim \mathcal{N}(0,1)$
+	\begin{equation}
+		\mathbb{P}\left(S_{10} \geq 15\right) = \mathbb{P}\left(\frac{S_{10}}{10}\geq 1.5\right) = \mathbb{P}\left(\frac{\frac{S_{10}}{10}-1}{1/\sqrt{10}}\geq \frac{\sqrt{10}}{2}\right) \approx 1-\Phi\left(\frac{\sqrt{10}}{2}\right)=0.057
+	\end{equation}
+\end{itemize}
+
+\begin{itemize}
+	\item[\textbf{Problem.8}] Use same notations as of problem 3. $A_i:=\{\text{Person $i$ picks right hat.}\}$. It is clear that $\mathbb{P}\left(A_i\right)=\frac{1}{n}=\mathbb{E}\left[\mathbbm{1}_{A_i} \right]$ for all $i$. Moreover, we have
+	$$X=\sum_{i=1}^n\mathbbm{1}_{A_i};~~\mathbb{E}\left[X\right]=\mathbb{E}\left[\sum_{i=1}^n\mathbbm{1}_{A_i}\right]=1$$
+	Clearly $\mathbbm{1}_{A_i}\sim \text{Bernoulli}(\frac{1}{n})$. Hence $\mathrm{\mathbb{V}ar}\left[\mathbbm{1}_{A_i}\right]=\frac{1}{n}(1-\frac{1}{n})$. \\
+	For any $i\ne j$, $\mathbb{E}\left[\mathbbm{1}_{A_i\cap A_j}\right]=\mathbb{P}\left(\mathbbm{1}_{A_i\cap A_j}=1\right)=\mathbb{P}\left(A_i A_j\right)=\mathbb{P}\left(A_i\right)\mathbb{P}\left(A_j|A_i\right)=\frac{1}{n}\cdot\frac{1}{n-1}$. So we have
+	\begin{equation}
+		\begin{split}
+			\mathrm{\mathbb{C}ov}\left[\mathbbm{1}_{A_i}, \mathbbm{1}_{A_j}\right]&=\mathbb{E}\left[(\mathbbm{1}_{A_i}-\mathbb{E}\left[A_i\right])(\mathbbm{1}_{A_j}-\mathbb{E}\left[A_j\right])\right]\\
+			&=\mathbb{E}\left[\mathbbm{1}_{A_i\cap A_j}-\frac{1}{n}(\mathbbm{1}_{A_j}+\mathbbm{1}_{A_i})+\frac{1}{n^2}\right]\\
+			&= \mathbb{E}\left[\mathbbm{1}_{A_i\cap A_j}\right]-\frac{1}{n^2}=\frac{1}{n(n-1)}-\frac{1}{n}=\frac{1}{n^2(n-1)}
+		\end{split}
+	\end{equation}
+	Therefore
+	\begin{equation}
+		\begin{split}
+			\mathrm{\mathbb{V}ar}\left[X\right]&=\sum_{i=1}^n \mathrm{\mathbb{V}ar}\left[\mathbbm{1}_{A_i}\right]+\sum_{i\ne j}{\mathrm{\mathbb{C}ov}\left[\mathbbm{1}_{A_i}, \mathbbm{1}_{A_j}\right]}\\
+			&=n\cdot \frac{n-1}{n^2}+(n^2-n)\cdot \frac{1}{n^2(n-1)}\\
+			& = \frac{n-1}{n}+\frac{1}{n}=1~~\blacksquare
+		\end{split}
+	\end{equation}
+\end{itemize}
+
+\begin{itemize}
+	\item[\textbf{Problem.9}] It suffices to check moment generating function. By thm. $\phi_{2X}(t)=\phi_{X+Y}(t)\phi_{X-Y}(t) \iff$ $X+Y$ and $X-Y$ are independent.\\
+	Note that as linear combinations of gaussian, $2X\sim \mathcal{N}(2\mu, 4\sigma^2)$; $X+Y\sim \mathcal{N}(2\mu, 2\sigma^2)$; $X-Y\sim \mathcal{N}(0, 2\sigma^2)$
+	$$LHS=\exp \left(2\mu t+\frac{1}{2}\cdot 4 \sigma^2t^2\right) $$
+	$$RHS=\exp \left(2\mu t+\frac{1}{2}\cdot 2 \sigma^2t^2\right) \exp \left(0+\frac{1}{2}\cdot 2 \sigma^2t^2\right)=LHS~~\blacksquare$$
+\end{itemize}
+
+\begin{itemize}
+	\item[\textbf{Problem.10}] (a) The first equality:
+	\begin{equation}
+		\begin{split}
+			\mathbb{E}\left[N\right]&:=\sum_{j=0}^{\infty} j \cdot\mathbb{P}\left(N=j\right)~~(\text{Note that $j=\sum_{k=1}^j 1$})\\
+			&=\sum_{j=0}^{\infty} \left(\sum_{k=1}^j 1\right)\mathbb{P}\left(N=j\right)=\sum_{j=0}^{\infty} \left(\sum_{k=1}^{\infty} \mathbbm{1}_{\{k\leq j\}}(k)\right)\mathbb{P}\left(N=j\right)\\
+			&=\sum_{k=1}^{\infty} \left(\sum_{j=0}^{\infty} \mathbbm{1}_{\{k\leq j\}}(k)\cdot\mathbb{P}\left(N=j\right)\right)=\sum_{k=1}^{\infty} \left(\sum_{j=k}^{\infty} \mathbb{P}\left(N=j\right)\right)=\sum_{k=1}^{\infty} \mathbb{P}\left(N\geq k\right)
+		\end{split}
+	\end{equation}
+	The second is pretty much the same,
+	\begin{equation}
+		\begin{split}
+			\mathbb{E}\left[N\right]&:=\sum_{j=0}^{\infty} j \cdot\mathbb{P}\left(N=j\right)~~(\text{Note that $j=\sum_{k=0}^{j-1} 1$})\\
+			&=\sum_{j=0}^{\infty} \left(\sum_{k=0}^{j-1} 1\right)\mathbb{P}\left(N=j\right)=\sum_{j=0}^{\infty} \left(\sum_{k=0}^{\infty} \mathbbm{1}_{\{k<j\}}(k)\right)\mathbb{P}\left(N=j\right)\\
+			&=\sum_{k=0}^{\infty} \left(\sum_{j=0}^{\infty} \mathbbm{1}_{\{k< j\}}(k)\cdot\mathbb{P}\left(N=j\right)\right)=\sum_{k=1}^{\infty} \left(\sum_{j=k+1}^{\infty} \mathbb{P}\left(N=j\right)\right)\\
+			&=\sum_{k=1}^{\infty} \mathbb{P}\left(N\geq k+1\right)=\sum_{k=1}^{\infty} \mathbb{P}\left(N> k\right)~~~\blacksquare
+		\end{split}
+	\end{equation}
+	(c) But I want to show general case directly...
+	\begin{equation}
+		\begin{split}
+			\mathbb{E}\left[g(X)\right] &= \int_{\Omega} g(X) d\mathbb{P} = \int_{\Omega} \left(\int_0^{g(X)} 1 dt\right) d\mathbb{P} \\
+			&=\int_{\Omega} \left(\int_0^{\infty} \mathbbm{1}_{\{t<g(X)\}} dt\right) d\mathbb{P}=\int_0^{\infty} \left( \int_{\Omega}\mathbbm{1}_{\{t<g(X)\}} d\mathbb{P} \right) dt ~~(\text{By \textbf{Tonelli.}})\\
+			&=\int_0^{\infty} \mathbb{P}\left(X>g^{-1}(t)\right) dt~~~~(\text{Define $z:=g^{-1}(t)$, then $t=g(z)$})\\
+			&=\int_0^{\infty} \mathbb{P}\left(X>z\right) g'(z)dz~~(\dagger)~~~\blacksquare
+		\end{split}
+	\end{equation}
+	The equations in (b) are implied by $(\dagger)$. Take $g(X):=X$, we have (b-1), take $g(X):=X^n$, we obtain (b-2). Both also satisfy $g(0)=0$.
+\end{itemize}
+
+\begin{itemize}
+	\item[\textbf{Problem.11}] (a) CDF is defined as the mapping $F_X(x):=\mathbb{P}\left(X\leq x\right)$\footnote{To avoid duplicate notations we specify $F_X(\cdot)\equiv F(\cdot)$ in this problem, but not using $F(\cdot)$ on its own.}. Hence the CDF of RV $F_X(X)$ is
+	\begin{equation}
+		F_{F_X(X)}(z) := \mathbb{P}\left(F_X(X)\leq z\right) = \mathbb{P}\left(X\leq F_X^{-1}(z)\right) =: F_X(F_X^{-1}(z)) = z
+	\end{equation}
+	for all $z\in (0,1)$; implies that $F_X(X) \sim \mathcal{U}(0,1)$.\\
+	(b) Now given $U\sim \mathcal{U}(0,1)$, we have $F_U(u)=\frac{u-0}{1-0}$.
+	\begin{equation}
+		\begin{split}
+			F_{F_X^{-1}(U)}(z) &= \mathbb{P}\left(F_X^{-1}(U)\leq z\right) = \mathbb{P}\left(U\leq F_X(z)\right) \\
+			&= F_U(F_X(z)) = \frac{F_X(z)-0}{1-0}=F_X(z) ~~\blacksquare
+		\end{split}
+	\end{equation}
+\end{itemize}
+
+\begin{itemize}
+	\item[\textbf{Problem.12}] (a) It suffices to determine joint-pmf:
+	\begin{equation}
+		\begin{split}
+			p_{N_1, ..., N_r}(n_1, ..., n_r)&:=\mathbb{P}\left(N_1=n_1, N_2=n_2, ..., N_r=n_r\right)\\
+			&=\mathbb{P}\left(N_1=n_1\right) \mathbb{P}\left(N_2=n_2 | N_1=n_1\right)\cdot...\cdot\mathbb{P}\left(N_r=n_r|N_1=n_1,...,N_{r-1}=n_{r-1}\right)\\
+			&=\binom{n}{n_1}p_1^{n_1}\binom{n-n_1}{n_2}p_2^{n_2}\cdot ...\cdot \binom{n-n_1-...-n_{r-1}}{n_r}p_r^{n_r}\\
+			&=\frac{n!}{n_1!(n-n_1)!}\frac{(n-n_1)!}{n_2!(n-n_1-n_2)!}...\frac{(n-n_1-...-n_{r-1})!}{n_{r}!0!}\prod_{k=1}^r p_{k}^{n_k}\\
+			&=\frac{n!}{\prod_{k=1}^r n_k!}\prod_{k=1}^r p_{k}^{n_k}
+		\end{split}
+	\end{equation}
+	When $\sum_{k=1}^r n_k=1$. Otherwise $p_{N_1, ..., N_r}(n_1, ..., n_r)=0~~~~\blacksquare$.\\
+	(b) Denote $A_i^{[m]}:=\{\text{$i^{th}$ outcome appears at $m^{th}$ trial}\}$. $1\leq i\leq r$, $1\leq m \leq n$. Then $A_i^{[p]}, A_j^{[q]}$ are independent as long as $p\ne q$. Moreover $\mathbbm{1}_{A_i^{[m]}\cap A_j^{[m]}}\equiv0$ for $i\ne j$.
+	\begin{equation}
+		\begin{split}
+			&\mathbb{E}\left[\mathbbm{1}_{A_i^{[m]}}\right]=\mathbb{P}\left(\mathbbm{1}_{A_i^{[m]}}=1\right)=p_i;~~~~\mathrm{\mathbb{V}ar}\left[\mathbbm{1}_{A_i^{[m]}}\right]=p_i(1-p_i)\\
+			&\mathbb{E}\left[N_i\right] = \mathbb{E}\left[\sum_{m=1}^n \mathbbm{1}_{A_i^{[m]}}\right] = np_i;~~~~\mathrm{\mathbb{V}ar}\left[N_i\right] = np_i(1-p_i)
+		\end{split}
+	\end{equation}
+	\begin{equation}
+		\begin{split}
+			&\mathbb{E}\left[N_iN_j\right]=\mathbb{E}\left[\sum_{m=1}^n \mathbbm{1}_{A_i^{[m]}}\sum_{m=1}^n \mathbbm{1}_{A_j^{[m]}}\right]=\mathbb{E}\left[\sum_{m=1}^n \mathbbm{1}_{A_i^{[m]}\cap A_j^{[m]}}+\sum_{1 \leq p\ne q \leq n} \mathbbm{1}_{A_i^{[p]}\cap A_j^{[q]}}\right]=(n^2-n)p_ip_j\\
+			&\mathrm{\mathbb{C}ov}\left[N_i,N_j\right]=\mathbb{E}\left[(N_i-np_i)(N_j-np_j)\right]=\mathbb{E}\left[N_iN_j\right]-n^2p_ip_j=-np_ip_j~~~~\blacksquare
+		\end{split}
+	\end{equation}
+	(c) Denote $B_i:=\{\text{Outcome $i$ does not occur throughout all trials}\}$. $\mathbb{E}\left[\mathbbm{1}_{B_i}\right]=\mathbb{P}\left(B_i\right)=(1-p_i)^n$. $K:=\sum_{i=1}^r \mathbbm{1}_{B_i}$ is $\#$outcomes that do not occur.
+	\begin{equation}
+		\begin{split}
+			&\mathbb{E}\left[K\right]=\sum_{i=1}^r(1-p_i)^n\\
+			&\mathbb{E}\left[K^2\right]=\sum_{i=1}^r(1-p_i)^{2n}+\sum_{i\ne j} \mathbb{E}\left[\mathbbm{1}_{B_i\cap B_j}\right]
+		\end{split}
+	\end{equation}
+	And $\mathbb{P}\left(B_i\cap B_j\right)=\mathbb{P}\left(B_i\right)\mathbb{P}\left(B_j|B_i\right)=(1-p_i)^n\left(1-\frac{p_j}{1-p_i}\right)^n=(1-p_i-p_j)^n$. Hence \textbf{TODO}
+\end{itemize}
+
+\begin{itemize}
+	\item[\textbf{Problem.13}] (a) $X_1, X_2$ indep. $\iff$ $\phi_{X_1+X_2}(t)=\phi_{X_1}(t)\phi_{X_2}(t)$. Hence
+	\begin{equation}
+		\phi_{X_1+X_2}(t) = \exp[\lambda_1(e^t-1)]\exp[\lambda_2(e^t-1)] = \exp[(\lambda_1+\lambda_2)(e^t-1)]
+	\end{equation}
+	Therefore $X_1+X_2 \sim \text{Possion}(\lambda_1+\lambda_2)$\\
+	(b) 
+	\begin{equation}
+		\begin{split}
+			p_{X_1|X_1+X_2}(x|z)&=\mathbb{P}\left(X_1=x|X_1+X_2=z\right)=\frac{\mathbb{P}\left(X_1=x, X_1+X_2=z\right)}{\mathbb{P}\left(X_1+X_2=z\right)}\\
+			&=\frac{\frac{e^{-\lambda_1}\lambda_1^{x}}{x!}\frac{e^{-\lambda_2}\lambda_2^{z-x}}{(z-x)!}}{e^{-\lambda_1-\lambda_2}(\lambda_1+\lambda_2)^{z}/z!}=\frac{z!}{x!(z-x)!}\frac{\lambda_1^x\lambda_2^{z-x}}{(\lambda_1+\lambda_2)^z}\\
+			&=\binom{z}{x} \left(\frac{\lambda_1}{\lambda_1+\lambda_2}\right)^x\left(\frac{\lambda_2}{\lambda_1+\lambda_2}\right)^{z-x}
+		\end{split}
+	\end{equation}
+	Hence, $X_1|\{X_1+X_2=n\} \sim \text{Binomial}(\frac{\lambda_1}{\lambda_1+\lambda_2}, n)$. $\blacksquare$
+\end{itemize}
+
+\begin{itemize}
+	\item[\textbf{Problem.14}] Due to (\textbf{Jensen}), for \textit{concave} function $\phi(\cdot)$ and RV $X$, we have $\phi(\mathbb{E}\left[X\right])\geq \mathbb{E}\left[\phi(X)\right]$. Take $X$ be the discrete RV that takes value $\{x_1, x_2, ..., x_n\}$ with uniform probability. Take $\phi(\cdot)=\log(\cdot)$. Then
+	\begin{equation}
+		\log\left(\frac{1}{n}\sum_{i=1}^n x_i\right) \geq \frac{1}{n}\sum_{i=1}^n \log(x_i) = \log\left(\left(\prod_{i=1}^n x_i\right)^{\frac{1}{n}}\right)
+	\end{equation}
+	And $\log$ is monotone transform. We are done with required equation. $\blacksquare$
+\end{itemize}
+
+\begin{itemize}
+	\item[\textbf{Problem.15}] (a)
+	\begin{equation}
+		LHS = \mathbb{E}\left[X^2\right]-\mathbb{E}^2\left[X\right]
+	\end{equation}
+	\begin{equation}
+		\begin{split}
+			RHS &= \mathbb{E}\left[\mathbb{E}\left[X^2\middle|Y\right]-\mathbb{E}^2\left[X\middle|Y\right]\right]+\mathbb{E}\left[\mathbb{E}^2\left[X\middle|Y\right]-\mathbb{E}^2\left[\mathbb{E}\left[X\middle|Y\right]\right]\right]	\\
+			&=\mathbb{E}\left[X^2\right]-\mathbb{E}\left[\mathbb{E}^2\left[X\middle|Y\right]\right]+\mathbb{E}\left[\mathbb{E}^2\left[X\middle|Y\right]\right]-\mathbb{E}^2\left[X\right]\\
+			&=LHS
+		\end{split}
+	\end{equation}
+	(b) By \textbf{Wald's Identity}, since $\{X_i\}$ are i.i.d, indep. of $N$, denote $S_N:=\sum_{i=1}^N X_i$
+	\begin{equation}
+		\mathbb{E}\left[S_N\right] = \mathbb{E}\left[\mathbb{E}\left[S_N|N\right]\right] = \mathbb{E}\left[N \mathbb{E}\left[X_1\right]\right] = \mu \mathbb{E}\left[N\right]
+	\end{equation}
+	\begin{equation}
+		\begin{split}
+			\mathrm{\mathbb{V}ar}\left[S_N\right] &= \mathbb{E}\left[\mathrm{\mathbb{V}ar}\left[S_N|N\right]\right] + \mathrm{\mathbb{V}ar}\left[\mathbb{E}\left[S_N|N\right]\right]\\
+			&=\mathbb{E}\left[N\sigma^2\right] + \mathrm{\mathbb{V}ar}\left[\mu N\right]\\
+			&=\sigma^2 \mathbb{E}\left[N\right] + \mu^2 \mathrm{\mathbb{V}ar}\left[N\right]
+		\end{split}
+	\end{equation}
+\end{itemize}
+\end{document}

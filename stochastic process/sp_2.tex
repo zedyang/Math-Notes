@@ -1,0 +1,488 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+
+\title{\textbf{Stochastic Process Assignment II}}
+\author{Zed}
+
+\begin{document}
+\maketitle
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} Define RV $N^{[k]}_s:=$ \# of trials before obtaining $k$-consecutive successes, \textit{given} that we have already had $s$-consecutive successes in the stack. We want $\mathbb{E}\left[N^{[k]}_0\right]$, and we have
+\begin{equation}
+  N_0^{[k]} = N_0^{[k-1]} + N_{k-1}^{[k]}
+\end{equation}
+Define $A:=\{\text{The next trial right after we have $k-1$ consecutive successes is again a success}\}$, we can write
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[N_{k-1}^{[k]}\right] & = \mathbb{E}\left[N_{k-1}^{[k]}; A\right] + \mathbb{E}\left[N_{k-1}^{[k]}; A^{\complement}\right]\\
+    & = 1\cdot p + N_0^{[k]} \cdot (1-p)
+  \end{split}
+\end{equation}
+Insert back into equation (1) yields
+\begin{equation}
+  \mathbb{E}\left[N_0^{[k]}\right] = \frac{1}{p}\left(1+\mathbb{E}\left[N_0^{[k-1]}\right]\right)
+\end{equation}
+Which is a recursive formula for sequence $\left\{\mathbb{E}\left[N_0^{[k]}\right]: k\geq 1\right\}$. Note $N_0^{[1]}\sim \text{Geometric} (p)$, we solve from recursion that $\mathbb{E}\left[N_0^{[k]}\right]=\sum_{i=1}^k 1/p^i$.
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} By the definition given in the problem, it suffices to show $f_{Y|X}(y,i)=C'e^{-(\alpha+1)y}y^{s+i-1}$, where $C'$ is irrelevant to $y$.
+\begin{equation}
+  \begin{split}
+    f_{Y|X}(y|i) &:= \frac{f_{X,Y}(i,y)}{p_X(i)} \\
+    & = \frac{p_{X|Y}(i|y)f_{Y}(y)}{p_X(i)} \\
+    & = \frac{1}{p_X(i)} \cdot \frac{e^{-y}y^i}{i!} \cdot Ce^{-\alpha y}y^{s-1} \\
+    & = \frac{C}{p_X(i)i!} \cdot e^{-(\alpha+1)y}y^{s+i-1}
+  \end{split}
+\end{equation}
+Since $\{X=i\}$ is a known condition, $C':=C/p_X(i)i!$ is a constant. By the given definition in the problem, $Y|X$ is Gamma-distributed.
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} Since $T(\bm{X})=\sum_1^n X_i$, deterministically we have $t=\sum_1^n x_i$.
+\begin{equation}
+  \begin{split}
+    f_{\bm{X},T(\bm{X})}(\bm{x},t) &= \mathbb{P}\left(\bm{X}=\bm{x}, T(\bm{X})=t\right) \\
+    &= \mathbb{P}\left(\bm{X}=\bm{x}\right) \mathbb{P}\left(T(\bm{X})=t|\bm{X}=\bm{x}\right) \\
+    &= \mathbb{P}\left(\bm{X}=\bm{x}\right)\cdot 1 \\
+    &= f_{\bm{X}}(\bm{x})
+  \end{split}
+\end{equation}
+(a). When $X\sim \mathcal{N}(\theta, 1)$, $T(\bm{X})\sim \mathcal{N}(n\theta, n)$. And the gaussian vector $\bm{X}\sim \mathcal{N}(\bm{\theta}, \bm{\Sigma})$, where $\bm{\theta}=[\theta, ..., \theta]$, $\bm{\Sigma}=\bm{I}$ is identity matrix.
+\begin{equation}
+  \begin{split}
+    f_{\bm{X}|T(\bm{X})}(\bm{x}|t) &= \frac{f_{\bm{X}, T}(\bm{x}, t)}{f_{T}(t)} = \frac{f_{\bm{X}}(\bm{x})}{f_{T}(t)} \\
+    &= \frac{\exp\left(-\frac{1}{2}(\bm{x}-\bm{\theta})\bm{\Sigma}^{-1}(\bm{x}-\bm{\theta})^{\top}\right)/\sqrt{(2\pi)^n \det(\bm{\Sigma}})} {\exp(-\frac{1}{2n}(t-n\theta)^2)/\sqrt{2\pi n}} \\
+    &= C \exp\left(\frac{t^2}{2n}-\theta t+\frac{n\theta^2}{2}-\frac{\bm{x}\bm{x}^{\top}}{2}+\theta t -\frac{\bm{\theta}\bm{\theta}^{\top}}{2}\right) \\
+    &= C \exp\left(\frac{t^2}{2n} - \frac{\bm{x}\bm{x}^{\top}}{2}\right)
+  \end{split}
+\end{equation}
+In which $\bm{x}=[x_1, x_2, ..., x_n]$, $C:=\sqrt{1/(2\pi)^{n-1}}$. Since $f_{\bm{X}|T}$ is not a function of $\theta$, by definition, $T$ is a sufficient statistic. \\
+(b). Given $X\sim \text{Exp}(\theta)$, we have $T(\bm{X})\sim \Gamma(n, \theta)$.
+\begin{equation}
+  f_{\bm{X}|T(\bm{X})}(\bm{x}|t) = \frac{f_{\bm{X}}(\bm{x})}{f_{T}(t)} = \frac{\theta^n \exp(-\theta \sum_1^n x_i)}{\theta \exp(-\theta t)(\theta t)^{n-1}/\Gamma(n)} = \Gamma(n) / t^{n-1}
+\end{equation}
+(c) Given $X\sim \text{Bernoulli}(\theta)$, we have $T(\bm{X})\sim \text{Binom}(n,\theta)$.
+\begin{equation}
+  p_{\bm{X}|T(\bm{X})}(\bm{x}|t) = \frac{p_{\bm{X}}(\bm{x})}{p_{T}(t)} = \frac{\theta^{\sum_1^n x_i}(1-\theta)^{n-\sum_{1}^n x_i}}{\binom{n}{t}\theta^t(1-\theta)^{(n-t)}} = \frac{1}{\binom{n}{t}}
+\end{equation}
+(d) Given $X\sim \text{Poi}(\theta)$, we have $T(\bm{X})\sim \text{Poi}(n\theta)$.
+\begin{equation}
+  p_{\bm{X}|T(\bm{X})}(\bm{x}|t) = \frac{p_{\bm{X}}(\bm{x})}{p_{T}(t)} = \frac{e^{-n\theta}\theta^{\sum_1^n x_i}/\prod_1^n x_i!}{e^{-n\theta}(n\theta)^t/t!} = \frac{t!}{n^t \prod_1^n x_i!}
+\end{equation}
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} (a). Denote $D:=\{\text{The observed person has disease.}\}$, then we are able to interpret the quantities in the illustration as: $\mathbb{P}\left(D|\{X=x\}\right)=P(x)$; $\mathbb{P}\left(X=x\right)=f(x)$. Hence $\mathbb{P}\left(D\cap\{X=x\}\right)=P(x)f(x)$.
+\begin{equation}
+  \begin{split}
+    \mathbb{P}\left(\{X=x\}|D\right) &= \frac{\mathbb{P}\left(D\cap\{X=x\}\right)}{\mathbb{P}\left(D\right)}\\
+    &= \frac{\mathbb{P}\left(D\cap\{X=x\}\right)}{\int_x \mathbb{P}\left(D\cap\{X=x\}\right) dx}\\
+    &= \frac{P(x)f(x)}{\int_x P(x)f(x)dx}
+  \end{split}
+\end{equation}
+(b). Just replace $D$ with $D^{\complement}$, in which $\mathbb{P}\left(D^{\complement}\middle|\{X=x\}\right)=1-P(x)$, yields
+\begin{equation}
+  \mathbb{P}\left(\{X=x\}\middle|D^{\complement}\right) = \frac{(1-P(x))f(x)}{\int_x (1-P(x))f(x)dx}
+\end{equation}
+(c). 
+\begin{equation}
+  \frac{\mathbb{P}\left(\{X=x\}\middle|D\right)}{\mathbb{P}\left(\{X=x\}\middle|D^{\complement}\right)} = \frac{\int_x (1-P(x))f(x)dx}{\int_x P(x)f(x)dx} \cdot \frac{1}{\frac{1}{P(x)}-1}
+\end{equation}
+Note that in the first quantity we integrate $x$ out, so it's just a constant. And the second quantity $\nearrow$ whenever $1\geq P(x) \nearrow$, which finishes the proof.
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} (a). Define RV $N^{[i]}:=$ \# of rounds befone 2-consecutive hits when player $i$ shoots first; $i=1,2$. $A_k:=\{\text{The target is hitted in the $k^{th}$ round.}\}$. Then
+\begin{equation}
+  \begin{split}
+    \mu_1:=\mathbb{E}\left[N^{[1]}\right] &= \mathbb{E}\left[N^{[1]}; A_1\right] + \mathbb{E}\left[N^{[1]}; A_1^{\complement}\right] \\
+    &= \left(\mathbb{E}\left[N^{[1]}; A_1\cap A_2\right]+\mathbb{E}\left[N^{[1]}; A_1\cap A_2^{\complement}\right]\right) + \mathbb{E}\left[N^{[1]}; A_1^{\complement}\right] \\
+    &= \mathbb{E}\left[N^{[1]}\middle|A_1\cap A_2\right]\mathbb{P}\left(A_1 \cap A_2\right)+\mathbb{E}\left[N^{[1]}\middle|A_1\cap A_2^{\complement}\right]\mathbb{P}\left(A_1 \cap A_2^{\complement}\right) + \mathbb{E}\left[N^{[1]}\middle|A_1^{\complement}\right]\mathbb{P}\left(A_1^{\complement}\right) \\
+    &= 2p_1p_2 + (\mu_1+2)p_1(1-p_2) + (\mu_2+1)(1-p_1)
+  \end{split}
+\end{equation}
+By similar split of $N^{[2]}$, we have
+\begin{equation}
+  \mu_2= 2p_2p_1 + (\mu_2+2)p_1(1-p_2) + (\mu_1+1)(1-p_2)
+\end{equation}
+Solving the equation system, yields
+\begin{equation}
+  \begin{cases}
+  \mu_1 = (2+p_1^2p_2-p_1p_2)~/~(p_1p_2(2-p_1-p_2+p_1p_2)) & \\
+  \mu_2 = (2+p_2^2p_1-p_1p_2)~/~(p_1p_2(2-p_1-p_2+p_1p_2))
+  \end{cases}
+\end{equation}
+(b). Define RV $X^{[i]}:=$ \# of hits befone 2-consecutive hits when player $i$ shoots first; $A_i$ is same event as in (a).
+\begin{equation}
+  \begin{split}
+    h_1:=\mathbb{E}\left[X^{[1]}\right] &= \mathbb{E}\left[X^{[1]}; A_1\right] + \mathbb{E}\left[X^{[1]}; A_1^{\complement}\right] \\
+    &= \left(\mathbb{E}\left[X^{[1]}; A_1\cap A_2\right]+\mathbb{E}\left[X^{[1]}; A_1\cap A_2^{\complement}\right]\right) + \mathbb{E}\left[X^{[1]}; A_1^{\complement}\right] \\
+    &= 2p_1p_2 + (h_1+1)p_1(1-p_2) + h_2(1-p_1)
+  \end{split}
+\end{equation}
+By similar split of $X^{[2]}$, we have
+\begin{equation}
+  h_2= 2p_2p_1 + (h_2+1)p_1(1-p_2) + h_1(1-p_2)
+\end{equation}
+Solving the equation system, yields
+\begin{equation}
+  \begin{cases}
+  h_1 = (p_1+p_2+p_1^2p_2^2-p_1p_2^2)~/~(p_1p_2(2-p_1-p_2+p_1p_2)) & \\
+  h_2 = (p_1+p_2+p_1^2p_2^2-p_1^2p_2)~/~(p_1p_2(2-p_1-p_2+p_1p_2))
+  \end{cases}
+\end{equation}
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} Verify that following definitions for Poisson process are equivalent. Counting process $\{N(t): t\geq 0\}$ is a poisson process if 1. $N(0)=0$, 2. independent increments and
+\begin{itemize}
+  \item[3.] $\mathbb{P}\left(N(t+s)-N(s)=n\right)=e^{-\lambda t}(\lambda t)^n / n!$.
+  \item[3'] $\mathbb{P}\left(N(h+s)-N(s)=1\right)=\lambda h+o(h)$; $\mathbb{P}\left(N(h+s)-N(s)\geq 2\right)=o(h)$ for all $s$ and $h\to 0$.
+\end{itemize}
+\end{problem}
+\begin{proof} (3) $\Rightarrow$ (3') is straightforward
+\begin{equation}
+  \begin{split}
+    \mathbb{P}\left(N(h+s)-N(s)=0\right) &= e^{-\lambda h} = 1- \lambda h + o(h) \\
+    \mathbb{P}\left(N(h+s)-N(s)=1\right) &= e^{-\lambda h} \lambda h = (1- \lambda h + o(h)) \lambda h = \lambda h + o(h)
+  \end{split}
+\end{equation}
+Hence,
+\begin{equation}
+  \mathbb{P}\left(N(h+s)-N(s)\geq 2\right) = 1 - \mathbb{P}\left(N(h+s)-N(s)\in \{0,1\}\right)=o(h)
+\end{equation}
+Finishes the proof. \\
+(3') $\Rightarrow$ (3)
+(\textbf{Step.1}) We check MGF $\phi_{N(t)}(x)=\mathbb{E}\left[e^{xN(t)}\right]$ equal to that of Poisson$(\lambda t)$. For clearity of notations, we write $u(x,t):=\phi_{N(t)}(x)$. In particular for fixed $\bar{t}$, $u(x,\bar{t})$ is MGF of RV $N(\bar{t})$, and a univariate function of $u$. We further define increment $\Delta_{s,s+t}:=N(s+t)-N(s)$, then $N(s)=\Delta_{0,s}$. By independent increment property, $\Delta_{a,b}, \Delta_{c,d}$ are independent if $(a,b)\cap (c,d)=\emptyset$.
+\begin{equation}
+  \begin{split}
+    u(x,t+h) &= \mathbb{E}\left[e^{x(N(t+h)-N(t))}e^{xN(t)}\right] \\
+    &= \mathbb{E}\left[e^{x\Delta_{t,t+h}}e^{x\Delta_{0,t}}\right] \\
+    &= u(x,t) \mathbb{E}\left[e^{x\Delta_{t,t+h}}\right] \\
+    &= u(x,t)\left[1- \lambda h + o(h) + e^x(\lambda h + o(h))+o(h)\right]\\
+    &= u(x,t)\left[1- \lambda h  + e^x\lambda h +o(h)\right]
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    & \Rightarrow \frac{u(x,t+h)-u(x,t)}{h} = u(x,t)\lambda (e^x-1) + \frac{o(h)}{h} \\
+  \end{split}
+\end{equation}
+Let $h\to 0$ and note that $N(0)=0$, it suffices to solve following Boundary Value Problem
+\begin{equation}
+  \begin{cases}
+  u_t(x,t) = u(x,t)\lambda (e^x-1) & \\
+  u(x,0) = 1
+  \end{cases}
+\end{equation}
+It turns out that $u(x,t)=\exp(\lambda t(e^x-1))$, implies that for every fixed $t\geq0$, $N(t)\sim \text{Poi}(\lambda t)$. \\
+(\textbf{Step.2}) Now consider for any $s\geq 0$, $\Delta_{s,s+t}=N(s+t)-N(s)$ $\Rightarrow$ $\Delta_{s,s+t}+\Delta_{0,s}=\Delta_{0,s+t}$, and $\Delta_{s,s+t}, \Delta_{0,s}$ are independent increments; furthermore MGF of $\Delta_{0,s}$ is known to us, which is $u(x;s)$. Hence
+\begin{equation}
+  \begin{split}
+    &~~~~ \phi_{\Delta_{0,s}}\cdot \phi_{\Delta_{s,s+t}} = \phi_{\Delta_{0,s+t}}\\
+    & \Rightarrow \phi_{\Delta_{s,s+t}} = \frac{g(x,s+t)}{g(x,s)} = \exp(\lambda t(e^x-1))
+  \end{split}
+\end{equation}
+Which implies that $\Delta_{s,s+t} \sim \text{Poi}(\lambda t)$.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} $\{T_n :n\geq 1\}$ are i.i.d exponential with mean $\frac{1}{\lambda}$. Define $N(t):=\max\{n: S_n\leq t\}$ where $S_0=0$ and $S_n=\sum_{i=1}^n T_i$. Show $\{N(t)\}$ is Poisson process with rate $\lambda$.
+\end{problem}
+\begin{proof} (\textbf{Step.1}) We check $S_n \sim \Gamma(n, \lambda)$. Since $\{T_n: n\geq 1\}$ are i.i.d exponential, we consider the MGF of $S_n$,
+\begin{equation}
+  \phi_{S_n}(t) = \prod_{i=1}^n \phi_{T_i}(t) = \left(\frac{\lambda}{\lambda-t}\right)^n
+\end{equation}
+Which is exactly the MGF of a $\Gamma(n,\lambda)$ RV. Therefore we can write the CDF of $S_n$ as $\sim \Gamma(n,\lambda)$
+\begin{equation}
+  F_{S_n}(t) = \mathbb{P}\left(S_n \leq t\right) = 1-\sum_{i=0}^{n-1} \frac{e^{-\lambda t}(\lambda t)^i}{i!}
+\end{equation}
+(\textbf{Step.2}) Then we derive the distribution of $N(t)$. By its definition, $\mathbb{P}\left(N(t)=n\right)=\mathbb{P}\left(S_n \leq t< S_{n+1}\right)=\mathbb{P}\left(\{S_n\leq t\}\setminus \{S_{n+1}\leq t\}\right)$. It is clear that $\{S_{n+1}\leq t\} \subseteq \{S_n \leq t\}$ because $S_n \leq S_{n+1}$. Hence
+\begin{equation}
+  \begin{split}
+    \mathbb{P}\left(N(t)=n\right)&=\mathbb{P}\left(\{S_n\leq t\}\setminus \{S_{n+1}\leq t\}\right) \\
+    &= \mathbb{P}\left(S_{n}\leq t\right)-\mathbb{P}\left(S_{n+1}\leq t\right)\\
+    &= F_{S_n}(t) - F_{S_{n+1}}(t) \\
+    &= \frac{e^{-\lambda t}(\lambda t)^n}{n!}
+  \end{split}
+\end{equation}
+Which implies that $N(t)\sim \text{Poi}(\lambda t)$. \\
+(\textbf{Step.3}) We show that $\{N(t): t\geq 0\}$ is of \textbf{stationary increments}, and further show that it is of \textbf{independent increments}. Define $\Delta_{t_1, t_2} := N(t_2)-N(t_1)$, then in particular we have $\Delta_{0,t}=N(t)$. Still employ same notations for interarrival time and waiting time (i.e. $T_n$, $S_n$). \\
+$\forall$ starting point $s>0$, Define $S_n^{[s]}:=(S_{n+N(s)}-s)$ i.e. the waiting time of $n^{th}$ event happening \textbf{after} $s$. We have
+\begin{equation}
+  S_n^{[s]} = (S_{N(s)+1}-s) + \sum_{i=2}^{n} T_{N(s)+i}
+\end{equation}
+Where $S_{N(s)+1}$ is the waiting time of the first event happening after $s$, we have $S_{N(s)+1}=S_{N(s)}+T_{N(s)+1}$; and $T_{N(s)+i}$ are i.i.d Exponential$(\lambda)$. We notice that event $\{S_{N(s)+1}>s\}$ i.e. $\{S_{1}^{[s]}>0\}$ is \textit{surely true}\footnote{By saying event $E$ surely true, we mean that $E=\Omega$ (which differs from almost surely true where we only require $\mathbb{P}\left(E\right)=1$). And of course any event with probability 0 or 1 must be independent of anything else.}, since $N(s)+1^{st}$ event has not yet happened at time $s$. So for all $t\geq 0$, by \textbf{memoryless} property of $T_{N(s)+1}$:
+\begin{equation}
+  \begin{split}
+    \mathbb{P}\left(T_{N(s)+1}>t\right) &= \mathbb{P}\left(T_{N(s)+1}>t+(s-S_{N(s)})\middle|T_{N(s)+1}>(s-S_{N(s)})\right) \\
+    &= \mathbb{P}\left(S_{N(s)}+T_{N(s)+1}-s>t\middle|S_{N(s)}+T_{N(s)+1}-s>0\right) \\
+    &= \mathbb{P}\left(S_{1}^{[s]}>t\middle|S_{1}^{[s]}>0\right)\\
+    &= \frac{\mathbb{P}(\{S_{1}^{[s]}>t\}\cap \{S_{1}^{[s]}>0\})}{\mathbb{P}(S_{1}^{[s]}>0)} \\
+    &= \mathbb{P}(S_{1}^{[s]}>t)
+  \end{split}
+\end{equation}
+Which implies that $S_{1}^{[s]}$ has identical distribution as $T_{N(s)+1}$, which is Exponential$(\lambda)$ and is independent w.r.t. $T_{j}$, for all $j\ne N(s)+1$. Therefore $S_n^{[s]}=S_{1}^{[s]}+\sum_{i=2}^n T_{N(s)+i}$ is a summation of $n$ copies of i.i.d Exponential$(\lambda)$. Hence, $S_{n}^{[s]}\sim \Gamma(n, \lambda)$ is of identical distribution as $S_n$ $(\dag)$. \\
+Since $\Delta_{s,s+t}=\max\{n: S_n^{[s]}<t\}$. Note that $\Delta_{0,t}=N(t)=\max\{n: S_n<t\}$ and fact $(\dag)$, we finish the proof that $\Delta_{0,t}$ and $\Delta_{s,s+t}$ are identically distributed for all $s\geq 0$. (\textbf{Stationary Increments})\\
+Now for any $s,t$, we have
+\begin{equation}
+  \begin{split}
+    \phi_{\Delta_{0,s}+\Delta_{s,s+t}}(x) &= \phi_{\Delta_{0,s+t}}(x) \\
+    &= \exp(\lambda(s+t)(e^x-1)) \\
+    &= \exp(\lambda s(e^x-1))\cdot \exp(\lambda t(e^x-1))\\
+    &= \phi_{\Delta_{0,s}}(x)\cdot \phi_{\Delta_{0,t}}(x)\\
+    &= \phi_{\Delta_{0,s}}(x)\cdot \phi_{\Delta_{s,s+t}}(x)~~(\triangle)\text{(By stationary increments)}\\
+  \end{split}
+\end{equation}
+Which implies that $\Delta_{s,s+t}$ and $\Delta_{0,s}$ are independent for all $t,s\geq 0$. \\
+Now for any $a,b,c,d\geq0$, $(a,b)\cap (c,d)=\emptyset$ and WLOG $a\leq b\leq c\leq d$. $(\triangle)\Rightarrow$ $\Delta_{a,b},\Delta_{c,d}$ are independent. (\textbf{Independent Increments})\\
+(\textbf{Step.4}) By stationary increments in step3 and distribution of $N(t)$ in step2, we conclude that
+\begin{equation}
+  \mathbb{P}\left(\Delta_{s,s+t}=n\right)=\mathbb{P}\left(N(t)=n\right)=\frac{e^{-\lambda t}(\lambda t)^n}{n!}
+\end{equation}
+Which finishes the proof of defining properties of Poisson process.\\
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} (a) Denote RV $J$ the type of battery that is drawn, $j=1,2,...,n$.
+\begin{equation}
+  \begin{split}
+    \mathbb{P}\left(X\leq t\right) &= \sum_{j=1}^n \mathbb{P}\left(X\leq t\middle|J=j\right)\mathbb{P}\left(J=j\right)]\\
+    &= \sum_{j=1}^n (1-e^{-\lambda_j t}) P_j
+  \end{split}
+\end{equation}
+So $\bar{F}_X=\sum_{j=1}^n e^{-\lambda_j t} P_j$ and $f_X(t)=\sum_{j=1}^n \lambda_j e^{-\lambda_j t} P_j$. \\
+(b) We want to consider $\mathbb{P}\left(J=1\middle|X>t\right)$.
+\begin{equation}
+  \begin{split}
+    \mathbb{P}\left(J=1\middle|X>t\right) &= \frac{\mathbb{P}\left(X>t|J=1\right)\mathbb{P}\left(J=1\right)}{\mathbb{P}\left(X>t\right)}\\
+    &= \frac{e^{-\lambda_1 t}\cdot P_1}{e^{-\lambda_1 t}\cdot P_1+\sum_{j=2}^n e^{-\lambda_j t} P_j}\\
+    &= \frac{P_1}{P_1+\sum_{j=2}^n e^{(\lambda_1-\lambda_j)t} P_j}
+  \end{split}
+\end{equation}
+Since $\lambda_1 \geq \lambda_j$ for all $j$, $\mathbb{P}\left(J=1\middle|X>t\right) \nearrow $ with $t$. And we also observe that $\mathbb{P}\left(J=1\middle|X>t\right)\to 1$ when $t\to \infty$.
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} Issurance claims are made at times as Poisson process with $\lambda$, u.e. time of $n^{th}$ claim is waiting time $S_n$. Amount $C_n$ associated with each claim has known i.i.d dist with mean $\mu$. So the PV of total insurance payment up to $t$ is
+$$
+D(t) = \sum_{i=1}^{N(t)} e^{-\alpha S_i} C_i
+$$
+\end{problem}
+\begin{solution}
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[D(t)\right] &= \sum_{n\geq 0} \mathbb{E}\left[D(t); \{N(t)=n\}\right] \\
+    &= \sum_{n\geq 0} \mathbb{E}\left[D(t)|N(t)=n\right] \cdot \mathbb{P}\left(N(t)=n\right)\\
+    &= \sum_{n\geq 0} \left(\sum_{i=1}^{n} \mathbb{E}\left[e^{-\alpha S_i}C_i|N(t)=n\right]\right) \mathbb{P}\left(N(t)=n\right)\\
+    &= \sum_{n\geq 0} \left(\sum_{i=1}^{n} \mu\int_0^{\infty} e^{-\alpha s}f_{S_i|N(t)}(s|n)ds\right) \mathbb{P}\left(N(t)=n\right)~~(\text{We have $S_i|N(t)\sim \mathcal{U}(0,t)$})\\
+    &= \sum_{n\geq 0} \left(\sum_{i=1}^{n} \frac{\mu}{\alpha t}(1-e^{-\alpha t})\right) \mathbb{P}\left(N(t)=n\right)\\
+    &= \sum_{n\geq 0} \frac{n\mu}{\alpha t}(1-e^{-\alpha t}) \frac{e^{-\lambda t}(\lambda t)^n}{n!} \\
+    &=0+\sum_{n\geq 1} \frac{n\mu}{\alpha t}(1-e^{-\alpha t}) \frac{e^{-\lambda t}(\lambda t)^n}{n!}\\
+    &= \frac{\lambda\mu}{\alpha}(1-e^{-\alpha t}) \sum_{n\geq 1} \frac{e^{-\lambda t}(\lambda t)^{n-1}}{(n-1)!} = \frac{\lambda\mu}{\alpha}(1-e^{-\alpha t})\\
+  \end{split}
+\end{equation}
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} $\{N(t):t\geq 0\}$ be Poisson process, indep. of $\{X_i\}$ i.i.d with mean $\mu$ variance $\sigma^2$. Find $\mathrm{\mathbb{C}ov}\left[N(t), \sum_{i=1}^{N(t)}X_i\right]$
+\end{problem}
+\begin{solution} $N(t)\sim \text{Pois}(\lambda t)$, hence $\mathbb{E}\left[N(t)\right]=\lambda t$. Denote $S_N := \sum_{i=1}^{N(t)}X_i$. By \textbf{Wald's Identity}, $\mathbb{E}\left[S_N\right]=\mathbb{E}\left[N(t)\right]\mathbb{E}\left[X_1\right]=\lambda t \mu$. Then we calculate $\mathbb{E}\left[N(t)S_N\right]$:
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[N(t)S_N\right] &= \mathbb{E}\left[\mathbb{E}\left[N(t)\sum_{i=1}^{N(t)}X_i\middle|N(t)\right]\right] \\
+    &= \mathbb{E}\left[N(t)\sum_{i=1}^{N(t)}\mathbb{E}\left[X|N(t)\right]\right]\\
+    &= \mathbb{E}\left[N^2(t)\mu\right] = ((\lambda t)^2 + \lambda t) \mu
+  \end{split}
+\end{equation}
+Hence $\mathrm{\mathbb{C}ov}\left[N(t), S_N\right]=\mathbb{E}\left[N(t)S_N\right]-\mathbb{E}\left[S_N\right]\mathbb{E}\left[N(t)\right] = \lambda t \mu$
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} (a) Since $\{X_i\}$ are i.i.d Exponential, we have $\mathbb{E}\left[\prod_{1}^n X_i\right]=\prod_1^n \mathbb{E}\left[X_i\right]=\frac{1}{\mu^n}$.
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[S(t)\right] &= s \sum_{n\geq 0}\mathbb{E}\left[\prod_{1}^{N(t)} X_i \middle|N(t)=n\right] \cdot \mathbb{P}\left(N(t)=n\right)\\
+    &= s \sum_{n\geq 0}\frac{1}{\mu^n} \cdot \frac{e^{-\lambda t}(\lambda t)^n}{n!}\\
+    &= se^{-\lambda t} \sum_{n\geq 0}\cdot \frac{(\lambda t/\mu)^n}{n!} = se^{-\lambda t+\frac{\lambda t}{\mu}}
+  \end{split}
+\end{equation}
+(b) Similarly we have $\mathbb{E}\left[\prod_{1}^n X_i^2\right]=\prod_1^n \mathbb{E}\left[X_i^2\right]=\left(\frac{2}{\mu^2}\right)^n$
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[S^2(t)\right] &= s^2 \sum_{n\geq 0}\mathbb{E}\left[\prod_{1}^{N(t)} X_i^2 \middle|N(t)=n\right] \cdot \mathbb{P}\left(N(t)=n\right)\\
+    &= s^2 \sum_{n\geq 0}\frac{2}{\mu^{2n}} \cdot \frac{e^{-\lambda t}(\lambda t)^n}{n!}\\
+    &= s^2e^{-\lambda t} \sum_{n\geq 0}\cdot \frac{(2\lambda t/\mu^2)^n}{n!} = se^{-\lambda t+\frac{2\lambda t}{\mu^2}}
+  \end{split}
+\end{equation}
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} For a Poisson process show that for $s<t$,
+$$
+\mathbb{P}\left(N(s)=k|N(t)=n\right) = \binom{n}{k}\left(\frac{s}{t}\right)^k \left(1-\frac{s}{t}\right)^{n-k}
+$$
+\end{problem}
+\begin{proof} Define $\Delta_{s,t}:=N(t)-N(s)$, it is clear that following two events are equivalent:
+$$\{N(s)=k, N(t)=n\} \iff \{N(s)=k, \Delta_{s,t}=n-k\}~~(\dag)$$
+Therefore we have
+\begin{equation}
+  \begin{split}
+    \mathbb{P}\left(N(s)=k|N(t)=n\right) &= \frac{\mathbb{P}\left(N(s)=k, N(t)=n\right)}{\mathbb{P}\left(N(t)=n\right)}
+    \\
+    &= \frac{\mathbb{P}\left(N(s)=k, \Delta_{s,t}=n-k\right)}{\mathbb{P}\left(N(t)=n\right)}\\
+    &= \frac{\mathbb{P}\left(N(s)=k\right)\mathbb{P}\left(\Delta_{s,t}=n-k\right)}{\mathbb{P}\left(N(t)=n\right)}~~(\text{By independent increments.})\\
+    &= \left. \frac{e^{\lambda s}(\lambda s)^k}{k!}\cdot \frac{e^{\lambda (t-s)}(\lambda (t-s))^{n-k}}{(n-k)!} \middle/ \frac{e^{\lambda t}(\lambda t)^n}{n!} \right.\\
+    &= \frac{n!}{k!(n-k)!}\frac{s^k (t-s)^{n-k}}{t^n} = \binom{n}{k}\left(\frac{s}{t}\right)^k \left(1-\frac{s}{t}\right)^{n-k}
+  \end{split}
+\end{equation}
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} (c) By definition of non-homogeneous Poisson process, we known that $N(t)$ is a Poisson RV with rate $m(t)=\int_0^t \lambda(x)dx$; and $\Delta_{s,s+t}$ is a Poisson RV with rate $m(t+s)-m(s)=\int_s^{t+s} \lambda(x)dx$ hence
+\begin{equation}
+    \mathbb{P}\left(T_1>t\right) = \mathbb{P}\left(N(t)=0\right) = e^{-m(t)}
+\end{equation}
+Which implies $F_{T_1}(t)=1-e^{-m(t)}$, and $f_{T_1}(t)=\lambda(t)e^{-m(t)}$ for $t\geq 0$. \\
+(a,b) Then we derive the distribution of $T_2$ 
+\begin{equation}
+  \begin{split}
+    \mathbb{P}\left(T_2>t\right) &= \int_0^{\infty} \mathbb{P}\left(T_2>t|T_1=s\right) f_{T_1}(s) ds\\
+    &= \int_0^{\infty} \mathbb{P}\left(\Delta_{s,s+t}=0\right) f_{T_1}(s) ds\\
+    &= \int_0^{\infty} e^{m(s+t)-m(s)} \lambda(s) e^{-m(s)}ds
+  \end{split}
+\end{equation}
+\textbf{(TODO)}
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} (a) By the meaning of $X$, we can define it explicitly as
+\begin{equation}
+  X:=\begin{cases}
+  0 & N(t)=0,\\
+  \sum^{N(t)}_{i=1} (t-S_i) & \text{Otherwise.}
+  \end{cases}
+\end{equation}
+Where $N(t)$ is counting at $t$, $S_i$ is waiting time of event \{The arrival of $i^{th}$ person\}. By theorem, we know $S_i|N(t)\sim i.i.d.\mathcal{U}(0,t)$; hence $\mathbb{E}\left[S_i|N(t)\right]=t/2$ for all $i\geq 1$.
+\begin{equation}
+    \mathbb{E}\left[X|N(t)\right]=\sum_{i=1}^{N(t)}\left(t- \mathbb{E}\left[S_i|N(t)\right]\right)=\frac{tN(t)}{2}
+\end{equation}
+(b) $\mathrm{\mathbb{V}ar}\left[S_i|N(t)\right]=(t-0)^2/12=t^2/12$
+\begin{equation}
+    \mathrm{\mathbb{V}ar}\left[X|N(t)\right] = \sum_{i=1}^{N(t)} \mathrm{\mathbb{V}ar}\left[-S_i|N(t)\right]=\frac{t^2N(t)}{12}
+\end{equation}
+(3) $N(t)\sim \text{Pois}(\lambda t)$
+\begin{equation}
+  \begin{split}
+    \mathrm{\mathbb{V}ar}\left[X\right] &= \mathbb{E}\left[\mathrm{\mathbb{V}ar}\left[X|N(t)\right]\right] + \mathrm{\mathbb{V}ar}\left[\mathbb{E}\left[X|N(t)\right]\right]\\
+    &= \mathbb{E}\left[\frac{t^2 N(t)}{12}\right] + \mathrm{\mathbb{V}ar}\left[\frac{tN(t)}{2}\right]\\
+    &= \frac{t^2 \lambda t}{12} + \frac{t^2 \lambda t}{4} = \frac{t^3 \lambda}{3}
+  \end{split}
+\end{equation}
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} Calculate $\mathrm{\mathbb{C}ov}\left[X(t),X(s)\right]$ for compound Poisson: for $\{Y_i\}$ i.i.d and independent of $\{N(t):t\geq 0\}$
+$$X(t):=\sum^{N(t)}_{i=1}Y_i$$ 
+\end{problem}
+\begin{solution} WLOG assume $s\leq t \Rightarrow N(s)\leq N(t)$. And suppose Poisson process accociated with $X(t)$ has rate $\lambda$, then by \textbf{Wald's Identity}: $\mathbb{E}\left[X(t)\right]=\mathbb{E}\left[N(t)\right]\mathbb{E}\left[Y_1\right]$. It suffices to compute $\mathbb{E}\left[X(t)X(s)\right]$
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[X(t)X(s)\right] &= \mathbb{E}\left[\sum_{i=1}^{N(s)}Y_i^2 + \sum_{(i,j),i\ne j}^{(N(s),N(t))}Y_iY_j\right]\\
+    &= \mathbb{E}\left[N(s)\right] \mathbb{E}\left[Y_1^2\right] + \mathbb{E}\left[\mathbb{E}\left[\sum_{(i,j),i\ne j}^{(N(s),N(t))}Y_iY_j\middle|(N(s),N(t))\right]\right] \\
+    &= \mathbb{E}\left[N(s)\right] \mathbb{E}\left[Y_1^2\right] + \mathbb{E}\left[\sum_{(i,j),i\ne j}^{(N(s),N(t))}\mathbb{E}\left[Y_iY_j\middle|(N(s),N(t))\right]\right] \\
+    &= \mathbb{E}\left[N(s)\right] \mathbb{E}\left[Y_1^2\right] + \mathbb{E}\left[\left(N(s)N(t)-N(s)\right)\mathbb{E}^2\left[Y_1\right]\right]\\
+    &= \mathbb{E}\left[N(s)\right]\mathrm{\mathbb{V}ar}\left[Y_1\right] + \mathbb{E}^2\left[Y_1\right] \mathbb{E}\left[N(s)N(t)\right]~~(\dag)
+  \end{split}
+\end{equation}
+Since $N(t)=N(s)+\Delta_{s,t}$, $\Delta_{s,t}\sim \text{Pois}(\lambda(t-s))$ and independent wrt $N(s)$. We have $\mathbb{E}\left[N(s)N(t)\right]=\mathbb{E}\left[N^2(s)\right]+\mathbb{E}\left[N(s)\right] \mathbb{E}\left[N(t-s)\right]$. Therefore
+\begin{equation}
+  \begin{split}
+    (\dag)-\mathbb{E}\left[X(t)\right]\mathbb{E}\left[X(s)\right] &= \lambda s \mathrm{\mathbb{V}ar}\left[Y_1\right] + \mathbb{E}^2\left[Y_1\right] \left(\lambda^2 s^2+\lambda s +\lambda s(\lambda t - \lambda s)\right) - \lambda s \lambda t \mathbb{E}^2\left[Y_1\right] \\
+    &= \lambda s (\mathrm{\mathbb{V}ar}\left[Y_1\right] + \mathbb{E}^2\left[Y_1\right])\\
+    &= \lambda s \mathbb{E}\left[Y_1^2\right]
+  \end{split}
+\end{equation}
+Generalize this result to arbitrary $s,t$, we conclude that
+\begin{equation}
+  \mathrm{\mathbb{C}ov}\left[X(t), X(s)\right] = \min\{\lambda s,\lambda t\}\cdot \mathbb{E}\left[Y_1^2\right]
+\end{equation}
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+
+\end{document}

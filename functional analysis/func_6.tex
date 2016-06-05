@@ -1,0 +1,294 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz}
+
+\pagestyle{headings}
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+
+\title{\textbf{Functional Analysis Assignment VI}}
+\author{YANG, Ze (5131209043)}
+
+\begin{document}
+\maketitle
+
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} Show that a normed linear space $X$ is finite dimensional iff its dual $X'$ is finite dimensional
+\end{problem}
+\begin{proof} Show a stronger one: $\text{dim}X=\text{dim}X'$ for finite dimesional $X(\Rightarrow)$ or $X'(\Leftarrow)$. \\
+$(\Rightarrow)$ Since $X$ is of finite dimension, it has basis $\{x_j\}$. For aribitrary $x\in X$, $x=\sum_1^n a_j x_j$. Define $f_j \in X'$ as
+$$f_j(x)=a_j$$
+By this definition we also have $f_j(x_j)=\delta_{ij}$. And we obtain another vector $(f_1,...,f_n)$. \\
+\textit{Claim}: It is a basis of $X'$. \\
+\textit{Proof of Claim}: First, for all $f\in X'$, $f(\cdot)=\left(\sum_{j=1}^n f(x_j) f_j\right)(\cdot)$, in the sense that $\forall x\in X$,
+$$
+f(x) = f\left(\sum_{j=1}^n a_j x_j\right) = \sum_{j=1}^n f(x_j) a_j = \sum_{j=1}^n f(x_j) f_j(x) = \left(\sum_{j=1}^n f(x_j) f_j\right)(x)
+$$
+Implies that $\text{span}\{f_j\} = X'$. 
+Moreover $0$ is a linear functional in $X'$ with $0(x)=0$ for all $x\in X$. So if given
+\begin{equation}
+  \begin{split}
+    \sum_{j=1}^n \lambda_j f_j &= 0 \\
+    \Rightarrow \left(\sum_{j=1}^n \lambda_j f_j\right)(x_j) &= 0(x_j)\\
+    \Rightarrow \lambda_j &= 0~~\text{for all }1\leq j\leq n
+  \end{split}
+\end{equation}
+We conclude that $\{f_j\}$ is the basis of $X'$. \\
+For another direction $(\Leftarrow)$, just define a vector in $X$ as $f(x_j)=(\sum_1^n \lambda_i f_i)(x_j)=\lambda_j$, for $\{f_j\}$ be the basis of $X'$, then show $\{x_j\}$ is basis of $X$ in the same fashion.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} Let $C[0,1]$ be the Banach space of all real-valued continuous functions $f: [0,1]\to \mathbb{R}$, with norm $\left\|f\right\| = \max\limits_{x\in [0,1]}|f(x)|$.
+\begin{itemize}
+	\item[$\cdot$] Show $X=\{f\in C[0,1]; f(0)=0\}$ is a closed subspace of $C[0,1]$, hence a Banach space.
+	\item[$\cdot$] Show that the map $f\mapsto \ell(f)=\int_0^1 f(x)dx$ is a continuous linear functional on $X$. Compute the norm
+	$$\left\|\ell\right\| = \sup\limits_{\left\|f\right\|\leq 1, f\in X}|\ell(f)|$$
+	Is this supremum over closed ball actually as maximum?
+\end{itemize}
+\end{problem}
+
+\begin{proof} (a) Let $\{f_n\}\subset X$ be a convergent sequence. I.e $\left\|f_n - f\right\| \to 0$. Hence $\forall \epsilon>0$, exists $N$, such that for $n>N$
+\begin{equation}
+  \begin{split}
+    \left\|f_n - f\right\| &= \max\limits_{x\in [0,1]}|f_n(x)-f(x)| < \epsilon \\
+    \Rightarrow |(f_n - f)(0)| &= |f(0)| \leq \left\|f_n-f\right\| < \epsilon
+  \end{split}
+\end{equation}
+Since $\epsilon$ is arbitrary, we let it goes to 0, and obtain $|f(0)|=0$. Hence $f\in X$ $\Rightarrow$ $X$ is closed.  \\
+Since $X$ is closed, $X\subset C[0,1]$, a Banach space. So $X$ is also a Banach space.\\
+(b) Since $f$ is continuous function on compact set $[0,1]$, it is bounded and attains maximun/minimum. Which implies $|f(x)|\leq \left\|f\right\|<C$ for all $x\in[0,1]$. So $\ell(f) = \int_0^1 |f| \leq C$ is also bounded, hence continuous.
+\begin{equation}
+  \left\|\ell\right\| = \sup\limits_{\left\|f\right\|\leq 1, f\in X}|\ell(f)| = \sup\limits_{\left\|f\right\|\leq 1, f\in X} \left|\int_0^1 f(x)\right|
+\end{equation}
+The supremum is clearly $1$, when $f(x)$ approaches 1 at every $x>0$. The supremum is not attainable. Because $f(0)=0$ and $f$ is continuous. That is, $\forall \epsilon>0$, exists $\delta$, such that $|f(x)|<\epsilon$ whenever $0\leq x\leq\delta$. Hence
+\begin{equation}
+  \left|\int_0^1 f(x)\right| \leq (1-\delta) + \delta \epsilon = 1 - \delta(1- \epsilon) < 1
+\end{equation}
+\end{proof}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} In Banach space $X=L^{\infty}(\mathbb{R})$, consider the subspace $V$ consisting of all bounded continuous functions.
+\begin{itemize}
+	\item[$\cdot$] Show that there exists a bounded linear functional $\Lambda: L^{\infty}(\mathbb{R})\to \mathbb{R}$ with $\left\|\Lambda\right\|=1$ such that $\Lambda f=f(0)$ for every bounded continuous function $f$. However, show that there exists no function $g\in L^1(\mathbb{R})$ such that $\Lambda f = \int fg dx$ for every $f\in L^{\infty}(\mathbb{R})$. 
+	\item[$\cdot$] Conclude that the dual space of $L^{\infty}(\mathbb{R})$ cannot be identified with $L^1(\mathbb{R})$. 
+\end{itemize}
+\end{problem}
+\begin{proof}
+\end{proof}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} Given a sequence $\{x_n\}$ in Hilbert space $H$, show that the strong convergence $\left\|x_n - x\right\|\to 0$ holds if and only if
+$$
+\left\|x_n\right\| \to \left\|x\right\| ~~\text{and}~~x_n \rightharpoonup x
+$$
+\end{problem}
+\begin{proof} ($\Rightarrow$) is clear, since strong convergence implies weak convergence and the convergence of norm. \\
+($\Leftarrow$) Consider
+\begin{equation}
+  \begin{split}
+    \left\|x_n - x\right\|^2 &= \left\|x_n\right\|^2 + \left\|x\right\|^2 - 2 \langle x_n, x \rangle \\
+    \Rightarrow~\lim\limits_{n\rightarrow\infty} \left\|x_n - x\right\|^2 &=  \lim\limits_{n\rightarrow\infty} \left\|x_n\right\|^2 + \left\|x\right\|^2 - 2 \lim\limits_{n\rightarrow\infty}\ell(x_n)
+  \end{split}
+\end{equation}
+Where we denote $\ell(\cdot)=\langle \cdot, x \rangle$, clearly $\ell\in H'$. By weak convergence: $\lim\limits_{n\rightarrow\infty}\ell(x_n) = \ell(x) = \langle x,x \rangle=\left\|x\right\|^2$. By another condition $\lim\limits_{n\rightarrow\infty}\left\|x_n\right\| = \left\|x\right\|$. So RHS $= 2 \left\|x\right\|^2 - 2 \left\|x\right\|^2 = 0$. \\
+$\Rightarrow$ $x_n \to x$ strongly, finished the proof.
+\end{proof}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} Consider a bounded sequence of functions $f_n \in L^2[0,T]$. As $n\to \infty$, show that the weak convergence $f_n \rightharpoonup f$ holds iff
+$$
+\lim\limits_{n\rightarrow\infty}\int_0^b f_n(x)dx = \int_0^b f(x) dx~~\text{For every }b\in [0,T]~~(\dag)
+$$
+\end{problem}
+\begin{proof} ($\Rightarrow$) if $f_n \rightharpoonup f$, since $L^2$ is hilbert space, there is linear functional $\ell \in (L^2)'$, where
+\begin{equation}
+  \ell(f_n) = \langle \mathbbm{1}_{[0,b]}, f_n \rangle = \int_0^b f_n
+\end{equation}
+For all $b\in[0,T]$. So due to weak convergence we have $\lim\limits_{n\rightarrow\infty}\int_0^b f_n = \langle \mathbbm{1}_{[0,b]}, f \rangle = \int_0^b f$.\\
+($\Leftarrow$) Since $b$ is arbitrary, $(\dag)$ actually implies that $\int \mathbbm{1}_{D} f_n \to \int \mathbbm{1}_{D}f$ for any compact $D=[a,b]\subseteq [0,T]$, since $\int \mathbbm{1}_{[a,b]}f = \int (\mathbbm{1}_{[0,b]}-\mathbbm{1}_{[0,a]})f$, and $\int |\mathbbm{1}_{[a,b]}f|\leq C(b-a)$ by boundedness of $f$. \\
+Then we follow the real-analysis type construction.
+\begin{itemize}
+  \item[$\cdot$] By linearity, $\int \phi f_n \to \int \phi f$, $\phi$ is simple function.
+  \item[$\cdot$] By monotone convergence thm, this $\int g^{\pm} f_n \to \int g^{\pm} f$, $g^{\pm}$ are positive.
+  \item[$\cdot$] For arbitrary $g\in L^2$, let $g=g^{+}-g^{-}$, since $g$ is bounded: $\int g f_n \to \int g f$.
+\end{itemize}
+All linear functionals on $L^2$ have such form, so we finish the proof.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} Suppose $\Omega$ is Lebesgue measurable set and $p\in (1,\infty)$. If $f_n \rightharpoonup f$ in $L^p(\Omega)$ and
+$$
+\left\|f_n\right\|_{L^p} \to \left\|f\right\|_{L^p}
+$$
+Then show that $f_n \to f$ strongly in $L^p(\Omega)$. How about $p=1$?
+\end{problem}
+\begin{proof} (a) (\textbf{Radon-Riesz}) We first state a lemma\\
+\textit{lemma}. Assume $X$ is a uniformly comvex Banach space, $x_n \rightharpoonup x$ and
+$$
+\limsup\limits_{n\rightarrow\infty} \left\|x_n\right\| \leq \left\|x\right\|
+$$
+Then $x_n \to x$ strongly.\\
+\textit{Proof of lemma}. If $x=0$ we are done. Assume $x\ne 0$. Define
+$$
+\lambda_n := \max\{\left\|x_n\right\|, \left\|x\right\|\}~~y_n:=\frac{x_n}{\lambda_n},~~y:=\frac{x}{\left\|x\right\|}
+$$
+So we get $\lambda_n \to \left\|x\right\|$ by the limit sup condition. And for linear functional $\ell\in X'$, we have 
+\begin{equation}
+  \lim\limits_{n\rightarrow\infty}\ell(y_n) = \lim\limits_{n\rightarrow\infty}\ell\left(\frac{x_n}{\lambda_n}\right) = \lim\limits_{n\rightarrow\infty}\frac{1}{\lambda_n}\ell(x_n) = \frac{\ell(x)}{\left\|x\right\|} = \ell\left(\frac{x}{\left\|x\right\|}\right)
+\end{equation}
+That is, $y_n \rightharpoonup y$. In fact we use $\frac{y_n + y}{2} \rightharpoonup y$ and by theorem
+\begin{equation}
+  \left\|y\right\| \leq \liminf\limits_{n\rightarrow\infty} \left\|\frac{y_n+y}{2}\right\| \leq \left\|\frac{y_n+1}{2}\right\|
+\end{equation}
+By definition, $\left\|y_n\right\|\leq 1$ and $\left\|y\right\|=1$. So actually $\lim\limits_{n\rightarrow\infty}\left\|\frac{y_n+y}{2}\right\| = 1$. By uniform convexity $\Rightarrow$ $\left\|y_n-y\right\|\to 0$, that is $\left\|x_n-x\right\|\to 0$, finished the proof. $\blacksquare$\\
+In our previous result (HW4 problem 3), we have already shown that $L^p$ is uniformly convex for $p\geq 2$. \\
+And now that $\left\|f_n\right\|_{L^p} \to \left\|f\right\|_{L^p}$, we have
+$$
+\limsup\limits_{n\rightarrow\infty}\left\|f_n\right\|_{L^p} = \left\|f\right\|_{L^p} \leq \left\|f\right\|_{L^p}
+$$
+Apply the lemma, we obtain the desired result. \\
+(b) It is not the case for $p=1$. We let $\Omega=[0,2\pi]$, $f_n := \sin(nx)+1$. Then clearly $f_n \rightharpoonup 1$; 
+$$\left\|f_n\right\|_{L^1}=\int_0^{2\pi}|\sin(nx)+1|=2\pi$$
+but 
+$$\left\|f_n - 1\right\|_{L^1} = \int_0^{2\pi}|\sin(nx)|=4$$.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} Exercise 1. Show
+$$
+y_K = \sum_{k=1}^K x_{n_k}(t) < 4
+$$
+Exercise 2. If a sequence $\{x_n\}\subset \ell^1$ converges weakly, then it converges strongly. \\
+Exercise 3. If a sequence of points $\{x_n\}$ in normed linear space satisfies
+\begin{itemize}
+  \item[1.] $\{x_n\}$ are uniformly bounded, i.e. $|x_n|\leq c$.
+  \item[2.] $\lim\limits_{n\rightarrow\infty} \ell(x_n) = \ell(x)$ for a set of $\ell$ dense in $X'$.
+\end{itemize}
+Then $x_n \rightharpoonup x$.
+\end{problem}
+
+\begin{proof} (Ex.1) Draw a plot of $x_n(t)$, since $n_{k+1}>2n_k$, for any $t\in[0,1]$, there exists an $M>0$ such that $\frac{1}{n_M}< t<\frac{2}{n_M}$, hence $t> \frac{1}{n_M} >\frac{2}{n_{M+1}}$. So
+\begin{equation}
+  \begin{split}
+    \sum_{k=1}^K x_{n_k}(t) &\leq \sum_{k=1}^{\max\{M,K\}} x_{n_k}(t) \\
+    &= \left(\sum_{k=1}^{M} + \sum_{k=M}^{\max\{M,K\}}\right)x_{n_k}(t) \\
+    &= 2-n_Mt + \sum_{k=1}^{M-1} n_kt \\
+    &< 2-n_M\frac{1}{n_M} + \sum_{k=1}^{M-1}\frac{n_M}{2^{M-1-k}} \frac{2}{n_M}\\
+    &= 1+\frac{4}{2^M} \sum_{k=1}^{M-1} 2^k = 5\left(1-\frac{1}{2^M}\right) < 5
+  \end{split} 
+\end{equation}
+(Well...I didn't work out $4$, but the purpose of this is just deducing an upper bound of $y_K$, so I think $5$ is just fine.)
+\end{proof}
+
+~
+
+\begin{proof} (Ex.2) Let $\{\bm{y}^{[n]}\}\subset \ell^1$ be a sequence that converges weakly. WLOG $\bm{y}^{[n]} \rightharpoonup 0$. We argue by contradiction. \\
+Assume $\bm{y}^{[n]}$ does not converge to $0$ in norm, i.e. $\exists \epsilon > 0$, such that 
+$$\left\|\bm{y}^{[n]} - 0\right\| \geq 5 \epsilon$$ 
+By previous result we have known $(\ell^1)' = \ell^{\infty}$. \\
+We consider $\bm{y}^{[0]}=(y^{[0]}_1, y^{[0]}_2...)\in \ell^1$, there exists $n_0$ s.t. $\sum_{k\geq n_0+1}|y_k^{[0]}| <  \epsilon$; which implies that $\sum_{k=0}^{n_0}|y_k^{[0]}| > 3\epsilon - \epsilon = 4 \epsilon$. \\
+Now for this fixed $n_0$, pick $\bm{y}^{[1]}=(y^{[1]}_1, y^{[1]}_2...)\in \ell^1$, s.t. $\sum_{k=0}^{n_0}|y_k^{[1]}| <  \epsilon$. Moreover, there exists $n_1>n_0$ such that $\sum_{k\geq n_1+1}|y_k^{[1]}| <  \epsilon$. Hence
+$$
+\sum_{k=n_0+1}^{n_1}|y_k^{[1]}| = \left\| \bm{y}^{[1]} \right\| - \sum_{k=0}^{n_0}|y_k^{[1]}| - \sum_{k\geq n_1}|y_k^{[1]}| \geq 5 \epsilon - \epsilon - \epsilon = 3\epsilon
+$$
+We keep doing this and obtain $\{\bm{y}^{[j]}\}$. Extract $n_{j-1}$ to $n_j$ elements from each $\bm{y}^{[j]}$, normalize to $1$ and concatenate toghther: That is, we take 
+$$\bm{x}:=\left(0, ..., 0; \frac{y_{n_0+1}^{[1]}}{|y_{n_0+1}^{[1]}|}, ..., \frac{y_{n_1}^{[1]}}{|y_{n_1}^{[1]}|}; \frac{y_{n_1+1}^{[2]}}{|y_{n_1+1}^{[2]}|}, ..., \frac{y_{n_2}^{[2]}}{|y_{n_2}^{[2]}|}; ... ...\right)$$
+$\bm{x}\in \ell^{\infty}$ and clearly $\left\|\bm{x}\right\|_{\infty}=1$.
+\begin{equation}
+  \begin{split}
+    |\langle \bm{x}, \bm{y}^{[j]} \rangle| &=  \left|\sum_{k\geq 0} x_k y_k^{[j]}\right|  \\
+    &\geq \left|\sum_{k = n_{j-1}+1}^{n_j} x_k y_k^{[j]}\right| - \left|\sum_{k\geq n_j+1} x_k y_k^{[j]}\right| - \left|\sum_{k = 0}^{n_{j-1}} x_k y_k^{[j]}\right| \\
+    &\geq \sum_{k = n_{j-1}+1}^{n_j} |y_k^{[j]}| - \left\| \bm{x}\right\|_{\infty}\sum_{k\notin \{n_{j-1}+1, ..., n_j\}} |y_k^{[j]}| \\
+    &\geq 3 \epsilon - 1 \cdot (\epsilon + \epsilon) = \epsilon
+  \end{split}
+\end{equation}
+Define $\ell(\cdot):=\langle \bm{x}, \cdot \rangle$. It is clear that $\ell(\bm{y}^{[j]})$ does not converge to 0. But since $\bm{y}^{[j]} \rightharpoonup \bm{0}$, we should have $\lim\limits_{j\rightarrow\infty}\ell(\bm{y}^{[j]})=\ell(\bm{0})=0$, contradiction. 
+\end{proof}
+
+~
+
+\begin{proof} (Ex.3) Suppose $\left\|x_n\right\|<c$. For any $\epsilon>0$, for any $f\in X'$, we can choose $\{\phi_j\}\in D$, $D$ is dense in $X'$ and such that for $j$ large
+$$
+\left\|f_j - f\right\| \leq \frac{\epsilon}{3c}
+$$
+Due to weak convergece in $D$, for this $\epsilon$, exists $N$, for $n>N$ we have $|f_j(x_n)-f_j(x)|<\epsilon/3$ for any $f_j \in D$.
+\begin{equation}
+  \begin{split}
+    |f(x_n)-f(x)| & \leq |f(x_n)-f_j(x_n)| + |f_j(x_n)-f_j(x)| + |f_j(x)-f(x)| \\
+    & \leq |f_j(x_n)-f_j(x)| + 2\left\|f-f_j\right\|\cdot|x-x_n| \\
+    & \leq \frac{\epsilon}{3} + 2 \frac{\epsilon}{3c} \cdot c = \epsilon
+  \end{split}
+\end{equation}
+Which implies that $x_n \rightharpoonup x$ in $X'$, finished the proof.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} Deduce thm 10.5 from 10.6 applied to balls centered at origin $K=B_r: \{x: |x|\leq r\}$
+\end{problem}
+\begin{proof} The target is to show that if $x_n \rightharpoonup x$, then 
+$$
+\left\|x\right\| \leq \liminf\limits_{n\rightarrow\infty} \left\|x_n\right\|
+$$
+Denote $a:=\liminf\limits_{n\rightarrow\infty}\left\|x_n\right\|$. Now given $x_n \rightharpoonup x$, the norm is bounded: $\left\|x_n\right\|\leq c$ for some $c$. Further, we can pick $x_{n_1}\in \{x_n\}$, such that $\left\|x_{n_1}\right\|\leq a$. If $\{x_n\}\in B_a(0)$ then we are done, just apply theorm 6 on $B_a(0)$ yield the desired result. \\
+Otherwise, $\exists$ $x_{n_2}\in\{x_n\}$, $x_{n_2}\ne x_{n_1}$, we have $\{x_{n_1}, x_{n_2}\}\in B_{a_2}(0)$. Where $a_2=\max\{a, \left\|x_{n_2}\right\|\}$. \\
+...\\
+Continue doing this we obtain a subsequence $\{x_{n_k}\}$, $x_{n_k} \rightharpoonup x$, and $\{x_{n_k}\}\subset B_{a_k}(0)$. \\
+So apply theorem 5 yields $x\in B_{a_k}(0)$, $\Rightarrow$
+\begin{equation}
+  \begin{split}
+    \left\|x\right\| &\leq a_k \\
+    \Rightarrow \liminf\limits_{n\rightarrow\infty} \left\|x\right\| &\leq \liminf\limits_{k\rightarrow\infty}\max\{a, \left\|x_{n_k}\right\|\} \\
+    \Rightarrow \left\|x\right\| & \leq \max\{a, \liminf\limits_{k\rightarrow\infty}\left\|x_{n_k}\right\|\} \\
+    \Rightarrow \left\| x \right\| &\leq \max\{a, a\} = a
+  \end{split}
+\end{equation}
+Finished the proof.
+\end{proof}
+
+
+
+
+
+\end{document}

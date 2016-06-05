@@ -1,0 +1,239 @@
+\documentclass[a4paper, 11pt]{article}   	
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in}	
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{booktabs}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\title{\textbf{Functional Analysis Assignment I}}
+\author{YANG, Ze (5131209043)}
+
+\begin{document}
+\maketitle
+
+%------------------------------------------------------------------------
+\fbox{
+	\parbox{\boxwidth}{
+	\textbf{Problem 1.} If $x, y, z$ are points in metric space $(X,d)$, show
+  $$d(x,y)\geq |d(x,z)-d(y,z)|$$
+	}
+}
+%------------------------------------------------------------------------
+\begin{itemize}
+  \item[\textit{Proof.}] By defining properties of metric:
+  \begin{itemize}
+    \item[1.] $d(x,y)\geq 0$.
+    \item[3.] $d(x,z)\leq d(x,y)+d(y,z)$.
+  \end{itemize}
+  If $d(x,z)-d(y,z)\geq 0$, rearrange terms: $d(x,z)-d(y,z)\leq d(x,y)$ $\Rightarrow$ $|d(x,z)-d(y,z)|\leq d(x,y)$. 
+  Otherwise, rearrange terms: $d(y,z)-d(x,z)\geq -d(x,y)$ $\Rightarrow$ $|d(y,z)-d(x,z)|\leq d(x,y)$. $\blacksquare$
+\end{itemize}
+
+
+\begin{itemize}
+  \item[]
+\end{itemize}
+
+%------------------------------------------------------------------------
+\fbox{
+  \parbox{\boxwidth}{
+  \textbf{Problem 2.} $(X,d_X), (Y,d_Y)$ are metric spaces. Show that the \textit{Cartesian product} (For which $z=(x,y)\in Z$ for $x\in X, y\in Y$.) $(Z:=X\times Y, d)$ is a metric space with $$d(z_1,z_2):=d_X(x_1,x_2)+d_Y(y_1,y_2).$$
+  }
+}
+%------------------------------------------------------------------------
+
+\begin{itemize}
+  \item[\textit{Proof.}] It suffices to check the defining properties of $d$:
+  \begin{itemize}
+    \item[1.] $d(z_1,z_2)=d_X(x_1,x_2)+d_Y(y_1,y_2)\geq 0$ is clear, since $d_X, d_Y$ are metrics. Moreover, if $d(z_1, z_2)=0$, then it must be $d_X(x_1,x_2)=d_Y(y_1,y_2)=0$, hence $x_1=x_2, y_1 =y_2$ $\Rightarrow$ $z_1=z_2$; the other direction is trivial.
+    \item[2.] $d(z_1,z_2)=d_X(x_1,x_2)+d_Y(y_1,y_2)=d_X(x_2,x_1)+d_Y(y_2,y_1)=:d(z_2,z_1)$. (\textit{symmetry})
+    \item[3.] (\textit{triangle ineq.})
+    \begin{equation}
+      \begin{split}
+        d(z_1,z_3)+d(z_3,z_2) &= d_X(x_1,x_3)+d_Y(y_1,y_3) + d_X(x_3,x_2)+d_Y(y_3,y_2)\\
+        & \leq d_X(x_1,x_2) + d_Y(x_1,x_2)\\
+        & =: d(z_1, z_2)~~\blacksquare
+      \end{split}
+    \end{equation}
+  \end{itemize}
+\end{itemize}
+
+\begin{itemize}
+  \item[]
+\end{itemize}
+
+%------------------------------------------------------------------------
+\fbox{
+  \parbox{\boxwidth}{
+  \textbf{Problem 3.} $(X,d_X), (Y,d_Y), (Z, d_Z)$ be metric spaces. $f: X\to Y$ and $g: Y\to Z$ be continuous functions. Show that
+  $$h:=g \circ f: X\to Z$$
+  is continuous.
+  }
+}
+%------------------------------------------------------------------------
+
+\begin{itemize}
+  \item[\textit{Proof.}] 
+  Take arbitrary $\{x_n:n\geq 1\}\subseteq X$ converging to $x$. By continuity of $f$: $f(x_n)\to f(x)$. Consider sequence $\{f(x_n): n\geq 1\}$, by continuity of $g$: $g(f(x_n))\to g(f(x))$. \\
+  i.e. we have $g(f(x_n)) \to g(f(x))$ whenever $x_n \to x$. $\iff$ $h=g\circ f$ is a continuous mapping by definition. $\blacksquare$
+\end{itemize}
+
+\begin{itemize}
+  \item[]
+\end{itemize}
+
+%------------------------------------------------------------------------
+\fbox{
+  \parbox{\boxwidth}{
+  \textbf{Problem 4.} Show
+  \begin{itemize}
+    \item[$\cdot$] Every compact subset of a metric space is closed and bounded.
+    \item[$\cdot$] A closed subset of a compact space is compact.
+  \end{itemize}
+  }
+}
+%------------------------------------------------------------------------
+
+\begin{itemize}
+  \item[\textit{Proof}.] (1) Let $K \subseteq X$ be a compact subset. \\
+  (\textit{Boundedness}) By compactness, pick open cover $K \subseteq \bigcup_{x\in F} B_r(x)$, $\exists$ a finite subcover $K \subseteq \bigcup_{i=1}^{n} B_{r}(x_i)$. \\
+  Denote $d_1 :=\max\{r, d(x_1, x_2)\}$, then clearly $B_r(x_1)\cup B_r(x_2)\subseteq B_{r+d_1}(x_2)$; $d_2 :=\max\{r, d(x_2, x_3)\}$, then $B_r(x_3)\cup B_{r+d_1}(x_2) \subseteq B_{r+d_1+d_2}(x_3)$. Do this repeatedly until $n$, we have
+  $$K \subseteq \bigcup_{i=1}^{n} B_{r}(x_i) \subseteq B_{r+\sum_{i=1}^n d_i}(x_n)$$
+  Where $r+\sum_{i=1}^n d_i<\infty$. $K$ is bounded. \\
+  (\textit{Closedness}) Forall $x_0 \in X\setminus K$, we have $K \subseteq \bigcup_{x\in K}B_{\frac{1}{2}d(x,x_0)}(x)$. By compactness, $\exists$ a finite subcover $K \subseteq \bigcup_{i=1}^{n} B_{\frac{1}{2}d(x_i,x_0)}(x_i)$. Let $\delta:=\frac{1}{4}\min\limits_{i=1,...,n}\{d(x_i,x_0)\}$; then $\forall y\in B_{\delta}(x_0)$,$\forall i=1,...,n$: $d(x_i, y)\geq \frac{3}{4}d(x_i,x_0)$, which implies $y\notin B_{\frac{1}{2}d(x_i,x_0)}(x_i)$ for any $i$. Hence $B_{\delta}(x_0)\subseteq X \setminus K$ $\Rightarrow$ $X\setminus K$ is open.
+  \item[]
+  \item[] (2) Let $K \subseteq X$ be a closed subset. $X$ is a compact metric space $\iff$ $X$ is sequentially compact $\iff$ $X$ is complete and totally bounded. \\
+  Therefore it suffices to show $K$ is totally bounded. This follows the total-boundedness of $X$. Because $\forall \epsilon>0$, $\exists$ $n_{\epsilon}\in \mathbb{N}$, s.t.
+  $$K \subseteq X \subseteq \bigcup_{i=1}^{n_{\epsilon}}B_{\epsilon}(x_i)$$ 
+  Hence (under the condition that $K \subseteq X$, $X$ is complete) $K$ is closed and totally bounded $\iff$ $K$ is sequentially compact $\iff$ $K$ is compact. $\blacksquare$
+\end{itemize}
+
+%------------------------------------------------------------------------
+\fbox{
+  \parbox{\boxwidth}{
+  \textbf{Problem 5.} Let $(X,d)$ be complete metric space, and $Y \subset X$. Show that 
+  $$\text{$(Y,d)$ is complete} \iff \text{$Y$ is a closed subset of $X$}$$
+  }
+}
+%------------------------------------------------------------------------
+
+\begin{itemize}
+  \item[\textit{Proof.}] ($\Leftarrow$) $\forall$ Cauchy sequence $\{y_n\} \subset Y \subset X$. Since $(X,d)$ is complete, $\{y_n\}$ is convergent sequence and $y_n \to y \in X$. \\
+  Since $Y$ is closed, $\{y_n\}$ is convergent, limit point $y\in X$ $\Rightarrow$ $y \in Y$ by definition. Hence $Y$ is complete.
+  \item[]
+  ($\Rightarrow$) $\forall$ convergent sequence $\{y_n\} \subset Y$, $y_n \to y\in X$. But convergence of $y_n \to y$ implies that $\{y_n\}$ is Cauchy sequence.\\
+  Since $(Y,d)$ is complete, $y_n \to y \in Y$. Therefore $Y$ is closed. $\blacksquare$
+\end{itemize}
+
+\begin{itemize}
+  \item[]
+\end{itemize}
+
+%------------------------------------------------------------------------
+\fbox{
+  \parbox{\boxwidth}{
+  \textbf{Problem 6.} Let $(X, d)$ be metric space, $\{x_n\} \subset X$. Show if $\{x_n\}$ has Cauchy subsequence, then, for any decreasing sequence of positive $\epsilon_k \searrow 0$, there exists $\{x_{n_k}\}\subset \{x_n\}$, s.t.
+  $$d(x_{n_k},x_{n_l})\leq \epsilon_k~~~\text{for all $k\leq l$}$$
+  }
+}
+%------------------------------------------------------------------------
+\begin{itemize}
+  \item[\textit{Proof.}] Denote $\{x_{n_j}\}\subset \{x_n\}$ be a Cauchy. By definition, $\forall \epsilon>0$, $\exists N\in \mathbb{N}$, s.t. $d(x_{n_p},x_{n_q})\leq \epsilon$ for $n_q \geq n_p \geq N$. Given the sequence $\{\epsilon_k\} \searrow 0$, we have:\\
+  For $\epsilon_1$, $\exists N_1 \in \mathbb{N}$, s.t. $d(x_{n_{p_1}},x_{n_{q_1}})\leq \epsilon_1$ for all $n_{q_1} \geq n_{p_1} \geq N_1$. We pick $x_{n_1}^*:=x_{n_{p_1}}$.\\
+  For $\epsilon_2$, $\exists N_2 \in \mathbb{N}$, $N_2 \geq N_1$, s.t. $d(x_{n_{p_2}},x_{n_{q_2}})\leq \epsilon_2$ for all $n_{q_2} \geq n_{p_2} \geq N_2$. We pick $n_{p_2}$ such that $n_{p_2}\geq \max\{N_2, n_{p_1}\}$, let $x_{n_2}^*:=x_{n_{p_2}}$. It is clear that $d(x_{n_1}^*, x_{n_2}^*)\leq \epsilon_1$, because $x_{n_1}^*\geq N_1, x_{n_2}^*\geq x_{n_1}^*$.\\
+  ......\\
+  Do this repeatedly, we obtain $\{x_{n_k}^*\} \subset \{x_n\}$ that satisfies desired property. $\blacksquare$
+\end{itemize}
+
+\begin{itemize}
+  \item[]
+\end{itemize}
+
+%------------------------------------------------------------------------
+\fbox{
+  \parbox{\boxwidth}{
+  \textbf{Problem 7.} $f: X \to \mathbb{R}$ is lower semicontinuous and $M\in \mathbb{R}$. Define
+  $$f_M(x):=\min\{f(x),M\}$$
+  Show that $f_M$ is lower semicontinuous.
+  }
+}
+%------------------------------------------------------------------------
+
+\begin{itemize}
+  \item[\textit{Proof.}] By definition, $f_M(x)\leq f(x)$. \\
+  Since $f$ is lower semicontinuous, 
+  $$f_M(x)\leq f(x) \leq \liminf\limits_{n\rightarrow\infty}f(x_n)$$
+  whenever $x_n \to x$. Since $f_M(x)\leq M$,
+  \begin{equation}
+    \begin{split}
+      f_M(x) &\leq \min\{M,\liminf\limits_{n\rightarrow\infty}f(x_n)\} = \min\{M, \sup\limits_{m\geq 0}\inf\limits_{n\geq m}f(x_n)\} \\
+      & \leq \liminf\limits_{n\rightarrow\infty}(\min\{M, f(x_n)\}) \\
+      & = \liminf\limits_{n\rightarrow\infty}(f_M(x_n))~~~\blacksquare
+    \end{split}
+  \end{equation}
+\end{itemize}
+
+\begin{itemize}
+  \item[]
+\end{itemize}
+
+%------------------------------------------------------------------------
+\fbox{
+  \parbox{\boxwidth}{
+  \textbf{Problem 8.} $f: X \to \mathbb{R}$. The \textit{Epigraph} $\text{epi}f$ is the subset of $X \times \mathbb{R}$ consisting of points that lie above the graph of $f$, i.e.
+  $$\text{epi}f:=\{(x,t)\in X \times \mathbb{R}: t\geq f(x)\}$$
+  Show that $f$ is lower semicontinous $\iff$ its epigraph is a closed set.
+  }
+}
+%------------------------------------------------------------------------
+\begin{itemize}
+  \item[\textit{Proof.}] ($\Rightarrow$) Take any convergent sequence $\{(x_n,t_n)\} \subset \text{epi}f$, $(x_n, t_n)\to (x,t)$. We have pointwisely $t_n \geq f(x_n)$. Take limit inf on both sides: 
+  $$t=\lim\limits_{n\rightarrow\infty}t_n=\liminf\limits_{n\rightarrow\infty}t_n \geq \liminf\limits_{n\rightarrow\infty}f(x_n)$$
+  Since $f$ is lower semicontinous, we have
+  $$\liminf\limits_{n\rightarrow\infty}f(x_n)\geq f(x)$$
+  Hence $t\geq f(x)$, $(x,t)\in \text{epi}f$, implies that $\text{epi}f$ is a closed set. \\
+  ($\Leftarrow$) Let $x_n \to x$ be convergent sequence. Denote $t:=\liminf\limits_{n\rightarrow\infty}f(x_n)$, then there exists $\{x_{n_k}\}\subseteq \{x_n\}$, s.t. $f(x_{n_k}) \to t$, i.e. $(x_{n_k}, f(x_{n_k}))\to (x, t)$, which is also convergent. \\
+  Since $\text{epi}f$ is closed $\Rightarrow$ $(x, t) \in \text{epi}f$. So $t=\liminf\limits_{n\rightarrow\infty}f(x_n)\geq f(x)$. $\blacksquare$
+\end{itemize}
+
+\begin{itemize}
+  \item[]
+\end{itemize}
+
+%------------------------------------------------------------------------
+\fbox{
+  \parbox{\boxwidth}{
+  \textbf{Problem 9.} $\{x_n\}$ is sequence in compact metric space such that all its convergent subsequence has same limit $x$. Show that
+  $$x_n \to x$$
+  }
+}
+%------------------------------------------------------------------------
+
+\begin{itemize}
+  \item[\textit{Proof}.] Assume otherwise. I.e. $x_n$ does not converge to $x$.\\
+  Then by definition, $\exists \delta>0$, $\forall N\in \mathbb{N}$, $\exists n>N$, s.t. $x_{n} \notin B_{\delta}(x)$. Which is to say that infinitely many points lie out of $B_{\delta}(x)$. Denote these as $\{\bar{x}_n\}:=\{x_n\} \setminus \{x_i \in \{x_n\}: x_i \in B_{\delta}(x)\}$\\
+  Since $X$ is compact $\Rightarrow$ $\exists$ $\{x_{n_k}\} \subseteq \{\bar{x}_n\} \subseteq \{x_n\}$ that is convergent. But it can not converge to $x$, because $d(x,x_{n_k})> \delta$ for all $k$. Contradicts the fact that any subsequence of $\{x_n\}$ converges to $x$. $\blacksquare$
+\end{itemize}
+
+\end{document}

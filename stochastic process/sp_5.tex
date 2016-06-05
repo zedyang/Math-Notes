@@ -1,0 +1,683 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+
+\title{\textbf{Stochastic Process Assignment V}}
+\author{Zed}
+
+\begin{document}
+\maketitle
+
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} Define the followings
+\begin{itemize}
+  \item[$\cdot$] $\{D_n\}$ be the demand of customers, i.i.d and has known distribution $G$.
+  \item[$\cdot$] $\{T_n\}$ be the interarrival time of customers, i.i.d. and has common distribution $F$.
+  \item[$\cdot$] $X$ be the time between two occasions that the store make orders and bring the inventory up to $S$. Then $X$ forms renewal process.
+  \item[$\cdot$] Upon $X$, further define an alternating renewal process. The system is ``On'' if inventory is greater than or equal to $y$. $Y$ is the time that system is in ``On'' in each cycle.
+\end{itemize}
+By theorem,
+\begin{equation}
+  \lim\limits_{t\rightarrow\infty} \mathbb{P}\left(\{\text{``On'' at time }t\}\right) = \frac{\mathbb{E}\left[Y\right]}{\mathbb{E}\left[X\right]}~~(\dag)
+\end{equation}
+is exactly the long-run proportion of time that system possesses inventory more than $y$. Further define
+\begin{equation}
+  N(x) = \min\left\{n: \sum_{i=1}^n D_i > S-x\right\}
+\end{equation}
+Be the number of customers to bring the inventory from full ($S$) to $x$. It is clear that $N(x)\perp T_n$ for all $x,n$, becasue $\{D_n\}\perp \{T_n\}$. \\
+By this definition, we have $Z$ is just the time it takes to bring the inventory from full to $y$, and $X$ is just that from full to $s$, due to the $(S,s)$ policy.
+\begin{equation}
+    Z = \sum_{i=1}^{N(y)} T_i~~~~X = \sum_{i=1}^{N(s)} T_i;
+\end{equation}
+Wald's Identity $\Rightarrow$ $\mathbb{E}\left[Z\right]=\mathbb{E}\left[N(y)\right]\mathbb{E}\left[T\right]$, $\mathbb{E}\left[X\right]=\mathbb{E}\left[N(s)\right]\mathbb{E}\left[T\right]$.\\
+The definition of $N(x)$ indicates that it means the same thing as the index of the first arrival that comes \textbf{After} time $S-x$, where the interarrival times have same distribution as $D$. Define $\tilde{N}(t)$ as renewal process associated with $\{D_n\}$, that is
+\begin{equation}
+  \begin{split}
+    & N(x) = \tilde{N}(S-x) + 1 \\
+    \Rightarrow & \mathbb{E}\left[N(x)\right] = m(S-x)+1 = \sum_{n\geq 1} \mathbb{P}\left(\tilde{N}(S-x) \geq n\right) + 1 = \sum_{n\geq 1} G(S-x) + 1
+  \end{split}
+\end{equation}
+So
+\begin{equation}
+  (\dag) = \frac{\mathbb{E}\left[N(y)\right]}{\mathbb{E}\left[N(s)\right]} = \frac{\sum_{n\geq 1} G(S-y) + 1}{\sum_{n\geq 1} G(S-s) + 1}
+\end{equation}
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} (a) Consider a Poisson process with interarrival time $T\sim \text{Exp}(\lambda)$. And we \emph{only} count the $k^{th}$ event when $k$ is a multiple of $r$. Then the counted events form our desired renewal process that has interarrival time $rT\sim \Gamma(r, \lambda)$. \\
+Define $\{A(t)\}$ as the counting of initial Poisson; $N(t)$ as counting process associated with the new counted process. We have
+\begin{equation}
+  \mathbb{P}\left(N(t)\geq n\right) = \mathbb{P}\left(A(t)\geq rn\right) = \sum_{k\geq rn} e^{\lambda t}\frac{(\lambda t)^k}{k!}
+\end{equation}
+(b) 
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[N(t)\right] &= \sum_{n\geq 1} \mathbb{P}\left(N(t)\geq n\right) \\
+    &= \sum_{n\geq 1} \sum_{k\geq rn} e^{\lambda t}\frac{(\lambda t)^k}{k!} \\
+    &= \sum_{k\geq r} \sum_{n=1}^{\lfloor\frac{k}{r}\rfloor} e^{\lambda t}\frac{(\lambda t)^k}{k!} \\
+    &= \sum_{k\geq r} \left\lfloor \frac{k}{r} \right\rfloor e^{\lambda t}\frac{(\lambda t)^k}{k!}
+  \end{split}
+\end{equation}
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} We define following RVs:
+\begin{itemize}
+  \item[$\cdot$] The completion of jobs forms a renewal process, denote $X$ the interarrival time. We want to calculate the job completion rate in the long run, i.e. $\frac{1}{\mathbb{E}\left[X\right]}$
+  \item[$\cdot$] Let $Z$ be the time \emph{required} to finish a job, $Z$ has distribution $F$.
+  \item[$\cdot$] Let $T$ be the interarrival time of poisson shocks. $T \perp Z$, $T\sim \text{Exp}(\lambda)$.
+\end{itemize}
+Firstly condition on shock ($T$) and required time to complete current job ($Z$). If $T\geq Z$, the current job is not affected by the shock and will be finished upon $Z$. Otherwise, the job is restarted at $T$.
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[X|T,Z\right] = 
+    \begin{cases}
+      Z & \text{If $T\geq Z$,} \\
+      \mathbb{E}\left[X\right] + T & \text{else if $T<Z$.}
+    \end{cases}
+  \end{split}
+\end{equation}
+Therefore
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[X|Z\right] &= \int_{0}^{\infty} \mathbb{E}\left[X|Z,T=t\right] f_T(t) dt\\
+    &= \left(\int_{0}^{Z} + \int_{Z}^{\infty}\right) \mathbb{E}\left[X|Z,T=t\right] \lambda e^{-\lambda t} dt\\
+    &= \int_0^Z (\mathbb{E}\left[X\right] + t)\lambda e^{-\lambda t} dt + \int_Z^{\infty} Z \cdot \lambda e^{-\lambda t} dt\\
+    &= \mathbb{E}\left[X\right](1-e^{-\lambda Z}) - \left.te^{-\lambda t}\right|_0^Z +\left. \frac{-1}{\lambda} e^{-\lambda x}\right|_0^Z + \left.(-e^{-\lambda t})\right|_Z^{\infty} \\
+    &= \mathbb{E}\left[X\right](1-e^{-\lambda Z}) - Ze^{-\lambda Z} - \frac{e^{-\lambda Z}-1}{\lambda} + Ze^{-\lambda Z}\\
+    &= \left(\mathbb{E}\left[X\right]+\frac{1}{\lambda}\right)(1-e^{-\lambda Z})
+  \end{split}
+\end{equation}
+Finally, due to the fact that $T\perp Z$:
+\begin{equation}
+  \begin{split}
+    &\mathbb{E}\left[X\right] = \mathbb{E}\left[\mathbb{E}\left[X|Z\right]\right] = \left(\mathbb{E}\left[X\right]+\frac{1}{\lambda}\right)(1- \mathbb{E}\left[e^{-\lambda Z}\right]) \\
+    \Rightarrow & \frac{1}{\mathbb{E}\left[X\right]} = \frac{\lambda \mathbb{E}\left[e^{-\lambda Z}\right]}{1-\mathbb{E}\left[e^{-\lambda Z}\right]} = \frac{\lambda \int e^{-\lambda z}F'(z)dz}{1-\int e^{-\lambda z}F'(z)dz}
+  \end{split}
+\end{equation}
+Where $F'$ is PDF of $Z$. $F$ is known. 
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} (a) Define following RVs:
+\begin{itemize}
+  \item[$\cdot$] The machine replacements constitutes a renewal process. Denote $X$ the time between replacements.
+  \item[$\cdot$] Define $Z$ the lifespan of current machine. $Z$ has distribution $F,(f)$.
+\end{itemize}
+Similar to the analysis in question 3, We have
+\begin{equation}
+  \mathbb{E}\left[X|Z\right] = 
+    \begin{cases}
+      Z & \text{If $Z\leq T$,} \\
+      T & \text{else if $Z>T$.}
+  \end{cases}
+\end{equation}
+Therefore
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[X\right] &= \mathbb{E}\left[\mathbb{E}\left[X|Z\right]\right] \\
+    &=\mathbb{E}\left[\mathbb{E}\left[X|Z\right]; Z\leq T\right] + \mathbb{E}\left[\mathbb{E}\left[X|Z\right]; Z>T\right]\\
+    &= \int_0^T z f(z) dz + \int_T^{\infty} T f(z)dz \\
+    &= \int_0^T z f(z) dz + T(1-F(T))~~(\dag)
+  \end{split}
+\end{equation}
+Hence the rate is $1/\mathbb{E}\left[X\right]=(\dag)^{-1}$.\\
+(b) Further define
+\begin{itemize}
+  \item[$\cdot$] $Y$ be the life between fails of machines. Forms another renewal process. If $Z\leq T$, the current machine fails at $Z$. Otherwise, the current machine does not fail by $T$ and it then starts up a new machine. Therefore
+\end{itemize}
+\begin{equation}
+  \mathbb{E}\left[Y|Z\right] = 
+    \begin{cases}
+      Z & \text{If $Z\leq T$,} \\
+      T + \mathbb{E}\left[Y\right] & \text{else if $Z>T$.}
+  \end{cases}
+\end{equation}
+Hence
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[Y\right] &= \mathbb{E}\left[\mathbb{E}\left[Y|Z\right]\right] \\
+    &=\mathbb{E}\left[\mathbb{E}\left[Y|Z\right]; Z\leq T\right] + \mathbb{E}\left[\mathbb{E}\left[Y|Z\right]; Z>T\right]\\
+    &= \int_0^T z f(z) dz + \int_T^{\infty} (T+\mathbb{E}\left[Y\right]) f(z)dz \\
+    &= \int_0^T z f(z) dz + (T+\mathbb{E}\left[Y\right])(1-F(T))~~(\dag)
+  \end{split}
+\end{equation}
+\begin{equation}
+  \Rightarrow \mathbb{E}\left[Y\right] = \frac{\int_0^T z f(z) dz + T(1-F(T))}{F(T)} = \frac{(\dag)}{F(T)}
+\end{equation}
+i.e. $1/\mathbb{E}\left[Y\right]=F(T)\times (\dag)^{-1}$
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} (1) We set two states as the two types of machine life distribution. i.e. rate $\mu_1$ and $\mu_2$. Define the CTMC associated with it. By regarding each machine failure as a transition, we obtain
+\begin{equation}
+  q_{12} = \mu_1(1-p),~~~q_{21}=\mu_2 p
+\end{equation}
+Therefore
+\begin{equation}
+  P_{11}(t) = \frac{\mu_1(1-p)}{\mu_1(1-p)+\mu_2 p}\exp\left\{-[\mu_1(1-p)+\mu_2 p]t\right\} + \frac{\mu_2 p}{\mu_1 (1-p)+\mu_2 p}
+\end{equation}
+And $P_{12}(t)=1-P_{11}(t)$. Similarly we have
+\begin{equation}
+  P_{22}(t) = \frac{\mu_2 p}{\mu_1(1-p)+\mu_2 p}\exp\left\{-[\mu_1(1-p)+\mu_2 p]t\right\} + \frac{\mu_1(1-p)}{\mu_1 (1-p)+\mu_2 p}
+\end{equation}
+And $P_{21}(t)=1-P_{22}(t)$. \\
+(2) Condition on initial machine type (Denote $X(t)$ as type, $Y(t)$ as operating time)
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[Y(t)\right] &= p\mathbb{E}\left[Y(t)|X(0)=1\right] + (1-p) \mathbb{E}\left[Y(t)|X(0)=2\right] \\
+    &= p\left[\frac{P_{11}(t)}{\mu_1}+\frac{P_{12}(t)}{\mu_2}\right] + (1-p)\left[\frac{P_{21}(t)}{\mu_1}+\frac{P_{22}(t)}{\mu_2}\right]
+  \end{split}
+\end{equation}
+Where $P_{\cdot}(t)$s are specified in CTMC. \\
+The renewal equation, i.e. $m(t)$ is given via
+\begin{equation}
+  \mu[m(t)+1] = t+\mathbb{E}\left[Y(t)\right]
+\end{equation}
+with $\mu=\frac{p}{\mu_1}+\frac{(1-p)}{\mu_2}$
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} Define the followings
+\begin{itemize} 
+  \item[$\cdot$] $T_1, T_2$ be the lifespan of two components. $T_1 \sim \text{Exp}(\lambda_1)$, $T_2 \sim \text{Exp}(\lambda_2)$.
+  \item[$\cdot$] The replacements of machines constitute a renewal process. Let $X$ be the time between replacements. 
+  \item[$\cdot$] Further, $X=A+Y$, where $A$ is the time during which 2 components are working together. Clearly, $A=\min\{T_1, T_2\}$. Therefore, due to memorylessness property, $Y\sim \text{Exp}(\lambda_1)$ if $A=T_2$; $Y\sim \text{Exp}(\lambda_2)$ if otherwise.
+\end{itemize}
+Hence
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[X\right] &= \mathbb{E}\left[A\right] + \mathbb{E}\left[Y; A=T_1\right] + \mathbb{E}\left[Y; A=T_2\right] \\
+    &= \mathbb{E}\left[A\right] + \mathbb{E}\left[Y|A=T_1\right]\mathbb{P}\left(A=T_1\right) + \mathbb{E}\left[Y|A=T_2\right]\mathbb{P}\left(A=T_2\right) \\
+    &= \frac{1}{\lambda_1 + \lambda_2} + \frac{\lambda_1}{\lambda_1 + \lambda_2}\frac{1}{\lambda_2} + \frac{\lambda_2}{\lambda_1 + \lambda_2}\frac{1}{\lambda_1}
+  \end{split}
+\end{equation}
+Conduct similar analysis for the cost:
+\begin{itemize}
+  \item[$\cdot$] Define $C=K+C_1+C_2$ be the cost within $X$. where $K$ is the fixed cost. $C_2$ is the cost incurred when 2 components are working together. Clearly, $C_2=c_2A$. $C_1$ is the cost incurred when 1 component is working. $C_1=c_1Y$.
+\end{itemize}
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[C\right] &= K+c_2\mathbb{E}\left[A\right] + c_2\left(\mathbb{E}\left[Y; A=T_1\right] + \mathbb{E}\left[Y; A=T_2\right]\right) \\
+    &= K + \frac{c_2}{\lambda_1 + \lambda_2} + \frac{\lambda_1}{\lambda_1 + \lambda_2}\frac{c_1}{\lambda_2} + \frac{\lambda_2}{\lambda_1 + \lambda_2}\frac{c_1}{\lambda_1}
+  \end{split}
+\end{equation}
+The long run average marginal cost of operation time is given by $r:=\frac{\mathbb{E}\left[C\right]}{\mathbb{E}\left[X\right]}$.
+\begin{equation}
+  r= \frac{\lambda_1 \lambda_2 (\lambda_1 + \lambda_2)K + \lambda_1 \lambda_2 c_2 + (\lambda_1^2 + \lambda_2^2) c_1}{\lambda_1 \lambda_2 + \lambda_1^2 + \lambda_2^2}
+\end{equation}
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} (a) Settings:
+\begin{itemize}
+  \item[$\cdot$] Denote $N(t)$ the arrival process.
+  \item[$\cdot$] We regard an entering satellites becoming \emph{Type I} satellites if it departs by time $t$, \emph{Type II} satellites if otherwise. Denote \# of type $i$ satellites as $N_i(t)$.
+  \item[$\cdot$] Consider the satellite enters at time $s$, $s\leq t$, then it will be a Type I satellite if its orbiting time is less than $t-s$. So the probability that he become Type I is $F(t-s)$.
+\end{itemize}
+It is clear that $X(t)$ tracks the number of Type II satellites by time $t$. Due to \emph{Prop.5-3} In Ross, $X(t)$ i.e. $N_2(t)$ is a poisson variable with mean
+\begin{equation}
+  m(t) = \lambda \int_0^t \overline{F}(s)ds = \lambda \int_0^t (1-F(s))ds
+\end{equation}
+Hence
+\begin{equation}
+  \mathbb{P}\left(X(t)=k\right) = e^{-m(t)}\frac{m^k(t)}{k!}
+\end{equation}
+(b) We view the system as an alternating renewal process,
+\begin{itemize}
+  \item[$\cdot$] System is ``On'' if there is at least one satellite in the orbit. ``Off'' if otherwise. Denote $X$ be the time between the ends of adjacant ``Off'' periods.
+  \item[$\cdot$] $X=Y+Z$, $Y$ is the time of ``On'' period. $Z$ is that for ``Off''.
+\end{itemize}
+By theorem
+\begin{equation}
+  \lim\limits_{t\rightarrow\infty}\mathbb{P}\left(\{\text{Off at time $t$}\}\right) = \frac{\mathbb{E}\left[Z\right]}{\mathbb{E}\left[Y\right]+\mathbb{E}\left[Z\right]}
+\end{equation}
+Once the system is off, it just waits for another arrival. So it's clear that $Z$ is of same distribution as interarrival time of the Poisson arrival process. $\mathbb{E}\left[Z\right]=\frac{1}{\lambda}$. \\
+Moreover, $\mathbb{P}\left(\{\text{Off at time $t$}\}\right)=\mathbb{P}\left(X(t)=0\right)=e^{-m(t)}$.
+\begin{equation}
+  \lim\limits_{t\rightarrow\infty}\mathbb{P}\left(\{\text{Off at time $t$}\}\right) = \lim\limits_{t\rightarrow\infty}e^{-m(t)} =  e^{-\lambda \int_0^{\infty} \overline{F}(s)ds}
+\end{equation}
+Therefore
+\begin{equation}
+  e^{-\lambda \int_0^{\infty} \overline{F}(s)ds} = \frac{\frac{1}{\lambda}}{\mathbb{E}\left[Y\right]+\frac{1}{\lambda}}~~\Rightarrow~~\mathbb{E}\left[Y\right]=\frac{1-e^{-\lambda \int_0^{\infty} \overline{F}(s)ds}}{\lambda e^{-\lambda \int_0^{\infty} \overline{F}(s)ds}}
+\end{equation}
+And note that $\int_0^{\infty} \overline{F}(s)ds$ is just the expectation of service (orbiting) time. $Y$ and $Y_1$ are identically distributed, hence the expected time remaining functional is given by $\mathbb{E}\left[Y\right]$.
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} We must go for a stronger statement to obtain desired result. \\
+\textit{Claim}. $\{U_n\}$ i.i.d Uniform(0,1). For all $0<x\leq1$, $N(x):=\min\{n: U_1+...+U_n>x\}$:
+$$\mathbb{P}\left(N(x)>n\right)=\frac{x^n}{n!}$$
+\textit{Proof of Claim}. We proceed by induction. The $n=1$ case is true. Since
+\begin{equation}
+  \mathbb{P}\left(N(x)>1\right) = \mathbb{P}\left(U_1 \leq x\right) = x
+\end{equation}
+Then
+\begin{equation}
+  \begin{split}
+    \mathbb{P}\left(N(x)>n+1\right) &= \int_0^1 \mathbb{P}\left(N(x)>n+1|U_1=y\right) f_{U_1}(y) dy \\
+    &= \left(\int_0^x + \int_x^1\right) \mathbb{P}\left(N(x)>n+1|U_1=y\right) dy\\
+    &= \int_0^x\mathbb{P}\left(N(x)>n+1|U_1=y\right) dy~~\text{(Since $N(x)=1$ if $U_1\geq x$.)}\\
+    &= \int_0^x\mathbb{P}\left(N(x-y)>n\right) dy \\
+    &= \int_0^x \frac{(x-y)^n}{n!} dy ~~\text{(Let $z:=x-y$.)}\\
+    &= \int_x^0 -\frac{z^n}{n!}dz = \frac{x^{n+1}}{(n+1)!}
+  \end{split}
+\end{equation}
+Now take $x=1$ $\Rightarrow$ $\mathbb{P}\left(N>n\right)=\frac{1}{n!}$. Hence
+\begin{equation}
+  \mathbb{E}\left[N\right] = \sum_{n\geq 1}\mathbb{P}\left(N>n\right) = \sum_{n\geq 1}\frac{1}{n!} = e
+\end{equation}
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} Define the followings
+\begin{itemize}
+  \item[$\cdot$] $T_1, T_2$ is the lifespan of two machine, $T_1, T_2\sim \text{Exp}(\lambda)$.
+  \item[$\cdot$] Busy and Idle period forms an alternating renewal process. Let $X=B+D$ be the time between two ends of idle periods. $B$ for busy period, $D$ for idle. 
+  \item[$\cdot$] $Z$ be the repair time, which has known distribution $G, g$.
+\end{itemize}
+Then it suffices to calculate $\frac{\mathbb{E}\left[D\right]}{\mathbb{E}\left[B\right]+\mathbb{E}\left[D\right]}$. $D$ equals the time until next machine failure, which equals $\min\{T_1,T_2\}$. Hence $\mathbb{E}\left[D\right]=\frac{1}{2 \lambda}$. \\
+Now consider busy period. Let $T$ be the remaining life of the other machine when the repairman enters a busy period. Due to memorylessness, $T\sim \text{Exp}(\lambda)$. Conditional on $T,Z$, if $T>Z$, i.e. the other machine does not break until the end of current busy period, the man will enter an idle. Otherwise if $T\leq Z$, the man restarts another busy period when finished with the current one.
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[B|T,Z\right] = 
+    \begin{cases}
+      Z & \text{If $T>Z$,} \\
+      \mathbb{E}\left[B\right] + Z & \text{else if $T\leq Z$.}
+    \end{cases}
+  \end{split}
+\end{equation}
+Hence
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[B\right] &= \mathbb{E}\left[\mathbb{E}\left[B|Z\right]\right] \\
+    &= \mathbb{E}\left[\int_0^{\infty} \mathbb{E}\left[B|Z,T=t\right] f_T(t)dt\right] \\
+    &= \mathbb{E}\left[\int_0^{\infty} \mathbb{E}\left[B|Z,T=t\right] \lambda e^{-\lambda t}dt\right]\\
+    &= \mathbb{E}\left[\int_0^{Z} (\mathbb{E}\left[B\right]+Z) \lambda e^{-\lambda t}dt + \int_Z^{\infty} Z \lambda e^{-\lambda t}dt\right]\\
+    &= \mathbb{E}\left[Z + \mathbb{E}\left[B\right](1-e^{-\lambda Z})\right]\\
+    &= \mathbb{E}\left[Z\right] + \mathbb{E}\left[B\right](1- \mathbb{E}\left[e^{-\lambda Z}\right])
+  \end{split}
+\end{equation}
+Implies that
+\begin{equation}
+  \mathbb{E}\left[B\right] = \frac{\mathbb{E}\left[Z\right]}{\mathbb{E}\left[e^{-\lambda Z}\right]} = \frac{\int zG'(z)dz}{\int e^{-\lambda z}G'(z)dz}
+\end{equation}
+So, proportion of idle time is:
+\begin{equation}
+  \frac{\mathbb{E}\left[D\right]}{\mathbb{E}\left[B\right]} = \frac{1/2 \lambda}{\mathbb{E}\left[B\right]+1/2 \lambda}
+\end{equation}
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} The transition matrix is given by 
+\begin{equation}
+  \bm{P} = \begin{pmatrix}
+    0 & 1 & 0 \\
+    0 & 0 & 1 \\
+    \frac{2}{3} & \frac{1}{3} & 0\\
+  \end{pmatrix}
+\end{equation}
+Denote limiting probability as $\bm{\pi}$, solve for $\bm{\pi}\bm{P}=\bm{\pi}$ $\Rightarrow$ $\bm{\pi}=(\frac{1}{4}, \frac{3}{8}, \frac{3}{8})$. \\
+Denote mean time spent in state $i$ as $\mu_i$. 
+\begin{equation}
+  \begin{split}
+    & \mu_1 = t_1 + P_{12}m_{12} = 11 \\
+    & \mu_2 = t_2 + P_{23}m_{23} = 22 \\
+    & \mu_3 = t_3 + P_{31}m_{31} + P_{32}m_{32} = \frac{67}{3}\\
+  \end{split}
+\end{equation}
+The limiting probabiliy is given by
+\begin{equation}
+  \begin{split}
+    & P_j = \frac{\pi_j \mu_j}{\sum_j \pi_j \mu_j} \Rightarrow \\
+    & P_1 = \frac{66}{465}, P_2 = \frac{198}{465}, P_3 = \frac{201}{465}
+  \end{split}
+\end{equation}
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} (\textbf{Inspection Paradox}) For a renewal process with interarrival time $X_n$ with distribution $F$, show
+$$\mathbb{P}\left(X_{N(t)+1}>x\right)\geq \mathbb{P}\left(X_n>x\right)$$
+\end{problem}
+\begin{proof} Use the conventional notation $S_n=\sum_{i=1}^n X_i$ for waiting time. For $X_{N(t)+1}$. We condition on event $\{S_n=s, N(t)=n\}$. Note that we have following equivalence relationships:
+\begin{itemize}
+  \item[$\cdot$] $\{X_{N(t)+1}|N(t)=n\}$ $\iff$ $\{X_{n+1}|N(t)=n\}$. $(*)$
+  \item[$\cdot$] $\{N(t)=n\}\iff\{S_n\leq t, S_{n+1}>t\}$. Hence
+  $$\{S_n=s, N(t)=n\} \iff \{S_n=s, X_{n+1}>t-s\}~~(**)$$
+\end{itemize}
+Apply these equivalent condition step by step, we have
+\begin{equation}
+  \begin{split}
+    \mathbb{P}\left(X_{N(t)+1}>x|N(t)=n, S_n=s\right) &=  \mathbb{P}\left(X_{n+1}>x|N(t)=n, S_n=s\right)~~[\text{Apply } (*)]\\
+    &= \mathbb{P}\left(X_{n+1}>x|S_n=s, X_{n+1}>t-s\right)~~[\text{Apply } (**)]\\
+    &= \mathbb{P}\left(X_{n+1}>x|X_{n+1}>t-s\right)~~[\text{Since $X_{n+1}\perp S_n$}]\\
+    &= \frac{\mathbb{P}\left(X_{n+1}>x, X_{n+1}>t-s\right)}{\mathbb{P}\left(X_{n+1}>t-s\right)}\\
+    &= \frac{\overline{F}(\max\{x, t-s\})}{\overline{F}(t-s)}
+  \end{split}
+\end{equation}
+\emph{Claim}. $\frac{\overline{F}(\max\{x, t-s\})}{\overline{F}(t-s)}\geq \overline{F}(x)$.
+\emph{Proof of Claim}. 
+\begin{itemize}
+  \item[$\cdot$] \textit{Case.1} If $\max\{x, t-s\}=x$, then $LHS = \frac{\overline{F}(x)}{\overline{F}(t-s)}\geq \overline{F}(x)$. Because $\overline{F}(\cdot)\leq 1$.
+  \item[$\cdot$] \textit{Case.2} If $\max\{x, t-s\}=t-s$, then $LHS = \frac{\overline{F}(t-s)}{\overline{F}(t-s)}=1\geq \overline{F}(x)$ is clear. $\blacksquare$
+\end{itemize}
+Hence, 
+$$\mathbb{P}\left(X_{N(t)+1}>x|N(t)=n, S_n=s\right) =\mathbb{E}\left[\mathbbm{1}_{\{X_{N(t)+1}>x\}}|N(t)=n, S_n=s\right] \geq \overline{F}(x)$$
+Take expectation both sides:
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[\mathbb{E}\left[\mathbbm{1}_{\{X_{N(t)+1}>x\}}|N(t)=n, S_n=s\right]\right] &= \mathbb{E}\left[\mathbbm{1}_{\{X_{N(t)+1}>x\}}\right]\\
+    &= \mathbb{P}\left(X_{N(t)+1}>x\right) \\
+    &\geq \overline{F}(x) = \mathbb{P}\left(X_n>x\right)
+  \end{split}
+\end{equation}
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} Define \textbf{Age} and \textbf{Residual} life: $A(t):=t-S_{N(t)}$, $Y(t):=S_{N(t)+1}-t$. Show that
+\begin{itemize}
+   \item[a)] If $F$ is nonlattice and $\mu<\infty$, then 
+   $$
+     \lim\limits_{t\rightarrow\infty}\mathbb{P}\left(A(t)\leq x\right) = \lim\limits_{t\rightarrow\infty}\mathbb{P}\left(Y(t)\leq x\right) = \frac{\int_0^x \overline{F}(y)dy}{\mu}
+   $$
+   \item[b)] 
+   $$
+    \lim\limits_{t\rightarrow\infty}\mathbb{P}\left(X_{N(t)+1}> x\right) = \frac{\int_x^{\infty} dF(y)}{\mu}
+   $$
+   \item[c)] If $F$ is nonlattice and $X\in \mathcal{L}^2$, then the limiting mean excess life is
+   $$\lim\limits_{t\rightarrow\infty}\mathbb{E}\left[Y(t)\right]=\frac{\mathbb{E}\left[X^2\right]}{2\mu}$$
+ \end{itemize} 
+\end{problem}
+\begin{proof} a) We define an alternating renewal process as follows
+\begin{itemize}
+   \item[$\cdot$] The full cycle corresponds to the initial renewal process, i.e. each cycle lasts for $X$. 
+   \item[$\cdot$] The system is ``On'' at $t$ if the age $A(t)\leq x$. In another word, the \textbf{FIRST} $x$ unit of time in the cycle is ``On''. Denote ``On'' time as $Z$. We have, by definition $Z=\min\{X,x\}$.
+ \end{itemize} 
+ Apply \textit{Thm.3.4.4} in the notes. I.e. if $F$ is nonlattice, $\mathbb{P}\left(\{\text{On at }t\}\right)=\frac{\mathbb{E}\left[Z\right]}{\mathbb{E}\left[X\right]}$, i.e.
+ \begin{equation}
+  \begin{split}
+    \lim\limits_{t\rightarrow\infty}\mathbb{P}\left(A(t)\leq x\right) &= \frac{\mathbb{E}\left[Z\right]}{\mathbb{E}\left[X\right]} \\
+    &= \frac{\mathbb{E}\left[\min\{x,X\}\right]}{\mu} \\
+    &= \frac{1}{\mu}\int_{0}^{\infty}\mathbb{P}\left(\min\{x,X\}>y\right)dy \\
+    &= \frac{1}{\mu}\int_{0}^{x} \mathbb{P}\left(\min\{x,X\}>y\right)dy~~\text{(Since $\min\{x,X\} \leq y$ when $y\geq x$)} \\
+    &= \frac{1}{\mu}\int_{0}^{x} \mathbb{P}\left(X>y\right)dy~~\text{(Since $\{\min\{x,X\}>y\}\iff\{X>y\}$ when $y<x$)} \\
+    &= \frac{\int_0^x \overline{F}(y)dy}{\mu}
+  \end{split}
+ \end{equation}
+ Proceed similarly for $Y(t)$. The system is ``On (prime)'' at $t$ if the remaining life $Y(t)\leq x$. In another word, the \textbf{LAST} $x$ unit of time in the cycle is ``On (prime)''. Denote ``On (prime)'' time as $Z'$. We have, by definition $Z'=\min\{X,x\}$. By exactly the same calculation;
+ \begin{equation}
+   \lim\limits_{t\rightarrow\infty}\mathbb{P}\left(Y(t)\leq x\right) = \frac{\mathbb{E}\left[Z'\right]}{\mathbb{E}\left[X\right]} = \frac{\int_0^x \overline{F}(y)dy}{\mu}
+ \end{equation}
+\end{proof}
+
+\begin{proof} b) $X_{N(t)+1}$ is the current interval containing $t$. We define an alternating renewal process: The system is ``On'' for the \textbf{Entire} cycle if that cycle is longer than $x$, that is, for any cycle, it is either totally ``On'' (if longer than $x$) or totally ``Off''. So we have
+\begin{equation}
+    \mathbb{P}\left(X_{N(t)+1}>x\right) = \mathbb{P}\left(\{\text{Cycle containing $t$ is totally On}\}\right) = \mathbb{P}\left(\{\text{On at }t\}\right)
+\end{equation}
+Apply \textit{Thm.3.4.4},
+\begin{equation}
+  \mathbb{P}\left(X_{N(t)+1}>x\right) = \frac{\mathbb{E}\left[Z\right]}{\mathbb{E}\left[X\right]} = \frac{\mathbb{E}\left[X;X>x\right]}{\mu} = \frac{\int_x^{\infty} yf(y)dy}{\mu} = \frac{\int_x^{\infty} ydF(y)}{\mu}
+\end{equation}
+\end{proof}
+
+\begin{proof} c) We calculate $\mathbb{E}\left[Y(t)\right]$ by condition on $S_{N(t)}$:
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[Y(t)\right] &= \mathbb{E}\left[Y(t)|S_{N(t)}=0\right]\mathbb{P}\left(S_{N(t)}=0\right) + \int_0^t \mathbb{E}\left[Y(t)|S_{N(t)}=y\right]dF_{S_{N(t)}}(y) \\
+    &= \mathbb{E}\left[Y(t)|S_{N(t)}=0\right]\overline{F}(t) + \int_0^t \mathbb{E}\left[Y(t)|S_{N(t)}=y\right]\overline{F}(t-y)dm(y)~~\text{(By lemma 3.4.3.)} \\
+  \end{split}
+\end{equation}
+Now we have,
+\begin{equation}
+  \begin{split}
+    & \mathbb{E}\left[Y(t)|S_{N(t)}=0\right] = \mathbb{E}\left[X-t|X>t\right] \\
+    & \mathbb{E}\left[Y(t)|S_{N(t)}=y\right] = \mathbb{E}\left[X-(t-y)|X>t-y\right] \\
+  \end{split}
+\end{equation}
+When given $S_{N(t)}=y$, $A(t)=t-y$, hence $Y(t)=X-A(t)=X-(t-y)$. And the condition implies $X>t-y$. So the second one above follows. We have
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[Y(t)\right] &= \mathbb{E}\left[X-t|X>t\right]\overline{F}(t) + \int_0^t \mathbb{E}\left[X-(t-y)|X>t-y\right]\overline{F}(t-y)dm(y)
+  \end{split}
+\end{equation}
+Let $h(t):=\mathbb{E}\left[X-t|X>t\right]\overline{F}(t)$, we can check $h(t)$ is directly Riemann integrable since $X\in \mathcal{L}^2$. Apply \textit{Key Renewal Thm}, the boundary term vanishes when $t\to \infty$. So
+\begin{equation}
+  \begin{split}
+    \lim\limits_{t\rightarrow\infty}\mathbb{E}\left[Y(t)\right] &=  \lim\limits_{t\rightarrow\infty} \int_0^t h(t-y)dm(y)\\
+    &= \frac{1}{\mu} \int_0^t h(t)dt \\
+    &= \frac{1}{\mu} \int_0^t \mathbb{E}\left[X-t|X>t\right]\overline{F}(t)dt \\
+    &= \frac{1}{\mu} \int_0^t \left(\int_t^{\infty} (x-t)dF(x)\right)dt \\
+    &= \frac{1}{\mu} \int_0^{\infty} \left(\int_0^x (x-t)dt\right)dF(x) \\
+    &= \frac{1}{\mu} \int_0^{\infty} \frac{x^2}{2}dF(x) = \frac{\mathbb{E}\left[X^2\right]}{2\mu}
+  \end{split}
+\end{equation}
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} (\textbf{Elementary Renewal Thm}) Let $m(t):=\mathbb{E}\left[N(t)\right]$, $\mu:=\mathbb{E}\left[X_1\right]<\infty$
+$$\frac{m(t)}{t} \xrightarrow{t\to \infty} \frac{1}{\mu}$$
+\end{problem}
+\begin{proof} We have known in the lecture, $N(t)+1$ is a stopping time. And $S_{N(t)+1}\geq t$. Take expectation on both sides, by Wald's Identity:
+\begin{equation}
+  \begin{split}
+    & \mathbb{E}\left[S_{N(t)+1}\right] = \mu \mathbb{E}\left[N(t)+1\right] = \mu(m(t)+1)\geq t\\
+    \Rightarrow & \frac{m(t)+1}{t} \geq \frac{1}{\mu}~~~~(\text{Take liminf both sides}):\\
+    \Rightarrow & \liminf\limits_{t\rightarrow\infty}\frac{m(t)}{t} + \lim\limits_{t\rightarrow\infty}\frac{1}{t} \geq \frac{1}{\mu}\\
+    \Rightarrow & \liminf\limits_{t\rightarrow\infty}\frac{m(t)}{t} \geq \frac{1}{\mu}~~(*)
+  \end{split}
+\end{equation}
+Define a \textbf{truncation} of $X_n$, for any fixed constant $M>0$:
+\begin{equation}
+  \overline{X}_n := 
+  \begin{cases} 
+    X_n & X_n \leq M \\
+    M & X_n > M
+  \end{cases}
+\end{equation}
+The truncation $\{\overline{X}_n\}$ forms another renewal process $\{\overline{N}(t)\}$ since they are i.i.d. Also define $\overline{S}_n$ associated with this process. We have $\mu_M:=\mathbb{E}\left[\overline{X}_n\right]=\mathbb{E}\left[X_n;X_n\leq M\right]+M \mathbb{P}\left(X_n>M\right)\xrightarrow{M\to \infty}\mu$. And
+\begin{equation}
+  \begin{split}
+    & S_{N(t)+1} = S_{N(t)} + \overline{X}_{N(t)+1} \leq t + M \\
+    \Rightarrow & \mu_M(\overline{m}(t)+1) \leq t + M \\
+    \Rightarrow & \frac{\overline{m}(t)+1}{t+M} \leq \frac{1}{\mu_M}~~\text{For any fixed $M$.}
+  \end{split}
+\end{equation}
+\textbf{For every fixed $M$, we let $t\to \infty$ first}, take limsup on both sides:
+\begin{equation}
+  \limsup\limits_{t\rightarrow\infty}\frac{\overline{m}(t)}{t}=\limsup\limits_{t\rightarrow\infty}\frac{\overline{m}(t)}{t+M} \leq \frac{1}{\mu_M}
+\end{equation}
+Since $\overline{X}_n$ is truncated $X_n$, we have $N(t)\leq \overline{N}(t)$, hence $m(t)\leq \overline{m}(t)$. So
+\begin{equation}
+  \limsup\limits_{t\rightarrow\infty}\frac{m(t)}{t} \leq \limsup\limits_{t\rightarrow\infty}\frac{\overline{m}(t)}{t} \leq \frac{1}{\mu_M}
+\end{equation}
+LHS is a real number. Now let $M\to \infty$, the limit preserves inequility,
+\begin{equation}
+  \limsup\limits_{t\rightarrow\infty}\frac{m(t)}{t} \leq \lim\limits_{M\rightarrow\infty}\frac{1}{\mu_M} = \frac{1}{\mu}~~(**)
+\end{equation}
+$(*)$ and $(**)$ $\Rightarrow$ $\lim\limits_{t\rightarrow\infty}\frac{m(t)}{t}=\frac{1}{\mu}$, finished the proof.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} For the renewal reward process, show that if $R,X\in \mathcal{L}^1$, then
+\begin{itemize}
+  \item[a)] (Random variable)
+  $$\frac{R(t)}{t}\xrightarrow{a.s~~t\to \infty}\frac{\mathbb{E}\left[R\right]}{\mathbb{E}\left[X\right]}$$
+  \item[b)] (Quantity)
+  $$\frac{\mathbb{E}\left[R(t)\right]}{t}\xrightarrow{t\to \infty}\frac{\mathbb{E}\left[R\right]}{\mathbb{E}\left[X\right]}$$
+\end{itemize}
+\end{problem}
+
+\begin{proof} a) We write
+\begin{equation}
+  \frac{R(t)}{t} = \frac{\sum_{i=1}^{N(t)}R_i}{t} = \frac{\sum_{i=1}^{N(t)}R_i}{N(t)} \cdot \frac{N(t)}{t}
+\end{equation}
+By Proposition in Notes (\textbf{SLLN}): $\frac{N(t)}{t} \xrightarrow{a.s.} \frac{1}{\mathbb{E}\left[X\right]}$. And $\frac{\sum_{i=1}^{N(t)}R_i}{N(t)} \xrightarrow{a.s.} \mathbb{E}\left[R\right]$. Hence their product as a whole:
+\begin{equation}
+  \frac{\sum_{i=1}^{N(t)}R_i}{N(t)} \cdot \frac{N(t)}{t} \xrightarrow{a.s.} \frac{\mathbb{E}\left[R\right]}{\mathbb{E}\left[X\right]}
+\end{equation}
+Finished the proof.
+\end{proof}
+
+\begin{proof} b) Since $N(t)+1$ is a stopping time, we add an extra term to $R(t)$ and apply Wald's Identity:
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[R(t)\right] &= \mathbb{E}\left[\sum_{i=1}^{N(t)+1}R_i-R_{N(t)+1}\right]  \\
+    &= \mathbb{E}\left[N(t)+1\right]\mathbb{E}\left[R\right] - \mathbb{E}\left[R_{N(t)+1}\right] \\
+    &= (m(t)+1)\mathbb{E}\left[R\right] - \mathbb{E}\left[R_{N(t)+1}\right]
+  \end{split}
+\end{equation}
+Hence
+\begin{equation}
+  \frac{\mathbb{E}\left[R(t)\right]}{t} = \frac{(m(t)+1)\mathbb{E}\left[R\right]}{t} - \frac{\mathbb{E}\left[R_{N(t)+1}\right]}{t}
+\end{equation}
+By elementary renewal theorem, the first part $\frac{(m(t)+1)\mathbb{E}\left[R\right]}{t} \to \frac{\mathbb{E}\left[R\right]}{\mathbb{E}\left[X\right]}$. So now it suffices to show the second part has limit zero when $t\to \infty$. \\
+We proceed by conditioning on $S_{N(t)}$, apply lemma 3.4.3 yields
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[R_{N(t)+1}\right] = \mathbb{E}\left[R_{N(t)+1}|S_{N(t)}=0\right]\overline{F}(t) + \int_0^t \mathbb{E}\left[R_{N(t)+1}|S_{N(t)}=y\right]\overline{F}(t-y)dm(y)
+  \end{split}
+\end{equation}
+Where
+\begin{equation}
+  \begin{split}
+    & \mathbb{E}\left[R_{N(t)+1}|S_{N(t)}=0\right] = \mathbb{E}\left[R_1|R_1>t\right]\\
+    & \mathbb{E}\left[R_{N(t)+1}|S_{N(t)}=y\right] = \mathbb{E}\left[R_n|R_n>t-y\right]\\
+  \end{split}
+\end{equation}
+So, let $h(t):=\mathbb{E}\left[R|R>t\right]\overline{F}(t)$, it is clear that $h(t)\searrow 0$ with $t\nearrow\infty$. Therefore, for all $\epsilon>0$, exists $T$ large, such that $h(t)< \epsilon$ whenever $t>T$. Moreover, $h(t)\leq \mathbb{E}\left[R\right]$ for all $t$.
+\begin{equation}
+  \begin{split}
+    \frac{\mathbb{E}\left[R_{N(t)+1}\right]}{t} &= \frac{1}{t}\left(\mathbb{E}\left[R_1|R_1>t\right]\overline{F}(t) + \int_0^t \mathbb{E}\left[R_n|R_n>t-y\right]\overline{F}(t-y)dm(y)\right)\\
+    &= \frac{h(t)}{t} + \frac{\int_0^t h(t-y)dm(y)}{t} \\
+    &= \frac{h(t)}{t} + \frac{\int_0^{t-T} h(t-y)dm(y)}{t} + \frac{\int_{t-T}^{t} h(t-y)dm(y)}{t} \\
+    &\leq \frac{\epsilon}{t} + \frac{\epsilon \cdot m(t-T)}{t} + \frac{\mathbb{E}\left[R\right]\cdot (m(t)-m(t-T))}{t}
+  \end{split}
+\end{equation}
+The first quantity $\frac{\epsilon}{t}\to 0$, the second one $\frac{\epsilon \cdot m(t-T)}{t} \to \frac{\epsilon}{\mu}$ for any fixed $\epsilon,T$ due to elementary renewal thm. The last quantity $\frac{\mathbb{E}\left[R\right]\cdot (m(t)-m(t-T))}{t} \to 0$ for any fixed $T$.\\
+Hence, for any fixed $\epsilon, T(\epsilon)$, let $t$ goes to infinity first
+\begin{equation}
+  \frac{\mathbb{E}\left[R_{N(t)+1}\right]}{t} \xrightarrow{t\to \infty} \frac{\epsilon}{\mu}
+\end{equation}
+Then let $\epsilon$ goes to zero, we have $\frac{\mathbb{E}\left[R_{N(t)+1}\right]}{t} \to 0$ as desired, finished the proof.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} For semi-Markov process, show that the long-run proportion of time that the process spends in state $i$ is
+$$
+P_i = \frac{\pi_i \mu_i}{\sum_{j=1}^N \pi_j \mu_j}
+$$
+where $\pi_j$ is the limiting probability of the embedded Markov chain.
+\end{problem}
+\begin{proof} We consider the \emph{first $n$ transitions} of the semi-Markov process. Define
+\begin{itemize}
+  \item[$\cdot$] $P_i^{[n]}$ be the proportion of time in state $i$, during the first $n$ transitions.
+  \item[$\cdot$] $N_i^{[n]}$ \# of visits to state $i$ in the first $n$ transitions.
+  \item[$\cdot$] $Y_i^{[k]}$ be the amount of time stay in state $i$ in the $k^{th}$ visit to $i$. $\mu_i = \mathbb{E}\left[Y_i^{[k]}\right]$ for any $k\geq 1$.
+\end{itemize}
+By those definitons and logic reasoning,
+\begin{equation}
+  \begin{split}
+    P_i^{[n]} = \frac{\sum_{k=1}^{N_i^{[n]}}Y_i^{[k]}}{\sum_{j}\sum_{k=1}^{N_j^{[n]}}Y_j^{[k]}}
+  \end{split}
+\end{equation}
+Where the numerator is the summation of all time spent in state $i$, and denominator is the summation of the time spent in all state. Rewrite it as
+\begin{equation}
+  \begin{split}
+    P_i^{[n]} 
+    &= \frac{\frac{1}{n}\sum_{k=1}^{N_i^{[n]}}Y_i^{[k]}}{\sum_{j}\frac{1}{n}\sum_{k=1}^{N_j^{[n]}}Y_j^{[k]}} \\
+    &= \frac{\frac{N_i^{[n]}}{n}\sum_{k=1}^{N_i^{[n]}}\frac{Y_i^{[k]}}{N_i^{[n]}}}{\sum_{j}\frac{N_j^{[n]}}{n}\sum_{k=1}^{N_j^{[n]}}\frac{Y_j^{[k]}}{N_j^{[n]}}}
+  \end{split}
+\end{equation}
+Since $N_i^{[n]} \to \infty$ as $n\to \infty$, and $Y_i^{[k]}\in \mathcal{L}^1$. By strong law:
+\begin{equation}
+  \frac{\sum_{k=1}^{N_i^{[n]}}Y_i^{[k]}}{N_i^{[n]}} \xrightarrow{a.s~~n\to \infty} \mathbb{E}\left[Y_i^{[k]}\right] = \mu_i
+\end{equation}
+Moreover, $\frac{N_i^{[n]}}{n}$ is the proportion of visits to $i$ during the first $n$ visits. By definition of stationary probability,
+\begin{equation}
+  \lim\limits_{n\rightarrow\infty}\frac{N_i^{[n]}}{n} = \pi_i
+\end{equation}
+Hence
+\begin{equation}
+  P_i:=\lim\limits_{n\rightarrow\infty}P_i^{[n]}=\frac{\pi_i \mu_i}{\sum_j \pi_j \mu_j}
+\end{equation}
+\end{proof}
+
+
+
+\end{document}

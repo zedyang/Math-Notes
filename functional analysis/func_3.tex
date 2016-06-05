@@ -1,0 +1,327 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+
+\title{\textbf{Functional Analysis Assignment III}}
+\author{YANG, Ze (5131209043)}
+
+\begin{document}
+\maketitle
+
+\begin{problem} Let $K=\{(x,y)|-1<x<1, -1<y<1, \text{or }x=1, -1\leq y\leq 0\} \subset \mathbb{R}^2$, $(x_1, y_1)=(1,\frac{1}{2})$, and $(x_2, y_2)=(1,1)$.
+\begin{itemize}
+	\item[(a)] Construct an explicit unique nonzero linear functional $l$ satisfying $l(x_1, y_1)=1$ and 
+	$$l(x, y) \leq l(x_1, y_1)~~\text{for all $(x,y)\in K$}$$
+	\item[(b)] Show that there are infinitely many linear functionals $l$ satisfying $l(x_2, y_2)=1$ and
+	$$l(x, y) \leq l(x_2, y_2)~~\text{for all $(x,y)\in K$}$$
+\end{itemize}
+\end{problem}
+\begin{proof} (a) For $\bm{x}=(x, y)\in \mathbb{R}^2$, the linear functional of $\bm{x}$ takes form
+$$l(\bm{x})=\bm{a}\bm{x}^{\top}$$
+Where $\bm{a}=(a_1, a_2)$. \\
+(\textit{Existence}): $\bm{a}=(1,0)$ satisfies the condition. When $\bm{a}=(1,0)$, we have $l(\bm{z}_1)=1$. And for all $\bm{x}\in K$, $l(\bm{x})=x \leq 1 = l(\bm{z}_1)$.\\
+(\textit{Uniqueness}): suppose there exists another $\bm{a}'=(1,a)$ such that $\forall \bm{x}\in K$,
+$$l(\bm{x})=x+ay \leq 1+\frac{1}{2}a = l(\bm{z}_1)$$
+We pick $\bm{x}=(1,0)\in K$ $\Rightarrow$ $a\geq 0$. Then consider for all $a>0$, there exists $n>5$ (and sufficiently large), such that $-1<1-\frac{a}{n}<1$. Hence we have $\bm{x}'=(1-\frac{a}{n}, \frac{4}{5})\in K$, so 
+\begin{equation}
+  \begin{split}
+    l(\bm{x}')=1-\frac{a}{n}+\frac{4}{5}a &\leq 1+\frac{a}{2}\\
+    \Rightarrow \frac{3}{5}a  \leq  -\frac{a}{n}+\frac{4}{5}a &\leq \frac{a}{2}
+  \end{split}
+\end{equation}
+Which implies that $a\leq 0$. Contradicts the assumption that $a>0$. So the only feasible linear functional is $l(\bm{x})=(1,0)\bm{x}^{\top}$\\
+(b) $\bm{a}=(1,k)$ are all feasible linear functionals for $k\geq 0$. Because for all $\bm{x}=(x,y)\in K$, $x,y\leq1$.
+\begin{equation}
+  l(\bm{x})=x+ky \leq 1+k =l(\bm{z}_2)
+\end{equation}
+\end{proof} 
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} Prove that any two norms on a finite dimensional linear space $X$ are equivalent.
+\end{problem}
+\begin{proof} Let $\|\cdot\|$ be an arbitrary norm on $X$. For all $\bm{x}\in X$ we can write
+\begin{equation}
+  \bm{x} = \sum_{i=1}^n x_i \bm{e}_i
+\end{equation}
+Where $\bm{e}_i$ are basis of $X$ with unit lenth under $\|\cdot\|$, i.e. $\|\bm{e}_i\|=1$. Then it suffice to show that any norm on finite ($n$) dimensional linear space is equivalent to $\infty$-norm $\|\bm{x}\|_{\infty}=\max\{|x_1|, ..., |x_n|\}$. By \textit{Triangle Ineq.} and \textit{Homogeneity}:
+\begin{equation}
+  \|\bm{x}\|\leq \sum_{i=1}^n \|x_i \bm{e}_i\| = \sum_{i=1}^n |x_i| \|\bm{e}_i\| = \sum_{i=1}^n |x_i| \leq n \|\bm{x}\|_{\infty}
+\end{equation}
+Next we show the other direction. Let $\bm{I}:(X, \|\cdot\|_{\infty})\to (X, \|\cdot\|)$ Consider closed unit ball $B_{1}(\bm{0}) \subset (X, \|\cdot\|_{\infty})$; clearly $B_1(\bm{0})$ is compact in $(X, \|\cdot\|_{\infty})$. \\
+\textit{Claim}: $\bm{I}$ is continuous.\\
+\textit{Proof of Claim}: For any fixed $\bm{x}\in (X, \|\cdot\|_{\infty})$, and for all $\epsilon>0$, there exists $\delta=\frac{\epsilon}{n}$, such that $\forall \bm{z}\in (X, \|\cdot\|_{\infty})$ with $\|\bm{z}-\bm{x}\|_{\infty}\leq \delta$ $\Rightarrow$
+\begin{equation}
+  \|\bm{z}-\bm{x}\|\leq n\|\bm{z}-\bm{x}\|_{\infty} = n \delta = \epsilon
+\end{equation}
+Therefore, $\|\bm{I}\|$ attains maximum and minimum on $B_1(\bm{0})$. Denote the minimum: $\min\limits_{\bm{x}\in B_1(\bm{0})}\|\bm{I}(\bm{x})\|=c$ for a constant $c>0$. Let $\bm{z}=\frac{\bm{x}}{\|\bm{x}\|_{\infty}}\in B_1(\bm{0})$, we have 
+\begin{equation}
+  \bm{I}(\bm{z}) = \left\|\frac{\bm{x}}{\|\bm{x}\|_{\infty}}\right\| = \frac{\|\bm{x}\|}{\|\bm{x}\|_{\infty}} \geq c
+\end{equation}
+So we have $c\|\bm{x}\|_{\infty} \leq \|\bm{x}\|\leq n \|\bm{x}\|_{\infty}$. If $c>\frac{1}{n}$, By $\frac{1}{n} \|\bm{x}\|_{\infty} \leq c\|\bm{x}\|_{\infty} \leq \|\bm{x}\|\leq n \|\bm{x}\|_{\infty}$ we are done. Else, there exists $n'\geq n$, such that $0<\frac{1}{n'}\leq c \leq \frac{1}{n}$, implies that
+\begin{equation}
+  \frac{1}{n'} \|\bm{x}\|_{\infty} \leq c\|\bm{x}\|_{\infty} \leq \|\bm{x}\|\leq n \|\bm{x}\|_{\infty} \leq n' \|\bm{x}\|_{\infty}
+\end{equation}
+For arbitrary norm $\|\cdot\|$, finished the proof.
+\end{proof} 
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} Prove the Holder inequality for $l^p$ ($p\in(1,\infty)$). More precisely, for $x=(x_1, x_2, ...)\in l^p$ ($p\in(1,\infty)$) and $y=(y_1, y_2, ...)\in l^{\frac{p}{p-1}}$, show that
+$$\left|\sum_{i=1}^{\infty}x_i y_i\right| \leq \left(\sum_{i=1}^{\infty}|x_i|^p\right)^{\frac{1}{p}}\left(\sum_{i=1}^{\infty}|y_i|^{\frac{p}{p-1}}\right)^{\frac{p-1}{p}}$$
+Furthermore, the equality in (1) holds $\iff$ arg$x_j y_j$ and $|x_j|^p/|y_j|^{\frac{p}{p-1}}$ are independent of $j$. 
+\end{problem}
+\begin{proof} We first prove \textbf{Young's Ineq}: $p,q>1$ such that $1/p+1/q=1$ then for any $x,y$:
+\begin{equation}
+  xy \leq \frac{1}{p}x^p + \frac{1}{q} y^q
+\end{equation}
+Because $e^x$ is convex,
+\begin{equation}
+  LHS = e^{\log x + \log y} = e^{\frac{1}{p}\log x^p + \frac{1}{q}\log y^q} \leq \frac{1}{p}e^{\log x^p} + \frac{1}{q}e^{\log y^q} = RHS
+\end{equation}
+It is clear that the equility holds $\iff$ $y=x^{p/q}$.\\
+Now denote $A:=(\sum_{i\geq 1}|x_i|^p)^{1/p}$, $B:=(\sum_{i\geq 1}|y_i|^q)^{1/q}$. Apply Young's Ineq:
+\begin{equation}
+  \begin{split}
+    \frac{|\sum_{i\geq 1} x_iy_i|}{AB} &= \sum_{i\geq 1}\left|\frac{x_i}{A} \frac{y_i}{B}\right|  \\
+    &\leq \sum_{i\geq 1}\left|\frac{1}{p}\left(\frac{x_i}{A}\right)^p+\frac{1}{q}\left(\frac{y_i}{B}\right)^q\right| \\
+    &\leq \frac{1}{p}\sum_{i\geq 1}\frac{|x_i|^p}{A^p} + \frac{1}{q}\sum_{j\geq 1}\frac{|y_i|^q}{B^q}\\
+    &= \frac{1}{p}+\frac{1}{q} = 1
+  \end{split}
+\end{equation}
+It can be seen directly from the second line (when Young's holds in equility) that equility holds $\iff$
+\begin{equation}
+  \frac{|y_i|}{B}  = \left(\frac{|x_i|}{A}\right)^{\frac{p}{q}} \iff \frac{|x_i|^p}{|y_i|^q}  = \frac{A^p}{B^q}~~\text{Independent of $i$}.
+\end{equation}
+Finished the proof.
+\end{proof} 
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} (1) Verify that the composite of two linear maps is linear, and that the distributive law holds:
+$$\bm{M}(\bm{N}+\bm{K})=\bm{MN}+\bm{MK}$$
+$$(\bm{M+K})\bm{N}=\bm{MN}+\bm{KN}$$
+(2) (\textit{Thm.1}) Let $\bm{M}$ be a linear map $X \to U$, 
+\begin{itemize}
+	\item[1] The null space $N_{\bm{M}}$ is a linear subspace of $X$, the range $R_{\bm{M}}$ a linear subspace of $U$.
+	\item[2] $\bm{M}$ is invertible iff $N_{\bm{M}}=\{0\}$ and $R_{\bm{M}}=U$.
+	\item[3] $\bm{M}$ maps the quotient space $X/N_{\bm{M}}$ one-one onto $R_{\bm{M}}$.
+	\item[4] If $\bm{M}: X\to U$ and $\bm{K}: U \to W$ are both invertible, so is their product and
+	$$(\bm{KM})^{-1} = \bm{M}^{-1} \bm{K}^{-1}$$
+	\item[5] If $\bm{KM}$ is invertible, then
+	$$N_{\bm{M}}=\{0\}, R_{\bm{K}}=W$$
+\end{itemize}
+\end{problem}
+\begin{proof} (1) Suppose $\bm{M}: U\to V$, $\bm{N}: X\to U$ are linear maps, $x,y\in X$. Linearity of composition and Distributive law are straightforward due to definitions
+\begin{equation}
+  \begin{split}
+    \bm{M}\bm{N}(ax+by) &= \bm{M}(a \bm{N}(x) + b \bm{N}(y))\\
+    &= a \bm{MN}(x) + b \bm{MN}(y)
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    \bm{M}(\bm{N}+\bm{K})(x) &= \bm{M}(\bm{N}(x)+\bm{K}(x))\\
+    & = \bm{MN}(x) + \bm{MK}(x)
+  \end{split}
+\end{equation}
+(2) 
+\begin{itemize}
+  \item[1] This is really trivial by definitions...
+  \item[2] ($\Leftarrow$) It suffice to show $\bm{M}$ is bijective. $\bm{M}(X)=U$ implies $\forall x\in X$, $\exists u\in U$ such that $u=\bm{M}(x)$ (onto). Pick $x,x'\in X$ and suppose $\bm{M}(x)=\bm{M}(x')$; we can write $0=\bm{M}(x)-\bm{M}(x)=\bm{M}(x'-x)$; since $N_{M}=\{0\} \Rightarrow x=x'$ (one-one). Finished the proof.\\
+  ($\Rightarrow$) Very similar. $\bm{M}$ is onto $\Rightarrow$ $\bm{M}(X)=U$. And assume $X\ni s,t\ne 0$, $s\in N_M$, we will have $\bm{M}(s+t)=0+\bm{M}(t)$, but $s+t\ne t$, contradicts the fact that $\bm{M}$ is one-one. Finished the other direction.
+  \item[3] (\textit{onto}): $\forall u\in R_M$, there exists $x\in X$ s.t. $\bm{M}(x)=u$. hence denote $r\in N_M$, $\bm{M}([x])=\bm{M}(x)+\bm{M}(r)=\bm{M}(x)$.\\
+  (\textit{one-one}): $\forall [x],[y]\in X/N_M$, by definition $[x]-[y]\notin N_M$. So
+  \begin{equation}
+    \bm{M}([x]-[y])=\bm{M}([x])-\bm{M}([y]) \ne 0
+  \end{equation}
+  Finished the proof.
+  \item[4] By the alternative definition, $\bm{M}$ is invertible $\iff$ $\exists$ \textit{linear} map $\bm{M}^{-1}$, such that $\bm{M}\bm{M}^{-1}=\bm{M}^{-1}\bm{M}=\bm{I}$. Where $\bm{I}$ is identity map. Clearly $\bm{IM}=\bm{M}$ for any linear map $\bm{M}$.\\
+  \textit{Claim}: $\bm{M}^{-1}\bm{K}^{-1}$ is a linear map, and $\bm{M}^{-1}\bm{K}^{-1} \bm{KM}=\bm{KM}\bm{M}^{-1}\bm{K}^{-1}=\bm{I}$.\\
+  \textit{Proof of Claim}: Linearity is due to exercise 1. And
+  \begin{equation}
+    \begin{split}
+      (\bm{M}^{-1}\bm{K}^{-1}\bm{KM})(x) &= \bm{M}^{-1}(\bm{K}^{-1}(\bm{K}(\bm{M}(x))))\\
+      &= \bm{M}^{-1}(\bm{I}(\bm{M}(x)))\\
+      &= (\bm{M}^{-1}\bm{M})(x) = \bm{I}
+    \end{split}
+  \end{equation}
+  We proceed the same way for $\bm{KM}\bm{M}^{-1}\bm{K}^{-1}$.
+  \item[5] Assume $X \ni s,t \ne 0$, $s\in N_M$, We will have $\bm{KM}(t+s)=\bm{K}(\bm{M}(t)+0)=\bm{KM}(t)$, but $s+t\ne s$. Contradicts the fact $\bm{KM}$ is one-one. Hence $N_M = \{0\}$.\\
+  Since $\bm{KM}: X\to W$ is onto $\Rightarrow$ $R_K = W$. If otherwise, there exists some $w\in W$, such that no element in $U$ can be map onto $w$ by $\bm{K}$; then clearly there is also no element in $X$ that can be maped onto $w$.
+\end{itemize}
+\end{proof} 
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} (\textit{Thm.3}) For any convex set $\bm{K}$,
+$$p_K(x)\leq 1~~\text{If $x\in K$.}$$
+$$p_K(x)<1~~\text{Iff $x$ is an interior point of $K$.}$$
+\end{problem}
+\begin{proof} (1) is directly from definition, denote 
+$$p_K(x):=\inf\left\{a\middle|a>0, \frac{x}{a}\in K\right\}$$
+$p_K(x)\leq 1 \Rightarrow 1 \in \left\{a\middle|a>0, \frac{x}{a}\in K\right\}$, i.e. $x\in K$.\\
+(2) ($\Leftarrow$) $x$ is an interior point of $K$ $\iff$ $\forall y\in X$, $\exists \epsilon(y)>0$ such that $x+ty\in K$ as long as $|t|<\epsilon(y)$. We are free to pick $y=x$, then we have $(1+t)x\in K$ for all $0\leq |t|<\epsilon(x)$. Therefore $p_K(x)\leq \frac{1}{1+|t|}$ for all $|t|\in [0,\epsilon(x))$, pick $|t|=\frac{\epsilon(x)}{2}$, yields $p_K(x)\leq \frac{1}{1+\epsilon(x)/2}<1$. Finished the proof. \\
+($\Rightarrow$) $p_K(x)<1$ $\Rightarrow$ there exists $\epsilon>0$ for which $(1+\epsilon)x \in K$ ($\triangle$). \\
+Moreover, by definition of gauge function, $\forall y\in X$, $\frac{1}{\lambda} > p_K(y)$ we have $\lambda y \in K$ ($\dag$).\\
+\textit{Claim}: For all $y\in X$, define $\epsilon(y):=\frac{\epsilon \lambda}{1+\epsilon}$, then as long as $|t|<\epsilon(y)$, we have $x+ty \in K$.\\
+\textit{Proof of Claim}: WLOG assume $t\geq 0$. Otherwise we just modify the claim as $|-t|<\epsilon(y)$. Since $t\leq \epsilon(y)$, exists $\delta>0$, allowing us to write $t=\frac{\epsilon(\lambda - \delta)}{1+\epsilon}$. Hence
+\begin{equation}
+  \begin{split}
+    x+ty &= x+\frac{\epsilon(\lambda - \delta)}{1+\epsilon}y \\
+    &= \frac{1}{1+\epsilon} \cdot(1+\epsilon)x + \frac{\epsilon}{1+\epsilon} \cdot(\lambda - \delta) y
+  \end{split}
+\end{equation}
+By ($\triangle$) and ($\dag$) $\Rightarrow$ $(1+\epsilon)x \in K$ and $(\lambda - \delta) y\in K$. Since $K$ is convex, it follows that $x+ty \in K$. The \textit{Claim} is equivalent to saying $x$ in interior point of $K$, which finished the other direction of the proof.
+
+\end{proof} 
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} For $(z,u)\in Z \oplus U:=\{(z,u)|z\in Z, u\in U\}$, and $Z,U$ normed linear space
+\begin{itemize}
+	\item[a.] Show that $\|(z,u)\|=\|z\|_Z+\|u\|_U$, $\max\{\|z\|_Z,\|u\|_U\}$, $\sqrt{\|z\|_Z^2+\|u\|_U^2}$ are all norms.
+	\item[b.] Show that they are equivalent norms in terms of Def.(5).
+\end{itemize}
+\end{problem}
+\begin{proof} (a) It suffices to check the 3 defining properties of norm. Base upon the fact that $\|\cdot\|_Z$ and $\|\cdot\|_U$ are norms
+\begin{itemize}
+   \item[1] \textit{Positivity} is trivial. $\|a(z,u)\|=\|az\|_Z+\|au\|_U=|a|(\|z\|_Z+\|u\|_U)=|a|\|(z,u)\|$ (\textit{Homogeneity})
+   \begin{equation}
+    \begin{split}
+      \|(z_1,u_1)+(z_2,u_2)\| &= \|z_1+z_2\|_Z+\|u_1+u_2\|_U \\
+      &\leq \|z_1\|_Z+\|z_2\|_Z+\|u_1\|_U+\|u_2\|_U \\
+      &= \|(z_1,u_1)\| + \|(z_2, u_2)\| ~~(Triangle~Ineq)
+    \end{split}
+   \end{equation}
+   \item[2] Since $\|\cdot\|_Z, \|\cdot\|_U$ are positive, $\max\{\|z\|_Z,\|u\|_U\}=0 \iff \|z\|_Z=\|u\|_U=0 \iff (z,u)=(0,0)$. (\textit{Positivity}). \textit{Homogeneity} is trivial.
+   \begin{equation}
+     \begin{split}
+       \|(z_1,u_1)+(z_2,u_2)\| &= \max\{\|z_1+z_2\|_Z,\|u_1+u_2\|_U\}\\
+       &\leq \max\{\|z_1\|_Z+\|z_2\|_Z,\|u_1\|_U+\|u_2\|_U\}\\
+       &\leq \max\{\|z_1\|_Z+\|z_2\|_Z,\|u_1\|_U+\|u_2\|_U, \|z_1\|_Z+\|u_2\|_U, \|u_1\|_U+\|z_2\|_Z\}\\
+       &= \max\{\|z_1\|_Z, \|u_1\|_U\} + \max\{\|z_2\|_Z, \|u_2\|_U\} \\
+       &= \|(z_1,u_1)\| + \|(z_2, u_2)\| ~~(Triangle~Ineq)
+     \end{split}
+   \end{equation}
+   \item[3] \textit{Positivity} is trivial. $\|a(z,u)\|=\sqrt{\|az\|_Z^2+\|au\|_U^2}=|a|\sqrt{\|z\|_Z^2+\|u\|_U^2}=|a|\|(z,u)\|$ (\textit{Homogeneity}). Denote $\langle x, y \rangle$ the scalar product of $x,y$,
+   \begin{equation}
+     \begin{split}
+       \|(z_1,u_1)+(z_2,u_2)\|^2 &= \|z_1+z_2\|_Z^2 + \|u_1+u_2\|_U^2 \\
+       &= (\|z_1\|_Z^2 + \|u_1\|_U^2) + (\|z_2\|_Z^2 + \|u_2\|_U^2) + 2(\|z_1\|\|z_2\|_Z + \|u_1\|\|u_2\|_U) \\
+       &= \|(z_1, u_1)\|^2 + \|(z_2, u_2)\|^2 + 2(\|z_1\|\|z_2\|_Z + \|u_1\|\|u_2\|_U) \\
+       &\leq \|(z_1, u_1)\|^2 + \|(z_2, u_2)\|^2 + 2 \sqrt{(\|z_1\|_Z^2 + \|u_1\|_U^2)(\|z_2\|_Z^2 + \|u_2\|_U^2)}~~(\text{By Cauchy-Schwartz}) \\
+       &= (\|(z_1, u_1)\| + \|(z_2, u_2)\|)^2~~(Triangle~Ineq)
+     \end{split}
+   \end{equation}
+ \end{itemize} 
+  (b) Firstly we show 1-norm and $\infty$-norm are equivalent. It is clear that
+  \begin{equation}
+   \frac{\|z\|_Z + \|u\|_U}{2}\leq \max\{\|z\|_Z,\|u\|_U\} \leq 2(\|z\|_Z + \|u\|_U)
+  \end{equation}
+  Hence by definition of equivalence, $C=2$, $\|\cdot\|_1$ and $\|\cdot\|_{\infty}$ are equivalent.\\
+  Then we show $\infty$-norm and 2-norm are equivalent. Because
+  \begin{equation}
+  \begin{split}
+    \max\{\|z\|_Z,\|u\|_U\} &= \frac{1}{\sqrt{2}}\sqrt{\max\{\|z\|_Z,\|u\|_U\}^2 + \max\{\|z\|_Z,\|u\|_U\}^2} \\
+    \Rightarrow \|(z,u)\|_{\infty} &\geq \frac{1}{\sqrt{2}} \|(z,u)\|_2
+  \end{split}
+  \end{equation}
+  And it's clear that $\|(z,u)\|_{\infty}\leq \|(z,u)\|_2 \leq \sqrt{2}\|(z,u)\|_2$. Hence by definition of equivalence, $C=\sqrt{2}$, $\|\cdot\|_2$ and $\|\cdot\|_{\infty}$ are equivalent. Equivalence has transitivity, we finished the proof.\\
+\end{proof} 
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} Let $X$ be normed linear space, $Y$ a linear subspace of $X$. The closure of $Y$ is a linear subspace of $X$.
+\end{problem}
+\begin{proof} It suffice to show $\forall x,y\in \overline{Y}$, $a,b\in \mathbb{F}$, $ax+by \in \overline{Y}$. \\
+If both $x,y \in Y$, then $ax+by \in Y \subseteq \overline{Y}$ is straightforward. \\
+If $x\in Y$, $y\in \overline{Y}\setminus Y$, by definition, there is a $\{y_j\}\subset Y$, $y_j\to y$. Hence $\{ax+by_j\}\subset Y$ and $ax+by_j \to ax+by$ since the norm as a metric preserves linearity. It implies that $ax+by$ is a limit point of $Y$ $\Rightarrow$ $ax+by\in \overline{Y}$. \\
+Thirdly, if $x,y \in \overline{Y}\setminus Y$, then $\{x_i\},\{y_i\}\subset Y$; $x_i\to x, y_i\to y$. Again we construct new sequence $\{ax_i+by_i\}\subset Y$, and $ax_i+by_i \to ax+by$. Hence $ax+by$ is a limit point of $Y$ $\Rightarrow$ $ax+by\in \overline{Y}$.
+\end{proof} 
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} Show that if $X$ is a Banach space, $Y$ is a closed subspace of $X$, the quotient space $X/Y$ is complete. (Hint: Use a Cauchy sequence $\{q_n\}$ in $X/Y$ that satisfies $|q_n-q_{n+1}|<\frac{1}{n^2}$.)
+\end{problem}
+\begin{proof} (\textit{Step.1}) Let $\{x_n +Y\} \subset X/Y$ be a Cauchy sequence. Then by definiton, there exists a subsequence $\{x_{n_k} +Y\}$, such that
+\begin{equation}
+  \|(x_{n_k}+Y) - (x_{n_{k+1}}+Y)\|  < \frac{1}{k}
+\end{equation}
+Actually, $((x_{n_k}+Y) - (x_{n_{k+1}}+Y)) \sim [x_{n_k}-x_{n_{k+1}}]$, (denote $[~\cdot~]$ the equivalent class) so the inequility above is equivalent to
+\begin{equation}
+  \|(x_{n_k} - x_{n_{k+1}})+y)\| \leq \frac{1}{k}~~\text{For all $y\in Y$. $(\dag)$}
+\end{equation}
+(\textit{Step.2}) Now, we start from $y_1=0$, then by $(\dag)$, there exists $y^{[2]}=y_2\in Y$ such that
+\begin{equation}
+  \begin{split}
+    &\|(x_{n_1} - x_{n_{2}})+y^{[2]}\| = \|(x_{n_1} - x_{n_{2}})+(y_2 - 0)\| < \frac{1}{2} \\
+    &\Rightarrow \|(x_{n_1} - 0)-(x_{n_{2}}-y_2)\| < \frac{1}{2}
+  \end{split}
+\end{equation}
+Further, there exists $y^{[3]}\in Y$, denote $y_3=y^{[3]}+y_2 \in Y$
+\begin{equation}
+  \begin{split}
+    &\|(x_{n_2} - x_{n_3})+y^{[3]}\| = \|(x_{n_2} - x_{n_3})+(y_3 - y_2)\| < \frac{1}{3} \\
+    &\Rightarrow \|(x_{n_2} - y_2)-(x_{n_{3}}-y_3)\| < \frac{1}{3}
+  \end{split}
+\end{equation}
+Continue to proceed like this, we obtain a sequence $\{y_k\}\subset Y$, such that 
+\begin{equation}
+  \|(x_{n_k} - y_k)-(x_{n_{k+1}}-y_{k+1})\| < \frac{1}{k}
+\end{equation}
+So by definition, $h_k:=x_{n_k}-y_k$ is a Cauchy sequence in $X$. Since $X$ is a Banach space, $h_k \to h\in X$. \\
+(\textit{Step.3}) We show that $[x_{n_k}] \to [h]$.
+\begin{equation}
+  \begin{split}
+    \|(x_{n_k}+Y)-(h+Y)\| &= \|x_{n_k}-h+Y\|\\
+    &= \|x_{n_k}-y_k-h+Y\| ~~(\text{Since $y_k \in Y$})\\
+    &= \|h_k-h+Y\| \xrightarrow{k\to \infty} 0
+  \end{split}
+\end{equation}
+So for any Cauchy sequence $\{x_n +Y\}\in X/ Y$, it has a convergent subsequence $\{x_{n_k}+Y\}\in X/Y$ that converges to $\{h+Y\}\in X/Y$. $\Rightarrow$ $X/Y$ is complete.
+\end{proof} 
+
+
+
+
+
+\end{document}

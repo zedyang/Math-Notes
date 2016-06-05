@@ -1,0 +1,645 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+
+\title{\textbf{Stochastic Process Assignment III}}
+\author{Zed}
+
+\begin{document}
+\maketitle
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} (a) Define $Y_t$ be the number of family that is in the hotel on $t-1$-th day and spend another day (i.e. still in the hotel on $t$-th day). Then by illustration, $Y_t$ follows binomial distribution with probability $1-p$ (They check \textbf{out} with probability p!) and total counts $X_{t-1}$. On the another day, the total number of families is constituted by $Y_t$ and $N_t$, where $N_t$ is \# of new-comers $\sim\text{Pois}(\lambda)$. Hence
+\begin{equation}
+  \begin{split}
+    P_{ij} &= \mathbb{P}\left(X_t=j|X_{t-1}=i\right) \\
+    &= \mathbb{P}\left(Y_t+N_t=j|X_{t-1}=i\right)\\
+    &= \sum_{k=0}^i \mathbb{P}\left(Y_t+N_t=j|X_{t-1}=i,Y_t=k\right)\mathbb{P}\left(Y_t=k|X_{t-1}=i\right) \\
+    &= \sum_{k=0}^{\min\{i,j\}} \mathbb{P}\left(N_t=j-k\right) \binom{i}{k}(1-p)^kp^{i-k}\\
+    &= \sum_{k=0}^{\min\{i,j\}}\frac{e^{-\lambda}\lambda^{j-k}}{(j-k)!}\binom{i}{k}(1-p)^kp^{i-k}
+  \end{split}
+\end{equation}
+(b)
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[X_t\right] &= \mathbb{E}\left[\mathbb{E}\left[X_t|X_{t-1}\right]\right] = \mathbb{E}\left[\mathbb{E}\left[Y_t+N_t|X_{t-1}\right]\right] \\
+    &= \mathbb{E}\left[(1-p)X_{t-1}+\lambda\right] = (1-p)\mathbb{E}\left[X_{t-1}\right] + \lambda
+  \end{split}
+\end{equation}
+Solve for $\mathbb{E}\left[X_t\right]$ recurrsively, we get
+\begin{equation}
+  \begin{split}
+    &\mathbb{E}\left[X_t\right] = \lambda(1+(1-p)+...+(1-p)^{n-1})+(1-p)^n \mathbb{E}\left[X_0\right]\\
+    \Rightarrow & \mathbb{E}\left[X_t|X_0=i\right] = \frac{\lambda(1-(1-p)^n)}{p} + (1-p)^n \cdot i
+  \end{split}
+\end{equation}
+(c) \textit{Claim.} Stationary distribution of $\{X_t\}$ is a Poisson with rate $a=\lambda/p$. \\
+\textit{Proof of Claim.} It suffices to show $X_t$ has same distribution regardless of $t$. It is clear that $X_t = N_t + Y_t$, $N_t$ is independent of $Y_t$.
+\begin{equation}
+  \begin{split}
+    \mathbb{P}\left(Y_t = y\right) &= \sum_{k\geq y}\mathbb{P}\left(Y_t=y|X_{t-1}=k\right)\mathbb{P}\left(X_{t-1}=k\right)\\
+    &= \sum_{k\geq y} \frac{k!}{y!(k-y)!}(1-p)^kp^{k-y}\frac{e^{-a}a^k}{k!}\\
+    &= \sum_{k\geq y} \frac{e^{-a(1-p)}(a(1-p))^y}{y!}\cdot\frac{e^{-ap}(ap)^{k-y}}{(k-y)!}\\
+    &= \frac{e^{-a(1-p)}(a(1-p))^y}{y!}
+  \end{split}
+\end{equation}
+Hence $Y_t\sim\text{Pois}(a(1-p))$. We conclude that $X_t=Y_t+N_t$ is a Poisson with rate $\lambda + a(1-p)$, where $a=\lambda/p$ $\Rightarrow$ $\lambda + \frac{\lambda}{p}(1-p)=\lambda/p=a$. I.e. $X_t$ is identically distributed as $X_{t-1}$. This is the sufficient condition for stationary state. We finish the proof. 
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} (a) Denote state $\{0,1\}:=\{\text{Good Year, Bad Year}\}$. Then the transition matrix is given by
+\begin{equation}
+  \bm{P}=\begin{pmatrix}
+    \frac{1}{2} & \frac{1}{2} \\[5pt]
+    \frac{1}{3} & \frac{2}{3}
+  \end{pmatrix}, ~~
+  \bm{P}^2=\begin{pmatrix}
+    \frac{5}{12} & \frac{7}{12} \\[5pt]
+    \frac{7}{18} & \frac{11}{18}
+  \end{pmatrix}, ~~
+  \bm{P}^3=\begin{pmatrix}
+    \frac{29}{72} & \frac{43}{72} \\[5pt]
+    \frac{43}{108} & \frac{65}{108}
+  \end{pmatrix}
+\end{equation}
+Define RV $X_i:=$ \# of storms in year $i$, event $A_i:=\{\text{Year $i$ is good year, given that year 0 is good year.}\}$. Then
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[\sum_{i=1}^2 X_i\right] &= \sum_{i=1}^2 \mathbb{E}\left[X_i|A_i\right]\mathbb{P}\left(A_i\right) + \mathbb{E}[X_i|A_i^{\complement}]\mathbb{P}(A_i^{\complement}) \\
+    & = 1\cdot (P_{00}+P_{00}^2) + 3\cdot (P_{01} + P_{01}^2) = \frac{25}{6}
+  \end{split}
+\end{equation}
+(b) Using the elements in $\bm{P}^3$,
+\begin{equation}
+  \begin{split}
+    \mathbb{P}\left(X_3=0\right) &= \mathbb{P}\left(X_3=0|A_3\right)\mathbb{P}\left(A_3\right) + \mathbb{P}(X_3=0|A_3^{\complement})\mathbb{P}(A_3^{\complement})\\
+    &= \frac{29}{72}e^{-1} + \frac{43}{72}e^{-3}
+  \end{split}
+\end{equation}
+(c) Let the stationary probability be $\bm{\pi}=(\pi_0, \pi_1)^{\top}$, then we have
+\begin{equation}
+  \begin{split}
+    \begin{pmatrix}
+      1-P_{00} & -P_{10}\\[5pt]
+      1 & 1
+    \end{pmatrix} \bm{\pi} 
+    = \begin{pmatrix}
+      0 \\[5pt]
+      1
+    \end{pmatrix} \\
+    \Rightarrow 
+    \bm{\pi} = \begin{pmatrix}
+      \frac{1}{2} & -\frac{1}{3}\\[5pt]
+      1 & 1
+    \end{pmatrix}^{-1}
+    \begin{pmatrix}
+      0 \\[5pt]
+      1
+    \end{pmatrix} =
+    \begin{pmatrix}
+      \frac{2}{5} \\[5pt]
+      \frac{3}{5}
+    \end{pmatrix} 
+  \end{split}
+\end{equation}
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} Denote $\bm{P}$ the transition matrix.
+\begin{equation}
+  \bm{P}^3 = \left(
+  \begin{array}{ccc}
+   \frac{13}{36} & \frac{11}{54} & \frac{47}{108} \\[5pt]
+   \frac{4}{9} & \frac{4}{27} & \frac{11}{27} \\[5pt]
+   \frac{5}{12} & \frac{2}{9} & \frac{13}{36} \\[5pt]
+  \end{array}
+\right)
+\end{equation}
+Then 
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[X_3\right] &= \sum_{x=0}^2 \mathbb{E}\left[X_3|X_0=x\right]\mathbb{P}\left(X_0=x\right)\\
+    &= \sum_{x=0}^2\left(\sum_{z=0}^2 zP^3_{xz}\right) \mathbb{P}\left(X_0=x\right)\\
+    &= \left(\frac{11}{54}\cdot1 +\frac{47}{108}\cdot2\right)\frac{1}{4} + \left(\frac{4}{27}\cdot1 +\frac{11}{27}\cdot2\right)\frac{1}{4} + \left(\frac{2}{9}\cdot1 +\frac{13}{36}\cdot2\right)\frac{1}{2}\\
+    & =\frac{53}{54}
+  \end{split}
+\end{equation}
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} Show that the symmetric random walk is recurrent in two dimensions.
+\end{problem}
+\begin{solution} In $d$-dimension, we can always decompose a random walk on $d$ orthogonal degrees of freedom. I.e. the composed random walk is regarded as $d$-vector, denote $\bm{X}_t := (X_t^{[1]}, X_t^{[2]}, ..., X_t^{[d]})^{\top}$; such that on any one degree of freedom ($1\leq i\leq d$), $X_t^{[i]}$ is a 1-dimensional random walk. \\
+It is clear that in any dimensional space, all states still communicate. Hence it suffices to check state $\bm{0}$. I.e. whether $P_{\bm{00}}^{2n}$ is summable.
+\begin{equation}
+  X_{t+1}^{[i]} = \begin{cases}
+  X_t^{[i]} + 1 & \text{W.p. $1/2$,}\\
+  X_t^{[i]} - 1 & \text{W.p. $1/2$.}\\
+  \end{cases}
+\end{equation}
+Then it is clear that $X_{t}^{[i]}$ are mutually independent for $1\leq i\leq d$. Recall the result on 1-dimensional, we have
+\begin{equation}
+  \mathbb{P}\left(X_{2n}^{[i]}=0\middle|X_{0}^{[i]}=0\right) = \binom{2n}{n}\left(\frac{1}{2}\right)^{2n}\sim \frac{1}{\sqrt{\pi n}}
+\end{equation}
+So by independence,
+\begin{equation}
+  \mathbb{P}\left(\bm{X}_{2n}=\bm{0}\middle|\bm{X}_0=\bm{0}\right) = \prod_{i=1}^d \mathbb{P}\left(X_{2n}^{[i]}=0\middle|X_{0}^{[i]}=0\right) \sim \left(\frac{1}{\pi n}\right)^{\frac{d}{2}}
+\end{equation}
+Therefore, we know that $P^{2n}_{\bm{00}}$ is \textbf{Not} summable if and only if $d\leq 2$. I.e. The symmetric random walk is recurrent in 1D or 2D, and is transient in higher dimensional spaces.
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} Since the given markov chain is irreducible and aperiodic, it has a unique limiting distribution, denote $\bm{\pi}:=(\pi_0, \pi_1, ..., \pi_M)^{\top}$, which satisfies
+\begin{equation}
+  \bm{\pi} = \begin{pmatrix}
+    1-P_{00} & -P_{10} & -P_{20} & \dots & -P_{M0} \\
+    -P_{01} & 1-P_{11} & -P_{21} & \dots & -P_{M1} \\
+    -P_{02} & -P_{11} & 1-P_{21} & \dots & -P_{M2} \\
+    \vdots & \vdots & \vdots & \ddots & \vdots \\
+    P_{0M} & -P_{1M} & -P_{2M} & \dots & -P_{MM} \\
+  \end{pmatrix}^{-1}
+  \begin{pmatrix}
+    0\\0\\0\\ \vdots \\ 1
+  \end{pmatrix} =: \bm{X}^{-1}\bm{e}_M
+\end{equation}
+Where in the last column we have $-P_{Mj}=\sum_{i=0}^{M-1}P_{ij}-1$. One can invert the matrix by Mathematica to verify that $\pi_i=\frac{1}{M+1}$ $\forall 0\leq i\leq M$ indeed. \\
+Alternatively, by the fact that the process is irreducible and aperiodic, $\bm{X}$ must be invertible. Hence it suffices to check that $\pi_i=\frac{1}{M+1}$ $\Rightarrow$ $\pi_j=\sum_{i=0}^M \pi_i P_{ij}$ and $\sum_{i=0}^M \pi_i=1$. Then by uniqueness we know $\bm{\pi}$ is the solution. This is also indeed the case. 
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} (a) Denote $R:=\{\text{It rains}\}$. Define $X_t:=$ \# of umbrella at his current location. It is clear that $X_t \in \{0,1,...,r\}$, and at time $t$, there are $r-X_t$ umbrellas at the other location. The man brings an umbrella to time $t+1$ if it rains and $X_t>0$. Hence, at his next move we have
+\begin{equation}
+  X_{t+1} = \begin{cases}
+  r-X_t & \text{If $R^{\complement} \cup \{X_t=0\}$} \\
+  r-X_t+1 & \text{If $R \cap \{X_t> 0\}$}
+  \end{cases}
+\end{equation}
+By definition we can see $X_{t+1}$ only depend on present $X_t$. So $\{X_t\}$ is markov chain. Transition matrix is given by
+\begin{equation}
+  \bm{P} = \begin{pmatrix}
+    0 & 0 & 0 & \dots & 0 & 0 & 1\\
+    0 & 0 & 0 & \dots & 0 & 1-p & p\\
+    0 & 0 & 0 & \dots & 1-p & p & 0\\
+    \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots\\
+    0 & 1-p & p & \dots & 0 & 0 & 0\\
+    1-p & p & 0 & \dots & 0 & 0 & 0\\
+  \end{pmatrix}
+\end{equation}
+(b) Calculate limiting probability via
+\begin{equation}
+  \begin{split}
+    \begin{cases}
+    \pi_0 = (1-p)\pi_r & \\
+    \pi_i = (1-p)\pi_{r-i} + p\pi_{r-i+1} & 0<i<r\\
+    \pi_r = \pi_0 + p\pi_1 \\
+    \sum_{i=0}^r \pi_i = 1
+    \end{cases} 
+    \Rightarrow
+    \begin{cases}
+    \pi_0 = \frac{1-p}{1+r-p} & \\
+    \pi_i = \frac{1}{1+r-p} & 0<i\leq r
+    \end{cases} 
+  \end{split}
+\end{equation}
+(c) It is clear that $X_t$ is independent w.r.t. $R$ (Rainy or not). 
+\begin{equation}
+  \mathbb{P}\left(\{\text{Get Wet}\}\right) = \mathbb{P}\left(X_t=0|R\right)\mathbb{P}\left(R\right) = \mathbb{P}\left(X_t=0\right)\mathbb{P}\left(R\right) = \frac{p(1-p)}{1+r-p}
+\end{equation}
+(d) When $r=3$, employ first order condition
+\begin{equation}
+  \frac{d}{dp} \frac{p(1-p)}{4-p} = \frac{p^2-8p+4}{(4-p)^2} =0 \Rightarrow p^*=\frac{8-4\sqrt{3}}{2}
+\end{equation}
+Where $\frac{d^2}{dp^2}\mathbb{P}\left(\{\text{Get Wet}\}\right)(p)<0$. So we conclude that $p^*$ maximizes the chance by which he gets wet.
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution}
+\begin{equation}
+ \mathbb{P}\left(Y_n=(i,j)|Y_k=(x_{k-1},x_k), 0\leq k\leq n-1\right) = 
+ \begin{cases}
+ 0 & \text{If $x_{n-1} \ne i$} \\
+ \mathbb{P}\left(X_n=j|X_{n-1}=x_{n-1}\right) & \text{If $x_{n-1} = i$}
+ \end{cases}
+\end{equation} 
+Only dependent on present state. So $Y_n$ has markovian property. Transition probability is given by
+\begin{equation}
+  P_{(i,j),(k,l)} = 
+  \begin{cases}
+  0 & \text{If $j\ne k$}\\
+  P_{kl} & \text{$j=k$}
+  \end{cases}
+\end{equation}
+Where $P_{kl}$ is transition probability of $X_n$. 
+\begin{equation}
+  \begin{split}
+    \lim\limits_{n\rightarrow\infty} \mathbb{P}\left(Y_n=(i,j)\right) &= \lim\limits_{n\rightarrow\infty}\mathbb{P}\left(X_{n-1}=i, X_n = j\right)\\
+    & = \lim\limits_{n\rightarrow\infty}\mathbb{P}\left(X_{n-1}=i\right) \mathbb{P}\left(X_n=i|X_{n-1}=j\right)\\
+    & = \pi_i P_{ij}
+  \end{split}
+\end{equation}
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} (a) Define $A_n:=\{\text{Picked molecule is in urn 1 at $n$-th switch.}\}$, then
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[X_{n+1}\right] &= \mathbb{E}\left[\mathbb{E}\left[X_{n+1}|X_n\right]\right]\\
+    &= \mathbb{E}\left[\mathbb{E}\left[X_{n+1}|X_n;A_{n+1}\right] + \mathbb{E}[X_{n+1}|X_n;A^{\complement}_{n+1}]\right]  \\
+    &= \mathbb{E}\left[(X_n-1)\cdot\frac{X_n}{M} + (X_n+1)\cdot\frac{M-X_n}{M}\right]\\
+    &= 1 + \mathbb{E}\left[X_n\right] - \frac{2 \mathbb{E}\left[X_n\right]}{M}
+  \end{split}
+\end{equation}
+(b) By the recurrence formula that we obtain in (a), we can check for $n=1$: $\mu_1=1+(1-2/M)\mathbb{E}\left[X_0\right]=M/2 + (1-2/M)(\mathbb{E}\left[X_0\right]-M/2)$. We show by induction. Assume
+\begin{equation}
+  \mu_{n-1} = \frac{M}{2} + \left(\frac{M-2}{M}\right)^{n-1} \left(\mathbb{E}\left[X_0\right]-\frac{M}{2}\right)
+\end{equation}
+then by recurrence formula:
+\begin{equation}
+  \begin{split}
+    \mu_n &= 1+\left(1-\frac{2}{M}\right)\mu_{n-1} \\
+    &= 1+\frac{M}{2}\left(1-\frac{2}{M}\right)+\left(\frac{M-2}{M}\right)^n\left(\mathbb{E}\left[X_0\right]-\frac{M}{2}\right) \\
+    &= \frac{M}{2} + \left(\frac{M-2}{M}\right)^{n} \left(\mathbb{E}\left[X_0\right]-\frac{M}{2}\right)
+  \end{split}
+\end{equation}
+Finished the proof.\\
+(c) $X_n\in \{0, 1, ..., M\}$ has $M+1$ states. $X_n$ is a markov process with transition matrix
+\begin{equation}
+  \bm{P} = \begin{pmatrix}
+    0 & 1 &  &  &  &\\[5pt]
+    \frac{1}{M} & 0 & \frac{M-1}{M} &  &  &\\[5pt]
+    & \frac{2}{M} & 0 & \frac{M-2}{M} &  &\\[5pt]
+    & & \ddots & \ddots &  \ddots &\\[5pt]
+    & & & \frac{M-1}{M} & 0 & \frac{1}{M} \\[5pt]
+    & & &  & 1 & 0 \\[5pt]
+  \end{pmatrix}
+\end{equation}
+Denote limiting proability $\pi_i$, then from $\bm{P}$ and definition of $\pi_i$, we get
+\begin{equation}
+  \begin{cases}
+  \pi_0 = \frac{1}{M} \pi_1 & \\
+  \pi_i = \left(1-\frac{i-1}{M}\right)\pi_{i-1} + \frac{i+1}{M} \pi_{i+1} & \text{For $0<i<M$} \\
+  \pi_M = \frac{1}{M} \pi_{M-1}
+  \end{cases}
+\end{equation}
+Which implies the recurrence formula $\pi_k = \frac{M-k}{k+1}\cdot\pi_{k+1}$ for any $0\leq k\leq M$. Hence
+\begin{equation}
+  \begin{split}
+    \pi_0 &= \frac{k!}{M(M-1)(M-2)\cdot...\cdot(M-k)}\pi_k \\
+    &= \frac{k!(M-k)!}{M!}\pi_k = \frac{1}{\binom{M}{k}} \pi_k 
+  \end{split}
+\end{equation}
+Therefore we solve $\pi_0$ from
+\begin{equation}
+  1 = \sum_{k=1}^M \pi_k = \sum_{k=1}^M \binom{M}{k} \pi_0 \Rightarrow \pi_0 = \left(\frac{1}{2}\right)^M
+\end{equation}
+And obtain that
+\begin{equation}
+  \pi_k = \binom{M}{k}\left(\frac{1}{2}\right)^M
+\end{equation}
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} It can be easily seen that state $\{1,2,3\}$ communicate, and state $4$ is absorbing. Since state $\{1,2,3\}$ can go to state $4$, we conclude that they are all \textit{transient}.
+\begin{equation}
+  \bm{P}_T = \begin{pmatrix}
+    0.4 & 0.2 & 0.1 \\
+    0.1 & 0.5 & 0.2 \\
+    0.3 & 0.4 & 0.2 \\
+  \end{pmatrix} \Rightarrow \bm{S}=(\bm{I}-\bm{P}_T)^{-1} =
+  \begin{pmatrix}
+    \frac{64}{29} & \frac{40}{29} & \frac{18}{29} \\[5pt]
+    \frac{28}{29} & \frac{90}{29} & \frac{26}{29} \\[5pt]
+    \frac{38}{29} & \frac{60}{29} & \frac{56}{29} \\[5pt]
+  \end{pmatrix}
+\end{equation}
+The third column gives $s_{i3}$. $s_{13}=18/29, s_{23}=26/29, s_{33}=56/29$. It follows that
+\begin{equation}
+  f_{13} = \frac{s_{13}}{s_{33}}=\frac{9}{28};~~f_{23}=\frac{s_{23}}{s_{33}} = \frac{13}{28};~~f_{33}=\frac{s_{33}-1}{s_{33}} = \frac{27}{56}
+\end{equation}
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} Denote $\mu=\sum jP_j$, when $\mu>1$, $\pi_0$ is the smallest positive number that solves
+\begin{equation}
+  \pi_0 = \sum_{j\geq 0} \pi_0^j P_j
+\end{equation}
+Else $\pi_0=1$. Hence we have
+\begin{itemize}
+  \item[(a)] $\pi_0 = 1$ since $\mu=3/4<1$.
+  \item[(b)] $\pi_0 = 1$ since $\mu = 1/2 + 2\cdot 1/4 = 1$.
+  \item[(c)] $\mu = 1/2+2/3 >1$,
+  \begin{equation}
+    \pi_0 = \frac{1}{6} + \frac{1}{2}\pi_0 + \frac{1}{3} \pi_0^2 \Rightarrow \pi_0 = \frac{1}{2}
+  \end{equation}
+\end{itemize}
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} Define this as event $E$. Fatorize the probability by conditioning recursively:
+\begin{equation}
+  \begin{split}
+    \mathbb{P}\left(E\right) &= \sum_{i\ne 0} \mathbb{P}\left(X_{m-k-1}=i\right)\mathbb{P}\left(X_{m-k}=...=X_{m-1}=0, X_m \ne 0|X_{m-k-1}=i\right)\\
+    &= \sum_{i\ne 0} \pi_i\mathbb{P}\left(X_{m-k}=0|X_{m-k-1}=i\right) \cdot
+      \mathbb{P}\left( 
+        \begin{aligned}
+        & X_{m-k+1}=..=X_{m-1}=0, \\
+        & X_m \ne 0
+        \end{aligned}
+      \middle|
+        \begin{aligned}
+        & X_{m-k-1}=i, \\
+        & X_{m-k}=0
+        \end{aligned}
+      \right) \\
+    &= \sum_{i\ne 0} \pi_iP_{i0} \cdot 
+      \mathbb{P}\left(X_{m-k+1}=0\middle|
+        \begin{aligned}
+        & X_{m-k-1}=i, \\
+        & X_{m-k}=0
+        \end{aligned}
+      \right)
+      \mathbb{P}\left(
+        \begin{aligned}
+        & X_{m-k+2}=..=X_{m-1}=0, \\
+        & X_m \ne 0
+        \end{aligned}
+      \middle|
+        \begin{aligned}
+        & X_{m-k-1}=i \\
+        & X_{m-k}=X_{m-k+1}=0
+        \end{aligned}
+      \right)\\
+    & = \dots \dots~~\text{(Apply Markovian Property)}\\
+    & = \sum_{i\ne0} \pi_i P_{i0}\cdot P_{00}^{k-1} \cdot \mathbb{P}\left(X_{m}\ne 0|X_{m-1}=0\right) \\
+    & = \sum_{i\ne0} \pi_i P_{i0}\cdot P_{00}^{k-1}(1-P_{00})\\
+    & = P_{00}^{k-1} (1-P_{00}) \left(\sum_{i\geq 0} \pi_i P_{i0} - \pi_0P_{00}\right) \\
+    & = P_{00}^{k-1} (1-P_{00})^2\pi_0
+  \end{split}
+\end{equation}
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{proof} 
+\begin{equation}
+  \begin{split}
+    P_{ij}^{(n)} &= \mathbb{P}\left(X_n=j|X_0=i\right) \\
+    &= \sum_{k=1}^n \mathbb{P}\left(X_n = j\middle|
+        \begin{aligned}
+        & X_k=j, \\
+        & X_{k-1}, ..., X_1 \ne j, \\
+        & X_0=i
+        \end{aligned}
+    \right)
+    \mathbb{P}\left(
+        \begin{aligned}
+        & X_k=j, \\
+        & X_{k-1}, ..., X_1 \ne j, \\
+        \end{aligned}
+        \middle| X_0 = i
+    \right)\\
+    &= \sum_{k=1}^n \mathbb{P}\left(X_n=j|X_k=j\right)f^{(k)}_{ij}~~(\text{By Markovian Property})\\
+    &= \sum_{k=1}^n P_{jj}^{(n-k)}f^{(k)}_{ij}\\
+    &= \sum_{k=0}^n P_{jj}^{(n-k)}f^{(k)}_{ij}~~(\text{Since $f_{ij}^{(0)}=0$.})
+  \end{split}
+\end{equation}
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} (a) Define $f_{n}$ be the probability that first return occurs at time $n$; and $P_n$ be the probability of returning at $n$, both conditional on $X_0=0$ if express by conventional notations, $f_n:=f_{00}^{(n)}, P_n:=P_{00}^{(n)}$.
+\begin{equation}
+  \begin{split}
+    & P_n := \mathbb{P}\left(X_n=0|X_0=0\right)\\
+    & f_n := \mathbb{P}\left(X_n=0|X_0=0, X_1,...,X_{n-1}\ne 0\right) 
+  \end{split}
+\end{equation} 
+Then for the first question, it suffices to calculate $\sum_{n\geq 0}nf_n$. \\
+(\textit{Step.1}) Consider transition probability, by the result of problem 12:
+\begin{equation}
+  P_{00}^{(n)} = \sum_{k=1}^n P_{00}^{(n-k)} f_{00}^{(k)}~~\Rightarrow~~P_n = \sum_{k=1}^n P_{n-k} f_k~~(\dag)
+\end{equation}
+$P_n$ can be easily obtained, for $n$ odd, there is no chance to return. For $n$ even, it must spend half of the time moving forward, and half backward to remained unmoved. Hence for $n\geq 0$
+\begin{equation}
+  P_{2n} = \binom{2n}{n}\left(\frac{1}{2}\right)^{2n},~~~P_{2n+1}=0
+\end{equation}
+(\textit{Step.2}) Define $P_0=1$, then define \textbf{Generating Function}:
+\begin{equation}
+  \Phi_P(t) = \sum_{n\geq 0} P_n t^n,~~~\Phi_f(t) = \sum_{n\geq 1} f_n t^n
+\end{equation}
+We can already write down $\Phi_P$ explicitly, by \textit{Taylor Expansion} of $(1-x)^{-1/2}$:\footnote{$(1-x)^{-1/2}=\sum_{n\geq 0}\binom{2n}{n}(x/4)^n$}
+\begin{equation}
+  \Phi_P = \sum_{n\geq 0}\binom{2n}{n}\left(\frac{1}{2}\right)^{2n} t^{2n} = \frac{1}{\sqrt{1-t^2}}
+\end{equation}
+Apply $(\dag)$,
+\begin{equation}
+  \begin{split}
+    \Phi_P(t) &= 1+\sum_{n\geq 1} \left(\sum_{k=1}^n P_{n-k} f_k\right) t^n \\
+    &= 1+\sum_{k\geq 1}f_k t^k \left(\sum_{n\geq k} P_{n-k}t^{n-k} \right) \\
+    &= 1+\Phi_{P}(t)\Phi_f(t)
+  \end{split}
+\end{equation}
+Which implies that $\Phi_f(t) = 1-1/\Phi_P(t)=1-\sqrt{1-t^2}$.\\
+(\textit{Step.3}) It is easy to check that
+\begin{equation}
+  \sum_{n\geq 0} nf_n = \left.\frac{\partial}{\partial t} \Phi_f(t)\right|_{t=1} = \left.\frac{t}{\sqrt{1-t^2}}\right|_{t=1} = \infty
+\end{equation}
+We therefore conclude the the expected returning time is infinity, i.e. the symmetric random walk on 1-d is \textbf{Null-Recurrent}. \\
+(b) Denote $A_{2t}=\{\text{Return to origin at time $2t$.}\}$, clearly, $\mathbb{P}\left(A_{2t}\right)=P_{2t}$. Then, we have
+\begin{equation}
+    N_{2n} = \sum_{t=1}^n \mathbbm{1}_{A_{2t}}
+\end{equation}
+Hence
+\begin{equation}
+  \mathbb{E}\left[N_{2n}\right] = \sum_{t=1}^n \mathbb{E}\left[\mathbbm{1}_{A_{2t}}\right] = \sum_{t=1}^n P_{2t} = \sum_{t=0}^n P_{2t} -1 = \sum_{t=0}^n \binom{2n}{n}\left(\frac{1}{2}\right)^{2n} - 1~~(\triangle)
+\end{equation}
+\textit{Claim.}
+\begin{equation}
+  \mathbb{E}\left[N_{2n}\right] = (2n+1)\binom{2n}{n}\left(\frac{1}{2}\right)^{2n} - 1 ~~(\dag)
+\end{equation}
+\textit{Proof of Claim.} We prove this by \textbf{induction}. For the boundary case $\mathbb{E}\left[N_{0}\right]=0$ is clear. Now assume $(\dag)$ holds for $n$, we check $n+1$: By ($\triangle$):
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[N_{2n+2}\right] &= \mathbb{E}\left[N_{2n}\right] + P_{2n+2}\\
+    &= (2n+1)\binom{2n}{n}\left(\frac{1}{2}\right)^{2n} + \binom{2n+2}{n+1}\left(\frac{1}{2}\right)^{2n+2}- 1\\
+    &= (2n+1)\frac{2n!}{n!n!}\left(\frac{1}{2}\right)^{2n} + \frac{(2n+2)!}{(n+1)!(n+1)!}\left(\frac{1}{2}\right)^{2n+2}-1\\
+    &= \frac{(2n+1)\cdot 4\cdot (n+1)^2\cdot 2n!}{(n+1)^2\cdot n!n!}\left(\frac{1}{2}\right)^{2n+2} + \frac{(2n+2)!}{(n+1)!(n+1)!}\left(\frac{1}{2}\right)^{2n+2}-1\\
+    &= (2n+2)\frac{(2n+2)!}{(n+1)!(n+1)!}\left(\frac{1}{2}\right)^{2n+2} + \frac{(2n+2)!}{(n+1)!(n+1)!}\left(\frac{1}{2}\right)^{2n+2}-1\\
+    &= (2n+3)\binom{2n+2}{n+1}\left(\frac{1}{2}\right)^{2n+2} - 1
+  \end{split}
+\end{equation}
+Which finished the induction proof.  \\
+(c) By \textbf{Stirling’s formula} in the textbook problem, $P_{2t}\sim \frac{1}{\sqrt{t}}$, hence the summation
+\begin{equation}
+  \mathbb{E}\left[N_{2n}\right] = \sum_{t=1}^n P_{2t} \sim \sum_{t=1}^n \frac{1}{\sqrt{t}}
+\end{equation}
+\textit{Claim.} $\sum_{t=1}^n 1/\sqrt{t}=\Theta(\sqrt{n})$. \\
+\textit{Proof of Claim}. Firstly, notice that
+\begin{equation}
+  \frac{1}{\sqrt{t}} \leq \frac{2}{\sqrt{t}+\sqrt{t-1}} = \frac{2(\sqrt{t} + \sqrt{t-1})(\sqrt{t}-\sqrt{t-1})}{\sqrt{t}+\sqrt{t-1}} = 2(\sqrt{t} - \sqrt{t-1})
+\end{equation}
+Then one can easily see that 
+\begin{equation}
+  \sum_{t=1}^n \frac{1}{\sqrt{t}} \leq 2(\sqrt{n}-1)
+\end{equation}
+Secondly, notice that
+\begin{equation}
+  \frac{1}{\sqrt{t}} \geq \frac{1}{\sqrt{t}+\sqrt{t-1}} = \sqrt{t} - \sqrt{t-1}
+\end{equation}
+we assume $\sum_{t=1}^{n-1} 1/\sqrt{t} \geq \sqrt{n-1}$, then the inequality above implies:
+\begin{equation}
+  \sum_{t=1}^{n}\frac{1}{\sqrt{n}} \geq \sqrt{n-1} + \frac{1}{\sqrt{n}} \geq \sqrt{n}
+\end{equation}
+It is easy to check boundary case $n=1$, then by induction, we obtain $\sum_{t=1}^{n}1/\sqrt{n} \geq \sqrt{n}$. Therefore
+\begin{equation}
+  \sqrt{n} \leq \sum_{t=1}^n \frac{1}{\sqrt{t}} \leq 2(\sqrt{n}-1)
+\end{equation}
+Which finished the proof.
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} (a) The boundary condition $M_0=M_N=0$ is clear by game rules. For $1\leq i\leq N-1$. Define $X_n:=$ \# of the rounds till gameover starting at initial fortune $n$. $W=\{\text{Win the next round.}\}$
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[X_n\right] &= \mathbb{E}\left[X_n|W\right]\mathbb{P}\left(W\right)+ \mathbb{E}[X_n|W^{\complement}]\mathbb{P}(W^{\complement}) \\
+    &= (1+\mathbb{E}\left[X_{n+1}\right])p+(1+\mathbb{E}\left[X_{n-1}\right])q\\
+    &= 1+pM_{n+1}+qM_{n-1}
+  \end{split}
+\end{equation}
+(b) The formula
+\begin{equation}
+  M_n = 1+pM_{n+1}+qM_{n-1}
+\end{equation}
+is a \textit{second order linear nonhomogeneous} recurrence relation with constant coefficients. By related theory, it has same general solution as homogeneous one $M_n=pM_{n+1}+qM_{n-1}$. 
+\begin{itemize}
+  \item[$\cdot$] For $p=q=1/2$, the general solution is
+  \begin{equation}
+    M_n = -n^2 + C_1 + C_2 n
+  \end{equation}
+  Where $C_1,C_2$ are undetermined constants. Applying boundary condtions $M_0=M_N=0$ $\Rightarrow$ $C_1=0, C_2=N$. $M_n=n(N-n)$.
+  \item[$\cdot$] For $p\ne q$, the general solution is
+  \begin{equation}
+    M_n = \frac{n}{q-p} + C_1 + C_2 \left(\frac{q}{p}\right)^n
+  \end{equation}
+  Boundary conditions yields $C_1+C_2=0$ and $C_1+C_2(q/p)^N=-N/(q-p)$. $\Rightarrow$ 
+  \begin{equation}
+    C_2 = \frac{-N}{(q-p)((q/p)^N-1)},~~C_1=-C_2
+  \end{equation}
+  So
+  \begin{equation}
+    M_n = \frac{n}{q-p} + \frac{N}{q-p}\cdot\frac{1-(q/p)^n}{(q/p)^N-1}
+  \end{equation}
+\end{itemize}
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\begin{problem} 
+\end{problem}
+\begin{solution} $X_n = X_{n-1}-S_n+O_n$. $S_n,O_n$ stand for sales and order. $\{O_n\}$ is independent of $\{X_n\}$, and $S_n$ only depend on $X_{n-1}$, independent of other history $\{X_t\}_{t<n-1}$. Therefore $\{X_n\}$ is a markov chain. The state space is $\{0,1,..., S\}$.\\
+\begin{itemize}
+  \item[] (\textit{Case.1}) If $0\leq X_{n-1}<s$, then at the beginning of $n$-th period, the inventory is $S$. To remain $j$ items at the end of this period, it should sell $(S-j)$ items, $j\leq S$.
+  \begin{equation}
+    P_{ij} = 
+    \begin{cases}
+    0 & j>S,~0\leq i<s\\
+    \alpha_{S-j} & 0<j\leq S,~0\leq i<s \\
+    1-\sum_{k=0}^{S-1} \alpha_k & j=0,~0\leq i<s\\
+    \end{cases}
+  \end{equation}
+  \item[] (\textit{Case.2}) Else if $X_{n-1}\geq s$, the inventory will be $X_{n-1}=i$. To remain $j$ items at the end of this period, it should sell $(i-j)$ items, $j\leq i$.
+  \begin{equation}
+    P_{ij} = 
+    \begin{cases}
+    0 & j>i,~i\geq s\\
+    \alpha_{i-j} & 0<j\leq i,~i\geq s \\
+    1-\sum_{k=0}^{i-1} \alpha_k & j=0,~i\geq s\\
+    \end{cases}
+  \end{equation}
+\end{itemize}
+Which gives the full representation of transition matrix $\bm{P}$.
+ 
+\end{solution}
+
+
+
+
+\end{document}

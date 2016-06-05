@@ -1,0 +1,357 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz}
+
+\pagestyle{headings}
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+
+\title{\textbf{Functional Analysis Assignment V}}
+\author{YANG, Ze (5131209043)}
+
+\begin{document}
+\maketitle
+
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} Let $f\in C^{\infty}(0,1)$. Use the \textbf{Lax-Milgram thm} to show that BVP
+$$
+\begin{cases}
+-v'' + \frac{1}{10}v' + v = f \\
+v(0) = 0,~v(1)=0 
+\end{cases}
+$$
+Has a unique solution $v\in \mathcal{L}^2(0,1)$
+\end{problem}
+
+\begin{proof} Assume $v$ is a classical solution, then $\forall \phi\in H_0^1$, we have
+\begin{equation}
+	\int v'\phi' + \int \frac{1}{10} v'\phi + \int v \phi = \int f\phi
+\end{equation}
+We define 
+\begin{equation}
+	A(v,\phi) := \int v'\phi' + \int \frac{1}{10} v'\phi + \int v \phi
+\end{equation}
+It is clear that $A$ is a bilinear function, but not symmetric. We further set $\xi=e^{\frac{-x}{10}}$. Then the former equation can be written as
+\begin{equation}
+	-(\xi v')' + \xi v = \xi f 
+\end{equation}
+Define on $H_0^1$ the symmetric continuous bilinear form
+\begin{equation}
+	B(v,\phi) = \int \xi v'\phi' + \int \xi v\phi
+\end{equation}
+This form is coercive, apply Lax-Milgram, there exists a unique $v\in H_0^1$ such that $B(v,\phi)=\int \xi f\phi$, for any $\phi \in H_0^1$. 
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} Show that the closed linear span of a set is the closure of its linear span.
+\end{problem}
+
+\begin{proof} By their definition, linear span and closed linear span of a set $S$ is defined as
+\begin{equation}
+	\begin{split}
+		& \text{cspan}\{S\} = \bigcap_{\substack{S\subseteq C \\ C \text{ closed}}}C \\
+		& \text{span}\{S\} = \bigcap_{S\subseteq Y}Y \\
+		& \overline{\text{span}\{S\}} = \bigcap_{\substack{\text{span}\{S\}\subseteq Z \\ Z\text{ closed}}}Z
+	\end{split}
+\end{equation}
+Where $C,Y,Z$ are all linear subspaces. Denote $\{C\}, \{Y\}, \{Z\}$ as the families of sets forms the above intersection.\\
+First we show $\overline{\text{span}\{S\}} \subseteq\text{cspan}\{S\}$.
+\begin{itemize}
+	\item[$\cdot$] Take any $x\in \text{cspan}\{x\}$, then $x\in C$ for all $C\in \{C\}$.
+	\item[$\cdot$] Since $S\subseteq \text{span}\{S\}\subseteq Z$. We have $\{Z\}\subseteq \{C\}$. Hence $x\in Z$ for all $Z\in \{Z\}$. 
+\end{itemize}
+Next we show the another direction.
+\begin{itemize}
+	\item[$\cdot$] Take any $x\in \overline{\text{span}\{S\}}$, then $x\in Z$ for all $Z\in \{Z\}$.
+	\item[$\cdot$] Since $\text{span}\{S\}\subseteq \overline{\text{span}\{S\}}$ $\Rightarrow$ $x\in \text{span}\{S\}$. Hence $x\in Y$ for all $Y\in \{Y\}$. 
+	\item[$\cdot$] Clearly $\{C\}\subseteq \{Y\}$, so $x\in C$ for all $C\in \{C\}$
+\end{itemize}
+
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} (\textit{Lemma 8}.) Let $H$ be a Hilbert space $\{x_j\}$ an orthonormal set in $H$. $\overline{\text{span}\{S\}}=\{\sum a_j x_j, \sum a_j^2 < \infty\}$
+Show that $y\in\overline{\text{span}\{S\}}$ converges. That is, \\
+$\sum a_j^2 < \infty$ $\iff$ For $\Lambda$ an index set, $\forall \epsilon >0$, exists a finite index subset $I_{\epsilon} \subset \Lambda$, such that $\forall I \supset I_{\epsilon}$,
+$$\left\|\sum_I a_j x_j - x\right\|^2 < \epsilon^2$$
+For some $x\in H$.
+\end{problem}
+
+\begin{proof} ($\Rightarrow$) Given $\sum a_j^2 < \infty$, we define $a:=\sup \sum a_j^2 < \infty$. Then for all $\epsilon >0$, there exists $I_{\epsilon}$, such that $\forall I \supset I_{\epsilon}$
+$$\left|\sum_I a_j^2-a\right|<\epsilon^2$$
+Therefore
+\begin{equation}
+	\begin{split}
+		\left\|\sum_{I_{\epsilon}}a_jx_j-\sum_{I}a_jx_j\right\|^2 &\leq \left\|\sum_{I_{\epsilon}}a_jx_j\right\|^2 + \left\|\sum_{I}a_jx_j\right\|^2 \\
+		&= \sum_{I_{\epsilon}}|a_j|^2 + \sum_{I}|a_j|^2 \\
+		&\leq \left|\sum_{I_{\epsilon}}|a_j|^2-a\right| + \left|\sum_{I}|a_j|^2-a\right| \\
+		& < 2 \epsilon^2
+	\end{split}
+\end{equation}
+($\Leftarrow$) $\forall \epsilon >0$, exists a finite index subset $I_{\epsilon} \subset \Lambda$, such that $\forall I \supset I_{\epsilon}$, $\left\|\sum_I a_j x_j - x\right\|^2 < \epsilon^2$. Hence
+\begin{equation}
+	\left\|\sum_{I\setminus I_{\epsilon}} a_j x_j\right\|^2 \leq \left\|\sum_{I} a_j x_j-x\right\|^2 + \left\|x-\sum_{I_{\epsilon}} a_j x_j\right\|^2 < 2 \epsilon^2
+\end{equation}
+It is clear that $\left\|\sum_{I_{\epsilon}}a_jx_j\right\|^2<C$ is bounded, since there are finitely many terms.
+\begin{equation}
+	\sum_{I}|a_j|^2 = \left\|\sum_{I}a_jx_j\right\|^2 \leq \left\|\sum_{I_{\epsilon}}a_jx_j\right\|^2 + \left\|\sum_{I \setminus I_{\epsilon}}a_jx_j\right\|^2 < C + 2 \epsilon^2 < \infty
+\end{equation}
+Finished the proof.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} (\textit{Thm.9'}) Let $\{y_j\}$ be a sequence of vectors in Hilbert space whose closed linear span is all of $H$. Then there exists an orthonormal basis $\{x_j\}$ such that the linear span of $\{x_1, ..., x_n\}$ contains $y_1, ..., y_n$. \\
+(\textit{Ex.8}) Let $H$ be Hilbert space; show that any two orthonormal bases in $H$ have same cardinality. \\
+(\textit{Thm.10}) Let $H$ be Hilbert space, $\{x_j\}$, $\{y_j\}$ two orthonormal bases. For all $x\in H$, has representation $x=\sum a_jx_j$, $a_j = \langle x,x_j \rangle$. Then the mapping
+$$x\to y = \sum a_j y_j$$
+is an isometry of $H$ onto $H$, $0 \mapsto 0$. Furthermore every isometry of $H$ onto $H$ $0\mapsto 0$ can be obtained in this fashion.
+\end{problem}
+
+\begin{proof} By hypothesis, we have
+$$\overline{\text{span}\{y_j\}} = H$$
+Let $u_1 = y_1$, $x_1 = \frac{u_1}{\left\|u_1\right\|}$. Then let
+\begin{equation}
+	\begin{split}
+		& u_2 = y_2 - \langle y_2, u_1 \rangle\cdot\frac{u_1}{\left\|u_1\right\|^2}\\
+		& x_2 = \frac{u_2}{\left\|u_2\right\|}
+	\end{split}
+\end{equation}
+It is easy to check that $\langle u_1, u_2 \rangle=\langle u_1, y_2 \rangle- \langle y_2, u_1 \rangle\frac{\langle u_1, u_1 \rangle}{\left\|u_1\right\|^2}=0$, hence $\langle x_1, x_2 \rangle=0$. Then keep on doing this,
+\begin{equation}
+	\begin{split}
+		& u_k = y_k - \sum_{i=1}^{k-1} \langle y_k, u_i \rangle\frac{u_i}{\left\|u_i\right\|^2}\\
+		& x_k = \frac{u_k}{\left\|u_k\right\|}
+	\end{split}
+\end{equation}
+Stop at $n$ until $u_n=0$. This must happen at some $n<\infty$ since $\overline{\text{span}\{y_j\}} = H$. \\
+\textit{Claim}. $\{x_k\}$ are orthonormal. \\
+\textit{Proof of Claim}. $\left\|x_k\right\|=1$ is straightforward in construction. It suffices to show they are orthogonal. We prove by induction. \\
+Assume $u_k \perp u_s$ for all $1\leq s \leq k-1$. The basic case $u_2\perp u_1$ is checked in the first step. Now at $k+1$, for any $1\leq s\leq k$:
+\begin{equation}
+	\begin{split}
+		\langle u_s, u_{k+1} \rangle &= \left\langle u_s, y_{k+1} - \sum_{i=1}^{k} \langle y_{k+1}, u_i \rangle\frac{u_i}{\left\|u_i\right\|^2} \right\rangle \\
+		&= \langle u_s, y_{k+1} \rangle - \sum_{i=1}^k \langle y_{k+1}, u_i \rangle\frac{\langle u_s, u_i \rangle}{\left\|u_i\right\|^2} \\
+		&= \langle u_s, y_{k+1} \rangle - \langle y_{k+1}, u_s \rangle\frac{\langle u_s, u_s \rangle}{\left\|u_s\right\|^2}~~\text{(By assumption, $\langle u_s,u_i \rangle=\delta_{si}$)} \\
+		& = 0
+	\end{split}
+\end{equation}
+Which finished the proof.
+\end{proof}
+
+~\\
+
+\begin{proof} If $H$ has finite dimension, the statement is obvious. \\
+If $H$ is infinite dimensional, let $\{x_i\}_{i\in I}$ and $\{y_j\}_{j\in J}$ be two orthonormal bases. $I,J$ are infinite index sets. By Parseval's Identity, for any $z\in H$
+\begin{equation}
+	\left\|z\right\|^2 = \sum_{i\in I} \langle z, x_i \rangle^2
+\end{equation}
+So $\langle z,x_i \rangle\ne 0$ for countable number of $i$. We pick $z=y_j$, denote $I_j=\{i\in I, \langle y_j,x_i \ne 0\rangle\}$, we have $|I_j|=|\mathbb{N}|$. Now for any $i\in I$, using orthonormal basis $\{y_j\}$, we can also write
+\begin{equation}
+	\left\|x_i\right\|^2 = \sum_{j\in J} \langle x_i, y_j \rangle^2 = 1
+\end{equation}
+So for any $i\in I$, there exists $j\in J$ such that $\langle x_i, y_j \rangle\ne 0$. Therefore, $I=\bigcup_{j\in J}I_j$. We conclude that $|I|=|J\times\mathbb{N}|\leq |J|$. \\Apply similar argument for the reverse direction, we obtain $|J|=|I\times\mathbb{N}|\leq |I|$, $\Rightarrow$ $|I|=|J|$, finished the proof.
+\end{proof}
+
+~\\
+
+\begin{proof} (1) Define this mapping $T: x\mapsto y = \sum a_j y_j$, $a_j=\langle x,x_j \rangle$. We have
+\begin{equation}
+ 	\left\|x\right\| = \left(\sum |a_j|^2 \right)^{\frac{1}{2}} = \left\|\sum_j a_j y_j\right\| = \left\|Tx\right\|
+\end{equation} 
+Hence $T$ is an isometry. By lemma.8, $\forall x\in H$, $x$ has orthonormal expansion. Hence $T$ is onto. \\
+(2) There exists a orthonormal basis $\{e_j\}$ for $H$. For any onto isometry $T: H\to H$,and any $x,y\in H$, we have
+\begin{equation}
+	\left\|Tx+Ty\right\|^2 = \left\|x+y\right\|^2 \Rightarrow \langle Tx, Ty \rangle = \langle x,y \rangle~~(\dag)
+\end{equation}
+We define $\{f_j\}=\{Te_j\}$. Clearly $\left\|f_j\right\| = \left\|Te_j\right\| = \left\|e_j\right\| = 1$. And by $(\dag)$, for $i\ne j$
+\begin{equation}
+	\langle f_i, f_j \rangle = \langle Te_i, Te_j \rangle = \langle e_i, e_j \rangle = 0
+\end{equation}
+Moreover, since $T$ is onto $\{f_j\}$ is an orthonormal basis.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} Show that every infinite dimensional separable Hilbert space is isomophic with $\ell^2$.
+$$\ell^2 = \left\{x=(a_1, a_2, ... ), \sum |a_j|^2 < \infty\right\}$$
+$\left\|x\right\|=\left(\sum |a_j|^2\right)^{\frac{1}{2}}$
+\end{problem}
+\begin{proof} Since $H$ is separable, it has countably dense orthonormal basis $\{e_i\}_{i=1}^{\infty}$. By previous results in lecture, $\ell^2$ is Hilbert space with inner product $\langle x,y \rangle=\sum x_j \bar{y}_j$. Hence we define
+\begin{equation}
+	\begin{split}
+		T: & H \to \ell^2 \\
+		& x \mapsto (\langle x,e_1 \rangle, ..., \langle x_j, e_j \rangle, ...)=:(z_1, ..., z_j, ...)
+	\end{split}
+\end{equation}
+We check that $T$ is isometry:
+\begin{equation}
+	\left\|x\right\| = \left(\sum \langle x_j, e_j \rangle^2 \right)^{\frac{1}{2}} = \left(\sum |z_j|^2 \right)^{\frac{1}{2}} = \left\|Tx\right\|
+\end{equation}
+And $T$ is onto due to lemma 8. Thus $H$ is isomorphic with $\ell^2$.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} Show that $C_0^{\infty}(D)$ is an inner product space under $\langle f,g \rangle_0$ and $\langle f,g \rangle_1$. Where
+$$
+\langle f,g \rangle_0 = \int_D fg~~~\langle f,g \rangle_1 = \int_D \sum \frac{\partial f}{\partial x_j}\frac{\partial g}{\partial x_j}
+$$
+\end{problem}
+
+\begin{proof} For both cases, symmetry is clear. For $\langle \cdot \rangle_0$:
+\begin{equation}
+	\langle f,\alpha g+\beta h \rangle_0 = \int_D f(\alpha g+\beta h) = \alpha \int_D fg + \beta \int_D fh = \alpha \langle f,g \rangle_0 + \beta \langle f,h \rangle_0
+\end{equation}
+\begin{equation}
+	\langle f,f \rangle_0 = \int_D f^2 = 0 \Rightarrow f=0~\text{almost surely}
+\end{equation}
+Since $f\in C_0^{\infty}$ $\Rightarrow$ $f\equiv 0$. \\
+For $\langle \cdot \rangle_1$:
+\begin{equation}
+	\langle f,\alpha g+\beta h \rangle_1 = \int_D \sum \frac{\partial f}{\partial x_j}\left(\alpha\frac{\partial g}{\partial x_j}+\beta\frac{\partial h}{\partial x_j}\right) = \alpha \langle f,g \rangle_1 + \beta \langle f,h \rangle_1
+\end{equation}
+\begin{equation}
+	\langle f,f \rangle_1 = 0 \Rightarrow \int_D \sum \left(\frac{\partial f}{\partial x_j}\right)^2 = 0 \Rightarrow \sum \left(\frac{\partial f}{\partial x_j}\right)^2=0\text{ a.s.}
+\end{equation}
+Since $f\in C_0^{\infty}$, $S=\sum \left(\frac{\partial f}{\partial x_j}\right)^2$ is continuous, hence $S\equiv0$, which implies that $\frac{\partial f}{\partial x_j}\equiv 0$ for all $x_j$, $x\in D$. Hence $f\equiv C$, $C$ is constant. \\
+Moreover, since $f$ have compact support and $\text{supp}f\subset D$, we have $f=0$ on $\partial D$ $\Rightarrow$ $C=0$.
+\end{proof}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} (\textit{Ex.1}) Show $Y^{\bot}$ is a closed linear subspace of $X'$. \\
+(\textit{Ex.2}) Let $Y$ be a closed linear subspace of a normed linear space $X$. Show that the dual of $(X/Y)$ is isometrically isomorphic with $Y^{\bot}$.
+\end{problem}
+
+\begin{proof} By its definition, the annihilator of subset $Y\subseteq X$ is
+$$Y^{\bot}:=\left\{\ell \in X': \ell(x)=0\text{ for all }x\in Y\right\}$$
+We define linear functional $\kappa_x \in (X')'$, i.e. $\kappa_x: X'\to \mathbb{R}$ as $\kappa_x(\ell)=\ell(x)$. Then $\kappa_x$ is continuous by definition of dual space. Hence the null space of $\kappa_x$
+$$\mathcal{N}(\kappa_x)=\{\ell\in X': \kappa_x(\ell)=\ell(x)=0\}$$
+is closed, because of the fact that $\mathcal{N}(\kappa_x) = \kappa_x^{-1}(\{0\})$, and continuity. \\
+Therefore by definition
+$$Y^{\bot} = \bigcap_{x\in Y}\mathcal{N}(\kappa_x)$$
+is intersection of closed sets, hence closed, finished the proof.
+\end{proof}
+
+~\\
+
+\begin{proof} We define
+$$\sigma: (X/Y)' \to X'~~\sigma(f)=f\circ Q$$
+For all $f\in (X/Y)'$, and $Q: X\to X/Y$ is quotient map. \\
+First we show $\sigma(\cdot)$ is onto $Y^{\bot}$, i.e. its range $\mathcal{R}(\sigma)=Y^{\bot}$. 
+\begin{itemize}
+	\item[$\cdot$] Notice that $\sigma(f)(Y) = f(QY) = f(0) = 0$, so $\mathcal{R}(\sigma)\subseteq Y^{\bot}$.
+	\item[$\cdot$] For any $g\in Y^{\bot}$, $\mathcal{N}(g)\supseteq Y$. Hence there exists $\hat{g}\in (X/Y)'$ such that $\hat{g}\circ Q = g$ and $\left\|\hat{g}\right\|=\left\|g\right\|$. Hence $\mathcal{R}(\sigma)\supseteq Y^{\bot}$
+\end{itemize}
+Next we show $\sigma$ is an isometry. For all $f\in (X/Y)'$, there exists $\{x_n\}\subset X$, s.t. $\left\|Qx_n\right\|<1$ and $\left\|f(Qx_n)\right\| \to \left\|f\right\|$. We pick $y_n\in Y$ s.t. $\left\|x_n + y_n\right\|<1$, then
+\begin{equation}
+	\left\|f\circ Q(x_n+y_n)\right\| = \left\|f(Q(x_n))\right\| \to \left\|f\right\|
+\end{equation}
+So $\left\|f\circ Q\right\|\geq \left\|f\right\|$. We already have $\left\|f\circ Q\right\|\leq \left\|f\right\|$. So we finish with the proof.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} (\textit{Ex.3}) Show that $Y'$ is isometrically isomorphic with $X'/Y^{\bot}$. \\
+(\textit{Ex.4}) Show that the closed linear span of $\{y_j\}$ is the closure of linear span $Y$ of $\{y_j\}$, consisting of all finite linear combinations of the $y_j$:
+$$
+y = \sum_F a_j y_j
+$$
+\end{problem}
+
+\begin{proof} By definition
+$$Y^{\bot}:=\{\ell \in X', \ell(y)=0~\forall y\in Y\}$$
+We define 
+\begin{equation}
+	\rho: X' \to Y'~~\rho(\ell) = \ell|_Y
+\end{equation}
+Then the null space $\mathcal{N}(\rho)=Y^{\bot}$, because $\ell(Y)=0$ $\forall \ell \in Y^{\bot}$. Hence we have $\rho(Y^{\bot}+\ell)=\rho(\ell)$. We can define
+\begin{equation}
+	\hat{\rho}: X'/Y^{\bot} \to Y'~~\rho(\ell+Y^{\bot}) = \rho(\ell) = \ell|_Y
+\end{equation}
+First we show $\hat{\rho}$ is onto. For any $\phi \in Y'$, by \textbf{Hahn-Banach}, there exists extension $f \in X'$ such that $f|_Y=\phi$. Hence we have $f+Y^{\bot} \in X'/Y^{\bot}$
+\begin{equation}
+	\hat{\rho}(f+Y^{\bot}) = \rho(f) = \phi
+\end{equation}
+indicates that $\hat{\rho}$ is onto. \\
+Next we show $\hat{\rho}$ is isometry. For any $f+Y^{\bot} \in X'/Y^{\bot}$, 
+\begin{equation}
+	\left\|\hat{\rho}(f+Y^{\bot})\right\| = \left\|f|_Y\right\| = \left\|f\right\| \geq   \inf\limits_{m\in Y^{\bot}}\left\|f-m\right\| = \left\|f+Y^{\bot}\right\|
+\end{equation}
+Since for all $m\in Y^{\bot}$, $\left\|f-m\right\|\geq \left\|f|_Y\right\|$, it's clear that $\left\|f+Y^{\bot}\right\|\geq \left\|f|_Y\right\| = \left\|\hat{\rho}(f+Y^{\bot})\right\|$. So $\left\|\hat{\rho}(f+Y^{\bot})\right\| = \left\|f+Y^{\bot}\right\|$. Completed the proof that $\hat{\rho}$ gives an isometric isomorphism.
+\end{proof}
+
+~\\
+
+\begin{proof} $\text{closedspan}\{y_j\}=\overline{\text{span}\{y_j\}}$ is a duplicate of problem 2. We only show this definitions are equivalent to definition using finite linear combinations. That is, it suffices to show
+$$U_1:=\bigcap_{C\in \mathscr{C}}C = \overline{\left\{\sum_{j\in F} a_j y_j, \text{$F$ is finite}\right\}}=:\overline{U_2}$$
+Where $\mathscr{C}=\{C: \{y_j\}\subseteq C, C \text{ closed linear subspace}\}$ \\
+(\textbf{Step.1}) $U_2$ is a linear subspace, since
+$$\alpha \sum_{j\in F_1} a_j y_j + \beta \sum_{k\in F_2} b_k y_k =  \sum_{i\in F_1 \cup F_2}(\alpha a_i \mathbbm{1}_{\{i\in F_1\}}+\beta b_i \mathbbm{1}_{\{i\in F_2\}}) y_i$$
+And the closure of a linear subspace is again a linear subspace.\\
+$\overline{U_2} \supseteq \{y_j\}$, we just take $a_i=\delta_{ij}$. (i.e. $a_i=1$ for $i=j$, otherwise $0$). Moreover, $\overline{U_2}$ is closed since it's a closure.
+Hence $\overline{U_2} \in \mathscr{C}$ $\Rightarrow$ $U_1 \subseteq \overline{U_2}$. \\
+(\textbf{Step.2}) Pick $z \in U_2$. Then for any $C\in \mathscr{C}$, since $\{y_j\}\subseteq C$, and $C$ is linear subspace $\Rightarrow z \in C$. Since $C$ is an aribitray one in $\mathscr{C}$, we conclude that $U_2 \subseteq U_1$. \\
+Since $U_1$ is closed, any limit point of $U_2$ is also in $U_1$.\\
+Hence $\overline{U_2} \subseteq U_1$, finished the proof.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} Show that if the total measure equals $1$, then $\left\|x\right\|_p$ is an increasing function of $p$. I.e. for $s\geq p$
+$$\left\|x\right\|_p \leq \left\|x\right\|_s$$
+\end{problem}
+
+\begin{proof} For $s=p$ clearly the equility holds. We assume $s>p$. If the full measure $\mu\left(\Omega\right)=1$, by Holder's Inequlity: for $r>1$:
+\begin{equation}
+	\left|\int_{\Omega} fg\right| \leq \left(\int_\Omega|f|^r \right)^{\frac{1}{r}}\left(\int_\Omega|g|^{\frac{r}{r-1}} \right)^{1-\frac{1}{r}}
+\end{equation}
+We take $g=\mathbbm{1}_{\Omega}\equiv 1$, $f=|x|^p$, $r=\frac{s}{p}>1$, $\Rightarrow$
+\begin{equation}
+	\begin{split}
+		& \left|\int_{\Omega} |x|^p\right| \leq \left(\int_\Omega|x|^s \right)^{\frac{p}{s}}\left(\int_\Omega|\mathbbm{1}_{\Omega}|^{\frac{s}{s-p}} \right)^{1-\frac{p}{s}} \\
+		\Rightarrow & \left(\int_{\Omega} |x|^p\right)^{\frac{1}{p}} \leq \left(\int_\Omega|x|^s \right)^{\frac{1}{s}}
+	\end{split}
+\end{equation}
+Since $\int_\Omega|\mathbbm{1}_{\Omega}|^{\frac{s}{s-p}} = \mu(\Omega)=1$. The proof is finished.
+\end{proof}
+
+
+
+\end{document}

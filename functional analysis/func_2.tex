@@ -1,0 +1,398 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+
+\title{\textbf{Functional Analysis Assignment II}}
+\author{YANG, Ze (5131209043)}
+
+\begin{document}
+\maketitle
+\begin{problem} Let $(X,d)$ be metric space. Suppose $h$ is a \textit{homeomorphism} of $X$ onto $X$, i.e. $h$ is continous bijective map and its inverse is continuous. Given $A \subset X$, show that $A$ and $h(A)$ have same category in $X$. 
+\end{problem}
+\begin{proof} Since the sets of second category is defined to be those that are \textit{not} of first category, it suffices to show that
+$$\text{$A$ is of first category}\iff\text{$h(A)$ is of first category}$$
+($\Rightarrow$) Suppose $A$ is of first category, then we write $A=\bigcup_{i=1}^{n}A_i$, $A_i$ are nowhere dense sets. Since $h(\cdot)$ is bijective, define $B_i:=h(A_i)$, then $h(A)=\bigcup_{i=1}^{n}B_i$. \\
+\textit{Claim}: $B_i$ is nowhere dense for all $i=1,2,...,n$.\\
+\textit{Proof of claim}: Show by contradiction. Assume otherwise, i.e. $B_i$ is not nowhere dense for some $i$, i.e. the interior of $\bar{B}_i$ is not empty, denote as $O$. It is clear that $O$ and $h^{-1}(O)$ are open. We have
+\begin{equation}
+  h^{-1}(O) \subseteq h^{-1}(\bar{B}_i) \subseteq \overline{h^{-1}(B_i)}
+\end{equation}
+The second subseteq is due to continuity of $h^{-1}(\cdot)$: pick a point $b\in \bar{B}_i$, either $b\in B_i$ or $\lim\limits_{n\rightarrow\infty}b_n=b$, $\{b_n\}\subset B_i$. For the first case, clearly $h^{-1}(b)\in h^{-1}(B_i)$. For the second, since $h^{-1}$ is continuous, we have $h^{-1}(\lim\limits_{n\rightarrow\infty}b_n)=\lim\limits_{n\rightarrow\infty}h^{-1}(b_n)$, and $\{h^{-1}(b_n)\}\subset h^{-1}(B_i)$. In both cases we can obtain $h^{-1}(b)\in \overline{h^{-1}(B_i)}$ $\forall b\in \bar{B}_i$, gives the proof.\\
+Now that we have (1), note that $\overline{h^{-1}(B_i)}=\overline{h^{-1}(h(A_i))}=\bar{A}_i$; and exists open set $h^{-1}(O)\subseteq \bar{A}_i$ that is not empty. By definition
+\begin{equation}
+  \text{int}(\bar{A}_i):=\bigcup_{Q\subseteq \bar{A}_i, \text{open}} Q \supseteq h^{-1}(O)
+\end{equation}
+is therefore not empty. Contradict the fact that $A$ is of first category, i.e. $A_i$ is nowhere dense.\\
+$(\Leftarrow)$ is just a symmetric argument. Assume $h(A)=\bigcup_{k=1}^{n}B_i$, claim $A_i:=h^{-1}(B_i)$ is nowhere dense. Argue by contradiction with using the continuity of $h(\cdot)$.
+\end{proof} 
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} Show that $\mathcal{C}([a,b])$ is separable.
+\end{problem}
+\begin{proof} It suffices to show there exists a contable dense set contained in $\mathcal{C}([a,b])$.\\
+Firstly, we denote
+$$
+\mathcal{P}(\mathbb{Q}):=\left\{q\middle|q(x)=\sum_{k=0}^{n} a_k x^k; n\in \mathbb{N}, a_k\in \mathbb{Q}, a_n\ne 0\right\}
+$$
+$$
+\mathcal{P}(\mathbb{R}):=\left\{p\middle|p(x)=\sum_{k=0}^{n} b_k x^k; n\in \mathbb{N}, b_k\in \mathbb{R}, b_n\ne 0\right\}
+$$
+(\textit{Step.1}) We show that $\mathcal{P}(\mathbb{Q})$ is countable. Define $\mathcal{P}_n:=\{q|q(x)=\sum_{k=0}^{n} a_k x^k; a_k\in \mathbb{Q}, a_n\ne 0\}$. Then $|\mathcal{P}_n|=|\mathbb{Q}\setminus \{0\} \times \mathbb{Q}^{n-1}|$, and $\mathcal{P}(\mathbb{Q})=\bigcap_{k=0}^{\infty} \mathcal{P}_n$. Countable union of contable set, cartesian product of finite number of countable sets are both countable, which gives the proof of $\mathcal{P}(\mathbb{Q})$'s countability. \\
+(\textit{Step.2}) WLOG assume $x\in [0,1]$. Due to (\textbf{Weietrass}), for all $f\in \mathcal{C}([0,1])$, we can find $p\in \mathcal{P}(\mathbb{R})$ such that $|f-p_n|<\frac{1}{2n}$.\\
+Then for this $p_n$ with however large $n$, we can find $q_n \in \mathcal{P}(\mathbb{Q})$ with same $n$. Further more, since $\mathbb{Q}$ is dense in $\mathbb{R}$, for $b_k \in \mathbb{R}$, we can find $a_k \in \mathbb{Q}$ for every $k$, such that $|a_k-b_k|<\frac{1}{2n^2}$ uniformly. Therefore
+\begin{equation}
+  |q_n-p_n|=\left|\sum_{k=0}^{n} a_k x^k-b_kx^k\right| \leq \sum_{k=0}^n |a_k-b_k||x^k| \leq \sum_{k=0}^n |a_k -b_k| < \frac{1}{2n}
+\end{equation}
+Hence $|f-q_n|\leq |f-p_n|+|q_n-p_n|<\frac{1}{n} \to 0$, i.e. $q_n\to f$. Since $\{q_n\} \subset \mathcal{P}(\mathbb{Q})$, we can conclude that $\overline{\mathcal{P}(\mathbb{Q})} \supseteq \mathcal{C}([0,1])$. $\overline{\mathcal{P}(\mathbb{Q})} \subseteq \mathcal{C}([0,1])$ is trivial. So we have $\mathcal{P}(\mathbb{Q})$ is dense in $\mathcal{C}([0,1])$. \\
+(\textit{Step.3}) We extend this to $[a,b]$ by defining
+$$
+h:=\mathcal{C}([0,1])\to \mathcal{C}([a,b])
+$$
+with $(h\circ f)(x):=f(a+(b-a)x)$. Clearly $h$ is isometry, and $h$ is invertible. We conclude that $h^{-1}(\mathcal{P}(\mathbb{Q}))$ is dense in $\mathcal{C}([a,b])$, implies that the latter is separable.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} Show that every sequentially compact metric space $K$ is separable.
+\end{problem}
+\begin{proof} $K$ is sequentially compact $\Rightarrow$ $K$ is totally bounded; i.e. for all $\epsilon>0$, there exists a finite $\epsilon$-net s.t. $K \subseteq \bigcup_{i=1}^{n_{\epsilon}} B_{\epsilon}(x_i)$.\\
+Let $\epsilon=1$, we find $U_1:=\bigcup_{i=1}^{n_{1}} B_{1}(x_i)$ is a union of $n_1$ balls. Denote
+$$C_1:=\{x_i: B_1(x_i) \text{ Belongs to finite 1-net that covers $K$}\}$$
+I.e. $C_1$ is the collection of all \textit{center points} of balls in 1-net. \\
+Do this for $\epsilon=\frac{1}{2}, \frac{1}{3}, ..., \frac{1}{n}, ...$, we obtain $\{C_1, C_2, ..., C_n, ...\}$ as collection of center points of the balls that constituting $\frac{1}{n}$-net. Then for any $z\in K$, there exists $x_1 \in C_1, x_2 \in C_2, ..., x_n \in C_n,...$ such that $d(z, x_n)\leq \frac{1}{n}$. Hence we can obtain a sequence $x_n \to z$, with $\{x_n\} \subset \bigcup_{n=1}^{\infty} C_n$, which implies
+\begin{equation}
+  \overline{\bigcup_{n=1}^{\infty} C_n} = K
+\end{equation}
+I.e. $\bigcup_{n=1}^{\infty} C_n$ is dense in $K$. And $\bigcup_{n=1}^{\infty} C_n$ is also countable since it's countable union of sets that each has finite number of elements. We conclude that $K$ is separable.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} Let $K$ be a compact subset in the complete metric space $X$. Suppose $f\in \mathcal{C}(K, \mathbb{R})$. Show that $f$ is uniformly continuous.
+\end{problem}
+\begin{proof} Firstly since $f: K\to \mathbb{R}$ is continuous, $\forall \epsilon>0$, $\forall x,y\in K$, there exists $\delta_x$ relevant to $x$, such that $d(x,y)<\delta_x \Rightarrow d(f(x),f(y))<\epsilon$, i.e. 
+\begin{equation}
+  f(B_{\delta_x}(x)) \subseteq B_{\epsilon}(f(x))
+\end{equation}
+For same $\epsilon$, exhaust all $x\in K$. Then clearly $\bigcup_{x\in K}B_{\frac{\delta_x}{2}}(x)$ is an open cover of $K$. Since $K$ is compact, there exists a finite subcover $U:=\bigcup_{j=1}^n B_{\frac{\delta_{j}}{2}}(x_j)$.\\
+\textit{Claim.} $\forall \epsilon>0$, $\forall x,y\in K$, there exists $\delta=\min\limits_{j=1,...,n}\frac{\delta_j}{2}$ uniformly, we have $d(x,y)<\delta \Rightarrow d(f(x),f(y))<\epsilon$.\\
+\textit{Proof of Claim.} Suppose $x\in B_{\frac{\delta_{j}}{2}}(x_j)$ for some ball $j$ in the finite subcover $U$, then the choice of $\delta$ ensures that $y$ must be in the ball with same center and radius $\delta_j$. Because
+\begin{equation}
+  d(x_i,y)\leq d(x_i, x)+d(x,y)=\frac{\delta_j}{2}+\min\limits_{j=1,...,n}\frac{\delta_j}{2} \leq \delta_j
+\end{equation}
+Hence $x,y \in B_{\delta_j}(x_j)$, and by the initial choice of $\delta_j$: $f(B_{\delta_j}(x_j))\subseteq B_{\epsilon}(f(x_i))$, implies that $f(x), f(y) \in B_{\epsilon}(f(x_i))$. Hence $d(x,y)<\delta \Rightarrow d(f(x),f(y))< \epsilon$, proves uniform continuity.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} Let $K$ be a compact subset in the complete metric space $X$. Suppose $f\in \mathcal{C}(K, \mathbb{R})$. Show that $f$ is bounded and attains its maximum and minimum.
+\end{problem}
+\begin{proof} \textit{Step.1} We first show that compactness is continous-invariant, i.e. for $f: K\to W$ continuous, $K$ compact, then $f(K)$ is also compact. \\
+For arbitrary open cover $U=\bigcup_{i\in A} O_i$ of $f(K)$, $f^{-1}(U)$ is a cover of $K$. Since $f^{-1}(U)=\bigcup_{i\in A} f^{-1}(O_i)$, and $f$ is continuous $\Rightarrow$ $f^{-1}(O_i)$ are open sets. Hence $f^{-1}(U)$ is an open cover of $K$ $\Rightarrow$ $\exists$ $\bigcup_{i=1}^{n} f^{-1}(O_i) \subseteq f^{-1}(U)$ and is a finite cover of $K$. Therefore $\bigcup_{i=1}^{n} O_i$ is a finite cover of $f(K)$. Proves that $f(K)$ is compact.\\
+\textit{Step.2} Since $f(K) \subseteq \mathbb{R}$ is compact, it is bounded and closed. Since it's bounded, $a:=\inf f(K)$ and $b:=\sup f(K)$ exists and are limit points of $f(K)$. Moreover since $f(K)$ is closed $\Rightarrow$ $a,b \in f(K)$.\\
+Therefore, $\forall x \in K$, $a\leq f(x)\leq b$; and $\exists x_a, x_b \in K$, s.t. $f(x_a)=a, f(x_b)=b$. Which proves that $f$ is bounded on $K$ and attains its maximum and minimum.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} Let $\{f_n \in \mathcal{C}([0,1]) | n\in \mathbb{N}\}$ be equicontinuous. If $f_n \to f$ pointwise, show that $f$ is continuous.
+\end{problem}
+\begin{proof} $\mathcal{F}=\{f_n \in \mathcal{C}([0,1]) | n\in \mathbb{N}\}$ is equicontinuous, and $[0,1]$ is compact $\Rightarrow$ $\mathcal{F}$ is uniformly equicontinuous. So $\forall n\in \mathbb{N}$, $\forall x\in [0,1]$, $\forall \epsilon >0$, there exists $\bar{\delta}$ \textit{having nothing to do} with $n, x$, such that $f_n(B_{\bar{\delta}}(x)) \subseteq B_{\frac{\epsilon}{3}}(f_n(x))$.\\
+Since $f_n \to f$ pointwise, $\forall \epsilon>0$, $\forall x\in [0,1]$, $\exists N\in \mathbb{N}$, s.t $d(f(x),f_n(x))<\frac{\epsilon}{3}$ as long as $n>N$.\\ 
+Now we can show the continuity of $f$. Consider $\forall \epsilon>0$, there exists $\delta=\bar{\delta}$. Then due to uniform equicontinuity of $\mathcal{F}$: $f_n(B_{\delta}(x)) \subseteq B_{\frac{\epsilon}{3}}(f_n(x))$ \textit{regardless of} $n,x$. Then pick $n=N+1$, we have $d(f_n(x),f(x))<\frac{\epsilon}{3}$. Finally restrict $d(x,y)<\delta$, we get
+\begin{equation}
+  \begin{split}
+    d(f(x),f(y)) &\leq d(f(x),f_n(x))+d(f_n(x),f_n(y))+d(f_n(y)-f(y)) \\
+    & \leq \frac{\epsilon}{3} + \frac{\epsilon}{3} + \frac{\epsilon}{3} \\
+    &= \epsilon
+  \end{split}
+\end{equation}
+Implies that $f$ is continuous.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} Show that $T: \mathbb{R} \to \mathbb{R}$ defined by
+$$ T(x) = \frac{\pi}{2}+x -\tan^{-1}x $$
+has no fixed point. And
+$$ |T(x)-T(y)| < |x-y| \text{ For all $x\ne y\in \mathbb{R}$.} $$
+Illustrate the reason why this example does not contradict the contraction mapping thm.
+\end{problem}
+\begin{proof} Suppose $T$ has fixed point $\bar{z}$, then $T\bar{z}=\bar{z}$ $\Rightarrow \frac{\pi}{2}-\tan^{-1}\bar{z}=0$, which has no solution. Hence $T$ has no fixed point. \\
+Then consider $\forall x\ne y \in \mathbb{R}$. Since $T$ is continous on $\mathbb{R}$, by mean-value theorem, there exists $\xi \in [x,y]$
+\begin{equation}
+  \begin{split}
+    |Tx-Ty|&=|T'(\xi)||x-y|\\
+    &=\left|1-\frac{1}{1+\xi^2}\right||x-y|\\
+    &=\frac{\xi^2}{1+\xi^2}|x-y|<|x-y|
+  \end{split}
+\end{equation}
+This does not contradict the contraction mapping thm because $T$ is \textit{Not} a contraction map. By definition, $T:\mathbb{R}\to \mathbb{R}$ is contraction map if there exists $L\in[0,1)$ \textit{regardless of} $x,y$, such that $d(Tx, Ty)\leq Ld(x,y)~(\triangle)$ for all $x,y \in \mathbb{R}$.\\
+But for this $T$ it is clear that $RHS$ in equation (9) $\to |x-y|$ when $\xi \to \infty$. For example, we let $y=x+1$ and $x\to \infty$. Then we can't find $L$ strictly less than $1$ such that $d(Tx, Ty)\leq Ld(x,y)$. Clearly this implies that we can't find $L<1$ for all $x\ne y\in \mathbb{R}$ to make $(\triangle)$ hold. Therefore $T$ is not contraction map on $\mathbb{R}$.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} The following integral equation for $f:[-a, a]\to \mathbb{R}$ arises in a model of gas particles on a line:
+$$f(x)=1+\frac{1}{\pi}\int_{-a}^a \frac{1}{1+(x-y)^2}f(y)dy~~\text{for $-a\leq x \leq a$.}$$
+Show that this equation has unique, bounded, continuous solution for $0<a<\infty$. Further show that the solution is non-negative. Also discuss the circumstance when $a=\infty$.
+\end{problem}
+\begin{proof} (\textbf{Step.1}) Define functional $T: \mathcal{C}[-a,a]\to \mathcal{C}[-a,a]$, such that
+\begin{equation}
+  Tf:=1+\frac{1}{\pi}\int_{-a}^a \frac{1}{1+(x-y)^2}f(y)dy
+\end{equation}
+It is clear that RHS is continuous for $-a\leq x\leq a$. Define $d(f,g):=\sup\limits_{x\in[-a,a]}|f(x)-g(x)|$, then
+\begin{equation}
+  \begin{split}
+    |Tf-Tg| &= \left|\frac{1}{\pi}\int_{-a}^a \frac{1}{1+(x-y)^2}(f(y)-g(y))dy\right| \\
+    & \leq \left|\frac{1}{\pi}\int_{-a}^a \frac{1}{1+(x-y)^2}dy\right|d(f,g) \\
+    & = \left|\frac{-1}{\pi}\int_{x-a}^{x+a} \frac{1}{1+(x-y)^2}d(x-y)\right|d(f,g)\\
+    & = \left|\frac{1}{\pi}\left(\tan^{-1}(x-a)-\tan^{-1}(x+a)\right)\right|d(f,g)\\
+    & \leq \frac{2}{\pi}\tan^{-1}(2a)\cdot d(f,g)
+  \end{split}
+\end{equation}
+Denote $L:=\frac{2}{\pi}\tan^{-1}(2a)$, we have $d(Tf,Tg)\leq Ld(f,g)$. When $a$ is finite, $L<1$. Hence $d(Tf,Tg)<d(f,g)$ $\Rightarrow$ $T$ is a contraction map on $\mathcal{C}[-a,a]$, which is also complete. \\
+By \textit{Contraction mapping Thm.} we know that $Tf=f$ has unique fixed point $\bar{f}\in \mathcal{C}[-a,a]$. Hence $\bar{f}(x)$ is unique solution of the equation, and is continuous. Since $[-a,a]$ is compact $\Rightarrow$ $\bar{f}$ is also bounded.\\
+(\textbf{Step.2}) Now we show $\bar{f}$ is non-negative. By the fact that $T$ is contraction map, we can approach by newton's method. I.e. let $g_n := Tg_{n-1}$, then $g_n \to \bar{f}$. We pick $g_0 = 0$. Then $g_1 = Tg_0 = 1\geq 0$. Now we prove by \textbf{Induction}. Assume $g_n \geq 0$ $\forall x\in [-a,a]$, then
+\begin{equation}
+  g_{n+1}(y) = 1+\frac{1}{\pi}\int_{-a}^a \frac{1}{1+(x-y)^2}g_n(y)dy \geq 1 \geq 0
+\end{equation}
+So $g_n \geq 0$ for all $n\geq 0$. Since inequality is preserved in limit, we have $\bar{f}\geq 0$ as desired. \\
+$\bullet$ When $a\to \infty$, we have $L=\lim\limits_{a\rightarrow\infty}\frac{2}{\pi}\tan^{-1}(2a)=1$, hence $d(Tf, Tg)\leq d(f,g)$. $T$ is no longer a contraction map. In fact I have checked\footnote{By Mathematica.} that $Tf=f$ has no continous and bounded solution under this circumstance.
+\end{proof}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} Show there is a unique solution for following nonlinear BVP when constant $\lambda$ has sufficiently small absolute value, where $f:[0,1]\to \mathbb{R}$ is a given continuous function.
+$$
+  \begin{cases} 
+    -u_{xx} + \lambda \sin u = f(x) & \\
+    u(0) = 0,~u(1)=0
+  \end{cases}
+$$
+\end{problem}
+\begin{proof} (\textbf{Step.1}) First we claim without proof (it's PDE class's business) that solving the given BVP is equivalent to solving $Tu=u$, where $T: \mathcal{C}[0,1]\to \mathcal{C}[0,1]$, 
+\begin{equation}
+  Tu:=\int_{0}^1 [f(y)-\lambda\sin(u(y))] G(x,y) dy
+\end{equation}
+Where
+\begin{equation}
+  G(x,y)=\begin{cases}
+  x(1-y) & 0\leq x \leq y \leq 1\\
+  y(1-x) & 0\leq y \leq x \leq 1\\
+  \end{cases}
+\end{equation}
+is Green's function of $-\partial^2 / \partial x^2$ in 1-D given boundary condition $u(0)=u(1)=0$. We also define $d(u,v):=\sup\limits_{x\in[0,1]}|u(x)-v(x)|$. Then we have:
+\begin{equation}
+  \begin{split}
+    |Tu-Tv| &= \left|\int_{0}^1 \lambda[\sin v(y)-\sin u(y)] G(x,y) dy\right| \\
+    & \leq |\lambda|\left|\int_{0}^1 G(x,y) dy\right|d(\sin v, \sin u) \\
+    & = |\lambda| d(\sin v, \sin u) \left|\int_{0}^x y(1-x) dy + \int_{x}^1 x(1-y) dy\right| \\
+    & = |\lambda| d(\sin v, \sin u) \left|\frac{x^2}{2}(1-x) + x(\frac{1}{2}-x+\frac{x^2}{2})\right| \\
+    & = |\lambda| d(\sin v, \sin u) \left|\frac{x-x^2}{2}\right|\\
+    & \leq |\lambda| d(\sin v, \sin u)
+  \end{split}
+\end{equation}
+Hence $d(Tu, Tv) \leq |\lambda| d(\sin v, \sin u)$. We let $\lambda = \frac{1}{2}$, Then $T$ is a contraction map. Since $\mathcal{C}[0,1]$ is complete, by contraction mapping theorem, $Tu=u$ has unique solution.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} Prove the following theorem. (\textit{Thm.1}) Given linear space $X$.
+\begin{itemize}
+  \item[1.] The sets $\{0\}$ and $X$ are linear subspaces of $X$.
+  \item[2.] The sum of any collection of subspaces is a subspace.
+  \item[3.] The intersection of any collection of subspaces is a subspace.
+  \item[4.] The union of a collection of subspaces totally ordered by inclusion is a subspace.
+\end{itemize}
+\end{problem}
+\begin{proof} (\textit{Thm.1})
+\begin{itemize}
+  \item[] 1. Really trivial.
+  \item[] 2. $Y_{\alpha}\subset X$ is linear subspace for index $\alpha \in A$. Consider any $x,y \in \sum_{\alpha} Y_{\alpha}$, by definition we can write $x=\sum_{\alpha} x_{\alpha}, y=\sum_{\alpha} y_{\alpha}$ with $x_{\alpha}, y_{\alpha}\in Y_{\alpha}$. Since $Y_{\alpha}$ is linear subspace $\Rightarrow$ $a x_{\alpha} + b y_{\alpha} \in Y_{\alpha}$. So
+  \begin{equation}
+    ax + by = a\sum_{\alpha} x_{\alpha} + b\sum_{\alpha} y_{\alpha} = \sum_{\alpha} ax_{\alpha} + by_{\alpha} \in \sum_{\alpha} Y_{\alpha}
+  \end{equation}
+  \item[] 3. $Y_{\alpha}$ is linear subspace for index $\alpha \in A$. Then for $x,y \in \bigcap_{\alpha} Y_{\alpha}$, we have $x,y$ in $Y_{\alpha}$ for all $\alpha$. Hence $ax+by \in Y_{\alpha}$ for all $\alpha$ $\Rightarrow$ $ax+by \in \bigcap_{\alpha} Y_{\alpha}$, finished the proof.
+  \item[] 4. $Y_n \subset X$ is linear subspace for all $n\in \mathbb{N}$; $Y_n \subseteq Y_{n+1}$. Consider $x,y \in \bigcup_{n\geq 1} Y_n$, there exists $p,q\geq 1$ such that $x\in Y_p, y\in Y_q$. WLOG assume $p\leq q$, then by inclusion $x\in Y_p \subseteq Y_q$. Therefore $ax+by \in Y_q \subseteq \bigcup_{n\geq1} Y_n$, finished the proof.
+\end{itemize}
+
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} $X$ is linear space, $Y$ is linear subspace of $X$. For $x_1, x_2 \in X$, denote $x_1 \equiv x_2$ mod $Y$ if $x_1-x_2 \in Y$. Verify the followings
+\begin{itemize}
+  \item[1.] If $x_1 \equiv z_1, x_2 \equiv z_2$, then $x_1+x_2 \equiv z_1+z_2$ mod $Y$.
+  \item[2.] If $x_1 \equiv z_1$, then $kx_1 \equiv kz_1$ mod $Y$.
+\end{itemize}
+\end{problem}
+\begin{proof} Both are clear by the fact that $Y$ is linear subspace. Since $x_1-z_1, x_2-z_2 \in Y$ $\Rightarrow$ $(x_1-z_1)+(x_2-z_2)\in Y$, i.e. $(x_1+x_2)-(z_1+z_2) \in Y$.\\
+Since $x_1-z_1 \in Y$ $\Rightarrow$ $k(x_1-z_1)=kx_1-kz_1\in Y$.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} Prove the following theorems. \\
+(\textit{Thm.3}) 
+\begin{itemize}
+  \item[1.] The image of a linear subspace $Y$ of $X$ under a linear map $\bm{M}:X\to U$ is a linear subspace of $U$.
+  \item[2.] The inverse image under $\bm{M}$ of a linear subspace $V$ of $U$ is a linear subspace of $X$.
+\end{itemize}
+(\textit{Thm.4}) Let $K$ be a convex subset of a linear space $X$ over the reals. Suppose that $x_1, ..., x_n\in K$; then so does every $x$ of the form
+$$x=\sum_{j=1}^n a_jx_j~~\text{where $a_j\geq 0$, $\sum_{j=1}^n a_j=1$}~(\dag)$$
+\end{problem}
+\begin{proof} (\textit{Thm.3}) $\forall u_1, u_2 \in \bm{M}Y$, we denote $\bm{M}y_1 = u_1, \bm{M}y_2 = u_2$ for $y_1, y_2 \in Y$. \\
+Since $\bm{M}$ is a linear map:
+\begin{equation}
+  \begin{split}
+    &u_1+u_2 = \bm{M}y_1 + \bm{M}y_2 = \bm{M}(y_1+y_2) \in \bm{M}Y \\
+    &ku_1 = k\bm{M}y_1 = \bm{M}(ky_1) \in \bm{M}Y
+  \end{split}
+\end{equation}
+indicates that $\bm{M}Y$ is a linear subspace of $U$. Also since $\bm{M}^{-1}$ is a linear map. $\forall z_1, z_2 \in \bm{M}^{-1}V$, we denote $\bm{M}z_1 = v_1, \bm{M}z_2 = v_2$ for $v_1, v_2 \in V$.
+\begin{equation}
+  \begin{split}
+    &z_1+z_2 = \bm{M}^{-1}v_1 + \bm{M}^{-1}v_2 = \bm{M}^{-1}(v_1+v_2) \in \bm{M}^{-1}V \\
+    &kz_1 = k\bm{M}^{-1}v_1 = \bm{M}^{-1}(kv_1) \in \bm{M}^{-1}V
+  \end{split}
+\end{equation}
+Bespeaks that $\bm{M}^{-1}V$ is a linear subspace of $X$.
+\end{proof} 
+
+\begin{proof} (\textit{Thm.4}) (\textbf{Induction Proof}) $n=1$ is trivial, $n=2$ is the definition of convexity. \\
+Assume theorem is true when $n=k$, then when $n=k+1$
+\begin{equation}
+  \sum_{n=1}^{k+1} a_nx_n = (1-a_{k+1})\sum_{n=1}^{k}\frac{a_n}{1-a_{k+1}}x_n + a_{k+1}x_{k+1}
+\end{equation}
+Since we have $\sum_{1}^{k+1}a_n=1$, therefore $\sum_{1}^{k}a_n=1-a_{k+1}$ $\Rightarrow$ $\sum_{1}^{k}\frac{a_n}{1-a_{k+1}}=1$. So by $n=k$ assumption, $y:=\sum_{1}^{k}\frac{a_n}{1-a_{k+1}}x_n \in K$, i.e. $RHS = (1-a_{k-1})y + a_{k+1} x_{k+1}$. It belongs to $K$ by defintion of convex set and the fact that $y, x_{k+1} \in K$.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} Prove the following theorems. \\
+(\textit{Thm.5}) Let $X$ be a linear space of the reals.
+\begin{itemize}
+  \item[1.] The empty set is convex.
+  \item[2.] A singleton is convex.
+  \item[3.] Every linear subspace of $X$ is convex.
+  \item[4.] The sum of two convex subsets is convex.
+  \item[5.] If $K$ is convex, so is $-K$.
+  \item[6.] The intersection of an arbitrary collection of convex sets is convex.
+  \item[7.] Let $\{K_j\}$ be a collection of convex subsets that is totally ordered by inclusion. Then their union is convex.
+  \item[8.] The image of a convex set under a linear map is convex.
+  \item[9.] The preimage of a convex set under a linear map is convex.
+\end{itemize}
+(\textit{Thm.6}) Define \textit{Convex Hull} of $S$ as the intersection of all convex sets containing $S$, denote $S^{co}$. Show that
+\begin{itemize}
+  \item[1.] $S^{co}$ is the smallest convex set containing $S$.
+  \item[2.] $S^{co}$ consists of all convex combinations ($\dag$) of points of $S$.
+\end{itemize}
+\end{problem}
+\begin{proof} (\textit{Thm.5}) $\bullet$ \textbf{(1)} trivial since there is no convex combinations. $\bullet$ \textbf{(2)} trivial since the only convex combination is just the singleton itself. $\bullet$ \textbf{(3)} trivial since convex combination is a special linear combination. \\
+$\bullet$ \textbf{(4)} Denote $K:=K_1+K_2$, $K_1, K_2$ convex. Pick any $x, y\in K$, form any convex combination $(1-\lambda)x+\lambda y=(1-\lambda)(x_1+x_2)+\lambda(y_1+y_2)=[(1-\lambda)x_1+y_1]+[(1-\lambda)x_2+\lambda y_2]$ for which we have $(1-\lambda)x_1+y_1\in K_1, (1-\lambda)x_2+y_2\in K_2$. Therefore $x+y\in K$.\\
+$\bullet$ \textbf{(5)} $x,y\in-K$, then $-x,-y \in K$ $\Rightarrow$ $-(1- \lambda)x-\lambda y \in K$ $\Rightarrow$ $(1- \lambda)x+\lambda y \in -K$\\
+$\bullet$ \textbf{(6)} Denote $K:=\bigcap_{\alpha}K_{\alpha}$. Pick any $x,y\in K$, then $x,y\in K_{\alpha}$ for all $\alpha$. Hence convex combination $(1-\lambda)x+\lambda y \in K_{\alpha}$ for all $\alpha$, so it is in $K$.\\
+$\bullet$ \textbf{(7)} Consider $K_n \subseteq K_{n+1}$, $K:=\bigcup_{k\geq 1} K_n$. Clearly $K_n \nearrow K$. For $x,y\in K$, $x\in K_p, y\in K_q$ for some $p,q$. So $x,y \in K_{\max{\{p,q\}}}$, which is convex $\Rightarrow$ $(1- \lambda)x+\lambda y\in K_{\max{\{p,q\}}} \subseteq K$.\\
+$\bullet$ \textbf{(8)} $\bm{M}: X \to Z$ is linear map. $\forall x,y \in \bm{M}K$ we have $\bm{M}^{-1}x, \bm{M}^{-1}y \in K$. By linearity of $\bm{M}$, Convex combination
+\begin{equation}
+  (1- \lambda)\bm{M}^{-1}x + \lambda \bm{M}^{-1}y = \bm{M}^{-1}((1- \lambda)x + \lambda y) \in K
+\end{equation}
+$\Rightarrow$ $(1- \lambda)x + \lambda y \in \bm{M}K$.\\
+$\bullet$ \textbf{(9)} $\bm{M}: V \to X$. $\forall x,y \in \bm{M}^{-1}K$ we have $\bm{M}x, \bm{M}y \in K$.
+\begin{equation}
+  (1- \lambda)\bm{M}x + \lambda \bm{M}y = \bm{M}((1- \lambda)x + \lambda y) \in K
+\end{equation}
+$\Rightarrow$ $(1- \lambda)x + \lambda y \in \bm{M}^{-1}K$.\\
+\end{proof} 
+
+\begin{proof} (\textit{Thm.6}) By its definiton
+\begin{equation}
+  S^{co}:=\bigcap_{S_{\alpha} \text{convex}, S \subseteq S_{\alpha}} S_{\alpha}
+\end{equation}
+So $\forall \alpha$, $S_{\alpha} \supseteq S^{co}$. Inplies that $S^{co}$ is contained in all convex sets containing $S$. \\
+$\forall x_1, ..., x_n\in S \subseteq S^{co}$, since $S^{co}$ is convex, and combinations $x$ of the form
+$$x=\sum_{j=1}^n a_jx_j~~\text{where $a_j\geq 0$, $\sum_{j=1}^n a_j=1$}~(\dag)$$
+Should be $x\in S^{co}$, by (\textit{Thm.4}) shown in problem 12.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} Prove the following theorems. \\
+(\textit{Thm.7}) Let $K$ be a convex set, $E$ an extreme subset of $K$ and $F$ an extreme subset of $E$. Then $F$ is an extreme subset of $K$.\\
+(\textit{Thm.8}) Let $\bm{M}$ be linear map of linear space $X$ into linear space $U$. Let $K$ be a convex subset of $U$, $E$ an extreme subset of $K$. Then the inverse image of $E$ is either empty or an extreme subset of the inverse image of $K$. \\
+Give an example to show that the image of an extreme subset under a linear map need not be an extreme subset of the image.
+\end{problem}
+\begin{proof} (\textit{Thm.7}) Since $E$ an extreme subset of $K$ $\Rightarrow$ $E$ convex and non-empty. $F$ is extreme subset of $E$ $\Rightarrow$ $F$ is also convex and non-empty by definition. \\
+Now it suffices to check second property. $\forall x \in F$ that can be written as $x=(y+z)/2$, $y,z\in K$; note that $F \subseteq E$, we have $x\in E$. So by the fact that $E$ is extreme subset of $K$ $\Rightarrow$ $y,z\in E$. \\
+Now that $x=(y+z)/2 \in F$, $y,z\in E$, $F$ is extreme subset of $K$ $\Rightarrow$ $y,z \in F$.
+\end{proof}
+\begin{proof} (\textit{Thm.8}) $\bm{M}: X \to U$. $E$ is extreme subset of convex $K\subset U$. Then if $\bm{M}^{-1}(E)$ is non-empty, it must be convex (due to \textit{Thm.5-9}). Furthermore, $\bm{M}^{-1}K$ is also convex.\\
+$\forall x\in \bm{M}^{-1}E$ that can be written as $x=(y+z)/2$, $y,z\in \bm{M}^{-1}K$; we have $\bm{M}y, \bm{M}z \in K$, $\bm{M}x \in E$. And since $\bm{M}$ is linear map,
+\begin{equation}
+  \bm{M}x = \bm{M}\left(\frac{y+z}{2}\right) = \frac{\bm{M}y + \bm{M}z}{2}
+\end{equation}
+Since $E$ is extreme subset of $K$, by definition we have $\bm{M}y, \bm{M}z \in E$. Therefore $y,z \in \bm{M}^{-1}E$ as desired. We obtain: $\forall x\in \bm{M}^{-1}E$ that can be written as $x=(y+z)/2$, $y,z\in \bm{M}^{-1}K$ $\Rightarrow$ $y,z \in \bm{M}^{-1}E$. Therefore in this case $\bm{M}^{-1}E$ is extreme set of $\bm{M}^{-1}K$.
+\end{proof}
+(\textit{Exercise 9}) Map $\bm{M}: [0,1]^2 \to [0,1]$, $(x,y) \mapsto x$. $\bm{M}$ is a linear map, because
+\begin{equation}
+  a\bm{M}(x_1,y_1)+b\bm{M}(x_2,y_2)=ax_1+bx_2=\bm{M}(a(x_1,y_1)+b(x_2,y_2))
+\end{equation}
+It is clear that both $[0,1]^2$ and $[0,1]$ are convex. Furthermore, take $E:=\{(x, y)|0.3\leq x \leq 0.4, y=0\} \subset [0,1]^2$. $E$ is a extreme subset of it. But $\bm{M}E=[0.3, 0.4]\subset [0,1]$ is not a extreme subset of $[0,1]$.
+
+
+
+\end{document}
