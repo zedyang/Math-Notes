@@ -117,12 +117,12 @@
   (\dag): c_1 \pmb{v}_1 + ... + c_{p-1} \pmb{v}_{p-1}= \pmb{v}_p
   $$
   Apply $\pmb{A}$ both sides:
-  \begin{equation}
+  \begin{equation*}
   \begin{split}
     \pmb{A}(c_1 \pmb{v}_1 + ... + c_{p-1} \pmb{v}_{p-1}) &= \pmb{A} \pmb{v}_p\\
     c_1 \lambda_1 \pmb{v}_1 + ... + c_{p-1} \lambda_{p-1} \pmb{v}_{p-1} &= \lambda_p \pmb{v}_p
   \end{split}
-  \end{equation}
+  \end{equation*}
   $(\dag)\times \lambda_p$, substracted from last equation:
   $$
   \sum_{j=1}^{p-1}c_j (\lambda_1 - \lambda_p)\pmb{v}_j = \lambda_p \pmb{v}_p - \lambda_p \pmb{v}_p = 0
@@ -170,6 +170,45 @@
   $$
   \pmb{A} = \pmb{V} \pmb{\Lambda} \pmb{V}^{-1} 
   $$
+  Entries of $\pmb{\Lambda}$ are eigvals of $\pmb{A}$, and cols of $\pmb{V}$ are corresponding eigvecs.\\
+  \textit{Proof.~~} $\pmb{AV} = \pmb{V} \pmb{\Lambda} \pmb{V}^{-1} \pmb{V}=\pmb{V\Lambda}$. \\
+  $\pmb{AV}=(\pmb{A}\pmb{v_1} | ... | \pmb{A}\pmb{v}_n)$; $\pmb{V\Lambda}=(\pmb{V}\lambda_1 \pmb{e}_1|...|\pmb{V}\lambda_n \pmb{e}_n)=(\pmb{v}_1\lambda_1|...|\pmb{v}_n\lambda_n)$. $\square$\\
+  Since $\pmb{V}$ is nonsingular, $\{\pmb{v}_k\}$ must be linearly indep.
+  \item[$\cdot$] $\pmb{A}$ is diagonalizable iff it has $n$ linearly indep. eigvecs.
+  \item[$\cdot$] If $\pmb{A} = \pmb{V} \pmb{\Lambda} \pmb{V}^{-1} $, then $\pmb{A}^p = \pmb{V} \pmb{\Lambda}^p \pmb{V}^{-1} $. \\
+  \textit{Proof.~~} $\pmb{A}^p = \pmb{V} \pmb{\Lambda} \pmb{V}^{-1}\pmb{V} \pmb{\Lambda} \pmb{V}^{-1}...\pmb{V} \pmb{\Lambda} \pmb{V}^{-1}=\pmb{V} \pmb{\Lambda}^p \pmb{V}^{-1}$.$\square$\\
+  Similarly, $\pmb{A}^{-1}=\pmb{V} \pmb{\Lambda}^{-1} \pmb{V}^{-1} $, and $\pmb{A}^{-p} = \pmb{V} \pmb{\Lambda}^{-p} \pmb{V}^{-1} $.
+\end{itemize}
+
+
+
+\section{Diagonally Dominant Matrices}
+\begin{itemize}
+  \item[$\cdot$] $R_j$ defined as sum of absolute value of entries on $j$-th row except for the main diagonal one $A_{jj}$.
+  $$
+  R_j:=\sum_{k=1, k\ne j}^n |A_{jk}|
+  $$
+  \item[$\cdot$] $\pmb{A}$ is a weakly diagonal dominant matrix iff $|A_{jj}|\geq R_j$ for all $j=1,...,n$.
+  \item[$\cdot$] $\pmb{A}$ is a strictly diagonal dominant matrix iff $|A_{jj}|>R_j$ for all $j=1,...,n$.
+  \item[\textit{Thm.~}] (\textbf{Gershgorin}) $\pmb{A}^{n\times n}$, for any eigval $\lambda$, there exists index $j$, s.t.
+  $$
+  |\lambda - A_{jj}| \leq R_j
+  $$
+  Alternative statement:
+  $$
+  \lambda(\pmb{A}) \subseteq \bigcup_{j=1}^{n}D(A_{jj}, R_j)
+  $$
+  Where $D(A_{jj}, R_j):=\{z\in \mathbb{C}: |z-A_{jj}|\leq R_j\}$ being disc in complex field, centerred at $A_{jj}$, with radius $R_j$. Let $\pmb{v}$ be eigval corresponding to $\lambda$, index $j$ is acturally the index of entry in $\pmb{v}$ who has biggest absolute value.\\
+  \textit{Proof.~~} $\pmb{Av}=\lambda \pmb{v}$, $\pmb{v}=(v_1, ..., v_n)^{\top}$. $j=\text{argmax}~|v_j|$.\\
+  $\langle \pmb{a}_j, \pmb{v} \rangle = \lambda v_j$, angle stands for inner product, $\pmb{a}_j$ is $j$-th row of $\pmb{A}$. I.e.
+  \begin{equation*}
+    \begin{split}
+    \lambda v_j &= \sum_{i=1}^n A_{ji} v_i = A_{jj}v_j +\sum_{i=1, i\ne j}^n A_{ji} v_i \\
+    \lambda-A_{jj} &= \frac{1}{v_j}\sum_{i=1, i\ne j}^n A_{ji}v_i\\
+    |\lambda-A_{jj}| &\leq \frac{1}{|v_j|}\sum_{i=1, i\ne j}^n |A_{ji}||v_i| =\sum_{i=1, i\ne j}^n |A_{ji}|\frac{|v_i|}{|v_j|}\\
+    &\leq \sum_{i=1, i\ne j}^n |A_{ji}| = R_j
+    \end{split}
+  \end{equation*}
 \end{itemize}
 %--------------------------------------------------------------------
 \fbox{
