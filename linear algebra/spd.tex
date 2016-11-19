@@ -32,6 +32,93 @@
 \begin{document}
 \maketitle
 
+\section{Preliminaries}
+\subsection{Inner Products}
+\begin{itemize}
+	\item[$\cdot$] Inner product on $\mathbb{R}^n$: $\langle \bm{v}, \bm{u} \rangle = \bm{v}^{\top} \bm{u}$. Has 3 properties:
+	\begin{itemize}
+		\item[1.] Positivity: $\langle \bm{v}, \bm{v} \rangle\geq 0$; $\langle \bm{v}, \bm{v} \rangle =0 \iff \bm{v}=\bm{0}$.
+		\item[2.] Bilinearity: $\langle a \bm{x}+b\bm{y}, \bm{z} \rangle = a\langle \bm{x}, \bm{z} \rangle+b\langle \bm{y}, \bm{z} \rangle$; $\langle \bm{z}, a\bm{x}+b\bm{y} \rangle = a\langle \bm{z}, \bm{x} \rangle+b\langle \bm{z}, \bm{y} \rangle$.
+		\item[3.] Symmetry: $\langle \bm{x}, \bm{y} \rangle = \langle \bm{y}, \bm{x} \rangle$.
+	\end{itemize}
+	\item[$\cdot$] Norm on $\mathbb{R}^n$: $\left\|\bm{v}\right\|^2=\langle \bm{v}, \bm{v} \rangle$
+	\item[$\cdot$] Inner product on $\mathbb{C}^n$: $\langle \bm{v}, \bm{u} \rangle_{\mathbb{C}} = \bm{v}^{H} \bm{u}$. Where $\bm{v}^H = (\bar{v}_1, ..., \bar{v}_n)$ is conjugate transpose of col vector $\bm{v}$, $\bar{v}$ is complex conjugate of entry $v$, i.e.
+	$$
+	\langle \bm{v}, \bm{u} \rangle_{\mathbb{C}} = \sum_{j=1}^n u_j \bar{v}_j
+	$$
+	Also 3 properties:
+	\begin{itemize}
+		\item[1.] Positivity: $\langle \bm{v}, \bm{v} \rangle_{\mathbb{C}}\geq 0$; $\langle \bm{v}, \bm{v} \rangle_{\mathbb{C}} =0 \iff \bm{v}=\bm{0}$.
+		\item[2.] Sesquilinearity: 
+		$$
+		\langle a \bm{x}+b\bm{y}, \bm{z} \rangle_{\mathbb{C}} = a\langle \bm{x}, \bm{z} \rangle_{\mathbb{C}}+b\langle \bm{y}, \bm{z} \rangle_{\mathbb{C}}
+		$$
+		$$
+		\langle \bm{z}, a\bm{x}+b\bm{y} \rangle_{\mathbb{C}}=\bar{a}\langle \bm{z}, \bm{x} \rangle_{\mathbb{C}} + \bar{b} \langle \bm{z}, \bm{y} \rangle_{\mathbb{C}}
+		$$
+		\textit{Proof.~~} Use conjugate symmetry. $\langle \bm{z}, a\bm{x}+b\bm{y} \rangle_{\mathbb{C}} 
+		= \overline{\langle a \bm{x}+b\bm{y}, \bm{z} \rangle_{\mathbb{C}}}
+		=\bar{a}\overline{\langle \bm{x}, \bm{z} \rangle_{\mathbb{C}}}+\bar{b}\overline{\langle \bm{y}, \bm{z} \rangle_{\mathbb{C}}} 
+		=\bar{a} \langle \bm{z}, \bm{x} \rangle_{\mathbb{C}} + \bar{b}\langle \bm{z}, \bm{y} \rangle$
+		\item[3.] Conjugate Symmetry: $\langle \bm{x}, \bm{y} \rangle = \overline{\langle \bm{y}, \bm{x} \rangle}$.
+	\end{itemize}
+	\item[$\cdot$] Norm on $\mathbb{C}^n$: $\left\|v\right\|^2_{\mathbb{C}} = \langle \bm{v}, \bm{v} \rangle_{\mathbb{C}}=\bm{v}^H \bm{v}$.
+	\item[$\cdot$] Let $\bm{A}$ be a matrix with complex entries, its conjugate transpose (hermitian): $\bm{A}^H = \overline{\bm{A}}^{\top}$. We have $(\bm{AB})^H = \bm{B}^H \bm{A}^H$. \\
+	And by definition of inner product on complex field, $\langle \bm{Au}, \bm{v} \rangle_{\mathbb{C}} = \bm{v}^H\bm{Au}=\langle \bm{u}, (\bm{v}^H \bm{A})^H \rangle_{\mathbb{C}} = \langle \bm{u}, \bm{A}^H \bm{v} \rangle_{\mathbb{C}}$. Similarly $\langle \bm{u}, \bm{Bv} \rangle = \langle \bm{B}^H \bm{u}, \bm{v} \rangle$.
+\end{itemize}
 
+
+\section{Properties}
+\subsection{Basics}
+\begin{itemize}
+	\item[$\cdot$] Symmetric matrix: $\bm{A} = \bm{A}^{\top}$. Let $\bm{X}$ be an arbitrary matrix, $\bm{X}^{\top} \bm{X}$ and $(\bm{X}+\bm{X}^{\top})$ are symmetric.
+
+	\item[$\cdot$] $\langle \bm{Au}, \bm{v} \rangle = \bm{v}^{\top}\bm{Au} = \langle \bm{u}, \bm{A}^{\top}\bm{v} \rangle$. And $\langle \bm{u}, \bm{Bv} \rangle = \bm{u}^{\top}\bm{Bv}=\langle \bm{B}^{\top}\bm{u}, \bm{v} \rangle$. 
+
+	\item[$\cdot$] $\bm{u} \perp \bm{v} \iff \langle \bm{u}, \bm{v} \rangle = 0$.
+
+	\item[$\cdot$] A matrix $\bm{Q}$ is orthogonal iff any two different columns of it are orthonormal. (orthogonal and unit norm); or any two different rows of it are orthonormal.
+
+	\item[\textit{Thm.~}] A square matrix $\bm{Q}$ is orthogonal iff $\bm{Q}^{-1} = \bm{Q}^{\top}$.\\
+	\textit{Proof.~~} We have $\bm{Q}^{\top} \bm{Q}=\bm{I}$.
+	\begin{equation*}
+		\begin{split}
+			\bm{Q}^{\top} \bm{Q} = \begin{pmatrix}
+				\bm{q}_1^{\top} \\
+				\bm{q}_2^{\top} \\
+				\vdots\\
+				\bm{q}_n^{\top}
+			\end{pmatrix}
+			\begin{pmatrix}
+				\bm{q}_1 & \bm{q}_2 & \cdots & \bm{q}_n
+			\end{pmatrix} = 
+			\begin{pmatrix}
+				\left\|\bm{q}_1\right\|^2 & \langle \bm{q}_1, \bm{q}_2 \rangle & \cdots & \langle \bm{q}_1, \bm{q}_n \rangle\\
+				\langle \bm{q}_2, \bm{q}_1 \rangle & \ddots & \ddots & \vdots\\
+				\vdots & \ddots & \ddots & \vdots\\
+				\langle \bm{q}_n, \bm{q}_1 \rangle & \cdots & \cdots & \left\|\bm{q}_n\right\|^2
+			\end{pmatrix}
+		\end{split}
+	\end{equation*}
+	Hence $\bm{Q}^{\top} \bm{Q}=\bm{I} \iff$ $\left\|\bm{q}_i\right\|=1$ for all $i$ and $\langle \bm{q}_j, \bm{q}_k \rangle=0$ for $k\ne j$. $\square$
+\end{itemize}
+
+
+
+\subsection{Eigvals and Eigvecs}
+\begin{itemize}
+	\item[\textit{Thm.}] Any eigval of symmetric matrix is real number. \\
+	\textit{Proof.~~} We have $\bm{Av} = \lambda \bm{v}$. $\bm{A}$ symmetric and real, hence $\bm{A}=\bm{A}^H$. Consider
+	$$
+	\langle \bm{Av}, \bm{v} \rangle_{\mathbb{C}} = \bm{v}^{H} \bm{Av}
+	= \langle \bm{v}, \bm{A}^H \bm{v} \rangle_{\mathbb{C}} = \langle \bm{v}, \bm{Av} \rangle_{\mathbb{C}}
+	$$
+	And $\langle \bm{Av}, \bm{v} \rangle_{\mathbb{C}} = \langle \lambda\bm{v}, \bm{v} \rangle_{\mathbb{C}} = \lambda \left\|\bm{v}\right\|_{\mathbb{C}}^2$; $\langle \bm{v}, \bm{Av} \rangle_{\mathbb{C}} = \langle \bm{v}, \lambda\bm{v} \rangle_{\mathbb{C}} = \bar{\lambda} \left\|\bm{v}\right\|_{\mathbb{C}}^2$ \\
+	$\Rightarrow \lambda = \bar{\lambda}$, which implies that $\lambda$ is real. $\square$
+	\item[$\cdot$] Eigvecs corresponding to different eigvals of symmetric matrix are orthogonal.\\
+	\textit{Proof.~~} $\langle \bm{Av}_1, \bm{v}_2 \rangle = \langle \lambda_1 \bm{v}_1, \bm{v}_2 \rangle = \lambda_1 \langle \bm{v}_1, \bm{v}_2 \rangle$.\\
+	$\langle \bm{Av}_1, \bm{v}_2 \rangle = \langle \bm{v}_1, \bm{A}^{\top}\bm{v}_2 \rangle = \langle \bm{v}_1, \bm{A}\bm{v}_2 \rangle = \langle \bm{v}_1, \lambda_2\bm{v}_2 \rangle = \lambda_2 \langle \bm{v}_1, \bm{v}_2 \rangle$. \\
+	Hence $\lambda_2 \langle \bm{v}_1, \bm{v}_2 \rangle = \lambda_1 \langle \bm{v}_1, \bm{v}_2 \rangle$; $\lambda_1 \ne \lambda_2$ $\Rightarrow \bm{v}_1 \perp \bm{v}_2$. $\square$
+\end{itemize}
 
 \end{document}

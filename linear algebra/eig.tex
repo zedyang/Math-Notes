@@ -39,25 +39,25 @@
 \subsection{Subspaces}
 \begin{itemize}
   \item[$\cdot$] $\mathbb{R}$, $\mathbb{C}$ field of real and complex numbers.
-  \item[$\cdot$] Colspace of $\pmb{A}^{m\times n}$: 
+  \item[$\cdot$] Colspace of $\bm{A}^{m\times n}$: 
   $$
-  \mathcal{C}(\pmb{A}):=\text{span}\left\{\text{Cols}(\pmb{A})\right\}\subseteq \mathbb{R}^n
+  \mathcal{C}(\bm{A}):=\text{span}\left\{\text{Cols}(\bm{A})\right\}\subseteq \mathbb{R}^n
   $$
-  And $\text{Dim}(\mathcal{C}(\pmb{A}))=r$. $r$ is rank of $\pmb{A}$.
+  And $\text{Dim}(\mathcal{C}(\bm{A}))=r$. $r$ is rank of $\bm{A}$.
 
-  \item[$\cdot$] Rowspace of $\pmb{A}^{m\times n}$: 
+  \item[$\cdot$] Rowspace of $\bm{A}^{m\times n}$: 
   $$
-  \mathcal{R}(\pmb{A}):=\text{span}\left\{\text{Rows}(\pmb{A})\right\}=\mathcal{C}(\pmb{A}^{\top})\subseteq \mathbb{R}^m
+  \mathcal{R}(\bm{A}):=\text{span}\left\{\text{Rows}(\bm{A})\right\}=\mathcal{C}(\bm{A}^{\top})\subseteq \mathbb{R}^m
   $$ 
-  And $\text{Dim}(\mathcal{R}(\pmb{A}))=r$.
+  And $\text{Dim}(\mathcal{R}(\bm{A}))=r$.
 
-  \item[$\cdot$] Nullspace of $\pmb{A}^{m\times n}$: 
+  \item[$\cdot$] Nullspace of $\bm{A}^{m\times n}$: 
   $$
-  \mathcal{N}(\pmb{A}):=\{\pmb{x}: \pmb{Ax}=0\}\subset \mathbb{R}^n
+  \mathcal{N}(\bm{A}):=\{\bm{x}: \bm{Ax}=0\}\subset \mathbb{R}^n
   $$ 
-  $\text{Dim}(\mathcal{N}(\pmb{A}))=n-r$.
+  $\text{Dim}(\mathcal{N}(\bm{A}))=n-r$.
 
-  \item[$\cdot$] $\mathcal{N}(\pmb{A}^{\top}):=\{\pmb{x}: \pmb{\pmb{A}^{\top}x}=0\}\subset \mathbb{R}^m$. $\text{Dim}(\mathcal{N}(\pmb{A}^{\top}))=m-r$.
+  \item[$\cdot$] $\mathcal{N}(\bm{A}^{\top}):=\{\bm{x}: \bm{\bm{A}^{\top}x}=0\}\subset \mathbb{R}^m$. $\text{Dim}(\mathcal{N}(\bm{A}^{\top}))=m-r$.
 \end{itemize}
 
 
@@ -66,97 +66,98 @@
 \section{Properties}
 \subsection{Eigval}
 \begin{itemize}
-  \item[$\cdot$] Eigval $\lambda$, eigvec $\pmb{v}$ such that: $\pmb{A} \pmb{v} = \lambda \pmb{v}$.
-  \item[$\cdot$]$c \pmb{v}$ is also an eigvec corresponding to $\lambda$, but only linearly indep. eigvecs are counted.
+  \item[$\cdot$] Eigval $\lambda$, eigvec $\bm{v}$ such that: $\bm{A} \bm{v} = \lambda \bm{v}$.
+  \item[$\cdot$]$c \bm{v}$ is also an eigvec corresponding to $\lambda$, but only linearly indep. eigvecs are counted.
 \end{itemize}
 
 \subsection{Characteristic Polynomial}
 \begin{itemize}
-  \item[$\cdot$] $\pmb{A}$ is $n\times n$ square, then the characteristic polynomial of $\pmb{A}$ is defined as.
+  \item[$\cdot$] $\bm{A}$ is $n\times n$ square, then the characteristic polynomial of $\bm{A}$ is defined as.
   $$
-  P_{\pmb{A}}(t):=\det(t \pmb{I} - \pmb{A})
+  P_{\bm{A}}(t):=\det(t \bm{I} - \bm{A})
   $$
-  \item[$\cdot$]$\lambda$ is eigval of $\pmb{A}$ $\iff P_{\pmb{A}}(\lambda) = 0\iff \lambda$ is root of $P_{\pmb{A}}(t)=0$.\\
-  \textit{Proof.~~} ($\Rightarrow$) $\lambda$ is eigval of $\pmb{A}$: $(\lambda \pmb{I}-\pmb{A})\pmb{v}=0$. \\
-  $\pmb{v}$ is an eigvec of $\pmb{A}$, so $\pmb{v}\ne 0$ $\Rightarrow \pmb{v}\in \mathcal{N}(\pmb{A})$.
-  Hence $\text{Dim}(\mathcal{N}(\pmb{A}))>0$ $\Rightarrow r<n$. $\square$
+  \item[$\cdot$]$\lambda$ is eigval of $\bm{A}$ $\iff P_{\bm{A}}(\lambda) = 0\iff \lambda$ is root of $P_{\bm{A}}(t)=0$.\\
+  \textit{Proof.~~} ($\Rightarrow$) $\lambda$ is eigval of $\bm{A}$: $(\lambda \bm{I}-\bm{A})\bm{v}=0$. \\
+  $\bm{v}$ is an eigvec of $\bm{A}$, so $\bm{v}\ne 0$ $\Rightarrow \bm{v}\in \mathcal{N}(\bm{A})$.
+  Hence $\text{Dim}(\mathcal{N}(\bm{A}))>0$ $\Rightarrow r<n$. $\square$
 
-  \item[$\cdot$] $P_{\pmb{A}}(t)$ can be represented as, sence we know the roots, 
+  \item[$\cdot$] $P_{\bm{A}}(t)$ can be represented as, sence we know the roots, 
   $$
-  P_{\pmb{A}}(t) = \prod_{j=1}^n (t- \lambda_j)
+  P_{\bm{A}}(t) = \prod_{j=1}^n (t- \lambda_j)
   $$
-  \item[$\cdot$] $\pmb{D}$ being diagonal matrix, then $P_{\pmb{D}} = \prod_{j=1}^n (t- d_j)$, which implies that $\lambda_j = d_j$, diagonal entries. Moreover, $\pmb{D}\pmb{e}_j = d_j \pmb{e}_j$, so the $j$-th eigvec is $\pmb{e}_j$ unit vec.
-  \item[$\cdot$] $\pmb{L}$ being lower triangular, then $P_{\pmb{L}} = \prod_{j=1}^n (t- L_{jj})$, which implies that $\lambda_j = d_j$. The last col of lower tri is $L_{nn} \pmb{e}_n$, therefore $\pmb{L}\pmb{e}_n = L_{nn}\pmb{e}_n$, i.e. the last eigvec is $\pmb{e}_n$ unit vector. We can not tell about other eigvecs. Similar for $\pmb{U}$. $\pmb{U}\pmb{e}_1 = U_{11}\pmb{e}_1$, i.e. the first eigvec of $\pmb{U}$ is $\pmb{e}_1$ unit vector.
+  \item[$\cdot$] $\bm{D}$ being diagonal matrix, then $P_{\bm{D}} = \prod_{j=1}^n (t- d_j)$, which implies that $\lambda_j = d_j$, diagonal entries. Moreover, $\bm{D}\bm{e}_j = d_j \bm{e}_j$, so the $j$-th eigvec is $\bm{e}_j$ unit vec.
+  \item[$\cdot$] $\bm{L}$ being lower triangular, then $P_{\bm{L}} = \prod_{j=1}^n (t- L_{jj})$, which implies that $\lambda_j = L_{jj}$. The last col of lower tri is $L_{nn} \bm{e}_n$, therefore $\bm{L}\bm{e}_n = L_{nn}\bm{e}_n$, i.e. the last eigvec is $\bm{e}_n$ unit vector. We can not tell about other eigvecs. Similar for $\bm{U}$. $\bm{U}\bm{e}_1 = U_{11}\bm{e}_1$, i.e. the first eigvec of $\bm{U}$ is $\bm{e}_1$ unit vector.
 \end{itemize}
 
 \subsection{Multiplicity}
 \begin{itemize}
-  \item[$\cdot$] $\lambda(\pmb{A})$ is the set of all eigvals of $\pmb{A}$, it is acturally the spectrum of $\pmb{A}$.
-  \item[$\cdot$] If $\lambda \in \lambda(\pmb{A})$ is a root of multiplicity $m_{\lambda}$ of $P_{\pmb{A}}(t)=0$, define $m_{\lambda}$ as multiplicity of eigval $\lambda$.
-  \item[$\cdot$] Square matrix $\pmb{A}$ has exactly $n$ eigvals ($\lambda\in \mathbb{C}$), counted with multiplicity, i.e.
+  \item[$\cdot$] $\lambda(\bm{A})$ is the set of all eigvals of $\bm{A}$, it is acturally the spectrum of $\bm{A}$.
+  \item[$\cdot$] If $\lambda \in \lambda(\bm{A})$ is a root of multiplicity $m_{\lambda}$ of $P_{\bm{A}}(t)=0$, define $m_{\lambda}$ as algebraic multiplicity of eigval $\lambda$.
+  \item[$\cdot$] Square matrix $\bm{A}$ has exactly $n$ eigvals ($\lambda\in \mathbb{C}$), counted with (algebraic) multiplicity, i.e.
   $$
-  \sum_{\lambda \in \lambda(\pmb{A})} m_{\lambda} = n
+  \sum_{\lambda \in \lambda(\bm{A})} m_{\lambda} = n
   $$
-  This is because, due to fundamental principal of algebra, $P_{\pmb{A}}(t)=0$ has exactly $n$ roots, counted with multiplicity.
+  This is because, due to fundamental principal of algebra, $P_{\bm{A}}(t)=0$ has exactly $n$ roots, counted with multiplicity.
 \end{itemize}
 
 \subsection{Eigspace}
 \begin{itemize}
-  \item[$\cdot$] Eigenspace (eigspace) of $\lambda$: $V_{\lambda}:=\{\pmb{v}: \pmb{A}\pmb{v}=\lambda \pmb{v}\}$, i.e. the set of all eigvecs corresponding to $\lambda$. $\text{Dim}(V_{\lambda})$ is the number of linearly indep. eigvecs corresponding to $\lambda$. We have
+  \item[$\cdot$] Eigenspace (eigspace) of $\lambda$: $V_{\lambda}:=\{\bm{v}: \bm{A}\bm{v}=\lambda \bm{v}\}$, i.e. the set of all eigvecs corresponding to $\lambda$. $\text{Dim}(V_{\lambda})$ is the number of linearly indep. eigvecs corresponding to $\lambda$. We have
   $$
   1\leq \text{Dim}(V_{\lambda})\leq m_{\lambda}
   $$
-  \item[\textit{Thm.~}] eigvecs corresponding to \textit{different} eigvals of $\pmb{A}$ are linearly indep.\\
-  \textit{Proof.~~} Let $\pmb{v}_1, ..., \pmb{v}_p$ correspond to different eigvals of $\pmb{A}$: $\lambda_1, ..., \lambda_p$ ($p\leq n$).\\
+  Where $\text{Dim}(V_{\lambda})$ is the geometric multiplicity of $\lambda$.
+  \item[\textit{Thm.~}] eigvecs corresponding to \textit{different} eigvals of $\bm{A}$ are linearly indep.\\
+  \textit{Proof.~~} Let $\bm{v}_1, ..., \bm{v}_p$ correspond to different eigvals of $\bm{A}$: $\lambda_1, ..., \lambda_p$ ($p\leq n$).\\
   It suffices to show
   $$
-  c_1 \pmb{v}_1 + ... + c_p \pmb{v}_p= \pmb{0} \Rightarrow c_1=...=c_p=0
+  c_1 \bm{v}_1 + ... + c_p \bm{v}_p= \bm{0} \Rightarrow c_1=...=c_p=0
   $$
   Show by contradiction: suppose otherwise, i.e. 
   $$
-  (\dag): c_1 \pmb{v}_1 + ... + c_{p-1} \pmb{v}_{p-1}= \pmb{v}_p
+  (\dag): c_1 \bm{v}_1 + ... + c_{p-1} \bm{v}_{p-1}= \bm{v}_p
   $$
-  Apply $\pmb{A}$ both sides:
+  Apply $\bm{A}$ both sides:
   \begin{equation*}
   \begin{split}
-    \pmb{A}(c_1 \pmb{v}_1 + ... + c_{p-1} \pmb{v}_{p-1}) &= \pmb{A} \pmb{v}_p\\
-    c_1 \lambda_1 \pmb{v}_1 + ... + c_{p-1} \lambda_{p-1} \pmb{v}_{p-1} &= \lambda_p \pmb{v}_p
+    \bm{A}(c_1 \bm{v}_1 + ... + c_{p-1} \bm{v}_{p-1}) &= \bm{A} \bm{v}_p\\
+    c_1 \lambda_1 \bm{v}_1 + ... + c_{p-1} \lambda_{p-1} \bm{v}_{p-1} &= \lambda_p \bm{v}_p
   \end{split}
   \end{equation*}
   $(\dag)\times \lambda_p$, substracted from last equation:
   $$
-  \sum_{j=1}^{p-1}c_j (\lambda_1 - \lambda_p)\pmb{v}_j = \lambda_p \pmb{v}_p - \lambda_p \pmb{v}_p = 0
+  \sum_{j=1}^{p-1}c_j (\lambda_1 - \lambda_p)\bm{v}_j = \lambda_p \bm{v}_p - \lambda_p \bm{v}_p = 0
   $$
   Which is not possible since $\exists c_j \ne 0$, and $(\lambda_j - \lambda_p)\ne 0~\forall j$. Contradiction. $\square$
 \end{itemize}
 
 \subsection{Miscellaneous}
 \begin{itemize}
-  \item[$\cdot$] $\pmb{A}$ singular $\iff$ $0\in \lambda(\pmb{A})$.\\
-  \textit{Proof.~~} $\det(0 \pmb{I}-\pmb{A})=0 \iff$ $\pmb{A}$ singular. $\square$
+  \item[$\cdot$] $\bm{A}$ singular $\iff$ $0\in \lambda(\bm{A})$.\\
+  \textit{Proof.~~} $\det(0 \bm{I}-\bm{A})=0 \iff$ $\bm{A}$ singular. $\square$
 
-  \item[$\cdot$] $\pmb{A}$ invertible. $\lambda \in \lambda(\pmb{A})$, $\pmb{v}\in V_{\lambda}(\pmb{A})$. Then $\frac{1}{\lambda}\in \lambda(\pmb{A}^{-1})$, $\pmb{v}\in V_{\frac{1}{\lambda}}(\pmb{A}^{-1})$.\\
-  \textit{Proof.~~} $\pmb{Av}=\lambda \pmb{v}$ $\Rightarrow$ $\pmb{A}^{-1}\pmb{Av} = \lambda \pmb{A}^{-1} \pmb{v}$ $\Rightarrow$ $\frac{1}{\lambda} \pmb{v} = \pmb{A}^{-1} \pmb{v}$. 
+  \item[$\cdot$] $\bm{A}$ invertible. $\lambda \in \lambda(\bm{A})$, $\bm{v}\in V_{\lambda}(\bm{A})$. Then $\frac{1}{\lambda}\in \lambda(\bm{A}^{-1})$, $\bm{v}\in V_{\frac{1}{\lambda}}(\bm{A}^{-1})$.\\
+  \textit{Proof.~~} $\bm{Av}=\lambda \bm{v}$ $\Rightarrow$ $\bm{A}^{-1}\bm{Av} = \lambda \bm{A}^{-1} \bm{v}$ $\Rightarrow$ $\frac{1}{\lambda} \bm{v} = \bm{A}^{-1} \bm{v}$. 
 
-  \item[$\cdot$] $\pmb{A}$ has eigtuple $(\lambda, \pmb{v})$, then $\pmb{A}^k$ with $(\lambda^k, v)$. $P(\pmb{A})$ is a polynomial of $\pmb{A}$, has eigtuple $(P(\lambda), \pmb{v})$.
+  \item[$\cdot$] $\bm{A}$ has eigtuple $(\lambda, \bm{v})$, then $\bm{A}^k$ with $(\lambda^k, v)$. $P(\bm{A})$ is a polynomial of $\bm{A}$, has eigtuple $(P(\lambda), \bm{v})$.
 
-  \item[$\cdot$] $\pmb{A}$ and $\pmb{A}^{\top}$ have same eigvals.\\
-  \textit{Proof.~~} $P_{\pmb{A}}(t) = \det(t\pmb{I}-\pmb{A}) = \det((t \pmb{I}-\pmb{A})^{\top}) = \det(t\pmb{I} - \pmb{A}^{\top}) = P_{\pmb{A}^{\top}}(t)$. Thus have same roots.
+  \item[$\cdot$] $\bm{A}$ and $\bm{A}^{\top}$ have same eigvals.\\
+  \textit{Proof.~~} $P_{\bm{A}}(t) = \det(t\bm{I}-\bm{A}) = \det((t \bm{I}-\bm{A})^{\top}) = \det(t\bm{I} - \bm{A}^{\top}) = P_{\bm{A}^{\top}}(t)$. Thus have same roots.
 
-  \item[$\cdot$] First, second and the last term of $P_{\pmb{A}}(t)$:
+  \item[$\cdot$] First, second and the last term of $P_{\bm{A}}(t)$:
   $$
-  P_{\pmb{A}}(t) = t^n - \text{tr}(\pmb{A}) t^{n-1} + ... + (-1)^n\det(\pmb{A})
+  P_{\bm{A}}(t) = t^n - \text{tr}(\bm{A}) t^{n-1} + ... + (-1)^n\det(\bm{A})
   $$
-  Moreover, $\sum_{j=1}^n \lambda_j = \text{tr}(\pmb{A})$ and $\prod_{j=1}^n \lambda_j = \det(\pmb{A})$.\\
-  \textit{Proof.~~} $P_{\pmb{A}}(t) = \det(t \pmb{I} - \pmb{A})$. \\
-  $P_{\pmb{A}}(0)=\det(-\pmb{A})=(-1)^n\det(\pmb{A})$.\\
+  Moreover, $\sum_{j=1}^n \lambda_j = \text{tr}(\bm{A})$ and $\prod_{j=1}^n \lambda_j = \det(\bm{A})$.\\
+  \textit{Proof.~~} $P_{\bm{A}}(t) = \det(t \bm{I} - \bm{A})$. \\
+  $P_{\bm{A}}(0)=\det(-\bm{A})=(-1)^n\det(\bm{A})$.\\
   $t^n, t^{n-1}$ arises with prod term of diagonal entries:
   $$
   \prod_{j=1}^n(t-A_{jj}) = t^n - t^{n-1}\sum_{j=1}^n A_{jj} + ...
   $$
-  which have coefficients $1$ and $-\text{tr}(\pmb{A})$. Moreover
+  which have coefficients $1$ and $-\text{tr}(\bm{A})$. Moreover
   $$
-  P_{\pmb{A}}(t) = \prod_{j=1}^n(t- \lambda_j) = t^n - t^{n-1}\sum_{j=1}^n \lambda_j + ... + (-1)^n \prod_{j=1}^n \lambda_j
+  P_{\bm{A}}(t) = \prod_{j=1}^n(t- \lambda_j) = t^n - t^{n-1}\sum_{j=1}^n \lambda_j + ... + (-1)^n \prod_{j=1}^n \lambda_j
   $$
   Finished the proof. $\square$
 \end{itemize}
@@ -166,18 +167,18 @@
 
 \section{Diagonal Form}
 \begin{itemize}
-  \item[$\cdot$] $\pmb{A}$ square, $\pmb{A}$ is diagonalizable iff $\exists$ diagonal $\pmb{\Omega}$, invertible $\pmb{V}$, s.t.
+  \item[$\cdot$] $\bm{A}$ square, $\bm{A}$ is diagonalizable iff $\exists$ diagonal $\bm{\Omega}$, invertible $\bm{V}$, s.t.
   $$
-  \pmb{A} = \pmb{V} \pmb{\Lambda} \pmb{V}^{-1} 
+  \bm{A} = \bm{V} \bm{\Lambda} \bm{V}^{-1} 
   $$
-  Entries of $\pmb{\Lambda}$ are eigvals of $\pmb{A}$, and cols of $\pmb{V}$ are corresponding eigvecs.\\
-  \textit{Proof.~~} $\pmb{AV} = \pmb{V} \pmb{\Lambda} \pmb{V}^{-1} \pmb{V}=\pmb{V\Lambda}$. \\
-  $\pmb{AV}=(\pmb{A}\pmb{v_1} | ... | \pmb{A}\pmb{v}_n)$; $\pmb{V\Lambda}=(\pmb{V}\lambda_1 \pmb{e}_1|...|\pmb{V}\lambda_n \pmb{e}_n)=(\pmb{v}_1\lambda_1|...|\pmb{v}_n\lambda_n)$. $\square$\\
-  Since $\pmb{V}$ is nonsingular, $\{\pmb{v}_k\}$ must be linearly indep.
-  \item[$\cdot$] $\pmb{A}$ is diagonalizable iff it has $n$ linearly indep. eigvecs.
-  \item[$\cdot$] If $\pmb{A} = \pmb{V} \pmb{\Lambda} \pmb{V}^{-1} $, then $\pmb{A}^p = \pmb{V} \pmb{\Lambda}^p \pmb{V}^{-1} $. \\
-  \textit{Proof.~~} $\pmb{A}^p = \pmb{V} \pmb{\Lambda} \pmb{V}^{-1}\pmb{V} \pmb{\Lambda} \pmb{V}^{-1}...\pmb{V} \pmb{\Lambda} \pmb{V}^{-1}=\pmb{V} \pmb{\Lambda}^p \pmb{V}^{-1}$.$\square$\\
-  Similarly, $\pmb{A}^{-1}=\pmb{V} \pmb{\Lambda}^{-1} \pmb{V}^{-1} $, and $\pmb{A}^{-p} = \pmb{V} \pmb{\Lambda}^{-p} \pmb{V}^{-1} $.
+  Entries of $\bm{\Lambda}$ are eigvals of $\bm{A}$, and cols of $\bm{V}$ are corresponding eigvecs.\\
+  \textit{Proof.~~} $\bm{AV} = \bm{V} \bm{\Lambda} \bm{V}^{-1} \bm{V}=\bm{V\Lambda}$. \\
+  $\bm{AV}=(\bm{A}\bm{v_1} | ... | \bm{A}\bm{v}_n)$; $\bm{V\Lambda}=(\bm{V}\lambda_1 \bm{e}_1|...|\bm{V}\lambda_n \bm{e}_n)=(\bm{v}_1\lambda_1|...|\bm{v}_n\lambda_n)$. $\square$\\
+  Since $\bm{V}$ is nonsingular, $\{\bm{v}_k\}$ must be linearly indep.
+  \item[$\cdot$] $\bm{A}$ is diagonalizable iff it has $n$ linearly indep. eigvecs.
+  \item[$\cdot$] If $\bm{A} = \bm{V} \bm{\Lambda} \bm{V}^{-1} $, then $\bm{A}^p = \bm{V} \bm{\Lambda}^p \bm{V}^{-1} $. \\
+  \textit{Proof.~~} $\bm{A}^p = \bm{V} \bm{\Lambda} \bm{V}^{-1}\bm{V} \bm{\Lambda} \bm{V}^{-1}...\bm{V} \bm{\Lambda} \bm{V}^{-1}=\bm{V} \bm{\Lambda}^p \bm{V}^{-1}$.$\square$\\
+  Similarly, $\bm{A}^{-1}=\bm{V} \bm{\Lambda}^{-1} \bm{V}^{-1} $, and $\bm{A}^{-p} = \bm{V} \bm{\Lambda}^{-p} \bm{V}^{-1} $.
 \end{itemize}
 
 
@@ -188,19 +189,19 @@
   $$
   R_j:=\sum_{k=1, k\ne j}^n |A_{jk}|
   $$
-  \item[$\cdot$] $\pmb{A}$ is a weakly diagonal dominant matrix iff $|A_{jj}|\geq R_j$ for all $j=1,...,n$.
-  \item[$\cdot$] $\pmb{A}$ is a strictly diagonal dominant matrix iff $|A_{jj}|>R_j$ for all $j=1,...,n$.
-  \item[\textit{Thm.~}] (\textbf{Gershgorin}) $\pmb{A}^{n\times n}$, for any eigval $\lambda$, there exists index $j$, s.t.
+  \item[$\cdot$] $\bm{A}$ is a weakly diagonal dominant matrix iff $|A_{jj}|\geq R_j$ for all $j=1,...,n$.
+  \item[$\cdot$] $\bm{A}$ is a strictly diagonal dominant matrix iff $|A_{jj}|>R_j$ for all $j=1,...,n$.
+  \item[\textit{Thm.~}] (\textbf{Gershgorin}) $\bm{A}^{n\times n}$, for any eigval $\lambda$, there exists index $j$, s.t.
   $$
   |\lambda - A_{jj}| \leq R_j
   $$
   Alternative statement:
   $$
-  \lambda(\pmb{A}) \subseteq \bigcup_{j=1}^{n}D(A_{jj}, R_j)
+  \lambda(\bm{A}) \subseteq \bigcup_{j=1}^{n}D(A_{jj}, R_j)
   $$
-  Where $D(A_{jj}, R_j):=\{z\in \mathbb{C}: |z-A_{jj}|\leq R_j\}$ being disc in complex field, centerred at $A_{jj}$, with radius $R_j$. Let $\pmb{v}$ be eigval corresponding to $\lambda$, index $j$ is acturally the index of entry in $\pmb{v}$ who has biggest absolute value.\\
-  \textit{Proof.~~} $\pmb{Av}=\lambda \pmb{v}$, $\pmb{v}=(v_1, ..., v_n)^{\top}$. $j=\text{argmax}~|v_j|$.\\
-  $\langle \pmb{a}_j, \pmb{v} \rangle = \lambda v_j$, angle stands for inner product, $\pmb{a}_j$ is $j$-th row of $\pmb{A}$. I.e.
+  Where $D(A_{jj}, R_j):=\{z\in \mathbb{C}: |z-A_{jj}|\leq R_j\}$ being disc in complex field, centerred at $A_{jj}$, with radius $R_j$. Let $\bm{v}$ be eigval corresponding to $\lambda$, index $j$ is acturally the index of entry in $\bm{v}$ who has biggest absolute value.\\
+  \textit{Proof.~~} $\bm{Av}=\lambda \bm{v}$, $\bm{v}=(v_1, ..., v_n)^{\top}$. $j=\text{argmax}~|v_j|$.\\
+  $\langle \bm{a}_j, \bm{v} \rangle = \lambda v_j$, angle stands for inner product, $\bm{a}_j$ is $j$-th row of $\bm{A}$. I.e.
   \begin{equation*}
     \begin{split}
     \lambda v_j &= \sum_{i=1}^n A_{ji} v_i = A_{jj}v_j +\sum_{i=1, i\ne j}^n A_{ji} v_i \\
@@ -209,7 +210,73 @@
     &\leq \sum_{i=1, i\ne j}^n |A_{ji}| = R_j
     \end{split}
   \end{equation*}
+
+  \item[\textit{Thm.}] $\bm{A}$ is strictly diagonally dominant $\Rightarrow \bm{A}$ is nonsingular.\\
+  \textit{Proof.~~} By (Gershgorin): if $\lambda$ is eigval, then exists $j$: $|\lambda - A_{jj}| \leq R_j$ \\
+  $\Rightarrow |A_{jj}| - |\lambda| \leq R_j \Rightarrow |\lambda|\geq |A_{jj}|-R_j > 0$.\\
+  $\bm{A}$ is singular iff $\lambda =0$, but any eigval has positive absolute value. $\square$
+
+  \item[$\cdot$] We can also examine sum of absolute values of entries on every column. $\bm{A}$ is strictly column diagonally dominant iff 
+  $$
+  |A_{jj}| > \sum_{k=1, k\ne j}^n |A_{kj}|
+  $$
+  \item[$\cdot$] $\bm{A}$ is (strictly) column diag dominant $\iff$ $\bm{A}^{\top}$ is (strictly) diag dominant. $\bm{A}$ being strictly column diag dominant $\Rightarrow$ nonsingular.
 \end{itemize}
+
+
+\section{Eigvals of Tridiagonal Matrix}
+\begin{itemize}
+  \item[$\cdot$] Symmetric $N\times N$ tridiagonal matrix:
+  $$\bm{B}_N:=
+  \begin{pmatrix}
+    2 & -1 & \cdots & 0 \\
+    -1 & \ddots & \ddots & \vdots \\
+    \vdots & \ddots & \ddots & -1 \\
+    0 & \cdots & -1 & 2 \\
+  \end{pmatrix}
+  $$
+  Has eigval
+  $$
+  \mu_j = 2 - 2 \cos\left(\frac{j\pi}{N+1}\right)
+  $$
+  Eigvec $\bm{v}_j$ with $i$-th entry:
+  $$
+  \bm{v}_j(i) = \sin\left(\frac{ij\pi}{N+1}\right)
+  $$
+  \textit{Proof.~~} By showing $\bm{B}_N \bm{v}_j = \mu_j \bm{v}_j$.
+  \item[$\cdot$] Any tridiagonal matrix
+  $$
+  \bm{T}=
+  \begin{pmatrix}
+    d & -a & \cdots & 0 \\
+    -a & \ddots & \ddots & \vdots \\
+    \vdots & \ddots & \ddots & -a \\
+    0 & \cdots & -a & d \\
+  \end{pmatrix}
+  $$
+  Has eigval $\lambda_j = d-2a+a\mu_j$, and same eigvec as $\bm{B}_N$.\\
+  \textit{Proof.~~} $\bm{T} = (d-2a)\bm{I}+a \bm{B}_N$, $\Rightarrow \bm{T}\bm{v}_j = (d-2a)\bm{v}_j + a \bm{B}_N \bm{v}_j = (d-2a+\mu_j) \bm{v}_j$. $\square$
+\end{itemize}
+
+
+
+\section{}
+\begin{itemize}
+  \item[$\cdot$] $\bm{v}$ is $n\times 1$,  $\bm{A}=\bm{v}\bm{v}^{\top}$ has rank 1. $\lambda_1=\bm{v}^{\top}\bm{v}$, $m_{\lambda_1}=1$. And $\lambda_2 =0$ with $m_{\lambda_2}=n-1$.\\
+  \textit{Proof.~~} Let $\lambda$ be a nonzero eigval of $\bm{A}$, with eigvec $\bm{u}$, then by $\bm{Au}=\lambda \bm{u}$:
+  $$
+  \bm{v}(\bm{v}^{\top}\bm{u}) = \lambda \bm{u} \Rightarrow \bm{u} = \frac{\bm{v}^{\top} \bm{u}}{\lambda}\bm{v} = c \bm{v}
+  $$
+  Hence $\bm{u}$ is a scaler multiple of $\bm{v}$. If $c\ne 0$:
+  $$
+  \bm{v}\bm{v}^{\top}c \bm{v} = \lambda c \bm{v} \Rightarrow c \bm{v}^{\top} \bm{v} = \lambda c
+  $$
+  So $\lambda_1=\bm{v}^{\top} \bm{v}$ is the only nonzero case. Otherwise $\bm{u}=\bm{0}$, $\lambda_2=0$. $\square$
+
+  \item[$\cdot$] If $\bm{A}$ is idempotent, i.e. $\bm{A}^2= \bm{A}$ $\Rightarrow\lambda=0$ or $1$.
+  \item[$\cdot$] If $\bm{A}$ is nilpotent, i.e. $\exists p$, s.t. $\bm{A}^p= \bm{O}$ $\Rightarrow \lambda=0$
+\end{itemize}
+
 %--------------------------------------------------------------------
 \fbox{
 	\parbox{\boxwidth}{
