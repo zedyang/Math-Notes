@@ -11,7 +11,7 @@
   \let\enddescription\endcompactdesc
   \pltopsep=\medskipamount
   \plitemsep=1pt
-  \plparsep=1pt
+  \plparsep=5pt
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
 
@@ -68,7 +68,7 @@
 \end{itemize}
 
 
-\section{Properties}
+\section{Symmetric and Orthogonal Matrix}
 \subsection{Basics}
 \begin{itemize}
 	\item[$\cdot$] Symmetric matrix: $\bm{A} = \bm{A}^{\top}$. Let $\bm{X}$ be an arbitrary matrix, $\bm{X}^{\top} \bm{X}$ and $(\bm{X}+\bm{X}^{\top})$ are symmetric.
@@ -101,6 +101,15 @@
 		\end{split}
 	\end{equation*}
 	Hence $\bm{Q}^{\top} \bm{Q}=\bm{I} \iff$ $\left\|\bm{q}_i\right\|=1$ for all $i$ and $\langle \bm{q}_j, \bm{q}_k \rangle=0$ for $k\ne j$. $\square$
+	\item[$\cdot$] Properties of $\bm{Q}$:
+	\begin{itemize}
+		\item[1.] If $\bm{Q}_1, \bm{Q}_2$ orthogonal matrices, same size $\Rightarrow \bm{Q}_1 \bm{Q}_2$ orthogonal.
+		\item[2.] $\bm{v}$ is $n\times 1$ vector, then $\left\|\bm{v}\right\| = \left\|\bm{Qv}\right\|$.
+		\item[3.] If $\lambda$ is eigval of $\bm{Q}$ $\Rightarrow |\lambda| = 1$.
+	\end{itemize}
+	\textit{Proof.~~} First prop: $\bm{Q}_1 \bm{Q}_2 (\bm{Q}_1 \bm{Q}_2)^{\top} = \bm{Q}_1 \bm{Q}_2 \bm{Q}_2^{\top} \bm{Q}_1^{\top} = \bm{I}$. \\
+	Second: $\langle \bm{Qv}, \bm{Qv} \rangle = (\bm{Qv})^{\top} \bm{Qv} = \bm{v}^{\top} \bm{Q}^{\top} \bm{Q}\bm{v} = \bm{v}^{\top} \bm{v} = \left\|\bm{v}\right\|^2$. \\
+	Third: by (2), $\left\|\bm{v}\right\| = \left\|\bm{Qv}\right\| = \left\|\lambda\bm{v} \right\| = |\lambda| \left\|\bm{v}\right\|$ $\Rightarrow |\lambda|=1$.
 \end{itemize}
 
 
@@ -119,6 +128,111 @@
 	\textit{Proof.~~} $\langle \bm{Av}_1, \bm{v}_2 \rangle = \langle \lambda_1 \bm{v}_1, \bm{v}_2 \rangle = \lambda_1 \langle \bm{v}_1, \bm{v}_2 \rangle$.\\
 	$\langle \bm{Av}_1, \bm{v}_2 \rangle = \langle \bm{v}_1, \bm{A}^{\top}\bm{v}_2 \rangle = \langle \bm{v}_1, \bm{A}\bm{v}_2 \rangle = \langle \bm{v}_1, \lambda_2\bm{v}_2 \rangle = \lambda_2 \langle \bm{v}_1, \bm{v}_2 \rangle$. \\
 	Hence $\lambda_2 \langle \bm{v}_1, \bm{v}_2 \rangle = \lambda_1 \langle \bm{v}_1, \bm{v}_2 \rangle$; $\lambda_1 \ne \lambda_2$ $\Rightarrow \bm{v}_1 \perp \bm{v}_2$. $\square$
+\end{itemize}
+\subsection{Diagonal Form}
+\begin{itemize}
+	\item[\textit{Thm.}] $\bm{A}$ is symmetric matrix, then $\bm{A}$ is diagonalizable, $\bm{A} = \bm{Q} \bm{\Lambda} \bm{Q}^{-1} $. Its eigvals are entries of $\bm{\Lambda}$, cols of $\bm{Q}$ are eigvecs, and $\bm{Q}$ is orthogonal.\\
+	So $\bm{Q}^{\top} = \bm{Q}^{-1}$, we can also write $\bm{A}=\bm{Q} \bm{\Lambda} \bm{Q}^{\top} $.\\
+	\textit{Proof.~~} $\bm{A}^{1\times 1}$ case is trivial. We wanna prove by induction. \\
+	Assume $\bm{A}_{n-1} = \bm{Q}_{n-1} \bm{\Lambda}_{n-1} \bm{Q}_{n-1}^{-1}$ with shape $n-1\times n-1$. \\
+	Now consider $\bm{A}^{n\times n}$. $(\lambda_1, \bm{v}_1)$ being an eigentuple of $\bm{A}$, pick $\left\|\bm{v}_1\right\|=1$. Construct $\bm{Q}_1=(\bm{v}_1, \bm{q}_2, ... ,\bm{q}_n)$ such that it is orthogonal. We have
+	\begin{equation*}
+		\begin{split}
+			\bm{Q}_1^{\top} \bm{A} \bm{Q}_1 &= 
+			\begin{pmatrix}
+				\bm{v}_1^{\top} \\
+				\bm{q}_2^{\top} \\
+				\vdots \\
+				\bm{q}_n^{\top}
+			\end{pmatrix}
+			\begin{pmatrix}
+				\bm{Av}_1 & \bm{Aq}_2 & \cdots & \bm{Aq}_n
+			\end{pmatrix}\\
+			&=
+			\begin{pmatrix}
+				\lambda_1 \bm{v}_1^{\top} \bm{v}_1 & \bm{v}_1^{\top} \bm{Aq}_2 & \cdots & \bm{v}_1^{\top} \bm{Aq}_n \\
+				\lambda_1 \bm{q}_2^{\top} \bm{v}_1 & \bm{q}_2^{\top} \bm{Aq}_2 & \cdots & \bm{q}_2^{\top} \bm{Aq}_n \\
+				\vdots & \vdots & \ddots & \vdots \\
+				\lambda_1 \bm{q}_n^{\top} \bm{v}_1 & \bm{q}_n^{\top} \bm{Aq}_2 & \cdots & \bm{q}_n^{\top} \bm{Aq}_n\\
+			\end{pmatrix}\\
+			&=\begin{pmatrix}
+				\lambda_1 & \bm{v}_1^{\top} \bm{Aq}_2 & \cdots & \bm{v}_1^{\top} \bm{Aq}_n \\
+				0 & \bm{q}_2^{\top} \bm{Aq}_2 & \cdots & \bm{q}_2^{\top} \bm{Aq}_n \\
+				\vdots & \vdots & \ddots & \vdots \\
+				0 & \bm{q}_n^{\top} \bm{Aq}_2 & \cdots & \bm{q}_n^{\top} \bm{Aq}_n\\
+			\end{pmatrix}\\
+		\end{split}
+	\end{equation*}
+	$\bm{Q}_1^{\top} \bm{AQ}_1$ is symmetric, so other entries on first row are also zeros. The southeast $n-1\times n-1$ block is $\bm{A}_{n-1}$, by assumption it can be written as $\bm{A}_{n-1}=\bm{Q}_{n-1} \bm{\Lambda}_{n-1} \bm{Q}_{n-1}^{-1}=\bm{Q}_{n-1} \bm{\Lambda}_{n-1} \bm{Q}_{n-1}^{t}$, $\bm{Q}_{n-1}$ orthogonal, $\Lambda_{n-1}$ diagonal. So
+	\begin{equation*}
+		\begin{split}
+			\bm{Q}_1^{\top} \bm{AQ}_1 &= 
+			\begin{pmatrix}
+				\lambda_1 & \bm{0}\\
+				\bm{0}^{\top} & \bm{Q}_{n-1} \bm{\Lambda}_{n-1} \bm{Q}_{n-1}^{t}\\
+			\end{pmatrix}\\
+			&=
+			\begin{pmatrix}
+				1 & \bm{0} \\
+				\bm{0}^{\top} & \bm{Q}_{n-1}\\
+			\end{pmatrix}
+			\begin{pmatrix}
+				\lambda_1 & \bm{0} \\
+				\bm{0}^{\top} & \bm{\Lambda}_{n-1}\\
+			\end{pmatrix}
+			\begin{pmatrix}
+				1 & \bm{0} \\
+				\bm{0}^{\top} & \bm{Q}_{n-1}^{\top}\\
+			\end{pmatrix}\\
+			&= \bm{Q}_n \bm{\Lambda}_n\bm{Q}_n^{\top}
+		\end{split}
+	\end{equation*}
+	$\Rightarrow$ $\bm{A}=\bm{Q}_1 \bm{Q}_n \bm{\Lambda}_n\bm{Q}_n^{\top} \bm{Q}_1^{\top} = (\bm{Q_1}\bm{Q}_n) \bm{\Lambda}_n (\bm{Q}_1 \bm{Q}_n)^{\top}$. Let $\bm{Q}:=\bm{Q}_1 \bm{Q}_n$, it's also orthogonal by prop 1. Hence $\bm{A}=\bm{Q} \bm{\Lambda}_n \bm{Q}^{\top}=\bm{Q} \bm{\Lambda}_n \bm{Q}^{-1} $.~~$\square$
+\end{itemize}
+
+
+\section{Symmetric Positive Definite Matrix}
+\begin{itemize}
+	\item[$\cdot$] $\bm{A}$ is symmetric positive definite (spd) iff
+	$$
+	\langle \bm{Ax}, \bm{x} \rangle = \bm{x}^{\top} \bm{A}\bm{x} > 0,~~\forall \bm{x} \in \mathbb{R}^n, \bm{x}\ne \bm{0}.
+	$$
+	This def (spd) is equivalent to
+	$$
+	\bm{x}^{\top} \bm{Ax} \geq 0,~~\forall \bm{x}\in \mathbb{R}^n\text{~~~and~~~} \bm{x}^{\top} \bm{Ax} = 0 \iff \bm{x}=0
+	$$
+	$\bm{A}$ is symmetric positive semidefinite (spsd) iff $\langle \bm{Ax}, \bm{x} \rangle\geq 0$, $\forall \bm{x}\in \mathbb{R}^n$. \\
+	$\bm{A}$ is symmetric \textit{negative} definite iff $\langle \bm{Ax},\bm{x} \rangle<0,~\forall x\in \mathbb{R}^n$. Iff $-\bm{A}$ is spd. \\
+	$\bm{A}$ is symmetric \textit{negative} semidefinite iff $-\bm{A}$ is spsd.
+
+	\item[$\cdot$] $\bm{M}^{\top} \bm{M}$ is spsd, it is spd iff $\bm{M}$ has full rank, i.e. nonsingular.\\
+	\textit{Proof.~~} $\langle \bm{M}^{\top} \bm{Mx}, \bm{x} \rangle = \langle \bm{Mx}, \bm{Mx} \rangle = \left\|\bm{Mx}\right\|^2 \geq 0$.\\
+	Moreover, $\left\|\bm{Mx}\right\|^2 = 0 \iff \bm{Mx}=0$. If $\bm{x}\ne 0$; $\bm{Mx}\ne 0 \iff \bm{M}$ has full rank, because $\bm{Mx}$ is just linear comb of cols of $\bm{M}$ with weights $\bm{x}$. $\square$
+	\item[\textit{Thm.}] Symmetic matrix $\bm{A}$ is spd $\iff$ all eigvals of it are \textbf{strictly} greater than 0. \\
+	It's spsd $\iff$ all eigvals are greater than or equal to 0. \\
+	\textit{Proof.~~} We show the spsd case. \\
+	($\Leftarrow$): By diagonal form of symmetric matrix: $\bm{A}=\bm{Q} \bm{\Lambda} \bm{Q}^{\top} $. \\
+	So $\bm{x}^{\top} \bm{Ax} = \bm{x}^{\top}\bm{Q} \bm{\Lambda} \bm{Q}^{\top} \bm{x} = \bm{y}^{\top} \bm{\Lambda}\bm{y}$, where $\bm{y}=\bm{Q}^{\top}\bm{x}$, i.e.
+	$$
+	\bm{x}^{\top} \bm{Ax} = \bm{y}^{\top} \bm{\Lambda}\bm{y}=\sum_{j=1}^n \lambda_j y_j^2 \geq 0,~~\forall \bm{y}\in \mathbb{R}^n, \bm{y}\ne \bm{0}.
+	$$
+	since all $\lambda_j \geq 0$. So $\bm{A}$ is spsd. \\
+	($\Rightarrow$): Suppose there is a $\lambda <0$, with eigvec $\bm{v}$. Then 
+	$$
+	\langle \bm{Av}, \bm{v}\rangle = \lambda \left\|\bm{v}\right\|^2 < 0
+	$$
+	contradicts the fact that $\bm{A}$ is spsd. Similar proof for strictly positive eigvals and spd case. $\square$
+
+	\item[$\cdot$] Spd matrix is nonsingular (due to nonzero eigvals). The inverse of spd matrix is also spd. (eigvals are $\frac{1}{\lambda}>0$.)
+
+	\item[$\cdot$] symmetric + strictly diagonally dominant + positive entries on main diag $\Rightarrow$ spd. \\
+	Symmetric + Weakly diagonally dominant + positive entries on main diag $\Rightarrow$ spsd. \\
+	\textit{Proof.~~} By (Gershgorin): $|\lambda - A_{jj}| \leq R_j$. $A_{jj}-\lambda \leq |A_{jj}-\lambda| \leq R_j$ \\
+	$\Rightarrow \lambda \geq A_{jj} - R_j$. If $\bm{A}$ is strictly diagdom with positive diag entries: $A_{jj}=|A_{jj}|>R_j$.\\
+	Hence $\lambda \geq |A_{jj}|-R_j >0$. All its eigvals are positive $\Rightarrow$ spd. $\square$
+
+	\item[\textit{Thm.}] (\textbf{Sylvester's Criterion}) A symmetric matrix is spd $\iff$ all its leading principal minors are positive. \\
+	It is spsd $\iff$ all its principal minors greater than or equal to 0.
 \end{itemize}
 
 \end{document}
