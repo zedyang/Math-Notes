@@ -1,0 +1,173 @@
+\documentclass[a4paper, 11pt]{article}   	
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in}	
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=5pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{booktabs}
+\usepackage{empheq}
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{Numerical Methods for Differential Equations, 2017 Spring.}
+
+\title{\textbf{Lecture 1}{}}
+\author{Zed}{}
+
+\begin{document}
+\maketitle
+
+\section{Euler Method}
+In this section we consider the numerical methods for solving the 1st order IVP $(\dag)$:
+$$
+\begin{cases}
+    y'=f(t,y(t)), t\in[0,T] \\
+    y(0)=y_0
+\end{cases}
+$$
+We specify a lattice $0 < t_1 < t_2 < ... < t_n = T$ with $t_{k+1}-t_k = h$, $t_n=nh$. Thus the integral form of the IVP is:
+$$
+y(t_{k+1})-y(t_{k}) = \int_{t_k}^{t_{k+1}} f(t, y(t))dt
+$$
+\begin{itemize}
+	\item[\textit{Thm.}] (\textbf{Existence and Uniqueness of Solution}) If $f(t,y(t))$ satisfies Lipschitz condition, i.e. 
+	$$
+	|f(t,y) - f(t,z)| \leq L|y-z|
+	$$
+	for $\forall y,z,t$, constant $L$; and $y(t)$ is continuous in $t$ $\Rightarrow$ $\exists~1$ solution for $(\dag)$.
+
+	\item[\textit{Def.}] (\textbf{Euler Method}): We define $y_0, y_1, ..., y_n$ as the approximations to the values of $y$ on the lattice, i.e. $y(0), y(t_1), ..., y(t_n)$. The \emph{Explicit} Euler Method is the iterative procedure using rectangle approximation of the integral to the RHS of the integral form:
+	$$
+	y_{k+1} - y_{k} = f(t_k, y_k) h
+	$$
+	And the \emph{Implicit} Euler Method use the right side of the rectangle:
+	$$
+	y_{k+1} - y_{k} = f(t_{k+1}, y_{k+1}) h
+	$$
+
+	\item[\textit{Def.}] \textbf{Convergence}: A method to solve $(\dag)$ is said to be convergent if for any ODE with Lipschitz $f$, $T>0$, it is true that
+	$$
+	\lim\limits_{h\rightarrow0} \max\limits_{k=0,1,...,\lfloor\frac{T}{h}\rfloor} |y_k^{[h]} - y(t_k)| = 0
+	$$
+	in which the superscript $[h]$ is to distinguish that the step size is $h$ when getting $\{y_k\}$. In the following text we just say $y_k$.
+
+	\item[\textit{Thm.}] The Euler Method is convergent.\\
+	\textit{Proof.~~} Define error $|e_k| := |y_k-y(t_k)|$, we are going to show $e_k \to 0$ as $h\to 0$. \\
+	Consider the Taylor expansion of $y(t_{k+1})$ at $y(t_k)$:
+	\begin{equation}
+		\begin{split}
+			y(t_{k+1}) &= y(t_k) + y'(t_k)(t_{k+1}-t_k) + \frac{1}{2}y''(\xi_k)(t_{k+1}-t_k)^2 \\
+					   &= y(t_k) + f(t_k, y(t_k))h + \frac{1}{2}y''(\xi_k)h^2
+		\end{split}
+	\end{equation}
+	And the Euler scheme:
+	\begin{equation}
+		y_{k+1} = y_{k} + f(t_k, y_k) h
+	\end{equation}
+	(2) - (1) $\Rightarrow$
+	\begin{equation}
+		\begin{split}
+			e_{k+1} &= e_k + h\left[f(t_k, y_k)-f(t_k, y(t_k))\right] - \frac{1}{2}y''(\xi_k)h^2 \\
+			|e_{k+1}| &\leq |e_k| + hL|e_k| + ch^2 \\
+			&\leq ch^2(1+...+(1+hL)^{k-1}) \\
+			&=ch^2\frac{(1+hL)^k-1}{hL} \\
+			&\leq \frac{ch}{L} (1+hL)^{\frac{T}{h}}\\
+			&\leq h\cdot \left(\frac{c}{L}e^{LT}\right) = O(h)~~~\blacksquare
+		\end{split}	
+	\end{equation}
+
+	\item[\textit{Ex.}] 
+	$$
+	\begin{cases}
+		y'=y^{1/3} \\
+		y(0)=0
+	\end{cases}
+	$$
+	The analytical solution is $y=(\frac{2}{3}t)^{3/2}$, but using explicit Euler one can only find $y\equiv0$ (which is another solution). The problem is that Lipschitz condition is not satisfied at $t=0$, so it has multiple solutions.
+
+	\item[\textit{Def.}] \textbf{Truncation Error}: For Explicit Euler, 
+	$$
+	R_k = \frac{y(t_{k+1})-y({t_k})}{h} - f(t_k, y(t_k))
+	$$
+	is the difference between the finite difference approx and the true value of $y'$ at $t_k$, it measures how much does the finite difference deviate from the ODE. 
+
+	\item[\textit{Def.}] A method is said to be of order $p$ if $|R_k|=O(h^p)$.
+\end{itemize}
+
+\section{Trapezoid Method}
+\begin{itemize}
+	\item[\textit{Def.}] \textbf{Trapezoid Method}: We can use trapezoid formula to approximate the value of integral
+	$$
+	y(t_{k+1})-y(t_{k}) = \int_{t_k}^{t_{k+1}} f(t, y(t))dt
+	$$
+	which is:
+	$$
+	y_{k+1} = y_k + \frac{1}{2}h\left[f(t_k, y_k)+f(t_{k+1}, y_{k+1})\right]
+	$$
+	\item[\textit{Thm.}] Trapezoid method is of order 2. \\
+	\textit{Proof.~~}
+	\begin{equation}
+		\begin{split}
+			R_k &= \frac{y(t_{k+1})-y({t_k})}{h} - \frac{1}{2}[f(t_k, y(t_k))+f(t_{k+1}, y(t_{k+1}))] \\
+			&= \frac{1}{h}\left[y'(t_k)h+\frac{1}{2}y''(t_k)h^2+\frac{1}{6}y'''(t_k)h^3+O(h^4)\right]- \frac{1}{2}[y'(t_k)+y'(t_{k+1})] \\
+			&=\left[y'(t_k)+\frac{1}{2}y''(t_k)h+\frac{1}{6}y'''(t_k)h^2+O(h^3)\right] - \frac{1}{2}\left[y'(t_k)+\left(y'(t_k)+y''(t_k)h+\frac{1}{2}y'''(t_k)h^2+O(h^3)\right)\right]\\
+			&=-\frac{1}{12}y'''(t_k)h^2 + O(h^3)\\
+			&=O(h^2)~~~\blacksquare
+		\end{split}
+	\end{equation}
+
+	\item[\textit{Thm.}] Trapezoid method is convergent. \\
+	\textit{Proof.~~}
+	$$
+	y_{k+1} = y_k + \frac{1}{2}h\left[f(t_k, y_k)+f(t_{k+1}, y_{k+1})\right]
+	$$
+	By definition of trunc error:
+	$$
+	y(t_{k+1}) = y(t_k) + \frac{1}{2}h\left[f(t_k, y(t_k))+f(t_{k+1}, y(t_{k+1}))\right] + hR_k
+	$$
+	The first equiation minus the second one:
+	\begin{equation}
+		\begin{split}
+			e_{k+1} &= e_k + \frac{h}{2}[f(t_k, y_k)-f(t_k, y(t_k))] + \frac{h}{2}[f(t_{k+1}, y_{k+1})-f(t_{k+1}, y(t_{k+1}))] + O(h^3) \\
+			|e_{k+1}| &\leq |e_k| + \frac{hL}{2}|e_k| + \frac{hL}{2}|e_{k+1}| + O(h^3)\\
+			&\leq \frac{1+\frac{hL}{2}}{1-\frac{hL}{2}}|e_k| + \frac{C}{1-\frac{hL}{2}}h^3\\
+			&\leq C(T)\cdot h^2 = O(h^2)
+		\end{split}
+	\end{equation}
+	Where $C(T)$ is a constant on $T$, $L$ is the constant in Lipschitz condition. $\blacksquare$
+
+\end{itemize}
+
+
+\section{Theta Method}
+We can generalize the trapezoid method to any linear combination of $k$ and $k+1$ sides:
+$$
+y_{k+1} = y_k + h(\theta f(t_k, y_k) + (1-\theta)f(t_{k+1}, y_{k+1}))
+$$
+Note that
+\begin{itemize}
+	\item[$\cdot$] $\theta=1$, Euler method, and it is the only emplicit method.
+	\item[$\cdot$] $\theta=0$, Implicit Euler.
+	\item[$\cdot$] $\theta=0.5$, Trapezoid.
+\end{itemize}
+
+\end{document}
