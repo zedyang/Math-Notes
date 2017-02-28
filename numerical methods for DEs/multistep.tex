@@ -31,7 +31,7 @@
 \lhead{Numerical Methods for Differential Equations, 2017 Spring.}
 \rhead{}
 
-\title{\textbf{Lecture 2}{}}
+\title{\textbf{Lecture 2}}
 \author{Zed}{}
 
 \begin{document}
@@ -178,9 +178,111 @@ $$
 		&= \sum_{k=0}^s a_k e^{kz}+ \sum_{k=0}^s b_k z e^{kz}
 	\end{split}
 \end{equation}
-Which is a powerful result:
+Which gives us
 $$
 P(z) = \sum_{m=0}^{\infty} c_m z^m = \sum_{k=0}^s a_k e^{kz}+ \sum_{k=0}^s b_k z e^{kz}
 $$
+Since $z$ in $P(z)$ has exactly the role of $h$ in $\psi(n,y)$. So the method is of order $p$ $\iff \psi(n,y) = O(h^{p+1})$ $\iff$ $P(z) = cz^{p+1} + h.o.t.$ (higher order terms) $(*)$.
 
+~\\
+Now let $\omega=e^z$. We have $\log \omega = \log(\omega -1+1) \sim \omega -1 $ as $\omega\to1$ as $z\to 0$. So $(*)$ $\iff$:
+$$
+P(z) = \sum_{k=0}^s a_k \omega^k - \log\omega \sum_{k=0}^s b_k \omega^k = c (\log \omega)^{p+1} + h.o.t. = c(\omega - 1)^{p+1} + h.o.t.
+$$
+By using the generating polynomial, we obtain a shortcut to see the order of the (truncation error) of the multistep methods.
+
+\begin{itemize}
+	\item[\textit{Def.}] \textbf{Characteristic Polynomial}: Define 
+	$$
+	P(\omega) := \sum_{k=0}^s a_k \omega^k - \log\omega \sum_{k=0}^s b_k \omega^k
+	$$
+	And further define $\rho(\omega):=\sum_{k=0}^s a_k \omega^k$ as the \emph{first characteristic polynomial}, $\sigma(\omega):=\sum_{k=0}^s b_k \omega^k$ as the \emph{second characteristic polynomial}. Then
+	$$
+	P(\omega) = \rho(\omega) - \sigma(\omega)\log \omega 
+	$$
+	\item[\textit{Thm.}] The multistep method is of order $p\geq 1$ $\iff$ $\exists c\ne 0$, such that as $\omega \to 1$,
+	$$
+	\rho(\omega) - \sigma(\omega) \log \omega = O\left((\omega-1)^{p-1}\right)
+	$$
+
+	\item[\textit{Ex.}] Check the $2^{nd}$ order multistep method:
+	$$
+	y_{n+2} = y_{n+1} + h \left[-\frac{1}{2}f(t_n, y_n)+\frac{3}{2}f(t_{n+1}, y_{n+1})\right]
+	$$
+	We have
+	$$
+	\rho(\omega) = \omega^2 - \omega;~~~\sigma(\omega) = \frac{3}{2}\omega - \frac{1}{2}
+	$$
+	So let $v:=\omega-1$
+	\begin{equation}
+		\begin{split}
+			\rho(\omega) - \sigma(\omega) \log \omega &= \omega^2 - \omega - \log \omega \left(\frac{3}{2}\omega - \frac{1}{2}\right) \\
+			&= v(v+1) - \left(v-\frac{v^2}{2}+\frac{v^3}{3}+O(v^4)\right) \left(\frac{3}{2}v + \frac{1}{2}\right) \\
+			&= v^2 + v -\frac{3}{2}v^2 - v + \frac{3}{4}v^3 + \frac{1}{2}v^2-\frac{1}{3}v^3 + O(v^4) \\
+			& = O(v^3)
+		\end{split}
+	\end{equation}
+	So by theorem, it is of order 2 indeed.
+
+	\item[\textit{Ex.}] Check the multistep method:
+	$$
+	y_{n+2} - 3y_{n+1} + 2y_n = h \left[\frac{13}{12}f(t_{n+2}, y_{n+2})-\frac{5}{3}f(t_{n+1}, y_{n+1})-\frac{5}{12}f(t_n, y_n)\right]
+	$$
+	We have
+	$$
+	\rho(\omega) = \omega^2 - 3\omega + 2;~~~\sigma(\omega) = \frac{13}{12}\omega^2 - \frac{5}{3}\omega - \frac{5}{12}
+	$$
+	By letting $v:=\omega-1$,
+	$$
+	\rho(\omega) - \sigma(\omega) \log \omega = O(v^3)
+	$$
+	So this method is also of order 2.
+\end{itemize}
+
+\section{Convergence of Multistep Methods}
+\begin{itemize}
+	\item[\textit{Def.}] \textbf{Consistency}: If a multistep method is at least of order 1, we call it \emph{consistent}. I.e. $\rho(\omega) - \sigma(\omega) \log \omega = O(v^p)$, $p\geq 2$.
+
+	\item[\textit{Cor.}] A method is consistant $\iff$ $c_0=0, c_1=0$, (recall that $c_0 := \sum_{k=0}^s a_k$, $c_m := \frac{1}{m!}\sum_{k=0}^s (a_k k^m - mb_k k^{m-1})$) $\iff$
+	\begin{equation}
+		\begin{split}
+			(a)~~~&\sum_{k=0}^s a_k = 0\\
+			(b)~~~&\sum_{k=0}^s (ka_k - b_k) = 0
+		\end{split}
+	\end{equation}
+	$\iff$ $\rho(1)=0$ and $\rho'(1)=\sigma(1)$. \\
+
+	\item[\textit{Ex.}] Consistency, by itself, does not guarantee convergence (a global characteristic). Consider using method
+	$$
+	y_{n+2} - 3y_{n+1} + 2y_n = h \left[\frac{13}{12}f(t_{n+2}, y_{n+2})-\frac{5}{3}f(t_{n+1}, y_{n+1})-\frac{5}{12}f(t_n, y_n)\right]
+	$$
+	to solve a naive IV problem: $y'=0, y(0)=1$. From our discussion above we know this method is of order 2, hence consistent. And the true solution of this ODE is just $y\equiv1$. 
+
+	~\\
+	The method degenerates to recursion $y_{n+2} - 3y_{n+1} + 2y_n=0$. If we start with $y_0=1$, then we get the correct solution. However, if we add a small disturbance to the initial data, i.e. $y_0=1+\epsilon$, $\epsilon$ is small, and may be caused by round-off error in computing (which is ubiquitous). We will have, by solving the linear recursion:
+	$$
+	y_n = C_1 + C_2 \cdot 2^n = 1-\epsilon + 2^n \epsilon
+	$$
+	which eventually blows up. And clearly this method does not converge for all ODEs.
+
+	\item[\textit{Def.}] \textbf{Stability}: A linear multistep ($s$-steps) method is said to be \emph{zero-stable}, if there exists constant $K$, s.t. for any two sequences $\{y_n\}$ and $\{\hat{y}_n\}$, generated with same method, but with different initial data: $\{y_0, y_1, ..., y_{s-1}\}$ and $\{\hat{y}_0, \hat{y}_1, ..., \hat{y}_{s-1}\}$, we have
+	$$
+	|y_n - \hat{y}_n| \leq K\cdot \max\limits_{0\leq j \leq s-1} \left(|y_j - \hat{y}_j|\right)
+	$$
+	for $t_n \leq T$ and $h\searrow 0$. Ususally $K$ depends on $T$ and not depends on $h$.
+
+	\item[\textit{Thm.}] A linear multistep method is zero-stable for any ODE $y'=f(y,t)$ where $f$ satisfies Lipschitz condition $\iff$ The first characteristic polynomial of this method $\rho(z)=\sum_{k=0}^s a_k z^k$ has all its zeros (roots) inside the closed unit disc (including the boundary). Moreover, if the zero lie \emph{on} the unit circle, it must be a simple root (has multiplicity 1). 
+
+	\textit{Proof.~~} $(\Rightarrow)$ We consider the naive IVP $y'=0$. The method degenerates to linear recursion
+	$$
+	\sum_{k=0}^s a_k y_{n+k} = 0
+	$$
+	which has general solution $y_n =\sum_{r} P_r(n)z_r^n$, where $z_r$ is root of $\rho(z)=0$, $P_r(n)$ is a polynomial whose degree equials $m(z_r)+1$, $m(z_r)$ is the multiplicity of $z_r$. It is clear that this problem has solution $y\equiv const$. Hence $y_n$ cannot be unbounded.
+
+	~\\
+	Under the other 2 scenarios (1) $|z_r|>1$ or (2) $|z_r|=1, P_r(n)$ is not constant; clearly $y_n$ unbounded. So the only possibilty is otherwise: $|z_r|<1$ or $|z_r|=1, P_r(n)\equiv c$ (has degree 0). $\blacksquare$ \\
+	$(\Leftarrow)$ is long, not so relevant to the numerical computing aspect. We just skip that.
+
+	\item[\textit{Thm.}] (\textbf{Convergence}) A multistep method is convergent $\iff$ It is consistent and zero-stable. Moreover, if the method is of order $p$, the global error is also of order $p$.
+\end{itemize}
 \end{document}
