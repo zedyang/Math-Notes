@@ -37,5 +37,26 @@
 \begin{document}
 \maketitle
 
+\section{General Formulation of Explicit 1-Step Method}
+We now write 1-step methods in a general form,
+$$
+y_{n+1} = y_n + h\Phi(t_n, y_n, h)~~~(\dag)
+$$
+\begin{itemize}
+	\item[\textit{Def.}] \textbf{Truncation Error}: We insert true values of the solution into the formulation above, and define the truncation error:
+	$$
+	T_n = \frac{y(t_{n+1})-y(t_n)}{h} - \Phi(t_n, y(t_n), h)
+	$$
+	\item[\textit{Def.}] \textbf{Consistency}: The numerical method $(\dag)$ is \emph{consistent} with $y'=f(t,y)$ if the truncation error goes to $0$ as $h\to 0$, i.e. $\lim\limits_{h\rightarrow0}T_n = 0$. 
+
+	\item[\textit{Cor.}] Let $\Phi(t_n, y(t_n), \cdot)$ continuous on $h$, then the definition of consistency is equivalent to
+	$$
+	\lim\limits_{h\rightarrow 0}\frac{y(t_{n}+h)-y(t_n)}{h} = \lim\limits_{h\rightarrow 0} \Phi(t_n, y(t_n), h)
+	$$
+	i.e. $y'(t_n) = \Phi(t_n, y(t_n), 0)$. Hence we have consistency $\iff$
+	$$
+	y'(t_n) = \Phi(t_n, y(t_n), 0) \iff f(t_n, y(t_n)) = \Phi(t_n, y(t_n), 0)
+	$$
+\end{itemize}
 
 \end{document}
