@@ -39,16 +39,17 @@
 
 \begin{document}
 \maketitle
+
 \section{Statistical Decision Theory}
 
 \subsection{Quantitative Dependent Variable}
-We want to firstly develop a general framework for supervised learning. We first consider quantitative output (label) $Y\in \mathbb{R}$ as a random variable. And $\bm{X}\in \mathbb{R}^p$ as a $p$-random column vector for input variables (features). 
+We want to firstly develop a general framework for supervised learning. We first consider quantitative output (label) $Y\in \mathbb{R}$ as a random variable. And $X\in \mathbb{R}^p$ as a $p$-random column vector for input variables (features). 
 ~\\
-We place ourselves in probability space $(\mathbb{R}^p\times \mathbb{R}, \mathcal{F}, \mathbb{P})$. The pair $(\bm{X}, Y)\in \mathbb{R}^p\times \mathbb{R}$ has joint distribution $p_{\bm{X},Y}(\bm{x},y)$, and we will also use similar notations for marginal and conditional distributions. Our goal is to find a function $\hat{Y}=f(\bm{X})$ to predict the value of $Y$ corresponding to given input. We proceed as follows.
+We place ourselves in probability space $(\mathbb{R}^p\times \mathbb{R}, \mathcal{F}, \mathbb{P})$. The pair $(X, Y)\in \mathbb{R}^p\times \mathbb{R}$ has joint distribution $p_{X,Y}(x,y)$, and we will also use similar notations for marginal and conditional distributions. Our goal is to find a function $\hat{Y}=f(X)$ to predict the value of $Y$ corresponding to given input. We proceed as follows.
 \begin{itemize}
 	\item[\textit{Def.}] \textbf{Loss Function}: $L(Y, \hat{Y})$ is constructed for penalizing errors in prediction. By far we choose a simple \emph{squared error loss}:
 	$$
-	L(Y,f(\bm{X})) = \left\|Y-f(\bm{X})\right\|_{\mathcal{L}^2} = (Y-f(\bm{X}))^2
+	L(Y,f(X)) = \left\|Y-f(X)\right\|_{\mathcal{L}^2} = (Y-f(X))^2
 	$$
 
 	\item[\textit{Def.}] \textbf{Expected Prediction Error (EPE)}: We seek to find a function $f$ that minimizes the expection of $L$ over the probability space we defined, which is:
@@ -58,53 +59,53 @@ We place ourselves in probability space $(\mathbb{R}^p\times \mathbb{R}, \mathca
 	If we use the squared error loss,
 	\begin{equation}
 		\begin{split}
-			EPE(f) & = \mathbb{E}\left[(Y-f(\bm{X}))^2\right] \\
-			& = \iint_{\mathbb{R}^p\times \mathbb{R}} (y-f(\bm{x}))^2 p_{\bm{X},Y}(\bm{x},y) dyd \bm{x}
+			EPE(f) & = \mathbb{E}\left[(Y-f(X))^2\right] \\
+			& = \iint_{\mathbb{R}^p\times \mathbb{R}} (y-f(x))^2 p_{X,Y}(x,y) dyd x
 		\end{split}
 	\end{equation}
 \end{itemize}
 We can split the joint distribution in (1) to conditional distribution times the marginal, and rewrite the integral as 
 \begin{equation}
 	\begin{split}
-		EPE(f) & = \iint_{\mathbb{R}^p\times \mathbb{R}} (y-f(\bm{x}))^2 p_{\bm{X},Y}(\bm{x},y) dy d \bm{x}\\
-		& = \int_{\bm{X}} p_{\bm{X}}(\bm{x}) \left(\int_Y (y-f(\bm{x}))^2 p_{Y|\bm{X}}(y|\bm{x}) dy\right) d \bm{x}\\
-		& = \mathbb{E}_{\bm{X}}\left[\mathbb{E}_{Y|\bm{X}}\left[(Y-f(\bm{X}))^2|\bm{X}=\bm{x}\right]\right]
+		EPE(f) & = \iint_{\mathbb{R}^p\times \mathbb{R}} (y-f(x))^2 p_{X,Y}(x,y) dy d x\\
+		& = \int_{X} p_{X}(x) \left(\int_Y (y-f(x))^2 p_{Y|X}(y|x) dy\right) d x\\
+		& = \mathbb{E}_{X}\left[\mathbb{E}_{Y|X}\left[(Y-f(X))^2|X=x\right]\right]
 	\end{split}
 \end{equation}
-And minimizing this expectation suffices to minimizing pointwise for any $\bm{x}$:
+And minimizing this expectation suffices to minimizing pointwise for any $x$:
 \begin{equation}
-	f(\bm{x}) = \argmin\limits_{\xi}\mathbb{E}_{Y|\bm{X}}\left[(Y-\xi)^2|\bm{X}=\bm{x}\right]
+	f(x) = \argmin\limits_{\xi}\mathbb{E}_{Y|X}\left[(Y-\xi)^2|X=x\right]
 \end{equation}
 Take FOC: 
 \begin{equation}
 	\begin{split}
-		\frac{\partial }{\partial \xi} \mathbb{E}_{Y|\bm{X}}\left[(Y-\xi)^2|\bm{X}=\bm{x}\right] &= \mathbb{E}_{Y|\bm{X}}\left[\frac{\partial }{\partial \xi}(Y-\xi)^2|\bm{X}=\bm{x}\right] = 0 \\
-		\Rightarrow f(\bm{x}) = \xi &= \mathbb{E}_{Y|\bm{X}}\left[Y|\bm{X}=\bm{x}\right]
+		\frac{\partial }{\partial \xi} \mathbb{E}_{Y|X}\left[(Y-\xi)^2|X=x\right] &= \mathbb{E}_{Y|X}\left[\frac{\partial }{\partial \xi}(Y-\xi)^2|X=x\right] = 0 \\
+		\Rightarrow f(x) = \xi &= \mathbb{E}_{Y|X}\left[Y|X=x\right]
 	\end{split}
 \end{equation}
-So the solution to pointwise minimization problem of EPE is $f(\bm{x})=\mathbb{E}_{Y|\bm{X}}\left[Y|\bm{X}=\bm{x}\right]$. Thus the best prediction of $Y$ at point $\bm{x}$ is the the conditional expectation of $Y$, when ths `best' is measured by square error. This is referred to as \emph{regression function}.
+So the solution to pointwise minimization problem of EPE is $f(x)=\mathbb{E}_{Y|X}\left[Y|X=x\right]$. Thus the best prediction of $Y$ at point $x$ is the the conditional expectation of $Y$, when ths `best' is measured by square error. This is referred to as \emph{regression function}.
 
 \begin{itemize}
 	\item[\textit{Ex.}] The \textbf{$k$-Nearest Neighbour} methods attempt to implement this recepie directly, with
 	$$
-	\hat{f}_{knn}(\bm{x}) = \frac{1}{k}\sum_{\bm{x}_j \in N_k(\bm{x})} y_j
+	\hat{f}_{knn}(x) = \frac{1}{k}\sum_{x_j \in N_k(x)} y_j
 	$$
-	Where $N_k(\bm{x})=\{\bm{x}_1, ..., \bm{x}_{k}; \left\|\bm{x}-\bm{x}_j\right\|\ \leq \left\|\bm{x}-\bm{z}\right\|\, j=1,2,...,k, \forall \bm{z}\notin N_k(\bm{x})\}$. It uses averaging to approximate expectation, and conditioning on 1 point is relaxed to conditioning on $N_k(\bm{x})$. It can be shown that with large training set of size $N$, $\hat{f}_{knn}(\bm{x})\to \mathbb{E}_{Y|\bm{X}}\left[Y|\bm{X}=\bm{x}\right]$ as $N,k\to \infty$ with $k/N \to 0$. However, the rate of convergence decrease when dimension $p$ increases.
+	Where $N_k(x)=\{x_1, ..., x_{k}; \left\|x-x_j\right\|\ \leq \left\|x-z\right\|\, j=1,2,...,k, \forall z\notin N_k(x)\}$. It uses averaging to approximate expectation, and conditioning on 1 point is relaxed to conditioning on $N_k(x)$. It can be shown that with large training set of size $N$, $\hat{f}_{knn}(x)\to \mathbb{E}_{Y|X}\left[Y|X=x\right]$ as $N,k\to \infty$ with $k/N \to 0$. However, the rate of convergence decrease when dimension $p$ increases.
 
-	\item[\textit{Ex.}] \textbf{OLS Linear Regression} asssumes the function is linear in $\bm{x}$, i.e.
+	\item[\textit{Ex.}] \textbf{OLS Linear Regression} asssumes the function is linear in $x$, i.e.
 	$$
-	\hat{f}_{ols}(\bm{x}) = \bm{x}^{\top} \beta 
+	\hat{f}_{ols}(x) = x^{\top} \beta 
 	$$
 	This is a model-based approach. We plug in this functional form into EPE:
 	\begin{equation}
-		EPE(\hat{f}_{ols}) = \mathbb{E}\left[(Y- \bm{X}^{\top}\beta )^2\right]
+		EPE(\hat{f}_{ols}) = \mathbb{E}\left[(Y- X^{\top}\beta )^2\right]
 	\end{equation}
 	Take FOC: 
 	\begin{equation}
 		\begin{split}
-			\frac{\partial }{\partial \beta} \mathbb{E}\left[(Y- \bm{X}^{\top}\beta )^2\right] &= \mathbb{E}\left[\frac{\partial }{\partial \beta}(Y- \bm{X}^{\top}\beta )^2\right] \\
-			&= \mathbb{E}\left[2 \bm{X}(Y- \bm{X}^{\top}\beta )\right] = 0\\
-			\Rightarrow \beta &= \mathbb{E}\left[\bm{X} \bm{X}^{\top}\right]^{-1} \mathbb{E}\left[\bm{X}Y \right]
+			\frac{\partial }{\partial \beta} \mathbb{E}\left[(Y- X^{\top}\beta )^2\right] &= \mathbb{E}\left[\frac{\partial }{\partial \beta}(Y- X^{\top}\beta )^2\right] \\
+			&= \mathbb{E}\left[2 X(Y- X^{\top}\beta )\right] = 0\\
+			\Rightarrow \beta &= \mathbb{E}\left[X X^{\top}\right]^{-1} \mathbb{E}\left[XY \right]
 		\end{split}
 	\end{equation}
 	And then by replacing the expection by averaging over the dataset we obtain the familiar OLS estimator solution.
@@ -112,47 +113,47 @@ So the solution to pointwise minimization problem of EPE is $f(\bm{x})=\mathbb{E
 
 We have seen that both KNN and the OLS end up approximating conditional expectations by averages, but they differ in terms of model assumptions.
 \begin{itemize}
-	\item[$\cdot$] $\hat{f}_{ols}(\bm{x})$ is assumed to be a globally linear function.
-	\item[$\cdot$] $\hat{f}_{knn}(\bm{x})$ is assumed to be a locally constant function. 
+	\item[$\cdot$] $\hat{f}_{ols}(x)$ is assumed to be a globally linear function.
+	\item[$\cdot$] $\hat{f}_{knn}(x)$ is assumed to be a locally constant function. 
 \end{itemize}
 
 \subsection{Categorical Dependent Variable}
-In this setting our dependent (random) varibale $G\in \{\mathcal{G}_1, \mathcal{G}_2, ...., \mathcal{G}_K\} =: \mathcal{G}$, i.e. it has $K$ types in total. $\hat{G}=\hat{G}(\bm{X})$ is the prediction. We can use a $K\times K$ matrix $\bm{L}$ to represent the loss, with $L_{kl}$ being the loss of classifying a $\mathcal{G}_k$ observation as $\mathcal{G}_l$. Usually we will use \emph{zero-one} loss function, which charges 1 unit for all misclassifications uniformly, i.e.
+In this setting our dependent (random) varibale $G\in \{\mathcal{G}_1, \mathcal{G}_2, ...., \mathcal{G}_K\} =: \mathcal{G}$, i.e. it has $K$ types in total. $\hat{G}=\hat{G}(X)$ is the prediction. We can use a $K\times K$ matrix $\bm{L}$ to represent the loss, with $L_{kl}$ being the loss of classifying a $\mathcal{G}_k$ observation as $\mathcal{G}_l$. Usually we will use \emph{zero-one} loss function, which charges 1 unit for all misclassifications uniformly, i.e.
 \begin{equation}
-	L(G, \hat{G}(\bm{X})) = 
+	L(G, \hat{G}(X)) = 
 	\begin{cases}
-	0 & G = \hat{G}(\bm{X}),\\
-	1 & G \ne \hat{G}(\bm{X})
+	0 & G = \hat{G}(X),\\
+	1 & G \ne \hat{G}(X)
 	\end{cases}
-	= \mathbbm{1}_{\{G \ne \hat{G}(\bm{X})\}}
+	= \mathbbm{1}_{\{G \ne \hat{G}(X)\}}
 \end{equation}
 We proceed in the same fashion
 \begin{equation}
 	\begin{split}
-		EPE(\hat{G}) &= \mathbb{E}\left[L(G, \hat{G}(\bm{X}))\right] \\
-		&= \int_X \left(\sum_{k=1}^K L(\mathcal{G}_k, \hat{G}(\bm{X})) \mathbb{P}\left(G=\mathcal{G}_k, \bm{X}=\bm{x}\right) \right)d \bm{x} \\
-		&= \int_X p_{\bm{X}}(\bm{x})\left(\sum_{k=1}^K L(\mathcal{G}_k, \hat{G}(\bm{X})) p_{G|\bm{X}}(\mathcal{G}_k|\bm{x}) \right)d \bm{x} \\
-		&= \mathbb{E}_X\left[\sum_{k=1}^K L(\mathcal{G}_k, \hat{G}(\bm{X})) p_{G|\bm{X}}(\mathcal{G}_k|\bm{x})\right]
+		EPE(\hat{G}) &= \mathbb{E}\left[L(G, \hat{G}(X))\right] \\
+		&= \int_X \left(\sum_{k=1}^K L(\mathcal{G}_k, \hat{G}(X)) \mathbb{P}\left(G=\mathcal{G}_k, X=x\right) \right)d x \\
+		&= \int_X p_{X}(x)\left(\sum_{k=1}^K L(\mathcal{G}_k, \hat{G}(X)) p_{G|X}(\mathcal{G}_k|x) \right)d x \\
+		&= \mathbb{E}_X\left[\sum_{k=1}^K L(\mathcal{G}_k, \hat{G}(X)) p_{G|X}(\mathcal{G}_k|x)\right]
 	\end{split}
 \end{equation}
-And again it suffices to minimize EPE pointwise w.r.t. $\bm{x}$,
+And again it suffices to minimize EPE pointwise w.r.t. $x$,
 \begin{equation}
 \begin{split}
-	\hat{G}(\bm{x}) &= \argmin\limits_{g \in \mathcal{G}} 	\sum_{k=1}^K L(\mathcal{G}_k, g) p_{G|\bm{X}}(\mathcal{G}_k|\bm{x}) \\
-	&= \argmin\limits_{g \in \mathcal{G}} 	\sum_{k=1}^K \mathbbm{1}_{\{g\ne\mathcal{G}_k\}} \mathbb{P}\left(G=\mathcal{G}_k|\bm{X}=\bm{x}\right)\\
-	&= \argmin\limits_{g \in \mathcal{G}} \left(1- \mathbb{P}\left(G=g|\bm{X}=\bm{x}\right)\right)
+	\hat{G}(x) &= \argmin\limits_{g \in \mathcal{G}} 	\sum_{k=1}^K L(\mathcal{G}_k, g) p_{G|X}(\mathcal{G}_k|x) \\
+	&= \argmin\limits_{g \in \mathcal{G}} 	\sum_{k=1}^K \mathbbm{1}_{\{g\ne\mathcal{G}_k\}} \mathbb{P}\left(G=\mathcal{G}_k|X=x\right)\\
+	&= \argmin\limits_{g \in \mathcal{G}} \left(1- \mathbb{P}\left(G=g|X=x\right)\right)
 \end{split}
 \end{equation}
-In another word, $\hat{G}(\bm{x})=\mathcal{G}_k$ $\iff$
+In another word, $\hat{G}(x)=\mathcal{G}_k$ $\iff$
 $$
-\mathcal{G}_k = \argmax\limits_{g \in \mathcal{G}} \mathbb{P}\left(G=g|\bm{X}=\bm{x}\right)~~~\iff
+\mathcal{G}_k = \argmax\limits_{g \in \mathcal{G}} \mathbb{P}\left(G=g|X=x\right)~~~\iff
 $$
 $$
-\mathbb{P}\left(G=\mathcal{G}_k|\bm{X}=\bm{x}\right) = \max\limits_{g \in \mathcal{G}} \mathbb{P}\left(G=g|\bm{X}=\bm{x}\right)
+\mathbb{P}\left(G=\mathcal{G}_k|X=x\right) = \max\limits_{g \in \mathcal{G}} \mathbb{P}\left(G=g|X=x\right)
 $$
-which says that, given $\bm{X}= \bm{x}$, $G=\mathcal{G}_k$ has the greatest conditional probability. This solution is known as \textbf{Bayes Classifier}. And the error rate is called the \emph{Bayes Rate}. If we know the generating distribution of dataset, the Bayes classifier decision boundary can be specifed exactly.
+which says that, given $X= x$, $G=\mathcal{G}_k$ has the greatest conditional probability. This solution is known as \textbf{Bayes Classifier}. And the error rate is called the \emph{Bayes Rate}. If we know the generating distribution of dataset, the Bayes classifier decision boundary can be specifed exactly.
 ~\\
-The dummy variable regression approach fits in this framework, and is just another way of representing the Bayes classifier. Because we use $\hat{Y}(\bm{X}) = \mathbb{E}\left[Y|\bm{X}\right] = \mathbb{P}\left(\mathcal{G}_1|\bm{X}\right)$ if $\mathcal{G}_1$ corresponds to $Y=1$.
+The dummy variable regression approach fits in this framework, and is just another way of representing the Bayes classifier. Because we use $\hat{Y}(X) = \mathbb{E}\left[Y|X\right] = \mathbb{P}\left(\mathcal{G}_1|X\right)$ if $\mathcal{G}_1$ corresponds to $Y=1$.
 
 
 
@@ -161,53 +162,53 @@ The dummy variable regression approach fits in this framework, and is just anoth
 
 
 
-\section{Local Methods in High Dimensions}
+\section{Bias-Variance Decomposition}
 The increase dimensionality $p$ cast shadow on our established intuition, that we could always approximate the conditional expectation with k-nearest neighbour averaging.
 ~\\
 \subsection{Curse of Dimensionality}
 \begin{itemize}
-	\item[$\cdot$] \textbf{Neighbourhood not-so-local}: Consider inputs $\bm{X}\sim \text{Uniform}([0,1]^p)$, uniformly distributed in $p$-dim hypercube. We want to use hypercubical neighbourhood to capture a fraction $r$ of all obs. The expected length of edge is $e(p) = r^{\frac{1}{p}}$, increases with $p$ exponentially. In high dimension, we need to look at a wide range on each input variable to capture a desirable fraction of data. Such neibourhood is not ``local'' any more.
+	\item[$\cdot$] \textbf{Neighbourhood not-so-local}: Consider inputs $X\sim \text{Uniform}([0,1]^p)$, uniformly distributed in $p$-dim hypercube. We want to use hypercubical neighbourhood to capture a fraction $r$ of all obs. The expected length of edge is $e(p) = r^{\frac{1}{p}}$, increases with $p$ exponentially. In high dimension, we need to look at a wide range on each input variable to capture a desirable fraction of data. Such neibourhood is not ``local'' any more.
 	\item[$\cdot$] \textbf{Sample close to boundary}: Each sample point becomes closer to boundary of the sample space. And the prediction is more difficult near the edges. 
 	\item[$\cdot$] \textbf{Sparsity of sample}: The sampling density is proportional to $N^{1/p}$. The number of obs required to form a desirably dense sample grows exponentially with dimensionality. Thus in high dimensions training samples \emph{sparsely} populate the input space.
 \end{itemize}
 
 \subsection{Bias-Variance Decomposition}
-We first reconsider the familiar definition in the context of statistical learning. Consider random variables $\bm{X}, Y$, $Y$ can be a \emph{deterministic function} of $\bm{X}$, say
+We reconsider some familiar definition in the context of statistical learning. Consider random variables $X, Y$, $Y$ can be a \emph{deterministic function} of $X$, say
 $$
-Y = f(\bm{X})
+Y = f(X)
 $$
-The \textbf{true} relationship between $\bm{X}$ and $Y$ can also be \emph{stochastic}, for example, in linear regression we have
+The \textbf{true} relationship between $X$ and $Y$ can also be \emph{stochastic}, for example, in linear regression we have
 $$
-Y = \bm{X}^{\top} \beta + \epsilon 
+Y = X^{\top} \beta + \epsilon 
 $$
 where $\epsilon$ is some kind of Gaussian random variable. 
 ~\\
-In the first setting, $f(\cdot)$ is a deterministic function, but \textbf{unknown}, i.e. we always estimate the function with $\hat{f}(\cdot)$, with the help of some kind of supervised learning algorithm, and a traing set $\mathcal{T}$ that contains the notion of randomness, because it is essentially a random sample of $(\bm{X}, Y)$, to which we have no complete control. 
+In the first setting, $f(\cdot)$ is a deterministic function, but \textbf{unknown}, i.e. we always estimate the function with $\hat{f}(\cdot)$, with the help of some kind of supervised learning algorithm, and a traing set $\mathcal{T}$ that contains the notion of randomness, because it is essentially a random sample of $(X, Y)$, to which we have no complete control. 
 
 ~\\
-Hence the estimation $\hat{f}(\cdot)$ relies on the random sample $\mathcal{T}$. At a given point $\bm{x}$, our estimator for $Y$ is $\hat{Y}(\bm{x}) = \hat{f}(\bm{x})$ is therefore also a random variable that relies on $\mathcal{T}$. When we take expectation of $\hat{Y}$, we are actually averaging over all possible training sets $\mathcal{T}$, which is the meaning of the notion 
+Hence the estimation $\hat{f}(\cdot)$ relies on the random sample $\mathcal{T}$. At a given point $x$, our estimator for $Y$ is $\hat{Y}(x) = \hat{f}(x)$ is therefore also a random variable that relies on $\mathcal{T}$. When we take expectation of $\hat{Y}$, we are actually averaging over all possible training sets $\mathcal{T}$, which is the meaning of the notion 
 $$
-\mathbb{E}_{\mathcal{T}}\left[\hat{f}(\bm{x})\right] = \int_{\text{all } \mathcal{T}} \hat{f}(\bm{x}) d\mathbb{P}
+\mathbb{E}_{\mathcal{T}}\left[\hat{f}(x)\right] = \int_{\text{all } \mathcal{T}} \hat{f}(x) d\mathbb{P}
 $$
 
 
 \begin{itemize}
-	\item[\textit{Def.}] \textbf{Bias (Supervised Learning)}: at a given point $\bm{x}$, the bias of an estimator $\hat{f}(\bm{x})$ of the deterministic \& true value $f(\bm{x})$ is
+	\item[\textit{Def.}] \textbf{Bias (Supervised Learning)}: at a given point $x$, the bias of an estimator $\hat{f}(x)$ of the deterministic \& true value $f(x)$ is
 	$$
-	\text{Bias}(\hat{f}(\bm{x}))=\mathbb{E}_{\mathcal{T}}\left[\hat{f}(\bm{x})\right] - f(\bm{x})
-	$$
-
-	\item[\textit{Def.}] \textbf{Variance (Supervised Learning)}: at a given point $\bm{x}$, the variance of a predictor $\hat{f}(\bm{x})$ of the  deterministic \& true value $f(\bm{x})$ is the centerred second moment wrt randomly sampled training set
-	$$
-	\mathrm{\mathbb{V}ar}_{\mathcal{T}}\left[\hat{f}(\bm{x})\right] = \mathbb{E}_{\mathcal{T}}\left[\left(\hat{f}(\bm{x})-\mathbb{E}_{\mathcal{T}}\left[\hat{f}(\bm{x})\right]\right)^2\right]
+	\text{Bias}(\hat{f}(x))=\mathbb{E}_{\mathcal{T}}\left[\hat{f}(x)\right] - f(x)
 	$$
 
-	\item[\textit{Def.}] \textbf{Mean Squared Error (MSE)}: deterministic model $Y = f(\bm{X})$, given point $\bm{x}$,
+	\item[\textit{Def.}] \textbf{Variance (Supervised Learning)}: at a given point $x$, the variance of a predictor $\hat{f}(x)$ of the  deterministic \& true value $f(x)$ is the centerred second moment wrt randomly sampled training set
 	$$
-	MSE(\hat{f}(\bm{x})) := \mathbb{E}_{\mathcal{T}}\left[\left(\hat{f}(\bm{x}) - f(\bm{x})\right)^2\right]
+	\mathrm{\mathbb{V}ar}_{\mathcal{T}}\left[\hat{f}(x)\right] = \mathbb{E}_{\mathcal{T}}\left[\left(\hat{f}(x)-\mathbb{E}_{\mathcal{T}}\left[\hat{f}(x)\right]\right)^2\right]
+	$$
+
+	\item[\textit{Def.}] \textbf{Mean Squared Error (MSE)}: deterministic model $Y = f(X)$, given point $x$,
+	$$
+	MSE(\hat{f}(x)) := \mathbb{E}_{\mathcal{T}}\left[\left(\hat{f}(x) - f(x)\right)^2\right]
 	$$
 \end{itemize}
-For simplicity we denote $\hat{Y}=\hat{Y}(\bm{x})$, $y=f(\bm{x})$ at a given $\bm{x}$, the first is a random varible, the second is deterministic. We have
+For simplicity we denote $\hat{Y}=\hat{Y}(x)$, $y=f(x)$ at a given $x$, the first is a random varible, the second is deterministic. We have
 \begin{equation}
 	\begin{split}
 		MSE(\hat{Y}) &= \mathbb{E}_{\mathcal{T}}\left[\left(\hat{Y} - y\right)^2\right] \\
@@ -222,6 +223,96 @@ Note that the second term is a constant wrt. expectation, the cross term is 0. H
 		&= \mathrm{\mathbb{V}ar}_{\mathcal{T}}[\hat{Y}] + \text{Bias}^2[\hat{Y}]
 	\end{split}
 \end{equation}
-which is called the bias-variance decomposition.
+which is called the bias-variance decomposition. Note that in this setting the mapping $f(\cdot)$ is deterministic, so given $x$; $y$ is also deterministic, the only factor of randomness is training set $\mathcal{T}$. Hence
+$$
+MSE(\hat{Y}) = \mathbb{E}_{\mathcal{T}}\left[\left(\hat{Y} - y\right)^2\right] = \mathbb{E}\left[\hat{Y} - y\right] = EPE(\hat{Y})
+$$ 
+
+~\\
+We now consider the second setting
+$$
+Y = X^{\top} \beta + \epsilon,~~~~\epsilon\sim \mathcal{N}(0, \sigma^2)
+$$
+Here upper cases $X,Y$ mean random varaible (scalar or vector). In the following text we use the bold notation $\bm{X}, \bm{y}$ to represent the matrix (training set). By OLS theory we have
+$$
+\hat{\beta} = (\bm{X}^{\top}\bm{X})^{-1} \bm{X}^{\top} \bm{y} = (\bm{X}^{\top}\bm{X})^{-1} \bm{X}^{\top} (\bm{X}\beta + \epsilon) = \beta + (\bm{X}^{\top}\bm{X})^{-1} \bm{X}^{\top} \epsilon
+$$
+So at a given point $\bm{x}_0$ (col vector, say $\bm{x}_0=\bm{0}$), $\hat{y}_0=\hat{f}(\bm{x}_0)=\bm{x}^{\top}_0\hat{\beta}=\bm{x}_0^{\top} \beta + \bm{x}_0^{\top}(\bm{X}^{\top}\bm{X})^{-1} \bm{X}^{\top}\epsilon$. Now the randomness comes from two sources: the sampling of trainging data $\bm{X}, \bm{y}$ and the noise $\epsilon$ within the mapping between $X,Y$, which affects the true value $y_0=\bm{x}_0^{\top}\beta+\epsilon$. 
+
+~\\
+Therefore, the expectation is splitted as $EPE(\hat{y}_0) = \mathbb{E}\left[(y_0-\hat{y}_0)^2\right] = \mathbb{E}_{\mathcal{T}}\left[\mathbb{E}_{y_0|x_0}\left[(y_0-\hat{y}_0)^2\right]\right]$. Since $\epsilon$ is independent to sampling $\mathcal{T}$, hence the expectation commutes: $\mathbb{E}_{\mathcal{T}}\mathbb{E}_{y_0|x_0} = \mathbb{E}_{y_0|x_0}\mathbb{E}_{\mathcal{T}}$. Further more, sampling $\mathcal{T}$ can be regarded as sampling $\bm{X}$ first, then obtain $\bm{y}=\bm{X}\beta+\bm{\epsilon}$. Hence moreover we have $\mathbb{E}_{\mathcal{T}}=\mathbb{E}_{\bm{X}}\mathbb{E}_{\bm{y}|\bm{X}}$.
+
+~\\
+Now we begin to deal with the $EPE(\hat{y}_0)$, we write
+\begin{equation}
+	\begin{split}
+		EPE(\hat{y}_0) & = \mathbb{E}_{\mathcal{T}}\left[\mathbb{E}_{y_0|x_0}\left[(y_0-\hat{y}_0)^2\right]\right] \\
+		& = \mathbb{E}_{\mathcal{T}}\left[\mathbb{E}_{y_0|x_0}\left[\left(y_0- \bm{x}_0^{\top}\beta + \bm{x}_0^{\top}\beta - \mathbb{E}_{\mathcal{T}}\hat{y}_0 + \mathbb{E}_{\mathcal{T}}\hat{y}_0 - \hat{y}_0\right)^2\right]\right] \\
+		& = \mathbb{E}_{\mathcal{T}}\left[\mathbb{E}_{y_0|x_0}\left[\left((y_0- \bm{x}_0^{\top}\beta) + (\bm{x}_0^{\top}\beta - \mathbb{E}_{\mathcal{T}}\hat{y}_0) + (\mathbb{E}_{\mathcal{T}}\hat{y}_0 - \hat{y}_0)\right)^2\right]\right] \\
+		& = \mathbb{E}_{\mathcal{T}}\left[\mathbb{E}_{y_0|x_0}\left[\left(U_1 + U_2 + U_3\right)^2\right]\right]~~~(*)
+	\end{split}
+\end{equation}
+We consider the properties of these three terms:
+\begin{itemize}
+	\item[$\cdot$] $U_1$: We note that $U_1=\epsilon$ has nothing to do with $\bm{X}, \bm{y}$, so $\mathbb{E}_{\mathcal{T}}\left[U_1\right] = U_1$. And $\mathbb{E}_{y_0|x_0}(\epsilon) = \mathbb{E}(\epsilon) = 0$.
+	\item[$\cdot$] $U_2$: The second factor $U_2$, by definition, is the Bias of $\hat{y}_0$ with respect to the deterministic part of $y_0$, i.e. $\bm{x}_0^{\top} \beta$. By econometrics theory, the OLS estimator $\hat{\beta}$ is unbiased, so we also expect $U_2=0$. Actually,
+	\begin{equation}
+		\begin{split}
+			\mathbb{E}_{\mathcal{T}}\left[\hat{y}_0\right] &= \mathbb{E}_{\mathcal{T}}\left[\bm{x}_0^{\top} \beta + \bm{x}_0^{\top}(\bm{X}^{\top}\bm{X})^{-1} \bm{X}^{\top}\epsilon\right] \\
+			&= \bm{x}_0^{\top} \beta + \mathbb{E}_{\bm{X}}\mathbb{E}_{\bm{y}|\bm{X}}\left[\bm{x}_0^{\top}(\bm{X}^{\top}\bm{X})^{-1} \bm{X}^{\top}\epsilon\right] \\
+			&= \bm{x}_0^{\top} \beta + \mathbb{E}_{\bm{X}}\left[\bm{x}_0^{\top}(\bm{X}^{\top}\bm{X})^{-1} \bm{X}^{\top}\cdot \mathbb{E}_{\bm{y}|\bm{X}}\left(\epsilon\right)\right] \\
+			&= \bm{x}_0^{\top} \beta
+		\end{split}
+	\end{equation}
+	Therefore $U_2=0$ indeed, and the estimator $\hat{y}_0$ is unbiased.
+	\item[$\cdot$] $U_3$: Clearly $\mathbb{E}_{\mathcal{T}}\left[U_3\right] = \mathbb{E}_{\mathcal{T}}\hat{y}_0-\mathbb{E}_{\mathcal{T}}\hat{y}_0=0$; and it has nothing to do with $\epsilon$, i.e. $\mathbb{E}_{y_0|x_0}\left[U_3\right] = U_3$.
+\end{itemize}
+Since $U_2=0$, the cross terms $2U_1U_2$ and $2U_2U_3$ are zero. And the third cross term $\mathbb{E}_{\mathcal{T}}\left[\mathbb{E}_{y_0|x_0}\left[2U_1U_3\right]\right] = \mathbb{E}_{\mathcal{T}}\left[2U_3\mathbb{E}_{y_0|x_0}\left[U_1\right]\right] = 0$, using the fact that $U_3$ can be taken out from inner expectation and that $\mathbb{E}_{y_0|x_0}\left[U_1\right] = 0$. 
+
+~\\
+Now we are almost done, only three squared terms (with $U_2^2 = 0$) remaining. We write
+\begin{equation}
+	\begin{split}
+		(*) &= \mathbb{E}_{y_0|x_0} U_1^2 + \mathbb{E}_{\mathcal{T}} U_2^2 + \mathbb{E}_{\mathcal{T}} U_3^2 = \mathrm{\mathbb{C}ov}_{y_0|x_0}\left[y_0\right] + \text{Bias}^2 (\hat{y}_0) + \mathrm{\mathbb{C}ov}_{\mathcal{T}}\left[\hat{y}_0\right] \\
+		&= \mathrm{\mathbb{C}ov}\left[\epsilon\right] + 0 + \mathrm{\mathbb{C}ov}_{\mathcal{T}}\left[\hat{y}_0\right] = \sigma^2 + \mathrm{\mathbb{C}ov}_{\mathcal{T}}\left[\hat{y}_0\right]
+	\end{split}
+\end{equation}
+Recall that $\hat{y}_0$ is unbiased to $\bm{x}_0^{\top}\beta$, hence
+\begin{equation}
+	\begin{split}
+		\mathrm{\mathbb{C}ov}_{\mathcal{T}}\left[\hat{y}_0\right] &= \mathbb{E}_{\mathcal{T}}\left[(\mathbb{E}_{\mathcal{T}}{\hat{y}_0}-\hat{y}_0)(\mathbb{E}_{\mathcal{T}}{\hat{y}_0}-\hat{y}_0)^{\top}\right] = \mathbb{E}_{\mathcal{T}}\left[(\bm{x}_0^{\top}\beta-\hat{y}_0)(\bm{x}_0^{\top}\beta-\hat{y}_0)^{\top}\right] \\
+		&= \mathbb{E}_{\mathcal{T}}\left[\bm{x}_0^{\top}(\bm{X}^{\top}\bm{X})^{-1} \bm{X}^{\top}\epsilon \epsilon^{\top} \bm{X}(\bm{X}^{\top}\bm{X})^{-1} \bm{x}_0\right] \\
+		& = \sigma^2\bm{x}_0^{\top} \mathbb{E}_{\bm{X}}\left[(\bm{X}^{\top}\bm{X})^{-1}\right] \bm{x}_0
+	\end{split}
+\end{equation}
+where $\sigma^2$ comes out because $\mathbb{E}_{\bm{y}|\bm{X}}(\epsilon \epsilon^{\top}) = \mathrm{\mathbb{V}ar}\left[\epsilon\right] = \sigma^2$, nothing to do with $\bm{X}$. Use a familiar technique in econometrics,
+$$
+\sigma^2\bm{x}_0^{\top} \mathbb{E}_{\bm{X}}\left[(\bm{X}^{\top}\bm{X})^{-1}\right] \bm{x}_0 = \frac{1}{N}\sigma^2\bm{x}_0^{\top} \mathbb{E}_{\bm{X}}\left[\left(\frac{\bm{X}^{\top}\bm{X}}{N}\right)^{-1}\right] \bm{x}_0
+$$
+when assuming the distribution that give rise to $\bm{X}, \bm{x}_0$ has mean 0, as $N\to \infty$, $\bm{X}^{\top}\bm{X}/N \to \mathrm{\mathbb{C}ov}\left[\bm{X}\right] = \mathrm{\mathbb{C}ov}\left[\bm{x}_0\right] =: \Sigma$, which is a $p\times p$ matrix. 
+\begin{equation}
+	\begin{split}
+		\mathbb{E}_{x_0}\lim\limits_{N\rightarrow\infty}\frac{1}{N}\sigma^2\bm{x}_0^{\top} \mathbb{E}_{\bm{X}}\left[\left(\frac{\bm{X}^{\top}\bm{X}}{N}\right)^{-1}\right] \bm{x}_0 & \approx \frac{1}{N}\sigma^2 \mathbb{E}_{\bm{x}_0}\left[\bm{x}_0^{\top}\Sigma^{-1}\bm{x}_0\right]  \\
+		&= \frac{1}{N}\sigma^2 \text{trace}\left(\Sigma^{-1}\mathbb{E}_{\bm{x}_0}\left[\bm{x}_0\bm{x}_0^{\top}\right]\right) \\
+		&= \frac{1}{N}\sigma^2 \text{trace}(\bm{I}_p) = \frac{p}{N} \sigma^2
+	\end{split}
+\end{equation}
+i.e.
+\begin{equation}
+	\mathbb{E}_{\bm{x}_0} EPE(\hat{y}_0) \approx \sigma^2 \left(1+\frac{p}{N}\right)
+\end{equation}
+Which indicates that the expectation (with respect to the fixed point we pick) of EPE grows \textbf{linearly} with $p$, as well as the variance of the estimator. This is a much better case, since we don't require the sample size $N$ to grow exponentially an when $N$ is large, the linear growth in variance is not a big deal. 
+
+~\\
+This is reason why we say that OLS method is relatively \emph{stable} compared with the 1-Nearest Neighbour case we discussed previously. When the true functional relation is linear, the bias is also small. But if the guess of linear structure is wrong, we will expect high bias. For example
+\begin{itemize}
+	\item[1.] $Y=X^{\top}\beta + \epsilon$, the linear model has no bias and small variance, and EPE slightly above $1\sigma^2$. In general settings it will dominate 1-Nearest Neighbour whose EPE is always above $2\sigma^2$. This ratio ($EPE_{1nn}/EPE_{ols}$) grows with the dimension.
+	\item[2.] $Y=\frac{1}{2}(X_1+1)^3$, the linear is biased this time, which moderates the ratio, but still increases with dimension. In low dimension, 1NN may dominates, and in high dimension, OLS dominates.
+	\item[3.] The case where linear assumption is seriously wrong, OLS bias is high, and 1-Nearest Neighbour may dominate OLS.
+\end{itemize}
+The moral of this example is that, by \emph{imposing some heavy restriction/structures} on the class of models being fitted, we can avoid the curse of dimensionality and reduce variance. But when the structure is wrong, bias term may dominates. There is always a trade-off between bias and variance.
+
+
+\section{Statistical Models}
 
 \end{document}
