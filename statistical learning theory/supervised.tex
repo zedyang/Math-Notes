@@ -313,6 +313,138 @@ This is reason why we say that OLS method is relatively \emph{stable} compared w
 The moral of this example is that, by \emph{imposing some heavy restriction/structures} on the class of models being fitted, we can avoid the curse of dimensionality and reduce variance. But when the structure is wrong, bias term may dominates. There is always a trade-off between bias and variance.
 
 
+
+
 \section{Statistical Models}
+\subsection{A Statistical Model for Joint Dist $p_{X,Y}$}
+For \emph{quantitative} output $Y$, suppose the true relation is
+$$
+Y = f(X) + \epsilon
+$$
+with $\mathbb{E}\left[\epsilon\right] =0$, independent of X. We take expectation conditional on $X$: $\mathbb{E}\left[Y|X=x\right]=f(x)$ (rely on the assumption that error has zero mean, and indep.) And the additive error model $\epsilon$ is a useful approximation, it indicates that pair $(X,Y)$ does not has deterministic relation, and there are other unmeasured variables that contributes to $Y$. The additive model assumes that we capture all of them via $\epsilon$.
+
+~\\
+For \emph{qualitative} output $G$, recall that we label an output as $\mathcal{G}_k$ if $\mathbb{P}\left(G=\mathcal{G}_k|X=x\right)$ is maximized. So we model the conditional probability $p_{G|X}(g|x)$ directly. 
+
+\subsection{Function Approximation} 
+We want to view the supervised learning problem as a function estimation problem. Usually we fit the function in a hypothesis space that contains a class of functions parametrized by $\theta$. We view the parametrized function $f_{\theta}(x)$ as a surface in the $p+1$ dimensional space $\mathbb{R}^p \times \mathbb{R}$. We observe noisy realizations $\mathcal{T}$, and find set of parameters such that the fitted surface gets as close to the observed points as possible, where close is measured by loss like residual sum of squres $RSS(\theta) = \sum_{i=1}^N (y_i - f_{\theta}(x_i))^2$, etc.
+
+~\\
+Another estimation method besides least square is the \textbf{Maximum Likelihood Estimation}. 
+\begin{itemize}
+	\item[\textit{Def.}] \textbf{Log Likelihood}: Given an i.i.d. random sample $y_i, i=1,2,...,N$ generated from a probability density $p_Y(y;\theta)$, parametrized by $\theta$. The log likelihood of the observed sample is
+	$$
+	L(\theta) = \sum_{i=1}^N \log p(y;\theta) = \log \left(\mathbb{P}\left(\bigcap_{i=1}^{N}\{Y_i = y_i\}; \theta\right)\right)
+	$$
+	This is exactly the log probability in which we see the sample $\{y_i\}$ conditional on the fact that the underlying density has parameter $\theta$.
+\end{itemize}
+The maximum likelihood principle goes that we should choose theta such that this conditional probability of obtaining the observed sample is maximized. 
+
+
+\begin{itemize}
+	\item[\textit{Ex}] Suppose the true model is error (white noise) additive with parameter $\theta$: $Y=f_{\theta}(X)+\epsilon$, then we obtain the conditional distribution of $Y$ on parameter and inputs: $Y|X; \theta \sim \mathcal{N}(f_{\theta}(X), \sigma^2)$
+	$$
+	\log\mathbb{P}\left(Y_i=y_i|X_i=x_i;\theta\right) = -\log\sqrt{2\pi} \sigma - \frac{(y_i - f_\theta(x_i))^2}{2\sigma^2}
+	$$
+	$$
+	L(\theta) = -N\log\sqrt{2\pi} \sigma  - \frac{1}{2\sigma^2}\sum_{i=1}^N(y_i - f_\theta(x_i))^2
+	$$
+
+	\item[\textit{Ex.}] In the qualitative case we fit, for every class $k$, the conditional probability $\mathbb{P}\left(G=\mathcal{G}_k|X=x\right) = p_{G|X}(\mathcal{G}_k|x)$. When this is parametrized by $\theta$ we write
+	$$
+	P_{k,\theta}(x) := \mathbb{P}\left(G=\mathcal{G}_k|X=x; \theta\right)
+	$$
+	And for an i.i.d. sample $\{g_i\}_{i=1}^N$, the log conditional probability of seeing it on $\theta$ and $\bm{X}$ is
+	\begin{equation}
+		\begin{split}
+			\log \left(\mathbb{P}\left(\bigcap_{i=1}^{N}\{G_i = g_i|X_i=x_i\}; \theta\right)\right) &= \log \prod_{i=1}^N \mathbb{P}\left(G_i=g_i|X_i=x_i;\theta\right) \\
+			&= \sum_{i=1}^N \log p_{g_i, \theta}(x_i)
+		\end{split}
+	\end{equation}
+	which is also referred to as the \emph{cross-entropy}.
+\end{itemize}
+
+
+
+
+\section{Structured Regression Models}
+There are infinitely many solutions of minimizing $RSS(\hat{f})=\sum_{i=1}^N (y_i-\hat{f}(x_i))^2$. And any particular one might perform poorly on test set. Hence we must restrict the eligible solutions to a smaller family of functions.
+
+~\\
+Most of these restrictions can be considered as \emph{complexity restrictions}. Which means that we assume the function to have regular behavior in small neighbourhoods of the input space. I.e. $\hat{f}$ exhibits special structure, like locally constant, linear or polynomial, for some $x$ that are sufficiently close to each other. 
+
+~\\
+The strength of the constraints is dictated by neighbourhood size, the larger the stronger. For example, locally constant on infinitesimally small neighbourhood is no constraint at all; but a global linear assumption is a strong one. Besides, some method directly specify the metric and size of neighbourhood, while others define these implicitly or adaptively. From previous discussion we know that all algorithms that attempts to produce functions in smally isotropic neighbourhoods will see problems in high dimensions; and those who overcome the dimensionality problems often have implicit or adaptive metrics for neighbourhood measures.
+
+~\\
+We now introduce some broad ideas of restrictions.
+\subsection{Roughness Penalty and Bayesian Methods} 
+A class of loss function is controlled by explicitly penalizing RSS with a term
+$$
+L(f;\lambda)_{PRSS} = RSS(f) + \lambda J(f)
+$$
+where \emph{functional} $J: \mathcal{F}(f)\to \mathbb{R}$ will be large for $f$ that vary too rapidly over the neighbourhood. For example
+$$
+L(f; \lambda)_{PRSS} = \sum_{i=1}^N \left\|y_i - f(x_i)\right\|_2 + \lambda \int (f''(x))^2 dx
+$$
+By choosing $\lambda$ we control the amount of penalty: $\lambda=0$ no penalty, $\lambda=\infty$ only allow linear functions.
+
+~\\
+The penalty function (regularization method) expresses our \emph{prior} belief that the class of funtion we seek exhibit a certain type of smooth behavior. In Bayesian framework, $J$ corresponds to a log-prior, $L(f;\lambda)$ is log-posterior distribution. 
+
+\subsection{Kernel Methods and Local Regression}
+These methods attempt to explicitly estimate functions by specifying the nature of local neighbourhood. A \emph{kernel function} $K_{\lambda}(x_0, x)$ assigns weights to point $x$ in a neighbourhood around $x_0$. For example, the Gaussian kernel
+$$
+K_{\lambda}(x_0, x) = \frac{1}{\lambda} \exp\left(-\frac{\left\|x-x_0\right\|^2}{2 \lambda}\right)
+$$ 
+the weights assigned to $x$ die exponentially with squared norm of distance from $x_0$. $\lambda$ corresponds to variance, and controls the size of neighbourhood. A simplest estimator is weighted average $\hat{f}(x_0) = \sum_{i=1}^N K_{\lambda}(x_0,x_i)y_i/\sum_{i=1}^N K_{\lambda}(x_0, x_i)$
+In general we define a local regression estimate with parameter $\theta$, we seek to choose $\hat{\theta}$ that minimizes
+$$
+RSS(f_{\theta}, x_0) = \sum_{i=1}^N K_{\lambda}(x_0, x_i) (y_i - f_{\theta}(x_i))^2
+$$
+Pick $f_{\theta}(x)=\theta_0$, the solution is the weighted average estimate. And KNN method can be thought of using kernel $K_k(x,x_0) = \mathbbm{1}_{\{\left\|x-x_0\right\|\leq \left\|x_{(k)}-x_0\right\|\}}$, where $x_{(k)}$ is the data with $k$-th rank in distance to $x_0$.
+
+\subsection{Basis Function and Dictionary Methods}
+Consider the model $f$ as a linear expansion of basis functions
+$$
+f_{\theta}(x) \sum_{m=1}^M \theta_m h_m(x)
+$$
+where each $h_m(\cdot)$ is a function of $x$ with no implicit parameters, say $x^2, \sin(x)$, etc. An example is polynomial spline basis functions, where ``spline'' refers to a piece of continuous function between two knots, and joined up we have a piecewise polynomial function with continuity of certain degree. Other examples are
+\begin{itemize}
+	\item[$\cdot$] \emph{Radial basis functions}, which are symmetirc p-dimensional kernels located at particular centroids. we have model $f_{\theta}(x)=\sum_{m=1}^M K_{\lambda_m}(\mu_m, x) \theta_m$.
+	\item[$\cdot$] \emph{Activation basis functions} are those we used in neural network, consider a sigmoid activation $\sigma(x)=\frac{1}{1+e^{-x}}$, and we model estimator as $f_{\theta}(x)=\sum_{m=1}^M \beta_m \sigma(\alpha^{\top}_m x+b_m)$.
+\end{itemize}
+When one has a set/dictionary $\mathcal{D}$ of candidate basis functions, and build model by employing some search algorithm to adaptively choose basis; this is often referred to as \emph{dictionary methods}.
+
+
+
+
+\section{Model Selection}
+All the structured models above includes some kind of \emph{smoothing} or \emph{complexity} hyperparameter to be manually determined,
+\begin{itemize}
+	\item[$\cdot$] Multiplier $\lambda$ of the penalty term in roughness penalty method.
+	\item[$\cdot$] The width of the kernel in the kernel method.
+	\item[$\cdot$] The number of basis functions in the dictionary method.
+\end{itemize}
+
+There are \emph{competing forces} that affects the predictive ability of our estimators. We use a KNN example to illustrate.
+\begin{itemize}
+	\item[\textit{Ex.}] At a test point $x_0$, our $k$-nearest neighbour fit is $\hat{f}_k(x_0)=\frac{1}{k}\sum_{l=1}^k y_{(l)}$, where $(x_{(l)},y_{(l)})$ is the sample point ranked $l$-th in distance to $\left\|x-x_0\right\|$. Suppose the true relation is $Y=f(X)+\epsilon$ with $\mathbb{E}\left[\epsilon\right]=0, \mathbb{E}\left[\epsilon^2\right]=\sigma^2$. For simplicity we assume no randomness in $\bm{X}$, i.e. the $x_i$ in training set $\mathcal{T}$ is fixed in advance. Hence $\hat{f}_k(x_0)=\frac{1}{k}\sum_{l=1}^k f(x_{(l)})+\epsilon_{(l)}$. $\mathbb{E}_{\mathcal{T}}\left[\hat{f}_k(x_0)\right]=\frac{1}{k}\sum_{l=1}^{k}f(x_{(l)})$; $\mathrm{\mathbb{V}ar}_{\mathcal{T}}\left[\hat{f}_k(x_0)\right]=\sigma^2/k$.
+
+	~\\
+	We calculate the expected prediction error at $x_0$:
+	\begin{equation}
+		\begin{split}
+			EPE(\hat{f}_k(x_0)) &= \mathbb{E}_{\mathcal{T}}\left[(Y(X)-\hat{f}_k(X))^2|X=x_0\right] = \mathbb{E}_{\mathcal{T}}\left[(\epsilon + f(x_0)-\hat{f}_k(x_0))^2\right]\\
+			&= \mathbb{E}_{\mathcal{T}}\left[\left(\epsilon + (f(x_0) -\mathbb{E}_{\mathcal{T}}\hat{f}_k(x_0))+(\mathbb{E}_{\mathcal{T}}\hat{f}_k(x_0)-\hat{f}_k(x_0))\right)^2\right]\\
+			&= \sigma^2 + \text{Bias}^2(\hat{f}_k(x_0)) + \mathrm{\mathbb{V}ar}_{\mathcal{T}}\left[\hat{f}_{k}(x_0)\right]~~~\text{(the cross terms die)}\\
+			&= \sigma^2  + \left(f(x_0)-\frac{1}{k}\sum_{l=1}^k f(x_{(l)})\right)^2 + \frac{\sigma^2}{k}
+		\end{split}
+	\end{equation}
+	\item[$\cdot$] The first term $\sigma^2$ is the variance of the new test case $y(x_0)$, and is due to $\epsilon$, because the relation is non-deterministic. This is call the \textit{irreducible error}.
+	\item[$\cdot$] The second term is the Bias of estimator, and is likely to increase with $k$, because large $k$ yields a wider neighbourhood, it is likely that new neighbours introduced are faraway from the true value of $f(x_0)$, so does the average.
+	\item[$\cdot$] The third term is the variance, clearly it is decreasing with $k$.
+	Therefore, as $k$ varies, there is a \textbf{Bias-Variance Trade Off}, as we have also seen in section 2. Generally, as the model complexity increases, the variance tends to increase and the bias reduced. For KNN the bias is controlled by $k$. Typically we want to trade these two off to minimize the test error as a whole. One must note that the \emph{training error} $\frac{1}{N}\sum_{i=1}^N (y_i-\hat{y}_i)$ cannot estimate test error, since it does not account for model complexity. Generally, training error always decreases with model complexity, i.e. whenever we fit the specific training data harder. And when the model adapts itself too much to the training set, it will not generalize well and have large \textbf{variance}, which we call as \textbf{overfit}. In other case when the model is not complex enough, it will have large \textbf{bias}, which we refer to as \textbf{underfit}.
+\end{itemize}
 
 \end{document}
