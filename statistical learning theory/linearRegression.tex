@@ -53,26 +53,72 @@ where $\beta=(\beta_0, \beta_1..., \beta_p)^{\top}$. $X=(1, X_1, ..., X_p)^{\top
 	$$
 	by the familiar method of moments, and get $\hat{\beta} = (\bm{X}^{\top} \bm{X})^{-1}\bm{X}^{\top} \bm{y}$;
 	~\\
+\end{itemize}
+the prediction for \emph{training set} is $\hat{\bm{y}}=\bm{X}(\bm{X}^{\top} \bm{X})^{-1}\bm{X}^{\top} \bm{y}$, which is, geometrically, an orthogonal projection of $\bm{y}$ onto the column space of $\bm{X}$, i.e. $\mathcal{C}(\bm{X})=\text{span}\{\text{Cols}(\bm{X})\}$. A few recap and highlights: 
+\begin{itemize}
+	\item[$\cdot$] (\emph{Orthogonal Projection}) $\hat{\bm{y}}$ is within $\mathcal{C}(X)$, since $\hat{y}=\bm{X}\hat{\beta}$, a linear combination of the columns of $\bm{X}$. The residual $\bm{y}-\hat{\bm{y}}$ is orthogonal to the subspace $\mathcal{C}(\bm{X})$, since $\bm{X}^{\top}(\bm{y}-\hat{\bm{y}}) = \bm{X}^{\top}(\bm{y}-\bm{X}(\bm{X}^{\top} \bm{X})^{-1}\bm{X}^{\top} \bm{y}) = 0$.
 
-	the prediction for \emph{training set} is $\hat{y}=\bm{X}(\bm{X}^{\top} \bm{X})^{-1}\bm{X}^{\top} \bm{y}$, which is, geometrically, an orthogonal projection of $\bm{y}$ onto the column space of $\bm{X}$, i.e. $\mathcal{C}(\bm{X})=\text{span}\{\text{Cols}(\bm{X})\}$. A few highlights: 
-	\item[$\cdot$] $\hat{y}$ is within $\mathcal{C}(X)$, since $\hat{y}=\bm{X}\hat{\beta}$, a linear combination of the columns of $\bm{X}$. The residual $\bm{y}-\hat{\bm{y}}$ is orthogonal to the subspace $\mathcal{C}(\bm{X})$, since $\bm{X}^{\top}(\bm{y}-\hat{\bm{y}}) = \bm{X}^{\top}(\bm{y}-\bm{X}(\bm{X}^{\top} \bm{X})^{-1}\bm{X}^{\top} \bm{y}) = 0$.
-	\item[$\cdot$] The matrix $\bm{H}_{\bm{X}} := \bm{X}(\bm{X}^{\top} \bm{X})^{-1}\bm{X}^{\top}$ is called the ``hat'' matrix, which maps a vector to its orthogonal projection on $\mathcal{C}(\bm{X})$. (idempotent, and maps columns of $\bm{X}$ to itself.)
-	\item[$\cdot$] When columns of $\bm{X}$ are linearly dependent, $\bm{X}^{\top} \bm{X}$ becomes singular, and $\hat{\beta}$ is not uniquely defined. But $\hat{\bm{y}}$ is still the orthogonal projection onto $\mathcal{C}(\bm{X})$, just with more than one way to do the projection.
+	\item[$\cdot$] (\emph{Orthogonal Complement}) Our sample $\bm{y} \in \mathbb{R}^N$, which can always be decomposed as $\mathbb{R}^N = V \oplus V^{\perp}$, where $V$ is a subspace, $V^{\perp}$ is the orthogonal complement of $V$. We already have the column space $\mathcal{C}(\bm{X})$, and we can show that $\mathcal{C}(\bm{X})^{\perp} = \mathcal{N}(\bm{X}^{\top})$, the null space of $\bm{X}^{\top}$, which has dimension $N-p-1$. \\
+	\textit{Proof.~~} Suppose $\bm{z} \in \mathcal{C}(\bm{X})^{\perp}$, then $\bm{z}^{\top} \bm{X}\beta =0$ for all linear combination parameter $\beta \ne 0$. Hence the only way is $\bm{z}^{\top} \bm{X} = \bm{0}$, i.e. $\bm{X}^{\top} \bm{z} = \bm{0}$. $\square$ \\
+
+	\item[$\cdot$] (\emph{Hat Matrix}) The matrix $\bm{H}_{\bm{X}} := \bm{X}(\bm{X}^{\top} \bm{X})^{-1}\bm{X}^{\top}$ is called the ``hat'' matrix, which maps a vector to its orthogonal projection on $\mathcal{C}(\bm{X})$. (symmetric, idempotent, and maps columns of $\bm{X}$ to itself.) A curious object is the trace of this matrix:
+	$$
+	\text{tr}(\bm{H}_{\bm{X}}) = \text{tr}(\bm{X}(\bm{X}^{\top} \bm{X})^{-1}\bm{X}^{\top}) = \text{tr}(\bm{I}_{p+1}) = p+1
+	$$
+
+	\item[$\cdot$] (\emph{Residual}) We are also interested in the error of the estimator \emph{within the training set}, i.e. define $\hat{\bm{u}}=\bm{y}-\hat{\bm{y}}$ as the residual term. It follows immediately that the residual sum of square $RSS= \hat{\bm{u}}^{\top} \hat{\bm{u}}$. And apply the hat matrix we see $\hat{\bm{u}}=(\bm{I}_N-\bm{H}_{\bm{X}})\bm{y}$. The object in between is also symmetric, idempotent, due to these property of $\bm{H}_{\bm{X}}$; consider
+	$$
+	(\bm{I}-\bm{H}_{\bm{X}})(\bm{I}-\bm{H}_{\bm{X}}) = \bm{I}-2 \bm{H}_{\bm{X}} + \bm{H}_{\bm{X}}
+	$$
+
+	\item[$\cdot$] (\emph{When $\bm{X}^{\top} \bm{X}$ is Singular}) When columns of $\bm{X}$ are linearly dependent, $\bm{X}^{\top} \bm{X}$ becomes singular, and $\hat{\beta}$ is not uniquely defined. But $\hat{\bm{y}}$ is still the orthogonal projection onto $\mathcal{C}(\bm{X})$, just with more than one way to do the projection.
 \end{itemize}
 
 ~\\
-To discuss statistical properties of $\hat{\beta}$, we assume that the linear model is the true model for the mean, i.e. the conditional expectation of $Y$ is $X\beta$, and that the devation of $Y$ from the mean is additive, distributed as $\epsilon \sim \mathcal{N}(0, \sigma^2)$. That is $Y=\mathbb{E}\left[Y\middle|X\right] + \epsilon = X\beta + \epsilon$. We further assume that the inputs $\bm{X}$ in the training set are fixed (non-random). 
+(\textbf{Linear Assumptions}) To discuss statistical properties of $\hat{\beta}$, we assume that the linear model is the true model for the mean, i.e. the conditional expectation of $Y$ is $X\beta$, and that the devation of $Y$ from the mean is additive, distributed as $\epsilon \sim \mathcal{N}(0, \sigma^2)$. That is 
+$$
+Y=\mathbb{E}\left[Y\middle|X\right] + \epsilon = X\beta + \epsilon
+$$
+We further assume that the inputs $\bm{X}$ in the training set are fixed (non-random). 
 
 Under these assumptions, a few other highlights on statistical properties of OLS estimator:
 \begin{itemize}
-	\item[$\cdot$] $\mathbb{E}(\hat{\beta}) = \mathbb{E}\left[(\bm{X}^{\top}\bm{X})^{-1} \bm{X}^{\top}(\bm{X}\beta + \epsilon)\right] = \beta$, i.e. it is an unbiased estimator.
-	\item[$\cdot$] $\mathrm{\mathbb{V}ar}(\hat{\beta}) = \mathbb{E}\left[(\bm{X}^{\top}\bm{X})^{-1} \bm{X}^{\top} \bm{\epsilon} \bm{\epsilon}^{\top}(\bm{X}^{\top} \bm{X})^{-1} \bm{X}\right] = \sigma^2 (\bm{X}^{\top} \bm{X})^{-1}$. That is, the estimator $\hat{\beta}\sim \mathcal{N}(\beta, \sigma^2(\bm{X}^{\top} \bm{X})^{-1})$
+	\item[$\cdot$] (\emph{Expectation of $\hat{\beta}$}) $\mathbb{E}(\hat{\beta}) = \mathbb{E}\left[(\bm{X}^{\top}\bm{X})^{-1} \bm{X}^{\top}(\bm{X}\beta + \epsilon)\right] = \beta$, i.e. it is an unbiased estimator.
+	\item[$\cdot$] (\emph{Variance of $\hat{\beta}$}) $\mathrm{\mathbb{V}ar}(\hat{\beta}) = \mathbb{E}\left[(\bm{X}^{\top}\bm{X})^{-1} \bm{X}^{\top} \bm{\epsilon} \bm{\epsilon}^{\top}(\bm{X}^{\top} \bm{X})^{-1} \bm{X}\right] = \sigma^2 (\bm{X}^{\top} \bm{X})^{-1}$. That is, the estimator $\hat{\beta}\sim \mathcal{N}(\beta, \sigma^2(\bm{X}^{\top} \bm{X})^{-1})$
+	\item[$\cdot$] (\emph{Residual Revisited}) With the assumption of the real model of $\bm{y}$, we can further write $\hat{\bm{u}}=(\bm{I}-\bm{H}_{\bm{X}})\bm{y} = (\bm{I}-\bm{H}_{\bm{X}})(\bm{X}\beta+\bm{\epsilon}) =(\bm{I}-\bm{H}_{\bm{X}}) \bm{\epsilon} $.
+	It is easy to see that $\mathbb{E}\left[\hat{\bm{u}}\right] = \mathbb{E}\left[\bm{X}(\beta-\hat{\beta})+\bm{\epsilon}\right] = 0$. And therefore
+	$$
+	\mathrm{\mathbb{V}ar}\left[\hat{\bm{u}}\right] = \mathbb{E}[\hat{\bm{u}}\hat{\bm{u}}^{\top}] = \mathbb{E}\left[(\bm{I}-\bm{H}_{\bm{X}}) \bm{\epsilon} \bm{\epsilon}^{\top}(\bm{I}-\bm{H}_{\bm{X}})\right] = \sigma^2 (\bm{I}-\bm{H}_{\bm{X}})
+	$$
+	So, although the errors $\bm{\epsilon}$ are i.i.d., residuals $\hat{\bm{u}}$ are correlated. 
+	\item[$\cdot$] (\emph{Individual Residual Term}) Pick any individual residual $\hat{u}_i$, $\mathrm{\mathbb{V}ar}\left[\hat{u}_i\right] = \sigma^2(1-h_i)$, where $h_i$ is the i-th diagonal entry of $\bm{H}_{\bm{X}}$. Furthermore $\mathrm{\mathbb{C}ov}\left[\hat{u}_i, \hat{u}_j\right] = \sigma^2 h_{ij}$, $i\ne j$, $h_{ij}$ is the row $i$, column $j$ entry in $\bm{H}_{\bm{X}}$.
 \end{itemize}
 
 ~\\
 An unbiased estimator of residual variance (square of residual standard error: $RSE^2$) is
 $$
-\hat{\sigma}^2 = \frac{RSS}{N-p-1}
+\hat{\sigma}^2 = \frac{RSS}{N-p-1} = \frac{\hat{\bm{u}}^{\top} \hat{\bm{u}}}{N-p-1}
 $$
+\begin{itemize}
+	\item[\textit{Prop.}] $\mathbb{E}(\hat{\sigma}^2) = \sigma^2$. \\
+	\textit{Proof.~~} 
+	\begin{equation}
+		\begin{split}
+			(N-p-1)\mathbb{E}(\hat{\sigma}^2) &= \mathbb{E}\left[\hat{\bm{u}}^{\top} \hat{\bm{u}}\right] = \mathbb{E}\left[\bm{y}^{\top} (\bm{I}-\bm{H}_{\bm{X}})^{\top}(\bm{I}-\bm{H}_{\bm{X}})\bm{y}\right] \\
+			&= \mathbb{E}\left[\bm{\epsilon}^{\top}(\bm{I}-\bm{H}_{\bm{X}})\bm{\epsilon}\right]
+		\end{split}
+	\end{equation}
+	While on the other hand, 
+	\begin{equation}
+		\begin{split}
+			\mathbb{E}\left[\hat{\bm{u}}^{\top} \hat{\bm{u}}\right] = \mathbb{E}\left[\sum_{i=1}^N \hat{u}_i^2\right] = \sum_{i=1}^N \mathrm{\mathbb{V}ar}\left[\hat{u}_i\right] = \sum_{i=1}^N \sigma^2(1-h_i)
+		\end{split}
+	\end{equation}
+	By the trace formula we have discussed, $\sum{h_i} = \text{tr}(\bm{H}_{\bm{X}}) = p+1$. Hence $(2)=\sigma^2(N-p-1)$. We conclude that 
+	$$
+	(N-p-1)\mathbb{E}(\hat{\sigma}^2) = \mathbb{E}\left[\bm{\epsilon}^{\top}(\bm{I}-\bm{H}_{\bm{X}})\bm{\epsilon}\right] = (N-p-1)\sigma^2~~~~~\square.
+	$$
+\end{itemize}
+
 
 \end{document}
