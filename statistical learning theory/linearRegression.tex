@@ -1,0 +1,78 @@
+\documentclass[a4paper, 11pt]{article}   	
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in}	
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=5pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm}
+\usepackage{bm}
+\usepackage{amsmath}
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\argmax}{argmax}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{booktabs}
+\usepackage{empheq}
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{Statistical Learning Theroy, 2017 Spring.}
+\rhead{}
+
+\title{\textbf{Linear Methods for Regression}}
+\author{Zed}{}
+
+\begin{document}
+\maketitle
+
+\section{Ordinary Least Squares}
+We write the linear regression model
+$$
+f(X) = \beta_0 + \sum_{j=1}^p X_j \beta_j = X^{\top} \beta
+$$
+where $\beta=(\beta_0, \beta_1..., \beta_p)^{\top}$. $X=(1, X_1, ..., X_p)^{\top}$ is a $p+1$ column vector, with the inputs $X_j$ being quantitative, factor variables ($X_j = \mathbbm{1}_{\{G=\mathcal{G}_j\}}$), transformation of quantitative (say $\sin X_j$, $\log X_j$), basis expansions ($X_2 = X_1^2, X_3 = X_1^3$, ...) or cross terms ($X_3 = X_2 X_1$). We have a quick review of the familiar OLS estimator before proceeding to new concepts and models. 
+
+\begin{itemize}
+	\item[\textit{Def.}] \textbf{Least Squares Estimator}: We choose sqaured error as loss function, and solve
+	$$
+	\hat{\beta} = \argmin\limits_{\beta} \sum_{i=1}^N (y_i - \bm{x}_i^{\top}\beta)^2 = \argmin\limits_{\beta} (\bm{y}-\bm{X}\beta)^{\top}(\bm{y}-\bm{X}\beta)
+	$$
+	by the familiar method of moments, and get $\hat{\beta} = (\bm{X}^{\top} \bm{X})^{-1}\bm{X}^{\top} \bm{y}$;
+	~\\
+
+	the prediction for \emph{training set} is $\hat{y}=\bm{X}(\bm{X}^{\top} \bm{X})^{-1}\bm{X}^{\top} \bm{y}$, which is, geometrically, an orthogonal projection of $\bm{y}$ onto the column space of $\bm{X}$, i.e. $\mathcal{C}(\bm{X})=\text{span}\{\text{Cols}(\bm{X})\}$. A few highlights: 
+	\item[$\cdot$] $\hat{y}$ is within $\mathcal{C}(X)$, since $\hat{y}=\bm{X}\hat{\beta}$, a linear combination of the columns of $\bm{X}$. The residual $\bm{y}-\hat{\bm{y}}$ is orthogonal to the subspace $\mathcal{C}(\bm{X})$, since $\bm{X}^{\top}(\bm{y}-\hat{\bm{y}}) = \bm{X}^{\top}(\bm{y}-\bm{X}(\bm{X}^{\top} \bm{X})^{-1}\bm{X}^{\top} \bm{y}) = 0$.
+	\item[$\cdot$] The matrix $\bm{H}_{\bm{X}} := \bm{X}(\bm{X}^{\top} \bm{X})^{-1}\bm{X}^{\top}$ is called the ``hat'' matrix, which maps a vector to its orthogonal projection on $\mathcal{C}(\bm{X})$. (idempotent, and maps columns of $\bm{X}$ to itself.)
+	\item[$\cdot$] When columns of $\bm{X}$ are linearly dependent, $\bm{X}^{\top} \bm{X}$ becomes singular, and $\hat{\beta}$ is not uniquely defined. But $\hat{\bm{y}}$ is still the orthogonal projection onto $\mathcal{C}(\bm{X})$, just with more than one way to do the projection.
+\end{itemize}
+
+~\\
+To discuss statistical properties of $\hat{\beta}$, we assume that the linear model is the true model for the mean, i.e. the conditional expectation of $Y$ is $X\beta$, and that the devation of $Y$ from the mean is additive, distributed as $\epsilon \sim \mathcal{N}(0, \sigma^2)$. That is $Y=\mathbb{E}\left[Y\middle|X\right] + \epsilon = X\beta + \epsilon$. We further assume that the inputs $\bm{X}$ in the training set are fixed (non-random). 
+
+Under these assumptions, a few other highlights on statistical properties of OLS estimator:
+\begin{itemize}
+	\item[$\cdot$] $\mathbb{E}(\hat{\beta}) = \mathbb{E}\left[(\bm{X}^{\top}\bm{X})^{-1} \bm{X}^{\top}(\bm{X}\beta + \epsilon)\right] = \beta$, i.e. it is an unbiased estimator.
+	\item[$\cdot$] $\mathrm{\mathbb{V}ar}(\hat{\beta}) = \mathbb{E}\left[(\bm{X}^{\top}\bm{X})^{-1} \bm{X}^{\top} \bm{\epsilon} \bm{\epsilon}^{\top}(\bm{X}^{\top} \bm{X})^{-1} \bm{X}\right] = \sigma^2 (\bm{X}^{\top} \bm{X})^{-1}$. That is, the estimator $\hat{\beta}\sim \mathcal{N}(\beta, \sigma^2(\bm{X}^{\top} \bm{X})^{-1})$
+\end{itemize}
+
+~\\
+An unbiased estimator of residual variance (square of residual standard error: $RSE^2$) is
+$$
+\hat{\sigma}^2 = \frac{RSS}{N-p-1}
+$$
+
+\end{document}
