@@ -175,5 +175,22 @@ Where the bigger model 1 has $p_1+1$ parameters, the smaller model 0 (correspond
 $$
 \beta_j \in (\hat{\beta}_j-z_{(1-\alpha)} \sqrt{v_j}\hat{\sigma}, \hat{\beta}_j+z_{(1-\alpha)} \sqrt{v_j}\hat{\sigma})
 $$
+\textit{Proof.~~} We know that $\hat{\beta}\sim \mathcal{N}(\beta, \sigma^2 (\bm{X}^{\top} \bm{X})^{-1})$, a multivariate normal. So isolating $\hat{\beta}_j$, we have $\hat{\beta}_j\sim \mathcal{N}(\beta_j, \sigma^2 v_j)$, where, as before, $v_j$ is the j-th diagonal element of the covariance matrix of $\hat{\beta}$. $\text{se}(\hat{\beta}_j)=\sigma \sqrt{v_j}$. And hence $\frac{\hat{\beta}_j-\beta_j}{\sigma \sqrt{v_j}}\sim \mathcal{N}(0,1)$.
+$$
+1- 2 \alpha = \mathbb{P}\left(\left|\frac{\hat{\beta}_j-\beta_j}{\sigma \sqrt{v_j}}\right|> z_{(1-\alpha)}\right) = \mathbb{P}\left(\hat{\beta}_j-z_{(1-\alpha)} \sqrt{v_j}\sigma<\beta_j<\hat{\beta}_j+z_{(1-\alpha)} \sqrt{v_j}\sigma\right)
+$$
+And substitute $\sigma$ with the estimate $\hat{\sigma}$, yields the result. $\square$
+
+~\\
+(\textbf{Confidence Region}) We also obtain a confidence set for the entire parameter vector $\beta$, 
+$$
+\beta \in C_{\beta} = \{(\hat{\beta}-\beta)^{\top}\bm{X}^{\top} \bm{X}(\hat{\beta}-\beta)\leq \hat{\sigma}^2 \chi^2_{p+1, (1-\alpha)}\}
+$$ 
+\textit{Proof.~~} We know $\hat{\beta}-\beta \sim \mathcal{N}(\bm{0}, \sigma^2 (\bm{X}^{\top} \bm{X})^{-1})$, by \emph{lemma} (Dist of quadratic form) part 1, 
+$(\hat{\beta}-\beta)^{\top} \frac{1}{\sigma^2}(\bm{X}^{\top} \bm{X}) (\hat{\beta}-\beta) \sim \chi^2(p+1)$. Hence
+$$
+1- \alpha = \mathbb{P}\left((\hat{\beta}-\beta)^{\top} \frac{1}{\sigma^2}(\bm{X}^{\top} \bm{X}) (\hat{\beta}-\beta) \leq \chi^2_{p+1, (1-\alpha)} \right) = \mathbb{P}\left((\hat{\beta}-\beta)^{\top} (\bm{X}^{\top} \bm{X}) (\hat{\beta}-\beta) \leq \sigma^2\chi^2_{p+1, (1-\alpha)} \right)
+$$
+And substitute $\sigma$ with the estimate $\hat{\sigma}$, yields the result. $\square$
 
 \end{document}
