@@ -45,7 +45,7 @@ $$
 f(X) = \beta_0 + \sum_{j=1}^p X_j \beta_j = X^{\top} \beta
 $$
 where $\beta=(\beta_0, \beta_1..., \beta_p)^{\top}$. $X=(1, X_1, ..., X_p)^{\top}$ is a $p+1$ column vector, with the inputs $X_j$ being quantitative, factor variables ($X_j = \mathbbm{1}_{\{G=\mathcal{G}_j\}}$), transformation of quantitative (say $\sin X_j$, $\log X_j$), basis expansions ($X_2 = X_1^2, X_3 = X_1^3$, ...) or cross terms ($X_3 = X_2 X_1$). We have a quick review of the familiar OLS estimator before proceeding to new concepts and models. 
-
+\subsection{Algebraic Properties}
 \begin{itemize}
 	\item[\textit{Def.}] \textbf{Least Squares Estimator}: We choose sqaured error as loss function, and solve
 	$$
@@ -56,7 +56,7 @@ where $\beta=(\beta_0, \beta_1..., \beta_p)^{\top}$. $X=(1, X_1, ..., X_p)^{\top
 \end{itemize}
 the prediction for \emph{training set} is $\hat{\bm{y}}=\bm{X}(\bm{X}^{\top} \bm{X})^{-1}\bm{X}^{\top} \bm{y}$, which is, geometrically, an orthogonal projection of $\bm{y}$ onto the column space of $\bm{X}$, i.e. $\mathcal{C}(\bm{X})=\text{span}\{\text{Cols}(\bm{X})\}$. A few recap and highlights: 
 \begin{itemize}
-	\item[$\cdot$] (\emph{Orthogonal Projection}) $\hat{\bm{y}}$ is within $\mathcal{C}(X)$, since $\hat{y}=\bm{X}\hat{\beta}$, a linear combination of the columns of $\bm{X}$. The residual $\bm{y}-\hat{\bm{y}}$ is orthogonal to the subspace $\mathcal{C}(\bm{X})$, since $\bm{X}^{\top}(\bm{y}-\hat{\bm{y}}) = \bm{X}^{\top}(\bm{y}-\bm{X}(\bm{X}^{\top} \bm{X})^{-1}\bm{X}^{\top} \bm{y}) = 0$.
+	\item[$\cdot$] (\emph{Orthogonal Projection}) $\hat{\bm{y}}$ is within $\mathcal{C}(\bm{X})$, since $\hat{y}=\bm{X}\hat{\beta}$, a linear combination of the columns of $\bm{X}$. The residual $\bm{y}-\hat{\bm{y}}$ is orthogonal to the subspace $\mathcal{C}(\bm{X})$, since $\bm{X}^{\top}(\bm{y}-\hat{\bm{y}}) = \bm{X}^{\top}(\bm{y}-\bm{X}(\bm{X}^{\top} \bm{X})^{-1}\bm{X}^{\top} \bm{y}) = 0$.
 
 	\item[$\cdot$] (\emph{Orthogonal Complement}) Our sample $\bm{y} \in \mathbb{R}^N$, which can always be decomposed as $\mathbb{R}^N = V \oplus V^{\perp}$, where $V$ is a subspace, $V^{\perp}$ is the orthogonal complement of $V$. We already have the column space $\mathcal{C}(\bm{X})$, and we can show that $\mathcal{C}(\bm{X})^{\perp} = \mathcal{N}(\bm{X}^{\top})$, the null space of $\bm{X}^{\top}$, which has dimension $N-p-1$. \\
 	\textit{Proof.~~} Suppose $\bm{z} \in \mathcal{C}(\bm{X})^{\perp}$, then $\bm{z}^{\top} \bm{X}\beta =0$ for all linear combination parameter $\beta \ne 0$. Hence the only way is $\bm{z}^{\top} \bm{X} = \bm{0}$, i.e. $\bm{X}^{\top} \bm{z} = \bm{0}$. $\square$ \\
@@ -74,7 +74,8 @@ the prediction for \emph{training set} is $\hat{\bm{y}}=\bm{X}(\bm{X}^{\top} \bm
 	\item[$\cdot$] (\emph{When $\bm{X}^{\top} \bm{X}$ is Singular}) When columns of $\bm{X}$ are linearly dependent, $\bm{X}^{\top} \bm{X}$ becomes singular, and $\hat{\beta}$ is not uniquely defined. But $\hat{\bm{y}}$ is still the orthogonal projection onto $\mathcal{C}(\bm{X})$, just with more than one way to do the projection.
 \end{itemize}
 
-~\\
+\subsection{Statistical Properties}
+
 (\textbf{Linear Assumptions}) To discuss statistical properties of $\hat{\beta}$, we assume that the linear model is the true model for the mean, i.e. the conditional expectation of $Y$ is $X\beta$, and that the devation of $Y$ from the mean is additive, distributed as $\epsilon \sim \mathcal{N}(0, \sigma^2)$. That is 
 $$
 Y=\mathbb{E}\left[Y\middle|X\right] + \epsilon = X\beta + \epsilon
@@ -100,15 +101,8 @@ $$
 \hat{\sigma}^2 = \frac{RSS}{N-p-1} = \frac{\hat{\bm{u}}^{\top} \hat{\bm{u}}}{N-p-1}
 $$
 \begin{itemize}
-	\item[\textit{Prop.}] $\mathbb{E}(\hat{\sigma}^2) = \sigma^2$. \\
-	\textit{Proof.~~} 
-	\begin{equation}
-		\begin{split}
-			(N-p-1)\mathbb{E}(\hat{\sigma}^2) &= \mathbb{E}\left[\hat{\bm{u}}^{\top} \hat{\bm{u}}\right] = \mathbb{E}\left[\bm{y}^{\top} (\bm{I}-\bm{H}_{\bm{X}})^{\top}(\bm{I}-\bm{H}_{\bm{X}})\bm{y}\right] \\
-			&= \mathbb{E}\left[\bm{\epsilon}^{\top}(\bm{I}-\bm{H}_{\bm{X}})\bm{\epsilon}\right]
-		\end{split}
-	\end{equation}
-	While on the other hand, 
+	\item[\textit{Prop.}] $\mathbb{E}(\hat{\sigma}^2) = \sigma^2$. We present two proofs. \\
+	\textit{Proof (1).~~} 
 	\begin{equation}
 		\begin{split}
 			\mathbb{E}\left[\hat{\bm{u}}^{\top} \hat{\bm{u}}\right] = \mathbb{E}\left[\sum_{i=1}^N \hat{u}_i^2\right] = \sum_{i=1}^N \mathrm{\mathbb{V}ar}\left[\hat{u}_i\right] = \sum_{i=1}^N \sigma^2(1-h_i)
@@ -118,7 +112,68 @@ $$
 	$$
 	(N-p-1)\mathbb{E}(\hat{\sigma}^2) = \mathbb{E}\left[\bm{\epsilon}^{\top}(\bm{I}-\bm{H}_{\bm{X}})\bm{\epsilon}\right] = (N-p-1)\sigma^2~~~~~\square.
 	$$
+	Before the second proof, we present a lemma.
+	\item[\textit{Lemma.}] (\textbf{Distribution of Quadratic Form})
+	\begin{itemize}
+		\item[$\cdot$] If an $n$-vector $\bm{x}$ is distributed as $\mathcal{N}(\bm{0}, \bm{\Sigma})$, then the quadratic form ${\bm{x}}^{\top} \bm{\Sigma}^{-1} {\bm{x}} \sim \chi^2(n)$.
+		\item[$\cdot$] If an $n$-vector $\bm{x}$ is standard multivariate normal: $\mathcal{N}(\bm{0}, \bm{I})$, and $\bm{H}_{\bm{Z}}$ is a projection matrix onto the column space of $\bm{Z}$, which has dimension $r$ (i.e. consider $\bm{Z}$ is a $n\times r$ matrix, and $\bm{Z}$ and $\bm{H}_{\bm{Z}}$ both have rank $r$); then the quadratic form $\bm{x}^{\top} \bm{H}_{\bm{Z}} \bm{x}\sim \chi^2(r)$.
+	\end{itemize}
+
+	\textit{Proof of lemma.~~} (\emph{First Part}) Since $\bm{\Sigma}$ is symmetric positive definite, we have \emph{Cholesky decomposition} $\bm{\Sigma} = \bm{Q}\bm{Q}^{\top}$, where $\bm{Q}$ is $n\times n$ lower triangular.
+	$$
+	\bm{x}^{\top} \bm{\Sigma}^{-1}\bm{x} = \bm{x}^{\top} \bm{Q}^{-\top}\bm{Q}^{-1}\bm{x} = (\bm{Q}^{-1}\bm{x})^{\top}(\bm{Q}^{-1}\bm{x}) = \bm{z}^{\top} \bm{z}
+	$$
+	in which we let $\bm{z}:=\bm{Q}^{-1}\bm{x}$. It is clear that $\mathbb{E}\left[\bm{z}\right] = \bm{Q}^{-1} \mathbb{E}\left[\bm{x}\right] = 0$. And 
+	$$
+	\mathrm{\mathbb{V}ar}\left[\bm{z}\right] = \mathbb{E}\left[\bm{\bm{Q}^{-1}\bm{x}}(\bm{Q}^{-1}\bm{x})^{\top}\right] = \bm{Q}^{-1} \mathbb{E}[\bm{x}\bm{x}^{\top}] \bm{Q}^{-\top} = \bm{Q}^{-1} \mathrm{\mathbb{V}ar}\left[\bm{x}\right] \bm{Q}^{-\top} = \bm{Q}^{-1} \bm{\Sigma} \bm{Q}^{-\top} = \bm{I}
+	$$
+	which indicates that $\bm{z}\sim \mathcal{N}(\bm{0}, \bm{I}_n)$ is an $n$-variate standard normal. It follows that $\bm{z}^{\top} \bm{z}\sim \chi^2(n)$. ~~~$\square$ \\
+	(\emph{Second Part}) 
+	$$
+	\bm{x}^{\top} \bm{H}_{\bm{Z}}\bm{x} = \bm{x}^{\top} \bm{Z}(\bm{Z}^{\top} \bm{Z})^{-1}\bm{Z}^{\top}\bm{x} = \bm{y}^{\top} \bm{\Omega}^{-1}\bm{y}
+	$$
+	in which we let $\bm{y}:=\bm{Z}^{\top} \bm{x}$ (an $r\times 1$ vector), and $\bm{\Omega}:=\bm{Z}^{\top} \bm{Z}$ (an $r\times r$ matrix). This is exactly the form in part 1. And the linear transform of $n$-variate normal: $\bm{Z}^{\top} \bm{x}$ is distributed as $r$-variate normal $\mathcal{N}(\bm{0}, \bm{Z}^{\top} \bm{Z})$. By the result of part 1 $\Rightarrow \bm{x}^{\top} \bm{H}_{\bm{Z}}\bm{x} \sim \chi^2(r)$. $\square$
+
+
+	\textit{Proof (2).~~}
+	\begin{equation}
+		\begin{split}
+			(N-p-1)\hat{\sigma}^2 &= \hat{\bm{u}}^{\top} \hat{\bm{u}} = \bm{y}^{\top} (\bm{I}-\bm{H}_{\bm{X}})^{\top}(\bm{I}-\bm{H}_{\bm{X}})\bm{y} \\
+			&= \bm{\epsilon}^{\top}(\bm{I}-\bm{H}_{\bm{X}})\bm{\epsilon} = \bm{\epsilon}^{\top} \bm{H}_{\bm{Z}} \bm{\epsilon}
+		\end{split}
+	\end{equation}
+	in which we let $\bm{H}_{\bm{Z}}:= \bm{I}-\bm{H}_{\bm{X}}$. By previous result, this is also symmetric, idempotent, and projects any vector to the null space of $\bm{X}^{\top}$, the orthogonal complement of $\mathcal{C}(\bm{X})$. We can always compose a matrix $\bm{Z}$ whose columns are the general solutions of $\bm{X}^{\top} \bm{z} = 0$. Clearly it has $N-p-1$ columns, since the orthogonal complement has dimension $N-p-1$. Hence $\bm{H}_{\bm{Z}}$ has $(N-p-1)$ rank. Morever, $\bm{\epsilon}^{\top} \bm{H}_{\bm{Z}} \bm{\epsilon} = \bm{\epsilon}^{\top}\bm{Z}(\bm{Z}^{\top} \bm{Z})^{-1}\bm{Z}^{\top} \bm{\epsilon}$, and $\bm{Z}^{\top} \bm{Z}$ is of $(N-p-1)\times(N-p-1)$. By lemma, and multiply a normalization factor $\Rightarrow$ $\bm{Z}^{\top} \bm{\epsilon}/\sigma \sim \mathcal{N}(\bm{0}, (\bm{Z}^{\top} \bm{Z}))$, $\frac{1}{\sigma^2}\bm{\epsilon}^{\top} \bm{H}_{\bm{Z}} \bm{\epsilon} \sim \chi^2(N-p-1)$. So:
+	$$
+		\mathbb{E}\left[\bm{\epsilon}^{\top} \bm{H}_{\bm{Z}} \bm{\epsilon}\right] = \sigma^2(N-p-1)~~~~\square
+	$$
+	Proof (2) gives us a stronger result:
+	\item[\textit{Prop.}] (\emph{Distribution of Sample Estimator of Variance}) The residual sum of square is Chi squared distributed with degree of freedom $(N-p-1)$.
+	$$
+	(N-p-1)\hat{\sigma}^2 = RSS \sim \sigma^2 \chi^2(N-p-1)
+	$$
+	In addition, $\hat{\beta}$ and $\hat{\sigma}$ are independent.
 \end{itemize}
 
+\subsection{Hypothesis Tests}
+(\textbf{t Statistic}) The $t(n)$ distribution is defined as $t(n)\sim \frac{\mathcal{N}(0,1)}{\sqrt{\chi^2(n)/n}}$. To test hypothesis that a particular coefficient $\beta_j=0$, we formulate the statistic
+$$
+t_j = \frac{\hat{\beta}_j/\mathrm{se}(\hat{\beta_j})}{\sqrt{(N-p-1)\hat{\sigma}^2/(N-p-1)\sigma^2}} = \frac{\hat{\beta}_j}{\hat{\sigma} \cdot \mathrm{se}(\hat{\beta}_j)/\sigma} = \frac{\hat{\beta}_j}{\hat{\sigma} \sqrt{v_j}}
+$$
+where $\hat{\sigma}=\sqrt{RSS/(N-p-1)}$, $\sqrt{v_j}$ is the $j$-th diagonal element of $(\bm{X}^{\top} \bm{X})^{-1}$. And we know that $\hat{\beta}_j/\mathrm{se}(\hat{\beta_j})\sim \mathcal{N}(\beta_j/\mathrm{se}(\hat{\beta_j}),1)$ and that $\sqrt{(N-p-1)\hat{\sigma}^2/(N-p-1)\sigma^2}\sim \sqrt{\chi^2_{N-p-1}/(N-p-1)}$. Under the null hypothesis $\beta_j=0$, $\hat{\beta}_j/\mathrm{se}(\hat{\beta_j})\sim \mathcal{N}(0,1)$. We have $t_j \sim t(N-p-1)$. 
+~\\ 
+If we know $\sigma$ before hand, we just use it instead of $\hat{\sigma}$. And $t_j$ reduces to $\hat{\beta}_j/\mathrm{se}(\hat{\beta_j})\sim \mathcal{N}(0,1)$. Where $\mathrm{se}(\hat{\beta_j}) = \sigma \sqrt{v_j}$.
+
+~\\
+(\textbf{F Statistic}) The $\mathcal{F}(n_1, n_2)$ distribution is defined as $\mathcal{F}(n_1, n_2)\sim \frac{\chi^2(n_1)/n_1}{\chi^2(n_2)/n_2}$. To test hypothesis that $k$ coefficients $\beta_{[1]}=...=\beta_{[k]}=0$ simultaneously, we formulate the statistic
+$$
+F = \frac{(RSS_0 - RSS_1)/p_1-p_0}{RSS_1/(N-p_1-1)}
+$$
+Where the bigger model 1 has $p_1+1$ parameters, the smaller model 0 (corresponds to null hypothesis $H_0$) has $p_0+1$ parameters, $p_1-p_0=k$. We have $F\sim \mathcal{F}(p_1-p_0, N-p_1-1)$ under the null hypothesis.
+
+~\\
+(\textbf{Confidence Interval}) We can isolate $\beta_j$ to form a $1-2\alpha$ confidence interval
+$$
+\beta_j \in (\hat{\beta}_j-z_{(1-\alpha)} \sqrt{v_j}\hat{\sigma}, \hat{\beta}_j+z_{(1-\alpha)} \sqrt{v_j}\hat{\sigma})
+$$
 
 \end{document}
