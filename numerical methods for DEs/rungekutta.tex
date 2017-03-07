@@ -32,7 +32,7 @@
 \rhead{}
 
 \title{\textbf{Lecture 3}}
-\author{Zed}{}
+\author{Zed}
 
 \begin{document}
 \maketitle
@@ -57,6 +57,143 @@ $$
 	$$
 	y'(t_n) = \Phi(t_n, y(t_n), 0) \iff f(t_n, y(t_n)) = \Phi(t_n, y(t_n), 0)
 	$$
+
+	\item[\textit{Thm.}] (\textbf{Convergence and Zero-Stability}) If the following conditions holds
+	\begin{itemize}
+		\item[1.] $f(t,y)$ is Lipschitz in $y$, continuous in $t$.
+		\item[2.] $\Phi(t,y,h)$ is continuous in $t$, Lipschitz in $y$ in the same region as for the Lipschitz condition of $f(t,y)$, such that
+		$$
+		|\Phi(x,y,h)-\Phi(x,z,h)| \leq L_{\Phi} |y-z|
+		$$
+		\item[3.] $\Phi(\cdot, \cdot, h)$ is uniformly continuous in $h$, $\forall$ $h\in [0,h_0]$.
+	\end{itemize}
+	Then the numerical solution is zero-stable (zero-stability), and it converges to the real solution. (convergence) \\
+	\textit{Proof.~~} We still use the similar trick as in the euler method's proof. I.e. write the numerical method in discrete terms and also in the exact values
+	$$
+	y_{n+1} = y_n + h\Phi(t_n, y_n, h)~~~~(*)
+	$$
+	$$
+	y(t_{n+1}) = y(t_n) + h\Phi(t_n, y(t_n), h) + hT_n~~~~(**)
+	$$
+	the second equation minus the first one, and let $e_n:=y_{n}-y(t_n)$, $T_n$ be the truncation error
+	\begin{equation}
+		\begin{split}
+			e_{n+1} &= e_n + h\left[\Phi(t_n,y_n,h) - \Phi(t_n,y(t_n),h)\right] - hT_n\\
+			|e_{n+1}| &\leq |e_n| + hL_{\Phi}|e_n| + hT_n \\
+			&\leq (1+hL_{\Phi}) |e_n| + hT~~~\text{(with $T=\max\limits_{n} T_n$)}
+		\end{split}
+	\end{equation}
+	Solve this recursive equation, and let $e_0:=y_0-y(t_0)$, the (round off) error of the initial data, we get
+	\begin{equation}
+		\begin{split}
+			|e_{n}| &\leq (1+hL_{\Phi})^n |e_0| + [(1+hL_{\Phi})^n -1 ] \frac{T}{L_{\Phi}} \\
+			&\leq \exp(nhL_{\Phi}) |e_0| + (\exp(nhL_{\Phi}) - 1)\frac{T}{L_{\Phi}}
+		\end{split}
+	\end{equation}
+	We have convergence: since the first term only concerns the error of initial data, which we can, using some technique, make it close to zero. The second term is constant times $T$, which is at least $O(h)\to 0$ as $h\to 0$. So the error itself is always bounded. \\
+	The zero stability goes in a similar fashion. Recall the definition, we have two initial data $y_0$ and $\tilde{y}_0$, and using the same numerical method, we obtain sequence $\{y_0, y_1, ..., y_n\}$ and $\{\tilde{y}_0, \tilde{y}_1, ..., \tilde{y}_n\}$. Substitute $y(t_n)$ in $(**)$ to $\tilde{y}_n$, we obtain
+	$$
+	|y_n - \tilde{y}_n| \leq \exp(nhL_{\Phi})|y_0-\tilde{y}_0| + O(h)
+	$$
+	which matches the definition of zero-stability $(|y_n - \tilde{y}_n| \leq c \max\limits_{0\leq j\leq s-1}|y_j-\tilde{y}_j|$ as $h\searrow 0$.)
 \end{itemize}
 
+\section{Construction of $\Phi$}
+\subsection{The Taylor Expansion}
+One way to construct a higher-ordered method is using Taylor expansion of $y(t_{n+1})$ at $y(t_n)$:
+$$
+y(t_{n+1}) = y(t_n) + hy'(t_n) + \frac{h^2}{2}y''(t_n) + ... + \frac{h^p}{p!}y^{(p)}(t_n) + O(h^{p+1})
+$$
+The complexity lies in calculating the derivatives. We do some low ordered terms:
+\begin{equation}
+	\begin{split}
+		& y'(t_n) = f(t_n, y(t_n)) \\
+		& y''(t_n) = f_t + f_y y'(t_n) = f_t + f_yf\\
+		& y'''(t_n) = f_{tt} + f_{ty}y' + y'f_{yt} + y'^2f_{yy} + y'' f_y = f_{tt} + 2f_{ty}f + f^2f_{yy} + f_{y}f_t + f_y^2f
+	\end{split}
+\end{equation}
+The number of terms grows exponentially, very hard to calculate...
+
+\subsection{Runge-Kutta Construction}
+We've got another idea, we want to approximate
+$$
+y(t_{n+1}) = y(t_n) + \int_{t_n}^{t_{n+1}} f(t, y(t)) dt
+$$
+with 
+$$
+y(t_{n+1}) = y(t_n) + h \sum_{j=1}^N b_j f(t_n + c_jh, y(t_n + c_j h))
+$$
+where we make a finer partition of $[t_n, t_{n+1}]$ to $N$ \emph{stages}: $t_n + c_j h$, $c_1 \leq c_2 \leq ... \leq c_N$. And $b_j$ being the weights assigned to each value.
+\begin{itemize}
+	\item[\textit{Def.}] \textbf{N-Stages Runge Kutta Method}: we partition the interval $[t_n, t_{n+1}]$ to $N$ stages, and update $y$ by
+	$$
+	y_{n+1} = y_n + h\sum_{j=1}^N b_j k_j
+	$$
+	where
+	$$
+	k_1 = f(t_n, y_n);~~~~k_i=f(t_n+c_ih, y_n + h\sum_{j=1}^{i-1} a_{ij}k_j)~~2\leq i \leq N
+	$$
+	There are three sets of parameters, $\bm{b}^{\top}$: the weights, $\bm{c}$: the nodes of partition of $[t_n, t_{n+1}]$ and $\bm{A}=\{a_{ij}\}$: the \emph{Runge-Kutta matrix}. We can put then together in a $n+1 \times n+1$ table, which is often referred to as \emph{butcher table}.
+		
+
+	\item[\textit{Prop.}] By the corollary listed in the previous section, consistency of 1-step method $\iff$ $\Phi(t_n, y(t_n), 0)=f(t_n,y(t_n))$. When $h=0$, all the $k$s degenerate to $f(t_n, y(t_n))$. And Runge-Kutta has $\Phi(t_n,y(t_n),h)=\sum_{j=1}^N b_j k_j$ $\Rightarrow \sum_{j=1}^N b_j f(t_n, y(t_n))= f(t_n, y(t_n))$ $\Rightarrow$ $\sum_{j=1}^N b_j=1$. Hence the consistency requires all the weights sum to 1.
+
+	\item[\textit{Ex.}] \textbf{Runge (1895)}:
+	\begin{center}
+		\begin{tabular}{c|ccccc}
+		0 \\
+		$c_2$ & $a_{21}$ \\
+		$c_3$ & $a_{31}$ & $a_{32}$\\
+		$\vdots$ & $\vdots$ & $\vdots$ & $\ddots$\\
+		$c_s$ & $a_{s1}$ & $a_{s2} $ & $\hdots$ & $a_{s,s-1}$\\
+		\hline
+		 & $b_1$ & $b_2$ & $\hdots$ & $b_{s-1}$ & $b_s$
+		\end{tabular} = 
+		\begin{tabular}{c|ccc}
+		\\
+		$\bm{c}$ &  & $\bm{A}$ \\
+		 & & \\
+		\hline
+		 &  & $\bm{b}^{\top}$ & 
+		\end{tabular} = 
+		\begin{tabular}{c|ccc}
+		\\
+		0 &  &  \\
+		1/2 & 1/2 &  \\
+		\hline
+		 & 0 & 1 &
+		\end{tabular}
+	\end{center}
+	Gives
+	$$
+	y_{n+1} = y_n + hk_2;~~~k_2 = f\left(t_n+\frac{1}{2}h, y_n+\frac{1}{2}f(t_n, y_n)\right)
+	$$
+	\item[\textit{Ex.}] ~
+	\begin{center}
+		\begin{tabular}{c|ccc}
+		\\
+		$\bm{c}$ &  & $\bm{A}$ \\
+		 & & \\
+		\hline
+		 &  & $\bm{b}^{\top}$ & 
+		\end{tabular} = 
+		\begin{tabular}{c|ccc}
+		\\
+		0 &  &  \\
+		1 & 1 &  \\
+		\hline
+		 & 1/2 & 1/2 &
+		\end{tabular}
+	\end{center}
+	Gives
+	\begin{equation}
+		\begin{split}
+				&y_{n+1} = y_n + \frac{h}{2}k_1 + \frac{h}{2}k_2 \\
+				&k_1=f(t_n,y_n), \\
+				&k_2 = f\left(t_n+h, y_n+f(t_n, y_n)\right)
+		\end{split}
+	\end{equation}
+\end{itemize}
+\section{Truncation Error}
+We now consider how to solve the coefficients 
 \end{document}
