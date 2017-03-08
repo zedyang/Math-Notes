@@ -1,0 +1,461 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+
+\title{\textbf{Numerical Solutions for DEs HW1}}
+\author{YANG, Ze (5131209043)}
+
+
+\begin{document}
+\maketitle
+
+
+%------------------------------------------------------------------------
+~\\
+\fbox{
+  \parbox{\boxwidth}{
+  \textbf{A Note to TA}: 
+  ~\\
+  \emph{Hi, this is the senior student from Antai College who did not register for this course. I would like to do all the assignments for practice, but feel free to just skip my homework if you don't have time.
+  Thank you again for allowing me to access the assignments and other class material! : )}
+  ~\\
+  \emph{- Ze}
+  }
+}
+
+~\\
+~\\
+%------------------------------------------------------------------------
+
+\begin{problem} (1.1) Apply the method to Theorems 1.1 and 1.2 to show the convergence of the implicit midpoint rule (1.12) and of the theta method (1.13)
+\end{problem}
+\begin{proof} (\textbf{a.} \emph{The implicit midpoint rule}) we let $\bar{t}=t_n+\frac{h}{2}=\frac{t_n+t_{n+1}}{2}$, $\bm{r}_n$ be the truncation error. And firstly we show that this method is of order 2. By definition
+\begin{equation}
+  \begin{split}
+      \bm{y}(t_{n+1}) &= \bm{y}(t_n) + h \bm{f}(\bar{t}, \tfrac{\bm{y}(t_n)+\bm{y}(t_{n+1})}{2}) + h \bm{r}_n \\
+      &= \bm{y}(t_n) + h \bm{f}(\bar{t}, \bm{y}(\bar{t})) + h \bm{u}_n + h \bm{r}_n 
+  \end{split}
+\end{equation}
+in which we let $\left\|\bm{u}_n\right\|= \left\|\bm{f}(\bar{t}, \tfrac{\bm{y}(t_n)+\bm{y}(t_{n+1})}{2})- \bm{f}(\bar{t}, \bm{y}(\bar{t}))\right\|$. Since $\bm{f}$ is Lipschitz in $\bm{y}$:
+\begin{equation}
+  \left\|\bm{u}_n\right\| \leq L \left\|\tfrac{\bm{y}(t_n)+\bm{y}(t_{n+1})}{2}-\bm{y}(\bar{t})\right\| = \tfrac{L}{2} \left\|\bm{y}(t_n)+\bm{y}(t_{n+1})-2 \bm{y}(\bar{t})\right\|
+\end{equation}
+With Taylor expansion at $\bar{t}$,
+\begin{equation}
+  \left\|\bm{u}_n\right\| \leq \tfrac{L}{2} \left\|(\bm{y}(\bar{t})-\tfrac{h}{2}\bm{y}'(\bar{t}))+(\bm{y}(\bar{t})+\tfrac{h}{2}\bm{y}'(\bar{t}))-2 \bm{y}(\bar{t})+O(h^2)\right\| = O(h^2)
+\end{equation}
+Hence use Taylor expansion at $\bar{t}$ for equation (1) $\Rightarrow$ (write $\bm{y}=\bm{y}(\bar{t})$ for simplicity)
+\begin{equation}
+  \begin{split}
+    h \bm{r}_n &= \bm{y}(t_{n+1}) - \bm{y}(t_n) - h \bm{y}'(\bar{t}) + O(h^3) \\
+    &= \bm{y} + \tfrac{h}{2}\bm{y}' + \tfrac{h^2}{8}\bm{y}'' - (\bm{y}-\tfrac{h}{2}\bm{y}' + \tfrac{h^2}{8}\bm{y}'') - h \bm{y}' + O(h^3)  \\
+    &= O(h^3)
+  \end{split}
+\end{equation}
+So the method is of order 2. Now we let $\bm{e}_n = \bm{y}_n - \bm{y}(t_n)$, we substract equation (1) from the method, and using Lipschitz condition:
+\begin{equation}
+  \begin{split}
+    \bm{e}_{n+1} &= \bm{e}_n + h\left[\bm{f}(\bar{t}, \tfrac{\bm{y}_n + \bm{y}_{n+1}}{2})-\bm{f}(\bar{t}, \tfrac{\bm{y}(t_n)+\bm{y}(t_{n+1})}{2})\right] + O(h^3) \\
+    \left\|\bm{e}_{n+1}\right\|& \leq \left\|\bm{e}_n\right\| + \tfrac{hL}{2} \left\|\bm{y}_n + \bm{y}_{n+1}-\bm{y}(t_n)-\bm{y}(t_{n+1})\right\| + O(h^3) \\
+    & \leq \left\|\bm{e}_n\right\| + \tfrac{hL}{2}(\left\|\bm{e}_n\right\| + \left\|\bm{e}_{n+1}\right\|) + O(h^3) \\
+    \Rightarrow \left\|\bm{e}_{n+1}\right\| & \leq \frac{1+\tfrac{hL}{2}}{1-\tfrac{hL}{2}} \left\|e_n\right\| + \frac{c}{1-\tfrac{hL}{2}}h^3~~~~(\text{same as the bound for trapezoid method}) \\
+    & \leq \frac{ch^2}{L}\exp{\left(\frac{nhL}{1-\frac{hL}{2}}\right)}
+  \end{split}
+\end{equation}
+We have $\lim\limits_{h\rightarrow0} \left\|\bm{e}_n\right\| = 0$. By definition the method is convergent in $[0, nh]$. $\square$
+
+~\\
+(\textbf{b.} \emph{the} $\theta$ \emph{method}) We have known that the theta method is at least order 1. So
+\begin{equation}
+  \begin{split}
+      \bm{y}(t_{n+1}) &= \bm{y}(t_n) + h \left[\theta \bm{f}(t_n, \bm{y}(t_n)+(1-\theta)\bm{f}(t_{n+1}, \bm{y}(t_{n+1})\right] + O(h^2)
+  \end{split}
+\end{equation}
+Substract it from the numerical formula, and employing Lipschitz condition:
+\begin{equation}
+  \begin{split}
+    \left\|\bm{e}_{n+1}\right\| &\leq \left\|\bm{e}_n\right\| + hL\theta \left\|\bm{e}_n\right\| + hL(1-\theta) \left\|\bm{e}_{n+1}\right\| + O(h^2) \\
+    \Rightarrow \left\|\bm{e}_{n+1}\right\| &\leq \frac{1+hL\theta}{1-hL(1-\theta)} \left\|\bm{e}_n\right\| + \frac{c}{1-hL(1-\theta)}h^2 \\
+    & \leq \frac{c}{L}\left[\left(\frac{1+hL\theta}{1-hL(1-\theta)} \right)^n -1\right]h \\
+    & \leq \frac{ch}{L} \exp\left(\frac{nhL}{1-hL(1-\theta)}\right)
+  \end{split}
+\end{equation}
+We have $\lim\limits_{h\rightarrow0} \left\|\bm{e}_n\right\| = 0$. By definition the method is convergent in $[0, nh]$. $\square$
+\end{proof} 
+
+
+
+
+
+
+
+
+
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} (1.2) The linear system $\bm{y}'=\bm{A} \bm{y}$, $\bm{y}(0)=\bm{y}_0$, where $\bm{A}$ is a symmetric matrix, is solved by Euler's method.
+\begin{itemize}
+  \item[a.] Letting $\bm{e}_n = \bm{y}_n - \bm{y}(nh)$, $n=0,1,...,$ show that 
+  $$
+  \left\|\bm{e}_n\right\|_2 \leq \left\|\bm{y}_0\right\|_2 \max\limits_{\lambda \in \sigma(\bm{A})} |(1+h \lambda)^n - e^{nh \lambda}|
+  $$
+  where $\sigma(\bm{A)}$ is the set of eigenvalues of $\bm{A}$ and $\left\|\cdot\right\|_2$ the Euclidean matrix norm.
+  \item[b.] Demonstrate that for every $-1 \ll x \leq 0$ and $n=0,1,...$ it is true that 
+  $$
+  e^{nx} - \frac{1}{2} nx^2 e^{(n-1)x} \leq (1+x)^n \leq e^{nx}
+  $$
+  \item[c.] Suppose that the maximal eigenvalue of $\bm{A}$ is $\lambda_{max} < 0$. Prove that, as $h\to 0$, and $nh \to t\in [0,t^*]$,
+  $$
+  \left\|\bm{e}_n\right\|_2 \leq \frac{1}{2} t \lambda_{max}^2 e^{\lambda_{max} t} \left\|\bm{y}_0\right\|_2 h \leq \frac{1}{2} t^* \lambda_{max}^2 \left\|\bm{y}_0 \right\|_2 h 
+  $$
+  \item[d.] Compare the order of magnitude of this bound with the upper bound from theorem 1.1 in the case
+  $$
+  \bm{A} = \begin{pmatrix}
+    -2 & 1\\
+    1 & -2
+  \end{pmatrix},~~~t^*=10
+  $$
+\end{itemize}
+\end{problem}
+\begin{proof} (a.) The exact solution of the system is $\bm{y}(t)=e^{\bm{A}t}\bm{y}_0$. The euler method gives $\bm{y}_n = (\bm{I} + h \bm{A}) \bm{y}_{n-1}$, so $\bm{y}_n = (\bm{I}+h \bm{A})^n \bm{y}_0$. By its definition $\bm{e}_n = [(\bm{I}+h \bm{A})^n - e^{nh\bm{A}}] \bm{y}_0$. Take the spectral norm we have
+\begin{equation}
+  \left\|\bm{e}_n\right\|_2 \leq \left\|\bm{y}_0\right\|_2 \left\|(\bm{I}+h \bm{A})^n - e^{nh\bm{A}}\right\|_2 = \left\|\bm{y}_0\right\|_2 \max\limits_{\lambda\in \sigma(\bm{A})}\left|(1+h \lambda)^n - e^{nh \lambda}\right|
+\end{equation}
+
+~\\
+(b) For $x\leq 0$: $f'(x)=(e^x-x-1)'=e^x-1\leq 0$, hence $f(x) \searrow$, $f(x) \geq f(0)=0 \Rightarrow $ $e^x\geq 1+x$ \emph{(we call it (1))}. At the same time $g'(x)=(e^x-\frac{x^2}{2}-x-1)'=e^x-x-1\geq 0$, hence $g(x) \nearrow$, $g(x) \leq g(0)=0 \Rightarrow $ $e^x\leq 1+x+\frac{x^2}{2}$, or $e^x -\frac{x^2}{2}\leq 1+x$ \emph{(we call it (2))}.
+
+~\\
+Let $h(\epsilon) = ((1-\epsilon)- \epsilon)^n + n (1- \epsilon)^{n-1}\epsilon - (1- \epsilon)^n$ for $1\gg \epsilon \geq 0$, $h'(\epsilon)=n-n(1- \epsilon)^{n-1}\geq 0$, hence $h(\epsilon) \geq h(0) = 0$ $\Rightarrow$ $((1-\epsilon)- \epsilon)^n \geq (1- \epsilon)^n-n (1- \epsilon)^{n-1}\epsilon$. Now suppose $a\to 1^-$, $b\to 0^+$, consider $(a-b)^n\sim ((1-\epsilon)- \epsilon)^n$ with $a\sim 1-\epsilon, b\sim \epsilon$, we obtain $(a-b)^n \geq a^n -na^{n-1}b$. \emph{(we call it (3))}.
+
+~\\
+Now let $a=e^x$, $b=\frac{x^2}{2}$, since $1 \ll x \leq 0$, $x\to 0^{-}$, $|b|, |a-1|$ are small. We can employ \emph{(3)}: 
+$$
+e^{nx}-\frac{nx^2}{2}e^{(n-1)x}\leq (e^x - \tfrac{x^2}{2})^n \leq (1+x)^n \leq e^{nx}
+$$
+where the first leq is due to \emph{(3)}, the second is due to \emph{(2)}, and the third one is due to \emph{(1)}.
+
+~\\
+(c) Since $\lambda_{max} < 0, t\in[0,t^*]$, we have $te^{\lambda_{max} t} < t \leq t^*$. Hence $\frac{1}{2}te^{\lambda_{max} t} (\lambda_{max}^2 \left\|\bm{y}_0\right\|_2h) \leq \frac{1}{2}t^* (\lambda_{max}^2 \left\|\bm{y}_0\right\|_2h)$. \\
+And by (b): $-\frac{1}{2}nx^2 e^{(n-1)x}\leq (1+x)^n-e^{nx} \leq 0$ $\Rightarrow$ $\frac{1}{2}nx^2 e^{(n-1)x}\geq |(1+x)^n-e^{nx}| \geq 0$. So
+\begin{equation}
+  \left\|\bm{e}_n\right\|_2 \leq \left\|\bm{y}_0\right\|_2 \max\limits_{\lambda\in \sigma(\bm{A})}\left|(1+h \lambda)^n - e^{nh \lambda}\right| \leq \left\|\bm{y}_0\right\|_2 \max\limits_{\lambda\in \sigma(\bm{A})}\frac{1}{2}nh^2\lambda^2 e^{(n-1)h \lambda}~~(*)
+\end{equation}
+with $h\to 0$, $nh=t=O(1)$, $(n-1)h\to t$. Hence
+\begin{equation}
+  \left\|\bm{e}_n \right\|_2 \leq (*) = \frac{1}{2}t\left\|\bm{y}_0\right\|_2h \max\limits_{\lambda\in \sigma(\bm{A})}\lambda^2 e^{\lambda t} = \frac{1}{2}t\left\|\bm{y}_0\right\|_2h\lambda_{max}^2 e^{t \lambda_{max}}
+\end{equation}
+Becasue $\lambda^2 e^{\lambda t}$ is an increasing function with respect to $\lambda$. Finished the proof.
+
+~\\
+(d) In this case $\lambda_{max}=-1$, $t^* = 10$. This bound:
+$$
+\left\|\bm{e}_n \right\|_2 \leq \frac{1}{2} t^* \lambda_{max}^2 \left\|\bm{y}_0\right\|_2 h = 5 \left\|\bm{y}_0 \right\|_2 h
+$$
+Is linear in $t^*$ and quadratic in $\lambda$.
+The bound in (1.1)
+$$
+\left\|\bm{e}_n\right\| \leq \frac{c}{\lambda} (e^{t^* \lambda} - 1)h \approx \frac{1}{1} \left\|\bm{y}_0\right\|(e^{10}-1)h \approx 22026 \left\|\bm{y}_0\right\| h
+$$
+grows exponentially with $\lambda t^*$.
+
+
+
+\end{proof} 
+
+
+
+
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} (1.3) We solve the scalar linear system $y'=ay, y(0)=1$.
+\begin{itemize}
+  \item[a.] Show that the `continuous output' method
+  $$
+  u(t) = \frac{1+\frac{1}{2}a(t-nh)}{1-\frac{1}{2}a(t-nh)} y_n, ~~~~~~nh\leq t \leq (n+1)h,~~n=0,1,...
+  $$
+  is consistent with the values of $y_n$ and $y_{n+1}$ which are obtained by the trapezoidal rule.
+  \item[b.] Demonstrate that $u$ obeys the perturbed ODE
+  $$
+  u'(t) = au(t) + \frac{\frac{1}{4}a^3 (t-nh)^2}{[1-\frac{1}{2}a(t-nh)]^2} y_n~~~~~t\in [nh, (n+1)h]
+  $$
+  with initial condition $u(nh)=y_n$. Thus prove that 
+  $$
+  u((n+1)h) = e^{ha} \left[1+\frac{1}{4}a^3 \int_0^h \frac{e^{-\tau a} \tau^2 d\tau}{(1-\frac{1}{2}a \tau)^2}\right] y_n
+  $$
+  \item[c.] Let $e_n = y_n - y(nh)$, $n=0,1,...$ show that
+  $$
+  e_{n+1} = e^{ha} \left[1+\frac{1}{4}a^3 \int_0^h \frac{e^{-\tau a} \tau^2 d\tau}{(1-\frac{1}{2}a \tau)^2}\right]e_n + \frac{1}{4}a^3e^{(n+1)ha}  \int_0^h \frac{e^{-\tau a} \tau^2 d\tau}{(1-\frac{1}{2}a \tau)^2}
+  $$
+  In particular, deduce that $a<0$ implies that the error propagetes subject to the inequality
+  $$
+  |e_{n+1}| \leq e^{ha} \left[1+\frac{1}{4}|a|^3 \int_0^h e^{-\tau a} \tau^2 d\tau\right]|e_n| + \frac{1}{4}|a|^3e^{(n+1)ha}  \int_0^h e^{-\tau a} \tau^2 d\tau
+  $$
+
+\end{itemize}
+\end{problem}
+\begin{proof} (a) the formula for Trapezoid rule to solve $y'=ay$ is
+$$
+y_{n+1} = y_n + \tfrac{h}{2}(ay_n+ay_{n+1}) \Rightarrow y_{n+1} = \frac{1+\frac{ah}{2}}{1-\frac{ah}{2}}y_n
+$$
+And insert $t=nh, t=(n+1)h$ to $u(t)$: $u(nh)=y_n$, $u(nh+h)=\frac{1+\frac{1}{2}a(nh+h-nh)}{1-\frac{1}{2}a(nh+h-nh)}=y_{n+1}$. Hence it is consistent to trapezoid rule in terms of $y_n$ and $y_{n+1}$.
+
+~\\
+(b)
+\begin{equation}
+  \begin{split}
+    u'(t) &= \frac{\frac{1}{2}a[1-\frac{1}{2}a(t-nh)]+\frac{1}{2}a[1+\frac{1}{2}a(t-nh)]}{[1-\frac{1}{2}a(t-nh)]^2} y_n =\frac{a}{[1-\frac{1}{2}a(t-nh)]^2} y_n \\
+    &=\frac{a-\frac{1}{4}a^3(t-nh)^2+\frac{1}{4}a^3(t-nh)^2}{[1-\frac{1}{2}a(t-nh)]^2} y_n
+    = \frac{a(1+\frac{1}{2}a(t-nh))(1-\frac{1}{2}a(t-nh))}{[1-\frac{1}{2}a(t-nh)]^2} y_n + \frac{\frac{1}{4}a^3(t-nh)^2}{[1-\frac{1}{2}a(t-nh)]^2}y_n \\
+    &= au(t) + \frac{\frac{1}{4}a^3(t-nh)^2}{[1-\frac{1}{2}a(t-nh)]^2}y_n
+  \end{split}
+\end{equation}
+
+So the general solution of the ode is:
+\begin{equation}
+  \begin{split}
+    u(t) &= e^{\int_{nh}^t -(-a)dz}\left(\int_{nh}^t e^{\int_{nh}^s -adz}\frac{\frac{1}{4}a^3(s-nh)^2}{[1-\frac{1}{2}a(s-nh)]^2}y_nds+C\right)\\
+    & = e^{a(t-nh)}\left(\frac{1}{4}a^3\int_{nh}^t \frac{e^{-a(s-nh)}(s-nh)^2}{[1-\frac{1}{2}a(s-nh)]^2}y_nds+C\right)\\
+  \end{split}
+\end{equation}
+Clearly when $t=nh$, the integral vanishes, so $C=y_n$, we let $\tau:=s-nh$ inside the integral:
+\begin{equation}
+  \begin{split}
+    u(t) &= e^{a(t-nh)}\left(\frac{1}{4}a^3\int_{0}^{t-nh} \frac{e^{-a\tau}\tau^2}{(1-\frac{1}{2}a\tau)^2}d\tau+1\right)y_n\\
+  \end{split}
+\end{equation}
+Therefore, at $t=(n+1)h$,
+$$
+u((n+1)h) = e^{ah}\left(\frac{1}{4}a^3\int_{0}^{h} \frac{e^{-a\tau}\tau^2}{(1-\frac{1}{2}a\tau)^2}d\tau+1\right)y_n\\
+$$
+
+~\\
+(c) We can easily solve the scalar linear system analytically: $y(t)=e^{at}$. Hence $y((n+1)h)=e^{a(n+1)h}=e^{ah}y(nh)$. And we let the constant $J=\frac{1}{4}a^3\int_{0}^{h} \frac{e^{-a\tau}\tau^2}{(1-\frac{1}{2}a\tau)^2}d\tau$. We have:
+\begin{equation}
+  \begin{split}
+    e_{n+1} &= y_{n+1} - y(t_{n+1}) = u((n+1)h)-y((n+1)h)\\
+    &= e^{ah}\left(J+1\right)y_n - e^{ah}y(nh) \\
+    &= e^{ah}\left(J+1\right)y_n - e^{ah}y(nh) - e^{ah}Jy(nh)  + e^{ah}Jy(nh)\\
+    &= e^{ah}\left(J+1\right)e_n + J e^{a(n+1)h}
+  \end{split}
+\end{equation}
+If $a<0$, $0<1\leq(1-\tfrac{1}{2}a\tau)^2$ i.e. $\frac{1}{(1-\tfrac{1}{2}a\tau)^2}\leq 1$ $\forall \tau \in [0,h]$. So $|J|\leq \frac{1}{4}|a|^3\int_{0}^h e^{-\tau a} \tau^2 d\tau$. We conclude that 
+\begin{equation}
+  |e_{n+1}| \leq e^{ah}\left(|J|+1\right)|e_n| + |J| e^{a(n+1)h} \leq e^{ah}\left(\frac{1}{4}|a|^3\int_{0}^h e^{-\tau a} \tau^2 d\tau+1\right) + \frac{1}{4}e^{a(n+1)h}|a|^3\int_{0}^h e^{-\tau a} \tau^2 d\tau
+\end{equation}
+\end{proof}
+
+
+
+
+
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+
+\begin{problem} (2.2) Let $\eta(z,w)=\rho(w)-z\sigma(w)$.
+\begin{itemize}
+  \item[a.] Demonstrate that the multistep method (2.8) is of order $p$ iff
+  $$
+  \eta(z,e^z)=cz^{p+1} + O(z^{p+2}),~~~~~z\to 0
+  $$ 
+  for some $c\in \mathbb{R} \setminus \{0\}$.
+  \item[b.] Show that, subject to $\partial \eta(0,1)/\partial w \ne 0$, there exists in a neighbourhood of the origin an analytic function $w_1(z)$ such that $\eta(z, w_1(z))=0$ and 
+  $$
+  w_1(z) = e^z - c\left(\frac{\partial \eta(0,1)}{\partial w}\right)^{-1} z^{p+1} + O(z^{p+2}),~~~~~z\to 0~~~(*)
+  $$
+  \item[c.] Show that $(*)$ is true if the underlying method is convergent. 
+\end{itemize}
+\end{problem}
+\begin{proof} (a) Define sequence $\{c_m\}$ as
+\begin{equation}
+  c_m = \begin{cases}
+  \sum_{k=0}^s a_k,~~~m=0 \\
+  \frac{1}{m!}\sum_{k=0}^s (a_k k^m - mb_k k^{m-1}),~~~m\geq 1
+  \end{cases}
+\end{equation}
+The method (2.8) is of order $p$ if and only if $c_m=0$ for $m=0,1,...,p$, $c_{p+1}\ne 0$; we call this condition $(\dag)$. We further examine the generating polynomial of $\{c_m\}$: $P(z) = \sum_{m=0}^{\infty} c_m z^m$. And then we have $P(0)=c_0$, $P'(0)=c_1$, ..., $P^{(m)}(0)=c_m$. Hence $(\dag) \iff$ $P^{(p+1)}(0)\ne 0$, $P^{(m)}(0)=0$ for $m=1,2,...,p$. Since $P$ is a polynomial of $z$, this is true if and only if
+$$
+P(z) = cz^{p+1} + h.o.t.~~c\ne0, z\to 0~~~(\ddagger)
+$$
+And then we rewrite $P(z)$ as we have done in the course, and finally we can rewrite $P(z)$ as $P(z) = \sum_{k=0}^s a_k (e^{z})^k - z\sum_{k=0}^s b_k (e^{z})^k = \rho(e^{z}) - z\sigma(e^{z}) = \eta(z,e^z)$. Hence $(\ddagger) \iff \eta(z,e^z) = cz^{p+1}+O(z^{p+2})$, $c\ne 0$. $\square$
+
+~\\
+(b) (c) \emph{No Idea...}
+\end{proof}
+
+
+
+
+
+
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} (2.3) Instead of (2.3), consider the identity
+$$
+\bm{y}(t_{n+s}) = \bm{y}(t_{n+s-2}) + \int_{t_{n+s-2}}^{t_{n+s}} \bm{f}(\tau ,\bm{y}(\tau)) d\tau
+$$
+\begin{itemize}
+  \item[a.] Replace $\bm{f}(\tau, \bm{y}(\tau))$ by the interpolating polynomial $\bm{p}$ from section 2.1 and substitute $\bm{y}_{n+s-2}$ in place of $\bm{y}(t_{n+s-2})$. Show that the resultant explicit \emph{Nystrom} method is of order $p=s$.
+  \item[b.] Derive the two-step Nystrom method in a closed form by using the above appraoch.
+  \item[c.] Find the coefficients of the two-step and three-step Nystrom methods by noticing that $\rho(w) = w^{s-2} (w^2 - 1)$ and evaluating $\sigma$ from (2.13).
+  \item[d.] Derive the two-step third-order implicit \emph{Milne} method. Again letting $\rho(w) = w^{s-2} (w^2 - 1)$ but allowing $\sigma$ to be of degree $s$.
+\end{itemize}
+\end{problem}
+\begin{proof} (a) 
+\begin{equation}
+  \begin{split}
+    \bm{y}(t_{n+s}) &= \bm{y}(t_{n+s-2}) + \int_{t_{n+s-2}}^{t_{n+s}} \bm{p}(\tau) d\tau + O(h^{s+1}) \\
+    &=\bm{y}(t_{n+s-2}) + \int_{t_{n+s-2}}^{t_{n+s}} \sum_{k=n}^{n+s-1} \bm{y}'(t_k)L_k^{[s]}(\tau) d\tau + O(h^{s+1}) \\
+    &=\bm{y}(t_{n+s-2}) + \sum_{k=n}^{n+s-1} \bm{y}'(t_k)\int_{t_{n+s-2}}^{t_{n+s}} L_k^{[s]}(\tau) d\tau + O(h^{s+1}) \\
+  \end{split}
+\end{equation}
+As before we translate the mesh to the left by $nh$, and find that $\int_{t_{n+s-2}}^{t_{n+s}} L_k^{[s]}(\tau) d\tau = \int_{t_{s-2}}^{t_{s}} L^{[s]}_{\tilde{k}}(\tau) d\tau$, where $\tilde{k}=0,1,...,s-1$, with $L_{k}^{[s]}(t)=\prod_{j=0, j\ne k}^{s-1} \frac{t_j - t}{t_j - t_k}$. And this integral is a constant quantity times $h$, we denote $\int_{t_{s-2}}^{t_{s}} L_{\tilde{k}}^{[s]}(\tau) d\tau = h\left(\frac{1}{h}\int_{t_{s-2}}^{t_{s}} L_{\tilde{k}}^{[s]}(\tau) d\tau\right)=:hc_k$ (we change $k$ to $k=0,1,...,s-1$ in the following text). Therefore
+\begin{equation}
+  \bm{y}(t_{n+s}) = \bm{y}(t_{n+s-2}) + h\sum_{k=0}^{s-1} c_{k}\bm{f}(t_{n+k}, \bm{y}(t_{n+k})) + O(h^{s+1})
+\end{equation}   
+And the method is given by
+\begin{equation}
+  \bm{y}_{n+s} = \bm{y}_{n+s-2} + h\sum_{k=0}^{s-1} c_{k}\bm{f}(t_{n+k}, \bm{y}_{n+k})
+\end{equation}
+$h$ times the truncation error $h\bm{r}_n \sim O(h^{s+1})$, so the method is of order $s$.
+
+~\\
+(b) Two-step Nystrom: $s=2$. $\bm{y}_{n+2}=\bm{y}_n + h(c_0 \bm{f}(t_n, \bm{y}_n)+c_1 \bm{f}(t_{n+1}, \bm{y}_{n+1}))$
+\begin{equation}
+    c_0 = \int_{0}^2 L_0^{[2]} dt = \int_0^2 \frac{1-t}{1-0}dt = 0;~~~~~~c_1 = \int_{0}^2 L_1^{[2]} dt = \int_0^2 \frac{0-t}{0-1}dt = 2 \\
+\end{equation}
+So the 2-step Nystrom is given by
+$$
+\bm{y}_{n+2}=\bm{y}_n + 2h\bm{f}(t_{n+1}, \bm{y}_{n+1})
+$$
+
+~\\
+(c) $\rho(w)=w^{s-2}(w^2-1)$.
+\begin{itemize}
+  \item[$\cdot$] $s=2$ case: $\rho(w)=w^2-1=(w-1)(w+1)=v(v+2)$, with $v=w-1$,
+  $$
+  \sigma(v) = \frac{v + 2}{1-(\frac{1}{2}v-\frac{1}{3}v^2)} = (v+2)(1+\tfrac{1}{2}v)+O(v^2)  = 2+2v+O(v^2)
+  $$
+  $\sigma(w)=2+2(w-1)=2$, which matches our result in (b).
+
+  \item[$\cdot$] $s=3$ case: $\rho(w)=w(w^2-1)=w(w-1)(w+1)=v(v+1)(v+2)$, with $v=w-1$,
+  $$
+  \sigma(v) = \frac{(v+1)(v + 2)}{1-(\frac{1}{2}v-\frac{1}{3}v^2)} = (v^2+3v+2)(1+\tfrac{1}{2}v-\tfrac{1}{12}v^2)+O(v^3)  = 2+4v+\frac{7 v^2}{3}+O(v^3)
+  $$
+  $\sigma(w)=\frac{1}{3}-\frac{2}{3}w+\frac{7}{3}w^2$, which gives the 3-step \emph{Nystrom} method:
+  \begin{equation}
+    \bm{y}_{n+3}=\bm{y}_{n+1} + h\left[\frac{1}{3}\bm{f}(t_{n}, \bm{y}_{n})-\frac{2}{3}\bm{f}(t_{n+1}, \bm{y}_{n+1})+\frac{7}{3}\bm{f}(t_{n+2}, \bm{y}_{n+2})\right]
+  \end{equation}
+\end{itemize}
+
+~\\
+(d) 2-step implicit: $\rho(w)=w^2-1=(w-1)(w+1)=v(v+2)$
+$$
+  \sigma(v) = \frac{v + 2}{1-(\frac{1}{2}v-\frac{1}{3}v^2)} = (v+2)(1+\tfrac{1}{2}v-\tfrac{1}{12}v^2)+O(v^3)  = 1+2v+\frac{v^2}{3}+O(v^3)
+$$
+$\sigma(w)=\frac{1}{3}+\frac{4}{3}w+\frac{1}{3}w^2$, which gives the 2-step \emph{Mline} method:
+  \begin{equation}
+    \bm{y}_{n+2}=\bm{y}_{n} + h\left[\frac{1}{3}\bm{f}(t_{n}, \bm{y}_{n})+\frac{4}{3}\bm{f}(t_{n+1}, \bm{y}_{n+1})+\frac{1}{3}\bm{f}(t_{n+2}, \bm{y}_{n+2})\right]
+  \end{equation}
+\end{proof} 
+
+
+
+
+
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} Show that the explicit multistep method 
+$$
+\bm{y}_{n+3} + a_2 \bm{y}_{n+2} + a_1 \bm{y}_{n+1} + a_0 \bm{y}_n = h[b_2 \bm{f}(t_{n+2}, \bm{y}_{n+2}) + b_1 \bm{f}(t_{n+1}, \bm{y}_{n+1}) + b_0 \bm{f}(t_{n}, \bm{y}_{n})]
+$$
+is fourth order only if $a_0 + a_2 =8$ and $a_1 = -9$. Hence deduce that this method cannot be both fourth order and convergent.
+\end{problem}
+\begin{proof} The method is of order $4$ $\iff$
+\begin{equation}
+  \sum_{k=0}^3 a_k = 0;~~~~~\sum_{k=0}^3(a_kk^m-mb_kk^{m-1})=0, ~~~m=1,2,3,4
+\end{equation}
+And we have already known $a_3=1$, $b_3=0$. Hence it suffices to solve
+\begin{equation}
+  \begin{cases}
+  a_0 + a_1 + a_2 = -1 \\
+  b_0 + a_1 - b_1 + 2a_2 - b_2 + 3a_3 = 0\\
+  a_1 - 2b_1 + 4a_2 - 4b_2 + 9 = 0\\
+  a_1 - 3b_1 + 8a_2 - 12b_2 + 27 = 0\\
+  a_1 - 4b_1 + 16a_2 - 32b_2 + 81 =0
+  \end{cases}
+\end{equation}
+Label the equations as a to e: $(d) - \frac{3}{4}(c) - \frac{1}{4}(e)$ $\Rightarrow$ 
+$$
+- 3b_1 + 8a_2 - 12b_2 - \frac{3(- 2b_1 + 4a_2 - 4b_2)}{4} - \frac{- 4b_1 + 16a_2 - 32b_2}{4} = 0 
+$$
+$$
+\Rightarrow -\frac{1}{2}b_1 + a_2 - b_2 = 0
+$$
+Insert into (c) $\Rightarrow a_1 = -9$, hence $a_0+a_2 = 8$. \\
+\emph{Claim} This method, with $a_1 = -9$ and $a_0+a_2 = 8$ is not stable. \\
+\textit{Proof of claim}: let $a_2=c$, then characteristic polynomial $\rho(z)=z^3+cz^2-9z+8-c$. Use \texttt{Mathematica}, we find its zeros:
+\begin{equation}
+  z_1 = 1,~~~z_2 = \frac{-(c+1)-\sqrt{32+(c-1)^2}}{2},~~~z_3 = \frac{-(c+1)+\sqrt{32+(c-1)^2}}{2}
+\end{equation}
+Which are neither (1) all inside the unit circle, nor (2) with norm $1$ while having multiplicity of $1$. Hence by theorem, the numerical method is not stable. $\Rightarrow$ the numerical method does not converge.
+\end{proof} 
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+
+\end{document}
