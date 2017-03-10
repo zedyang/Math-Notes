@@ -36,6 +36,65 @@
 
 \begin{document}
 \maketitle
+\section{Stiff ODEs}
+\subsection{Motivation}
+Consider the linear ode system:
+\begin{equation}
+	\begin{cases}
+		\bm{y}' = \bm{\Lambda} \bm{y}, ~~~t\geq 0\\
+		\bm{y}(0) = \bm{y}_0 \ne 0
+	\end{cases}
+	\text{where}~\bm{\Lambda} = 
+	\begin{pmatrix}
+		-100 & 1\\
+		0 & -\frac{1}{10}
+	\end{pmatrix}
+\end{equation}
+$\bm{\Lambda}$ is a diagonizable matrix, which we can write as $\bm{\Lambda} = \bm{V} \bm{D} \bm{V}^{-1}$, and
+$$
+\bm{V} = \begin{pmatrix}1 & 1 \\ 0 & \frac{999}{10}\end{pmatrix},~~~~\bm{D}=\begin{pmatrix}-100 & 0 \\ 0 &-\frac{1}{10}\end{pmatrix}
+$$
+By theory, the entries of diagonal matrix $\bm{D}$ are the eigenvalues of $\bm{\Lambda}$. We can derive the exact solution of the system: $\bm{y} = e^{\bm{\Lambda}t} \bm{y}_0 = \bm{V} e^{\bm{D}t} \bm{V}^{-1} \bm{y}_0$. Where $e^{\bm{D}t}$, the exponential of a matrix is defined as a matrix of same dimension in taylor expansion of $e^{(\cdot)}$. In this case $\bm{e}^{\bm{D}t}$ is a diagonal matrix with entries $e^{-100t}$ and $e^{-\frac{1}{10}t}$. So there exists constant $\bm{x}_1, \bm{x}_2$, such that $\bm{y}(t) = \bm{x}_1 e^{-100t} + \bm{x}_2 e^{-\frac{1}{10} t}$. Compared with the second term, $e^{-100t}$ is small (for $t\geq 0$), so this is approximately $\bm{y} \sim \bm{1}e^{-\frac{1}{10}t}$.
 
+~\\
+On the other hand we try solve the system with euler's method: $\bm{y}_{n+1} = \bm{y}_n + h \bm{\Lambda} \bm{y}_n = (\bm{I} + h \bm{\Lambda}) \bm{y}_n$. So we have
+\begin{equation}
+	\begin{split}
+		\bm{y}_n &= (\bm{I}+h \bm{\Lambda})^n \bm{y}_0 = \bm{V} (\bm{I}+h \bm{D})^n \bm{V}^{-1}\bm{y}_0 = \bm{V} \begin{pmatrix}
+		1-100h & 0\\
+		0 & 1-\frac{1}{10}h
+		\end{pmatrix}^n \bm{V}^{-1} \bm{y}_0 \\
+		&= \bm{c}_1 (1-100h)^n + \bm{c}_2 (1-\tfrac{1}{10}h)^n
+	\end{split}
+\end{equation}
+The exact solution decays with $t$, we want the numerical solution to possess this property, i.e. to decay with $n$. This requires $|1-100h|<1$ and $|1-\tfrac{1}{10}h|<1$, \emph{depending on our choice of $h$}. We \emph{should} choose $0<h<\frac{1}{50}$ and $0<h<20$ to make the numerical solution decay with $n$. The problem is that we can not foresee this problem all the time, so we are possible to select an improper $h$, like $h=\frac{1}{10}$. Which will make the first term blow up with $n$, and clearly in this case the numerical solution does not match the decaying property of the exact solution.
+
+\subsection{Stiffness}
+\begin{itemize}
+	\item[\textit{Def.}] \textbf{Stiffness}: An ODE system is said to be \emph{stiff} if the numerical solution requires a very \emph{small} $h$, i.e. a significant depression of step size, to avoid blow up. We also define the \emph{stiffness ratio} for the linear system $\bm{y}' = \bm{A}\bm{y}$ as the largest eigenvalue of $\bm{A}$ / the smallest eigenvalue of $\bm{A}$. We look at the (eigenvalues of) Jacobian $\nabla_{\bm{y}} \bm{f}$ as an approximation for nonlinear systems $\bm{y}' = \bm{f}(t, \bm{y})$. 
+
+	\item[\textit{Ex.}] \emph{A Chemical Reaction ODE System}:
+	\begin{equation}
+		\begin{cases}
+			y_1' = -0.04 y_1 + 10^4 y_2 y_3 \\
+			y_2' = 0.04 y_1 - 10^4 y_2 y_3 - 3\cdot 10^7 y_2^2\\
+			y_3' = 3\cdot 10^7 y_2^2 \\
+		\end{cases}
+	\end{equation}
+	An observation is the conservation of mass: $(y_1+y_2+y_3)'=0$, and we may want to preserve this property in numerical computing. In this system, $y_3$ is a \emph{fast} variable, since it has the largest change rate; $y_2$ is \emph{intermediate} and $y_1$ is \emph{slow}. In general, fast variable requires a small $h$, and determines the appropriate step size.
+\end{itemize}
+
+
+\section{Absolute Stability}
+\begin{itemize}
+	\item[\textit{Def.}] \textbf{Absolute Stability}: Apply a numerical method for $y'=f(t,y)$ to a linear ODE:
+	\begin{equation}
+		\begin{cases}
+		y' = \lambda y, ~~~t\geq 0\\
+		y(0) = y_0 \ne 0
+		\end{cases}
+	\end{equation}
+	for certain fixed $\bar{h} = \lambda h, \lambda \in \mathbb{C}$ (complex plane). $\{y_n\}$ is the path of numerical solution, if $\{y_n\}$ strictly decays to $0$ as $n\to \infty$, i.e. $\lim\limits_{n\rightarrow\infty} y_n =0$, we call the method as absolute stable (A-stable). Moreover, the region $\{\bar{h}: \bar{h}~\text{is A-stable}\} \subseteq \mathbb{C}$ is called the region of absolute stability of the method.
+\end{itemize}
 
 \end{document}
