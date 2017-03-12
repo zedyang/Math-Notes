@@ -1,0 +1,195 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+
+\title{\textbf{Numerical Solutions for DEs HW2}}
+\author{YANG, Ze (5131209043)}
+
+
+\begin{document}
+\maketitle
+
+
+%------------------------------------------------------------------------
+~\\
+\fbox{
+  \parbox{\boxwidth}{
+  \textbf{A Note to TA}: 
+  ~\\
+  \emph{Hi, this is the senior student from Antai College who did not register for this course. I would like to do all the assignments for practice, but feel free to just skip my homework if you don't have time.
+  Thank you again for allowing me to access the assignments and other class material! : )}
+  ~\\
+  \emph{- Ze}
+  }
+}
+
+~\\
+~\\
+%------------------------------------------------------------------------
+
+\begin{problem}
+\begin{itemize}
+  \item[a.] Implement \emph{RK2}, \emph{Heun's Method} and the classical \emph{RK4}, and justify the rate of convergence numerically.
+  \item[b.] Choose appropriate Runge-Kutta method to initialize \emph{Adams-Bashforth} method of order 3,
+  $$
+  y_{n+3} = y_{n+2} + h [\tfrac{23}{12}f(t_{n+2}, y_{n+2}) - \tfrac{4}{3} f(t_{n+1}, y_{n+1}) + \tfrac{5}{12}f(t_n, y_n)]
+  $$
+  Justify the rate of convergence numerically.
+\end{itemize}
+\end{problem}
+\begin{proof} 
+\end{proof} 
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} Consider the RK method
+$$
+\frac{U_{n+1}-U_n}{\Delta t} = c_1k_1 + c_2 k_2
+$$
+where $k_1= f(t_n, U_n), k_2 = f(t_n+b_{21}\Delta t, U_n + b_{21}\Delta t k_1$, and $c_1, c_2, b_{21} \in \mathbb{R}$. 
+\begin{itemize}
+  \item[a.] Show that there is a choice of these parameters such that the truncation error of the method
+  $$
+  \frac{T_n}{\Delta t} = \frac{u(t_{n+1})-u(t_n)}{\Delta t} = c_1f(t_n, u(t_n)) + c_2 f(t_n+b_{21}\Delta t, u(t_n) + b_{21}\Delta t f(t_n, u(t_n)))
+  $$
+  is of order 2 as $\Delta t \to 0$.
+  \item[b.] Suppose that a second order method of the above form is applied to the IVP $u'=-\lambda u$, $u(0)=1$, where $\lambda$ is real positive number. Show that the sequence $\{U_n\}_{n\geq 0}$ is bounded $\iff$ $\Delta t \leq 2/\lambda$ (\emph{interval of absolute stability}). Show further that, for such $\lambda$: $|u(t_n) - U_n|\leq \frac{1}{6}\lambda^3 \Delta t^2 t_n$, $n\geq 0$.
+\end{itemize}
+\end{problem}
+\begin{proof} 
+\end{proof} 
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} Find the general solution $\{y_n\}$ for the homogeneous recurrence reltation
+$$
+a_0 y_n + a_1 y_{n+1} + ... + a_s y_{n+s} = 0
+$$
+\end{problem}
+\begin{proof} 
+\end{proof} 
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} Find the region of A-stablity for the multistep method:
+$$
+U_{n+2} - U_n = \frac{1}{3}h [f(t_{n+2}, U_{n+2}) + 4f(t_{n+1}, U_{n+1}) + f(t_n, U_n) ]
+$$
+\end{problem}
+\begin{proof} 
+\end{proof} 
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} (Iserles 3.4) Apply the classical RK4 method to scalar autonomous ode $y'=f(y)$, check that this method is indeed of order 4.
+\end{problem}
+\begin{proof} 
+\end{proof} 
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} (Iserles 3.5) Suppose that a $\nu$-stage RK method of order $\nu$ is applied to linear scalar ode $y' = \lambda y$, show that
+$$
+y_n = \left(\sum_{k=0}^{\nu} \frac{1}{k!} (h \lambda)^k\right)^n y_0,~~~~n=0,1,...
+$$
+\end{problem}
+\begin{proof} 
+\end{proof} 
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} (Iserles 4.1) Let $\bm{y}'= \bm{\Lambda} \bm{y}$, $\bm{y}(t_0)=\bm{y}_0$ be solved (with a constant step size $h>0$) by a one-step method with a function $r$ that obeys the relation (4.12). Suppose that a nonsingular matrix $\bm{V}$ and a diagonal matrix $\bm{D}$ exists such that $\bm{\Lambda} = \bm{V} \bm{D} \bm{V}^{-1}$, show that there exists vectors $\bm{x}_1, \bm{x}_2, ..., \bm{x}_d \in \mathbb{R}^d$ such that
+$$
+\bm{y}(t_n) = \sum_{j=1}^d e^{t_n \lambda_j} \bm{x}_j,~~~~n=0,1,...
+$$
+And 
+$$
+\bm{y}_n = \sum_{j=1}^d [r(h \lambda)]^n \bm{x}_j,~~~~n=0,1,...
+$$
+where $\lambda_1, ..., \lambda_d$ are eigenvalues of $\bm{\Lambda}$. Deduce that the values of $\bm{x}_1$ and $\bm{x}_2$, given in (4.3) and (4.4) are identical.
+\end{problem}
+\begin{proof} 
+\end{proof} 
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} (Iserles 4.2) Consider the solution of $\bm{y}'=\bm{\Lambda} \bm{y}$ where 
+$$
+\bm{\Lambda} = \begin{pmatrix}
+  \lambda & 1\\
+  0 & \lambda
+\end{pmatrix}, ~~~~\lambda \in \mathbb{C}^-
+$$
+\begin{itemize}
+  \item[a.] Show that 
+  $$
+  \bm{\Lambda}^n = \begin{pmatrix}
+    \lambda^n & n \lambda^{n-1} \\
+    0 & \lambda^n
+  \end{pmatrix},~~~~ n = 0,1,...
+  $$
+  \item[b.] Let $g$ be an arbitrary function that is analytic about the origin. The $2\times2$ matrix $g(\bm{\Lambda})$ can be defined by substituting powers of $\bm{\Lambda}$ into the Taylor expansion of $g$, show that
+  $$
+  g(t \bm{\Lambda}) = \begin{pmatrix}
+    g(t \lambda) & tg'(t \lambda) \\
+    0 & g(t \lambda)
+  \end{pmatrix}
+  $$
+  \item[c.] By letting $g(z) = e^z$, show that $\lim\limits_{t\rightarrow\infty}\bm{y}(t)=\bm{0}$.
+  \item[d.] Suppose that $\bm{y}'= \bm{\Lambda} \bm{y}$ is solved with RK method, using a constant step size $h>0$. Let $r$ be the function from lemma 4.1. Letting $g=r$, obtain the explicit form of $[r(h \bm{\Lambda})]^n$, $n=0,1,...$
+  \item[e.] Show that if $h \lambda \in \mathcal{D}$, where $\mathcal{D}$ is the linaer stability domain of the RK method, then $\lim\limits_{n\rightarrow\infty} \bm{y}_n = \bm{0}$.
+\end{itemize}
+\end{problem}
+\begin{proof} 
+\end{proof} 
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+\end{document}
