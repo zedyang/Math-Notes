@@ -95,6 +95,58 @@ The exact solution decays with $t$, we want the numerical solution to possess th
 		\end{cases}
 	\end{equation}
 	for certain fixed $\bar{h} = \lambda h, \lambda \in \mathbb{C}$ (complex plane). $\{y_n\}$ is the path of numerical solution, if $\{y_n\}$ strictly decays to $0$ as $n\to \infty$, i.e. $\lim\limits_{n\rightarrow\infty} y_n =0$, we call the method as absolute stable (A-stable). Moreover, the region $\{\bar{h}: \bar{h}~\text{is A-stable}\} \subseteq \mathbb{C}$ is called the region of absolute stability of the method.
+
+	\item[\textit{Ex.}] (\emph{Explicit Euler}) check the A-stability of euler's method: $y_{n+1} = y_n + h \lambda y_n = (1+\bar{h})y_n = (1+ \bar{h})^{n+1} y_0$. $\Rightarrow \left\|1+\bar{h}\right\|<1$ gives $\bar{h}$ A-stable. On the complex plane this the \emph{interior} of a disk with radius 1, centered at $(-1, 0)$.
+
+	\item[\textit{Ex.}] (\emph{Backward Euler}): $y_{n+1} = y_n + h \lambda y_{n+1} = (1-\bar{h})^{-1}y_n = (1- \bar{h})^{-n-1} y_0$. $\Rightarrow \left\|1-\bar{h}\right\|>1$ gives $\bar{h}$ A-stable. On the complex plane this is the \emph{outside} of a disk with radius 1, centered at $(1, 0)$.
+
+	For the explicit euler the A-stable region is a bounded region, when $\lambda$ big, and we require the solution to decay with $n$, then $\bar{h}= \lambda h$ should be in that bounded region, hence we should pick a small $h$. However for the backward euler, the A-stable region include half of the complex plane ($\text{Re($\bar{h}$)}<0$), which implies that we can even find an $h$ to let the numerical solution decay for an exact solution that grows with $t$. (which is not desirable, hence we would not like to use this method for an ode that has growing solutions).
+
+	\item[\textit{Ex.}] (\emph{Trapezoid Method})
+	$$
+	y_{n+1} = y_n + \frac{h \lambda}{2}(y_n + y_{n+1}) = \left(\frac{1+ \frac{\bar{h}}{2}}{1-\frac{\bar{h}}{2}}\right)^{n+1} y_0 \Rightarrow \left\|\frac{1+ \frac{\bar{h}}{2}}{1-\frac{\bar{h}}{2}}\right\| < 1
+	$$
+	gives the A-stable region, i.e. $\|1+\tfrac{\bar{h}}{2}\|< \|1-\tfrac{\bar{h}}{2}\|$ $\Rightarrow \{z \in \mathbb{C}: \text{distance from $z$ to $(-2,0)<$ that to $(2, 0)$}\}$.
+	Hence the A-stable region is the left-half plane: $\{z\in \mathbb{C}: \text{Re}(z) < 0\}$. This matches the growing/decaying behavior of exactly solution in both cases: Re$(\lambda)<0 \Rightarrow$ the exact solution $\searrow$, and in this case for all $h\in \mathbb{R}$, $\lambda h \in$ A-stable region. 
+
+	\item[\textit{Ex.}] (\emph{2-stage Runge-Kutta}) 
+	\begin{equation}
+		\begin{cases}
+			y_{n+1} = y_n + h(b_1 k_1 + b_2 k_2) \\
+			k_1 = f(t_n , y_n) \\
+			k_2 = f(t_n + c_2 h , y_n + a_{21}h k_1) 
+		\end{cases}
+	\end{equation}
+	The order-2 condition requires $b_1 + b_2 = 1, b_2c_2 = b_2 a_{21} = \frac{1}{2}$. Apply the method to $y'= \lambda y$ $\Rightarrow$ $y_{n+1} = y_n (1+b_1 \bar{h} + b_2 \bar{h} + b_2 a_{21} \bar{h}^2) = (1+\bar{h}+\frac{1}{2}\bar{h}^2)^{n+1} y_0$. Notice that the resulting formula is not dependent upon the exact value of parameters, only the order-2 constraints can determine it. We denote $R(z):= 1+z+\frac{1}{2}z^2$, then the A-stable region is $\left\|R_2(z)\right\|<1$.
+
+	\item[\textit{Ex.}] (\emph{3-stage Runge-Kutta}) 
+	\begin{equation}
+		\begin{cases}
+			y_{n+1} = y_n + h(b_1 k_1 + b_2 k_2 + b_3 k_3) \\
+			k_1 = f(t_n , y_n) \\
+			k_2 = f(t_n + c_2 h , y_n + a_{21}h k_1) \\
+			k_3 = f(t_n + c_3 h , y_n + a_{31}h k_1 + a_{32}h k_2) 
+		\end{cases}
+	\end{equation}
+	It turns out that $y_{n+1} = (1+ \bar{h} + \frac{1}{2}\bar{h}^2 + \frac{1}{6}\bar{h}^3)^{n+1} y_0$. A-stable region: $\left\|R_3(z)\right\|<1$.
+
+	In fact, A-stable region does not depend on the specific choice of parameters until 4-stages. $R_4(z)=1+z+\frac{1}{2}z^2 + \frac{1}{6}z^3 + \frac{1}{24}z^4$. For $N\geq 5$ this is not true anymore.
+
+	\item[\textit{Ex.}] Consider ode $y'=iwy$. The solution is $y(t)=e^{iwt} y_0$, which oscillates. And we want to keep the property $\left\|y(t)\right\| = \left\|y_0\right\|$ for numerical solutions. In fact, in this case we are seeking for a method whose A-stable region is A, and $\partial A$ is the imaginary axis.
+
+	\item[\textit{Ex.}] (\emph{A-Stablity of Multistep Methods}) consider general formulation of multistep method:
+	\begin{equation}
+		\sum_{j=0}^s a_j y_{n+j} = h\sum_{j=0}^s b_j f(t_{n+j}, y_{n+j})
+	\end{equation}
+	Apply to $y'=\lambda y$: 
+	\begin{equation}
+		\sum_{j=0}^s a_j y_{n+j} = h \sum_{j=0}^s b_j \lambda y_{n+j} = \bar{h} \sum_{j=0}^s b_j y_{n+j}
+	\end{equation}
+	$$
+	\Rightarrow \sum_{j=0}^s (a_j - \bar{h}b_j) y_{n+j} = 0
+	$$
+	Recall fisrt and seond characteristic polynomials: $\rho(z)=\sum_0^s a_j z^j$, $\sigma(z)=\sum_0^s b_j z^j$, zero stability depends on the roots of $\rho(z)=0$. Now we define the \emph{Stablity Polynomial}: $\pi(z, \bar{h}):=\rho(z) - \bar{h}\sigma(z)$. A-stablity $\iff$ all roots of $\pi(z, \bar{h})=0$ have norm $<1$ (within the unit circle on complex plane).
 \end{itemize}
+
 
 \end{document}
