@@ -193,4 +193,85 @@ $$
 $$
 And substitute $\sigma$ with the estimate $\hat{\sigma}$, yields the result. $\square$
 
+\subsection{Gauss Markov Theorem}
+\begin{itemize}
+	\item[\textit{Thm.}] (\textbf{Gauss-Markov}) the least squares estimator has smallest variance among all \emph{linear unbiased} estimates.
+
+	\textit{Proof.~~} Let $\tilde{\beta}$ be an unbiased linear estimator other than $\hat{\beta}$, which is the ols estimator. By linearity: $\tilde{\beta} = \bm{A} \bm{y}$, where $\bm{A}$ is some (non-random) matrix. Hence we may decompose $\tilde{\beta} = ((\bm{X}^{\top} \bm{X})^{-1}\bm{X}^{\top} + \bm{C})\bm{y} = \hat{\beta} + \bm{Cy}$, where we let $\bm{C}:=\bm{A} - (\bm{X}^{\top} \bm{X})^{-1}\bm{X}^{\top}$. 
+
+	~\\
+	By unbiasedness: $\beta=\mathbb{E}[\tilde{\beta}] = \mathbb{E}\left[\bm{Ay}\right] = \mathbb{E}\left[\bm{A}(\bm{X}\beta + \bm{\epsilon})\right] = \bm{AX} \beta + \bm{A} \mathbb{E}\left[\bm{\epsilon}\right]$. Since the last term has mean $\bm{0}$, this requires $\bm{AX}=\bm{I}$ $\Rightarrow \bm{CX}=\bm{O}$. Hence $\bm{Cy} = \bm{C}(\bm{X}\beta + \bm{\epsilon}) = \bm{C \epsilon}$. Therefore
+	\begin{equation}
+		\begin{split}
+			\mathrm{\mathbb{C}ov}[\hat{\beta}, \bm{Cy}] &= \mathrm{\mathbb{C}ov}[\hat{\beta}, \bm{C \epsilon}] = \mathbb{E}[(\hat{\beta} - \mathbb{E}\hat{\beta})(\bm{C \epsilon} - \bm{C}\mathbb{E}\bm{\epsilon})^{\top}] = \mathbb{E}[(\hat{\beta} - \beta)\bm{\epsilon}^{\top} \bm{C}^{\top}]  \\
+			&= \mathbb{E}[(\bm{X}^{\top}\bm{X})^{-1} \bm{X}^{\top} \bm{\epsilon}\bm{\epsilon}^{\top} \bm{C}^{\top}] = \sigma^2 (\bm{X}^{\top} \bm{X})^{-1} (\bm{CX})^{\top} = \bm{O}
+		\end{split}
+	\end{equation}
+
+	So: 
+	$$
+		\mathrm{\mathbb{V}ar}[\tilde{\beta}]  = \mathrm{\mathbb{V}ar}[\hat{\beta} + \bm{Cy}] = \mathrm{\mathbb{V}ar}[\hat{\beta} + \bm{C \bm{\epsilon}}] = \mathrm{\mathbb{V}ar}[\hat{\beta}] + \sigma^2 \bm{C}\bm{C}^{\top}~~~~~\square
+	$$
+
+	\subsection{Algorithm for Multiple Regression}
+	For the univariate regression (with no intercept), we calculate ols estimator as:
+	$$
+	\hat{\beta}_1 = (\bm{x}^{\top}\bm{x})^{-1} \bm{x}^{\top} \bm{y} = \frac{\langle \bm{x}, \bm{x} \rangle}{\langle \bm{x}, \bm{y} \rangle}
+	$$
+	And the residual $\bm{r} = \bm{y} - \bm{x}\hat{\beta}$. Suppose $\langle \bm{x}_i, \bm{x}_j \rangle = 0$, i.e. $\bm{X}$ is an orthogonal matrix, then $\hat{\beta}_j = \langle \bm{x}_j, \bm{y} \rangle/ \langle \bm{x}_j, \bm{x}_j \rangle$, just write down $(\bm{X}^{\top}\bm{X})^{-1} \bm{X}^{\top} \bm{y}$ and use the fact that $\bm{X}$ is orthogonal we can easily get the result. This implies that when the inputs are orthogonal, they have no effect on each other's parameter estimates in the model.
+
+	~\\ 
+	For non-orthogonal $\bm{X}$, we perform the \emph{Gram-Schmidt} orthogonalization procedure:
+	\begin{itemize}
+		\item[\textit{Algo.}] (\emph{Gram-Schmidt}) Suppose $\bm{X}=(\bm{1}, \bm{x}_1, ..., \bm{x}_p)$.
+		\begin{itemize}
+			\item[1.] Let $\bm{z}_0 \leftarrow  \bm{x}_0 \leftarrow  \bm{1}$.
+			\item[2.] \texttt{For j = 1:p}: Regress $\bm{x}_j$ on $\bm{z}_0, ..., \bm{z}_{j-1}$ respectively to produce coefficients $\hat{\gamma}_{ij} \leftarrow \langle \bm{z}_i, \bm{x}_j \rangle / \langle \bm{z}_i, \bm{z}_i \rangle$, $i=0,1,...,j-1$; $\hat{\gamma}_{jj} \leftarrow 1$.
+			\item[3.] Calculate residual $\bm{z}_j \leftarrow \bm{x}_j - \sum_{i=0}^{j-1} \hat{\gamma}_{ij} \bm{z}_i$ 
+			\item[4.] Regress $\bm{y}$ on the residual $\bm{z}_j$ to produce $\hat{\beta}_j \leftarrow \langle \bm{z}_j, \bm{y} \rangle / \langle \bm{z}_j, \bm{z}_j \rangle$
+		\end{itemize}
+
+		\item[\textit{Prop.}] $\bm{Z} = (\bm{z}_0, \bm{z}_1..., \bm{z}_p)$ is orthogonal. \\
+		\textit{Proof.~~} We show by induction proof. Firstly, it is easy to see that 
+		$$
+		\langle \bm{z}_0, \bm{z}_1 \rangle = \langle \bm{z}_0, \bm{x}_1 - \frac{\langle \bm{z}_0, \bm{x}_1 \rangle}{\langle \bm{z}_0, \bm{z}_0 \rangle} \bm{z}_0 \rangle = \langle \bm{z}_0, \bm{x}_1 \rangle - \langle \bm{z}_0, \bm{x}_1 \rangle = 0
+		$$
+		We assume $\langle \bm{z}_0, \bm{z}_k \rangle = 0$ for all $1 < k\leq j < p$. Then for $k=j+1$: 
+		$$
+		\langle \bm{z}_0, \bm{z}_{j+1} \rangle = \langle \bm{z}_0, \bm{x}_{j+1}-\sum_{l=0}^j\frac{\langle \bm{z}_l, \bm{x}_{j+1} \rangle}{\langle \bm{z}_l, \bm{z}_l \rangle} \bm{z}_l\rangle = \langle \bm{z}_0, \bm{x}_{j+1} \rangle - \langle \bm{z}_0, \frac{\langle \bm{z}_0, \bm{x}_{j+1} \rangle}{\langle \bm{z}_0, \bm{z}_0\rangle} \bm{z}_0 \rangle = 0
+		$$
+		So we conclude that $\langle \bm{z}_0, \bm{z}_j \rangle = 0$ for $j=1,2,...,p$. Do the same induction for $\bm{z}_1$ as follows:
+		\begin{itemize}
+			\item[$\cdot$] Base case, using the fact (what we already known): $\langle \bm{z}_0, \bm{z}_1 \rangle = 0$
+			$$
+			\langle \bm{z}_1, \bm{z}_{2} \rangle = \langle \bm{z}_1, \bm{x}_{2}-\frac{\langle \bm{z}_0, \bm{x}_{2} \rangle}{\langle \bm{z}_0, \bm{z}_0\rangle} \bm{z}_0 - \frac{\langle \bm{z}_1, \bm{x}_{2} \rangle}{\langle \bm{z}_1, \bm{z}_1\rangle} \bm{z}_1\rangle = \langle \bm{z}_1, \bm{x}_2 \rangle - \langle \bm{z}_1, \bm{x}_2 \rangle = 0
+			$$ 
+			\item[$\cdot$] The induction, assume $\langle \bm{z}_1, \bm{z}_k \rangle = 0$ for all $2 < k\leq j < p$. Then for $k=j+1$: 
+			$$
+			\langle \bm{z}_1, \bm{z}_{j+1} \rangle = \langle \bm{z}_1, \bm{x}_{j+1}-\sum_{l=0}^j\frac{\langle \bm{z}_l, \bm{x}_{j+1} \rangle}{\langle \bm{z}_l, \bm{z}_l \rangle} \bm{z}_l\rangle = \langle \bm{z}_1, \bm{x}_{j+1} \rangle - \langle \bm{z}_1, \frac{\langle \bm{z}_1, \bm{x}_{j+1} \rangle}{\langle \bm{z}_1, \bm{z}_1\rangle} \bm{z}_1 \rangle = 0
+			$$
+		\end{itemize}
+		So we conclude that $\langle \bm{z}_1, \bm{z}_j \rangle = 0$ for $j=2,...,p$. And the induction for $\bm{z}_i$, $i=2,3,...,p-1$ in the same fashion, we have $\bm{Z}$ is orthogonal. $\square$
+	\end{itemize}
+	Another observation is that $\bm{x}_j$ is a linear combination of $\bm{z}_k$, for $k\leq j$. Hence $\bm{Z}$ is a orthogonal basis for the column space of $\bm{X}$. Let $\bm{D}=\text{diag}(\left\|\bm{z}_j\right\|)$, then $\bm{Z}\bm{D}^{-1}$ gives the \emph{orthonormal basis} of column sapce of $\bm{X}$. We denote $\bm{Q}:=\bm{Z}\bm{D}^{-1}$, which is also an orthogonal matrix.
+
+	~\\
+	By writing the algo in a matrix form, we denote $\bm{\Gamma}=\{\hat{\gamma}_{ij}\}$, which is an upper triangular matrix with main diagonal entries being $1$s. And hence we have
+	$$
+	\bm{X} = \bm{Z\Gamma} = \bm{ZD}^{-1} \bm{D\Gamma} =: \bm{QR}
+	$$
+	And the ols estimator given by
+	$$
+	\hat{\beta} = (\bm{X}^{\top}\bm{X})^{-1} \bm{X}^{\top} \bm{y} = (\bm{R}^{\top}\bm{Q}^{\top}\bm{QR})^{-1} \bm{R}^{\top} \bm{Q}^{\top} \bm{y} = \bm{R}^{-1} \bm{R}^{-\top} \bm{R}^{\top} \bm{Q}^{\top} \bm{y} = \bm{R}^{-1} \bm{Q}^{\top} \bm{y}
+	$$
+	$$
+	\hat{\bm{y}} = \bm{X}\hat{\beta} = \bm{QR}\bm{R}^{-1} \bm{Q}^{\top} \bm{y} = \bm{Q}\bm{Q}^{\top} \bm{y}
+	$$
+\end{itemize}
+
+
+\section{Subset Selection}
+
+\section{Shrinkage Methods}
+
 \end{document}
