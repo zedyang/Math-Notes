@@ -271,6 +271,12 @@ And substitute $\sigma$ with the estimate $\hat{\sigma}$, yields the result. $\s
 
 
 \section{Subset Selection}
+\begin{itemize}
+	\item[$\cdot$] (\emph{Best-Subset Selection}) Look at all possible models at every given number ($k$) of variables chosen. (computationally expensive, becomes infeasible for $p$ much larger than 30-40 or so)
+	\item[$\cdot$] (\emph{Forward-Stepwise Selection}) Rather than search through all possible subsets, we want to seek a path through them. FSS proceeds by sequentially adds into the model the predictor that most improves the fit. This is charactered as a \emph{greedy algorithm}, which must produce a nested sequence of models, i.e. it may not find the best model, when, for example, the best subset of size 2 does not include that of size 1 (which may happen). However, it has lower variance compared with best-subset.
+	\item[$\cdot$] (\emph{Backward-Stepwise Selection}) Starts with the full model, and sequentially deletes the predictors that has the least impact on the fit. Can only be used for $N>p$. 
+	\item[$\cdot$] (\emph{Forward-Stagewise (FS) Selection}) Start as the forward-stepwise, with intercept $\bar{y}$, and centered predictors with coefficients initially set as $0$. Then at each step, choose the variable that are most \emph{correlated} with the current residual, then compute simple regression param $\gamma$ of residual on this varible, add this to the current $\beta_j$, i.e. $\beta_j \leftarrow \beta_j + \gamma$. Continues until none are correlated with the residual. The convergence of this algorithm can be slow, but it has good performance for problems with high dimensionality.
+\end{itemize}
 
 \section{Shrinkage Methods}
 

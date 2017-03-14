@@ -149,4 +149,17 @@ The exact solution decays with $t$, we want the numerical solution to possess th
 \end{itemize}
 
 
+\section{L Stability}
+\begin{itemize}
+	\item[\textit{Def.}] \textbf{L Stability}: We define the growth factor as $R(\bar{h})=\frac{y_{n+1}}{y_n}$. And we say that a method is L-stable if it is A-stable and $\lim\limits_{\bar{h}\rightarrow\infty}|R(\bar{h})| =0$.
+
+	\item[\textit{Ex.}] 
+	\begin{itemize}
+		\item[$\cdot$] The explicit Euler: $R(z)=1+z$, not L-stable.
+		\item[$\cdot$] The implicit Euler: $R(z)=\frac{1}{1-z}$, L-stable.
+		\item[$\cdot$] The trapezoid: $R(z)=\frac{1+\frac{z}{2}}{1-\frac{z}{2}}$, not L-stable. 
+	\end{itemize}
+	Usually, we can see that an implicit method has better stability.
+\end{itemize}
+
 \end{document}
