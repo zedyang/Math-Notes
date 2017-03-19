@@ -277,7 +277,30 @@ And substitute $\sigma$ with the estimate $\hat{\sigma}$, yields the result. $\s
 	\item[$\cdot$] (\emph{Backward-Stepwise Selection}) Starts with the full model, and sequentially deletes the predictors that has the least impact on the fit. Can only be used for $N>p$. 
 	\item[$\cdot$] (\emph{Forward-Stagewise (FS) Selection}) Start as the forward-stepwise, with intercept $\bar{y}$, and centered predictors with coefficients initially set as $0$. Then at each step, choose the variable that are most \emph{correlated} with the current residual, then compute simple regression param $\gamma$ of residual on this varible, add this to the current $\beta_j$, i.e. $\beta_j \leftarrow \beta_j + \gamma$. Continues until none are correlated with the residual. The convergence of this algorithm can be slow, but it has good performance for problems with high dimensionality.
 \end{itemize}
+Subset selection is a \emph{discrete} process, we either include a variable or exclude it. As a result it often exhibits high variance. Shrinkage methods are more continuous, and do not suffer from high variability.
 
 \section{Shrinkage Methods}
+The motivation of various shrinkage methods is to overcome the \emph{combinatorial explosion} of the number of possible subsets (when $p$ large) by converting the discrete problem to a continuous one, which turn out to be simpler to solve.
+\subsection{Ridge Regression}
+The ridge regression shrinks the regression coefs by imposing a penalty on the magnitudes of these coefficients. Denote the ridge estimator $\hat{\beta}^{ridge}$, it minimizes a penalized sum of squares:
+
+$$
+\hat{\beta}^{ridge} = \argmin\limits_{\beta} \left\{\sum_{i=1}^N (y_i - \beta_0 - \sum_{j=1}^p x_{ij}\beta_j)^2 + \lambda \sum_{j=1}^p \beta_j^2\right\}~~~~(*)
+$$
+where $\lambda$ is a hyperparameter (complexity parameter) that controls the amount of shrink. The solution of $(*)$ are not equivalent under the scaling of inputs. Hence we usually standardize the input before solving $(*)$. In addition, we don't penalize the magnitude $\beta_0$
+
+~\\
+The standardization procedure is done as: calculate the centered inputs as $x_{ij}-\bar{x}_j$, (in the following text we assume $\{\bm{X}\}_{ij}$ is this, has $p$ columns without $\bm{1}$), and estimate $\hat{\beta}_0$ by $\sum_{1}^N y_i/N$.
+~\\
+\begin{itemize}
+	\item[\textit{Def.}] \textbf{Ridge Regression Estimator}: We minimize loss function with penalization:
+	$$
+	\hat{\beta}^{ridge} = \argmin\limits_{\beta} \{(\bm{y} - \bm{X}\beta)^{\top}(\bm{y} - \bm{X}\beta) + \lambda \beta^{\top} \beta\}
+	$$
+	We have $\partial RSS(\lambda)/\partial \beta = 2\bm{X}^{\top}(\bm{y} - \bm{X}\beta) + 2 \lambda \beta = 0$ $\Rightarrow$ $\hat{\beta}^{ridge} = (\bm{X}^{\top}\bm{X}+\lambda \bm{I}_p)^{-1} \bm{X}^{\top} \bm{y}$
+\end{itemize}
+Note that $\hat{\beta}^{ridge}$ is still a linear function of $\bm{y}$. And $\bm{X}^{\top}\bm{X}+\lambda \bm{I}_p$ is nonsigular, even if $\bm{X}^{\top} \bm{X}$ is singular.
+
+
 
 \end{document}

@@ -75,26 +75,93 @@
   Justify the rate of convergence numerically.
 \end{itemize}
 \end{problem}
-\begin{proof} 
-\end{proof} 
+\begin{solution} See the attached code.
+\end{solution} 
 \noindent\rule{16cm}{0.4pt}
 %///////////////////////////////////////////////////////////////////////
 
-\begin{problem} Consider the RK method
+\begin{problem} Consider the RK method (I just use the notations in the class)
 $$
-\frac{U_{n+1}-U_n}{\Delta t} = c_1k_1 + c_2 k_2
+\frac{y_{n+1}-y_n}{h} = c_1k_1 + c_2 k_2
 $$
-where $k_1= f(t_n, U_n), k_2 = f(t_n+b_{21}\Delta t, U_n + b_{21}\Delta t k_1$, and $c_1, c_2, b_{21} \in \mathbb{R}$. 
+where $k_1= f(t_n, y_n), k_2 = f(t_n+b_{21}h, y_n + b_{21}h k_1)$, and $c_1, c_2, b_{21} \in \mathbb{R}$. 
 \begin{itemize}
   \item[a.] Show that there is a choice of these parameters such that the truncation error of the method
   $$
-  \frac{T_n}{\Delta t} = \frac{u(t_{n+1})-u(t_n)}{\Delta t} = c_1f(t_n, u(t_n)) + c_2 f(t_n+b_{21}\Delta t, u(t_n) + b_{21}\Delta t f(t_n, u(t_n)))
+  \frac{T_n}{\Delta t} = \frac{y(t_{n+1})-y(t_n)}{h} - c_1f(t_n, y(t_n)) - c_2 f(t_n+b_{21}h, y(t_n) + b_{21}h f(t_n, y(t_n)))
   $$
-  is of order 2 as $\Delta t \to 0$.
-  \item[b.] Suppose that a second order method of the above form is applied to the IVP $u'=-\lambda u$, $u(0)=1$, where $\lambda$ is real positive number. Show that the sequence $\{U_n\}_{n\geq 0}$ is bounded $\iff$ $\Delta t \leq 2/\lambda$ (\emph{interval of absolute stability}). Show further that, for such $\lambda$: $|u(t_n) - U_n|\leq \frac{1}{6}\lambda^3 \Delta t^2 t_n$, $n\geq 0$.
+  is of order 2 as $h \to 0$.
+  \item[b.] Suppose that a second order method of the above form is applied to the IVP $y'=-\lambda y$, $y(0)=1$, where $\lambda$ is \emph{real positive} number. Show that the sequence $\{y_n\}_{n\geq 0}$ is bounded $\iff$ $h \leq 2/\lambda$ (like the interval of absolute stability). Show further that, for such $\lambda$: $|y(t_n) - y_n|\leq \frac{1}{6}\lambda^3 h^2 t_n$, $n\geq 0$.
 \end{itemize}
 \end{problem}
-\begin{proof} 
+\begin{proof} (a) We have (by $f$ we mean $f(t_n, y(t_n))$, and by $y$ we mean $y(t_n)$):
+\begin{equation}
+  \begin{split}
+    y'&=f \\
+    y'' &= f_t + f_yy' = f_t + f_y f\\
+    y'''&=f_{tt} + f_{ty} y' + y''f_y + (f_y)'y' = f_{tt}+2f_{ty}f+f^2 f_{yy}+f_y f_t + f_y^2 f
+  \end{split}
+\end{equation}
+Therefore use taylor expansion of $y(t_{n+1})$ at $t_n$: 
+\begin{equation}
+  \frac{y(t_{n+1}) - y(t_n)}{h} = f + \frac{h}{2}(f_t + f_y f) + \frac{h^2}{6}(f_{tt}+2f_{ty}f+f^2 f_{yy}+f_y f_t + f_y^2 f)  
+\end{equation}
+And that
+\begin{equation}
+  \begin{split}
+    b_1 k_1 + b_2 k_2 &= b_1 f + b_2 f(t_n + c_2 h, y(t_n) + ha_{21}f(t_n, y(t_n))) \\
+    &= b_1 f + b_2 (f + f_t c_2 h + f_y ha_{21}f + \tfrac{1}{2}(f_{tt}c_2^2h^2+2f_{ty} c_2 h \cdot a_{21}hf + f_{yy}h^2 a_{21}^2 f^2+O(h^3)) \\
+    &= (b_1 + b_2)f + h(b_2 c_2 f_t + b_2 a_{21}f_yf) + \tfrac{h^2}{2}(c_2^2 f_{tt}+2c_2a_{21}f_{ty}f+a_{21}f_{yy}f^2) + O(h^3)
+  \end{split}
+\end{equation}
+So we subtract $b_1 k_1 + b_2 k_2$ from $\frac{y(t_{n+1})-y(t_n)}{h}$. To achieve a truncation error of order $2$, we have to let $O(1)$ and $O(h)$ terms equal to 0:
+\begin{equation}
+  \begin{split}
+    O(1)\text{ terms}: & f  - (b_1 + b_2)f = 0 \\
+    O(h)\text{ terms}: & \frac{h}{2}(f_t + f_y f)  - h(b_2 c_2 f_t + b_2 a_{21}f_yf) = 0 \\
+  \end{split}
+\end{equation}
+$$
+  \Rightarrow b_1 + b_2 = 1;~~~b_2 c_2 = \tfrac{1}{2};~~~b_2 a_{21}=\tfrac{1}{2}
+$$
+Clearly, there exists such parameters. For example, $b_1 = b_2 = \frac{1}{2}$, $a_{21}=c_2=1$. $\square$
+
+~\\
+(b.) Apply RK2 to $y'=- \lambda y$: $k_1 = - \lambda y_n$. $k_2 = -\lambda (y_n + a_{21} hk_1)$. So let $z := \lambda h$
+$$
+y_{n+1} = y_n + h (-b_1 \lambda y_n - b_2 \lambda y_n + b_2 a_{21} h \lambda^2 y_n) = y_n (1-b_1 z-b_2z + b_2 a_{21} z^2) = y_n(1-z+\tfrac{1}{2}z^2)
+$$
+Therefore $y_n = (1-z+\tfrac{1}{2}z^2)^n y_0$ is bounded $\Rightarrow |1-z+\tfrac{1}{2}z^2|\leq 1$. The solution is $0\leq z\leq 2$, i.e. $h\leq 2/\lambda$. \\
+The exact solution $y(t_n) = e^{-\lambda t}y(0) = e^{-nz}$. Hence 
+$$
+y(t_n) - y_n = e^{-nz} - (1-z+\tfrac{1}{2}z^2)^n
+$$
+Use taylor expansion to $e^{-nz}$, and trinomial expansion to the second term:
+$$
+e^{-nz} = 1 - nz + \frac{n^2 z^2}{2} - \frac{n^3z^3}{6} + \frac{n^4z^4}{24} + h.o.t.
+$$
+\begin{equation}
+  \begin{split}
+    (1-z+\tfrac{1}{2}z^2)^n &= 1 + n(-z) + n(\tfrac{z^2}{2}) + \tfrac{n(n-1)}{2!}(-z)^2 + \tfrac{n(n-1)}{1!1!}(-z)(\tfrac{z^2}{2}) + \tfrac{n(n-1)(n-2)}{3!}(-z)^3 \\
+    &~~~~+ \tfrac{n(n-1)(n-2)(n-3)}{4!}(-z)^4 + \tfrac{n(n-1)}{2!}(\tfrac{z^2}{2})^2 + \tfrac{n(n-1)(n-2)}{2!1!}(-z)^2(\tfrac{z^2}{2})+h.o.t. \\
+    &= 1-nz + \tfrac{(n^2-n+n)}{2} z^2- \tfrac{[(n^3-3n^2+2n)+(3n^2-3n)]}{6}z^3\\
+    &~~~~+\tfrac{[(n^4-6n^3+11n^2-6n)+(3n^2-3n)+(6n^3-18n^2+12n)]}{24}z^4 + h.o.t\\
+    &=1-nz + \tfrac{n^2}{2}z^2 - \tfrac{n^3-n}{6}z^3 + \tfrac{n^4-4n^2+3n}{24}z^4  + h.o.t.
+  \end{split}
+\end{equation}
+Hence
+\begin{equation}
+  \begin{split}
+    y(t_n) - y_n &= -\frac{n}{6}z^3 + \frac{4n^2-3n}{24}z^4 + h.o.t. \\
+    &= -\frac{1}{6}\lambda^3 h^2 t_n + \frac{4n^2-3n}{24}z^4 + h.o.t.
+  \end{split}
+\end{equation}
+For $n \in \mathbb{N}^{+} \cup \{0\}$, we have $4n^2-3n \geq 0$. Therefore
+$$
+|y(t_n) - y_n| = \left|-\frac{1}{6}\lambda^3 h^2 t_n + \frac{4n^2-3n}{24}z^4 + h.o.t.\right| \leq \left|\frac{1}{6}\lambda^3 h^2 t_n\right|
+$$
+As $h\to 0$, $z=\lambda h\to 0$.
+
 \end{proof} 
 \noindent\rule{16cm}{0.4pt}
 %///////////////////////////////////////////////////////////////////////
@@ -104,17 +171,145 @@ $$
 a_0 y_n + a_1 y_{n+1} + ... + a_s y_{n+s} = 0
 $$
 \end{problem}
-\begin{proof} 
-\end{proof} 
+\begin{proof} WLOG we assume the recurrence is of order $s$, i.e. $a_s \ne 0$. Then rearrange the terms as:
+$$
+y_{n+s} + \tfrac{a_{s-1}}{a_s} y_{n+s-1} + ... + \tfrac{a_{1}}{a_s} y_{n+1} + \tfrac{a_{0}}{a_s} y_{n+1} = y_{n+s} + c_{s-1}y_{n+s-1} + ... + c_1 y_{n+1} + c_0 y_{n} = 0
+$$
+with $c_k=\frac{a_k}{a_s}$, $k=0,1,...,s-1$.
+We start with a lemma on \emph{companion matrix}.
+\begin{itemize}
+  \item[\textit{Lemma.}] The chracteristic polynomial of $n$-degree $P(\lambda)=\lambda^s + c_{s-1}\lambda^{s-1}+...+c_1 \lambda + c_0 = \det(\lambda \bm{I} - \bm{C})$, where 
+  $$
+  \bm{C} = \begin{pmatrix}
+    -c_{s-1} & -c_{s-2} & \hdots & -c_1 & -c_0 \\
+    1 & 0 & \hdots & 0 & 0\\
+    0 & 1 & \hdots & 0 & 0\\
+    \vdots & \vdots & \ddots & \vdots & \vdots\\
+    0 & 0 & \hdots & 1 & 0\\
+  \end{pmatrix}
+  $$
+\end{itemize}
+\emph{Proof of Lemma}: We prove by induction. For degree $s=1$ case, $P(\lambda) = \lambda + c_0$. And $\lambda \bm{I} - \bm{C}$ is just $\lambda - (-c_0)$. \\
+Now assume the relation is true for $s-1$, at $s$, we have $\det(\lambda\bm{I} - \bm{C}) = $
+$$
+\begin{vmatrix}
+    c_{s-1} & c_{s-2} & \hdots & c_1 & c_0 \\
+    -1 & \lambda & \hdots & 0 & 0\\
+    0 & -1 & \hdots & 0 & 0\\
+    \vdots & \vdots & \ddots & \vdots & \vdots\\
+    0 & 0 & \hdots & -1 & \lambda\\
+\end{vmatrix}_{s} = \lambda \begin{vmatrix}
+    c_{s-1} & c_{s-2} & \hdots & c_2 & c_1 \\
+    -1 & \lambda & \hdots & 0 & 0\\
+    0 & -1 & \hdots & 0 & 0\\
+    \vdots & \vdots & \ddots & \vdots & \vdots\\
+    0 & 0 & \hdots & -1 & \lambda\\
+\end{vmatrix}_{s-1} + (-1)^{s+1} c_0 
+\begin{vmatrix}
+    -1 & \lambda & \hdots & 0 & 0\\
+    0 & -1 & \hdots & 0 & 0\\
+    \vdots & \vdots & \ddots & \vdots & \vdots\\
+    0 & 0 & \hdots & -1 & \lambda\\
+    0 & 0 & \hdots & 0 & -1\\
+\end{vmatrix}_{s-1}~~(\dag)
+$$
+with our inductive assumption, the determinant in the first term is exactly $\det (\lambda \bm{I} - \bm{C})$ in the degree $s-1$ case. So,
+$$
+(\dag) = \lambda (\lambda^{s-1}+c_{s-1} \lambda^{s-2} + ... + c_2 \lambda + c_1) + (-1)^{s+1} c_0 (-1)^{s-1} = P(\lambda)~~~~\blacksquare
+$$
+The lemma suggests that finding the roots of $P(\lambda)=0$ is equivalent to finding the eigenvalues of $\bm{C}$. \\
+We denote $\bm{y}_n = (y_{n+s}, ..., y_{n+2}, y_{n+1})^{\top}$; $\bm{c}=(c_{s-1}, ..., c_1, c_0)^{\top}$, and unit vector with 1 on position $k$ as $\bm{\iota}_k$. We find that the linear recurrence can be vectorized as $y_{n+s} = -\bm{c}^{\top} \bm{y}_{n-1}$. Moreover $y_{n+k} = \bm{\iota}_k^{\top} \bm{y}_{n-1}$ for $k=1, ..., s-1$.
+$$
+\bm{y}_{n} = \begin{pmatrix}
+  y_{n+s} \\
+  y_{n+s-1} \\
+  y_{n+s-2} \\
+  \vdots \\
+  y_{n+1}
+\end{pmatrix} = 
+\begin{pmatrix}
+  -\bm{c}^{\top}\bm{y}_n \\
+  \bm{\iota}_{1}^{\top}\bm{y}_n \\
+  \bm{\iota}_{2}^{\top}\bm{y}_n \\
+  \vdots \\
+  \bm{\iota}_{s-1}^{\top}\bm{y}_n
+\end{pmatrix}
+= 
+\begin{pmatrix}
+    -c_{s-1} & -c_{s-2} & \hdots & -c_1 & -c_0 \\
+    1 & 0 & \hdots & 0 & 0\\
+    0 & 1 & \hdots & 0 & 0\\
+    \vdots & \vdots & \ddots & \vdots & \vdots\\
+    0 & 0 & \hdots & 1 & 0\\
+\end{pmatrix} 
+\begin{pmatrix}
+  y_{n+s-1} \\
+  y_{n+s-2} \\
+  y_{n+s-3} \\
+  \vdots \\
+  y_{n}
+\end{pmatrix} = \bm{Cy}_{n-1} = \bm{C}^{n} \bm{y}_0
+$$
+where $\bm{y}_0 = (y_s, y_{s-1}, ..., y_2, y_1)^{\top}$ is the initial condition.\\
+Assume $\bm{C}$ has eigenvalues $\lambda_1, ..., \lambda_p$, $p\leq s$ with algebraic multiplicity $m_1, ..., m_p$, where $\sum_p m_p = s$. Hence we decompose $\bm{C} = \bm{PJ}\bm{P}^{-1}$ in its Jordan Normal Form: 
+$$
+\bm{C}^n \bm{y}_0 = \bm{P} \bm{J}^n \bm{P}^{-1} \bm{y}_0 = \bm{P} \begin{pmatrix}
+  \bm{J}_{\lambda_1}^n & & \\
+  & \bm{J}_{\lambda_2}^n &  \\
+  & & \ddots & \\
+  & & & \bm{J}_{\lambda_p}^n
+  \\
+\end{pmatrix} \bm{P}^{-1} \bm{y}_0~~(*)
+$$
+$$
+\text{where } \bm{J}_{\lambda_i}^n = 
+\begin{pmatrix}
+   \lambda_i^n & \binom{n}{1} \lambda_i^{n-1} & \binom{n}{2} \lambda_i^{n-2} & \hdots & \binom{n}{m_{i}-1} \lambda_i^{n-(m_i-1)}\\
+   & \lambda_i^n & \binom{n}{1} \lambda_i^{n-1} & \hdots & \binom{n}{m_{i}-2} \lambda_i^{n-(m_i-2)}\\
+   & & \ddots & \ddots & \vdots \\
+   & & & \lambda_i^n &  \binom{n}{1} \lambda_i^{n-1}\\
+   & & & & \lambda_i^n
+\end{pmatrix}_{m_i \times m_i}
+$$
+The typical entry is $\binom{n}{r} \lambda_i^{n-r} = \frac{\binom{n}{r}}{\lambda_i^r} \lambda_i^n$, which we can regard as $p^{[r]}_i(n) \lambda_i^n$. Here $p^{[r]}_i(n)$ is a polynomial of $n$ to the degree $r$. Therefore, we regard $(*)$ as applying linear opeartions on these entries. We know that applying linear operations on a collection of polynomials $\{p^{[r]}_i(n)\}_{r=1}^{m_i-1}$ will result in another polynomial with degree no more than $m_i-1$, denote it as $g_i^{[m_i-1]}(n)$. So we have
+\begin{equation}
+  \begin{split}
+    y_{n+s} &= \sum_{i=1}^p g^{[m_i-1]}_i(n) \lambda_i^n = \sum_{i=1}^p  \sum_{r=0}^{m_i-1} \alpha_{ir} n^r \lambda_i^n \\
+    &= (\alpha_{10} + \alpha_{11}n + ... + \alpha_{1,m_1-1} n^{m_1-1}) \lambda_1^n + ... + (\alpha_{p0} + \alpha_{p1}n + ... + \alpha_{p,m_p-1} n^{m_p-1}) \lambda_p^n
+  \end{split}
+\end{equation}
+Where $\{\alpha_{ir}\}_{i=1, r=0}^{p, m_i-1}$ are constants. Since $\sum_{i=1}^p m_i = s$, there are $s$ constants in total, which are solved by inserting initial condition $\bm{y}_0=(y_s, y_{s-1}, ..., y_1)^{\top}$ into the general solution. If we index the initial condition as $(y_0, y_{-1}, ..., y_{-(s-1)})^{\top}$ instead, the general solution will be
+$$
+y_{n} = (C_{10} + C_{11}n + ... + C_{1,m_1-1} n^{m_1-1}) \lambda_1^n + ... + (C_{p0} + C_{p1}n + ... + C_{p,m_p-1} n^{m_p-1}) \lambda_p^n
+$$
+Where $\{C_{ir}\}$ is another set of constants. By lemma, $\{\lambda_i\}$ are the roots of $P(\lambda)=0$, with multiplicity $\{m_i\}$. And this general solution holds for all $n\geq 0$.
+
+\end{proof}
 \noindent\rule{16cm}{0.4pt}
 %///////////////////////////////////////////////////////////////////////
 
 \begin{problem} Find the region of A-stablity for the multistep method:
 $$
-U_{n+2} - U_n = \frac{1}{3}h [f(t_{n+2}, U_{n+2}) + 4f(t_{n+1}, U_{n+1}) + f(t_n, U_n) ]
+y_{n+2} - y_n = \frac{1}{3}h [f(t_{n+2}, y_{n+2}) + 4f(t_{n+1}, y_{n+1}) + f(t_n, y_n) ]
 $$
 \end{problem}
-\begin{proof} 
+\begin{proof} The first- and second-characteristic polynomial of the method is:
+$$
+\rho(z) = z^2 - z;~~~\sigma(z) = \tfrac{1}{3}z^2+\tfrac{4}{3}z+\tfrac{1}{3}
+$$
+So the method is absolute stable $\iff$ the roots $z$ of $\Pi(z,\bar{h})=\rho(z)-\bar{h}\sigma(z)$ have modulus $<1$.
+\begin{equation}
+  \Pi(z,\bar{h}) = z^2 - z - \bar{h}\left(\tfrac{1}{3}z^2+\tfrac{4}{3}z+\tfrac{1}{3}\right) = (1-\tfrac{\bar{h}}{3})z^2 + (-1-\tfrac{4\bar{h}}{3})z + (-\tfrac{\bar{h}}{3}) = 0
+\end{equation}
+We solve the equation and obtain
+$$
+z = \frac{\pm\sqrt{3(4 \bar{h}^2+12 \bar{h}+3)}-4 \bar{h}-3}{2 (\bar{h}-3)}
+$$
+Or $\bar{h} = (z^2 - z)/(\tfrac{1}{3}z^2+\tfrac{4}{3}z+\tfrac{1}{3})$. Denote the stability region as $\mathcal{S}$, then on $\partial \mathcal{S}$, the polynomial has root $|z|=1$. Hence we can find the boundary by
+$$
+\partial \mathcal{S} = \left\{\frac{\rho(e^{i\theta})}{\sigma(e^{i\theta})}, \theta\in [0, 2\pi]\right\} =  \left\{\frac{e^{2i\theta} - e^{i\theta}}{\tfrac{1}{3}e^{2i\theta}+\tfrac{4}{3}e^{i\theta}+\tfrac{1}{3}}, \theta\in [0, 2\pi]\right\}
+$$
+The region is give as the following plot (see the attached code).
 \end{proof} 
 \noindent\rule{16cm}{0.4pt}
 %///////////////////////////////////////////////////////////////////////
