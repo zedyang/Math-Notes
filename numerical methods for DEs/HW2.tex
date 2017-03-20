@@ -314,34 +314,258 @@ The region is give as the following plot (see the attached code).
 \noindent\rule{16cm}{0.4pt}
 %///////////////////////////////////////////////////////////////////////
 
-\begin{problem} (Iserles 3.4) Apply the classical RK4 method to scalar autonomous ode $y'=f(y)$, check that this method is indeed of order 4.
+\begin{problem} (Iserles 3.4) Apply the classical RK4 method (with coefficient table shown as below) to scalar autonomous ode $y'=f(y)$, check that this method is indeed of order 4.
+  \begin{center}
+    \begin{tabular}{c|ccccc}
+    $c_1$ \\
+    $c_2$ & $a_{21}$ \\
+    $c_3$ & $a_{31}$ & $a_{32}$\\
+    $c_4$ & $a_{41}$ & $a_{42}$ & $a_{43}$\\
+    \hline
+     & $b_1$ & $b_2$ & $b_3$ & $b_4$
+    \end{tabular}  = 
+    \begin{tabular}{c|ccccc}
+    $0$ \\
+    $1/2$ & $1/2$ \\
+    $1/2$ & $0$ & $1/2$\\
+    $1$ & $0$ & $0$ & $1$\\
+    \hline
+     & $1/6$ & $1/3$ & $1/3$ & $1/6$
+    \end{tabular}
+  \end{center}
 \end{problem}
-\begin{proof} 
+
+\begin{proof} We want to calculate the truncation error:
+$$
+\frac{T_n}{h} = \frac{y(t_{n+1})-y(t_n)}{h} - (b_1k_1 + b_2 k_2 + b_3 k_3 + b_4k_4)
+$$
+We first calculate the first term using taylor expansion. We calculate the derivatives with \texttt{Mathematica}:
+\begin{equation}
+  \begin{split}
+    y' &= f(y(t)) = f,~~~~\tfrac{1}{2!}y^{(2)} = y'(t) f'(y(t)) = \tfrac{1}{2}f_yf \\
+    \tfrac{1}{3!}y^{(3)} &= \tfrac{1}{6}y'(t)^2 f''(y(t))+\tfrac{1}{6}y''(t) f'(y(t)) = \tfrac{1}{6}f_{yy}f^2 + \tfrac{1}{6}f_y^2 f\\
+    \tfrac{1}{4!}y^{(4)} &=\tfrac{1}{24}[f^{(3)}(y(t)) y'(t)^3+3 y'(t) y''(t) f''(y(t))+y^{(3)}(t) f'(y(t))]\\
+    &= \tfrac{1}{24}[f_{yyy}f^3 + 3f(ff_y)f_{yy} + (f^2f_{yy} + f_y^2 f)f_y] \\
+    &= \tfrac{1}{24}f_{yyy}f^3 + \tfrac{1}{6}f_{yy}f_yf^2 + \tfrac{1}{24}f_y^3 f
+  \end{split}
+\end{equation}
+Then we expand the second part, the $k$'s are given by
+\begin{equation}
+  \begin{split}
+    k_1 &= f \\
+    k_2 &= f(y_n + \tfrac{1}{2}hf(y_n)) = \{f+f_y\cdot(\tfrac{1}{2}hf) + \tfrac{f_{yy}}{2}\cdot(\tfrac{1}{2}hf))^2+\tfrac{f_{yyy}}{6}\cdot(\tfrac{1}{2}hf)^3+O(h^4)\}\\
+    &= f + \tfrac{1}{2}f_yf h + \tfrac{1}{8}f_{yy}f^2 h^2 + \tfrac{1}{48}f_{yyy}f^3 h^3 + O(h^4)
+    \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    k_3 &= f\left(y_n + \tfrac{1}{2}h\left(f + \tfrac{1}{2}f_yf h + \tfrac{1}{8}f_{yy}f^2 h^2 + \tfrac{1}{48}f_{yyy}f^3 h^3 + O(h^4)\right)\right)\\
+    &= \Big\{
+    f + 
+    f_y\cdot \tfrac{1}{2}h \left(f + \tfrac{1}{2}f_yf h + \tfrac{1}{8}f_{yy}f^2 h^2 + O(h^3)\right) + 
+    \tfrac{f_{yy}}{2}\cdot \tfrac{1}{4}h^2 \left(f + \tfrac{1}{2}f_yf h + O(h^2)\right)^2 + 
+    \\
+    &~~~~+\tfrac{f_{yyy}}{6}\cdot \tfrac{1}{8}h^3 \left(f + O(h)\right)^3 + O(h^4) \Big\}\\
+    &= f + 
+    h \left(\tfrac{f_yf}{2} + \tfrac{1}{4}f_y^2f h + \tfrac{1}{16}f_{yy}f_yf^2 h^2 + O(h^3)\right)+
+    h^2 \left(\tfrac{f_{yy}f^2}{8} + \tfrac{1}{8}f_{yy}f_yf^2 h + O(h^2)\right) \\
+    &~~~~+h^3 \left(\tfrac{1}{48}f_{yyy}f^3 + O(h)\right) + O(h^4)\\
+    &= f + \tfrac{1}{2}f_yfh + (\tfrac{1}{4}f_y^2f+\tfrac{1}{8}f_{yy}f^2)h^2 + (\tfrac{3}{16}f_{yy}f_yf^2+\tfrac{1}{48}f_{yyy}f^3)h^3 + O(h^4)\\
+    \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    k_4 &= f\left(y_n + h\left[f + \tfrac{1}{2}f_yfh + (\tfrac{1}{4}f_y^2f+\tfrac{1}{8}f_{yy}f^2)h^2 + (\tfrac{3}{16}f_{yy}f_yf^2+\tfrac{1}{48}f_{yyy}f^3)h^3 + O(h^4)\right]\right) \\
+    & = \Big\{ f + f_y\cdot h\left[f + \tfrac{1}{2}f_yfh + (\tfrac{1}{4}f_y^2f+\tfrac{1}{8}f_{yy}f^2)h^2+O(h^3)\right] + \tfrac{f_{yy}}{2}\cdot h^2\left[f + \tfrac{1}{2}f_yfh + O(h^2)\right]^2\\
+    &~~~~+\tfrac{f_{yyy}}{6}\cdot h^3\left[f + O(h)\right]^3 + O(h^4)\Big\}\\
+    & = f + 
+    h \left[f_yf + \tfrac{1}{2}f_y^2f h + (\tfrac{1}{4}f_y^3f+\tfrac{1}{8}f_{yy}f_yf^2)h^2 + O(h^3)\right]+ h^2\left[\tfrac{1}{2}f_{yy}f^2 + \tfrac{1}{2}f_{yy}f_yf^2h + O(h^2)\right] \\
+    &~~~~+h^3(\tfrac{1}{6}f_{yyy}f^3 + O(h)) + O(h^4)\\
+    &= f + f_y fh + (\tfrac{1}{2}f_y^2f+\tfrac{1}{2}f_{yy}f^2)h^2 + (\tfrac{1}{4}f_y^3f + \tfrac{5}{8}f_{yy}f_yf^2+\tfrac{1}{6}f_{yyy}f^3)h^3 + O(h^4)
+  \end{split}
+\end{equation}
+Hence we have:
+\begin{equation}
+  \begin{split}
+    \tfrac{1}{6}k_1 &= \tfrac{1}{6} f \\
+    \tfrac{1}{3}k_2 &= \tfrac{1}{3}f + \tfrac{1}{6}f_yf h + \tfrac{1}{24}f_{yy}f^2 h^2 + \tfrac{1}{144}f_{yyy}f^3 h^3 + O(h^4) \\
+    \tfrac{1}{3}k_3 &= \tfrac{1}{3}f + \tfrac{1}{6}f_yfh + (\tfrac{1}{12}f_y^2f+\tfrac{1}{24}f_{yy}f^2)h^2 + (\tfrac{1}{16}f_{yy}f_yf^2+\tfrac{1}{144}f_{yyy}f^3)h^3 + O(h^4)\\
+    \tfrac{1}{6}k_4 &= \tfrac{1}{6}f + \tfrac{1}{6}f_y fh + (\tfrac{1}{12}f_y^2f+\tfrac{1}{12}f_{yy}f^2)h^2 + (\tfrac{1}{24}f_y^3f + \tfrac{5}{48}f_{yy}f_yf^2+\tfrac{1}{36}f_{yyy}f^3)h^3 + O(h^4)\\
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    \tfrac{1}{6}k_1 + \tfrac{1}{3}k_2 + \tfrac{1}{3}k_3 + \tfrac{1}{6}k_4 &= (\tfrac{1}{6} + \tfrac{1}{3} + \tfrac{1}{3} + \tfrac{1}{6}) f + (\tfrac{1}{6} + \tfrac{1}{6} + \tfrac{1}{6}) f_yfh \\
+    &~~~~+[(\tfrac{1}{24} + \tfrac{1}{24} + \tfrac{1}{12})f_{yy}f^2 + (\tfrac{1}{12} + \tfrac{1}{12})f_y^2f]h^2 \\
+    &~~~~+[(\tfrac{1}{144}+\tfrac{1}{144}+\tfrac{1}{36})f_{yyy}f^3+(\tfrac{1}{16}+\tfrac{5}{48})f_{yy}f_yf^2+(\tfrac{1}{24})f_y^3f]h^3  + O(h^4) \\
+    &= f + \tfrac{1}{2}f_yfh + (\tfrac{1}{6}f_{yy}f^2+\tfrac{1}{6}f_y^2f)h^2 + (\tfrac{1}{24}f_{yyy}f^3+\tfrac{1}{6}f_{yy}f_yf^2+\tfrac{1}{24}f_y^3f)h^3 + O(h^4)~~(\dag)
+  \end{split}
+\end{equation}
+Compare $(\dag)$ with the Taylor expansion of $\frac{y(t_{n+1})-y(t_n))}{h}$, and notice that the coefficients of $O(1), O(h), O(h^2)$ and $O(h^3)$ match together, hence they vanish. The truncation error $T_n/h = O(h^4)$. 
 \end{proof} 
 \noindent\rule{16cm}{0.4pt}
 %///////////////////////////////////////////////////////////////////////
 
-\begin{problem} (Iserles 3.5) Suppose that a $\nu$-stage RK method of order $\nu$ is applied to linear scalar ode $y' = \lambda y$, show that
+\begin{problem} (Iserles 3.5) Suppose that a $\nu$-stage explicit RK method of order $\nu$ is applied to linear scalar ode $y' = \lambda y$, show that
 $$
 y_n = \left(\sum_{k=0}^{\nu} \frac{1}{k!} (h \lambda)^k\right)^n y_0,~~~~n=0,1,...
 $$
 \end{problem}
-\begin{proof} 
+\begin{proof} The scheme of explicit RK method is
+$$
+y_{n+1} = y_n + h\Phi(t_n, y_n; h)
+$$
+And the truncation error is 
+$$
+\frac{T_n}{h} = \frac{y(t_{n+1})-y(t_n)}{h} - \Phi(t_n, y(t_n); h)
+$$
+As usual we expand the first term via taylor series, and since $y$ is solution of the linear scalar ode, we have $y'' = \lambda y' = \lambda^2 y$, ..., $y^{(n)}=\lambda^n y$.
+\begin{equation}
+  \begin{split}
+    \frac{y(t_{n+1})-y(t_n)}{h} &= y'(t_n) + \frac{y''(t_n)}{2!}h + ... + \frac{y^{(\nu)}(t_n)}{\nu!}h^{\nu-1} + O(h^{\nu}) \\
+    &= y(t_n)\left(\lambda  + \frac{\lambda^2}{2!}h + ... + \frac{\lambda^{\nu}}{\nu!}h^{\nu-1}\right) + O(h^{\nu})\\
+    &= \frac{y(t_n)}{h}\sum_{k=1}^{\nu} \frac{1}{k!}(\lambda h)^k + O(h^{\nu})
+  \end{split}
+\end{equation}
+Since the method is of order $\nu$, the truncation error is $O(h^{\nu})$, which implies that $\Phi(t_n, y(t_n); h) = \frac{y(t_n)}{h}\sum_{k=1}^{\nu} \frac{1}{k!}(\lambda h)^k$. Therefore the RK method formula is 
+$$
+y_{n+1}= y_n + h\Phi(t_n, y_n; h) = y_n + y_n\sum_{k=1}^{\nu} \frac{1}{k!}(\lambda h)^k = y_n\sum_{k=0}^{\nu} \frac{1}{k!}(\lambda h)^k
+$$
+i.e.
+$$
+y_n = \left(\sum_{k=1}^{\nu} \frac{1}{k!}(\lambda h)^k\right)^ny_0
+$$
 \end{proof} 
 \noindent\rule{16cm}{0.4pt}
 %///////////////////////////////////////////////////////////////////////
 
-\begin{problem} (Iserles 4.1) Let $\bm{y}'= \bm{\Lambda} \bm{y}$, $\bm{y}(t_0)=\bm{y}_0$ be solved (with a constant step size $h>0$) by a one-step method with a function $r$ that obeys the relation (4.12). Suppose that a nonsingular matrix $\bm{V}$ and a diagonal matrix $\bm{D}$ exists such that $\bm{\Lambda} = \bm{V} \bm{D} \bm{V}^{-1}$, show that there exists vectors $\bm{x}_1, \bm{x}_2, ..., \bm{x}_d \in \mathbb{R}^d$ such that
+\begin{problem} (Iserles 4.1) Let $\bm{y}'= \bm{\Lambda} \bm{y}$, $\bm{y}(t_0)=\bm{y}_0$ be solved (with a constant step size $h>0$) by a one-step method with a function $r(\cdot)$ that obeys the relation (4.12). Suppose that a nonsingular matrix $\bm{V}$ and a diagonal matrix $\bm{D}$ exists such that $\bm{\Lambda} = \bm{V} \bm{D} \bm{V}^{-1}$, show that there exists vectors $\bm{x}_1, \bm{x}_2, ..., \bm{x}_d \in \mathbb{R}^d$ such that
 $$
 \bm{y}(t_n) = \sum_{j=1}^d e^{t_n \lambda_j} \bm{x}_j,~~~~n=0,1,...
 $$
 And 
 $$
-\bm{y}_n = \sum_{j=1}^d [r(h \lambda)]^n \bm{x}_j,~~~~n=0,1,...
+\bm{y}_n = \sum_{j=1}^d [r(h \lambda_j)]^n \bm{x}_j,~~~~n=0,1,...
 $$
 where $\lambda_1, ..., \lambda_d$ are eigenvalues of $\bm{\Lambda}$. Deduce that the values of $\bm{x}_1$ and $\bm{x}_2$, given in (4.3) and (4.4) are identical.
 \end{problem}
-\begin{proof} 
+\begin{proof} (a.) The exact solution of the linear ode system is $\bm{y}(t)=e^{\bm{\Lambda}t}\bm{y}_0$. Since $\bm{\Lambda}$ is diagonalizable, we have $\bm{\Lambda}=\bm{V}\bm{D}\bm{V}^{-1}$, where the entries of $\bm{D}$ are the $d$ linear independent eigenvalues of $\bm{\Lambda}$ and the columns of $\bm{V}$ are the corresponding eigenvectors. Therefore
+$$
+e^{\bm{\Lambda}t} = e^{\bm{V}\bm{D}\bm{V}^{-1}t} = \sum_{k=0}^{\infty} \frac{t^k}{k!}(\bm{V}\bm{D}\bm{V}^{-1})^k = \sum_{k=0}^{\infty} \frac{t^k}{k!}\bm{V}\bm{D}^k\bm{V}^{-1} = \bm{V}\sum_{k=0}^{\infty} \frac{t^k}{k!}\bm{D}^k \bm{V}^{-1} = \bm{V}e^{\bm{D}t}\bm{V}^{-1}
+$$
+We denote $\bm{w} = \bm{V}^{-1}\bm{y}_0 = (w_1, ..., w_d)^{\top}$ is a $d\times 1$ vector, then
+$$
+\bm{y}(t_n) = \bm{V}e^{\bm{D}t}\bm{V}^{-1}\bm{y}_0 = \bm{V}\begin{pmatrix}
+  e^{\lambda_1 t_n} \\
+  & e^{\lambda_2 t_n}\\
+  & & \ddots \\
+  & & & e^{\lambda_d t_n}
+\end{pmatrix}
+\begin{pmatrix}
+  w_1 \\
+  w_2 \\
+  \vdots \\
+  w_d
+\end{pmatrix} = 
+\bm{V}
+\begin{pmatrix}
+  w_1 e^{\lambda_1 t_n} \\
+  w_2 e^{\lambda_2 t_n} \\
+  \vdots \\
+  w_d e^{\lambda_d t_n}
+\end{pmatrix} = \sum_{j=1}^d w_j e^{\lambda_j t_n}\bm{v}_j
+$$
+where $\bm{w}=\bm{V}^{-1}\bm{y}_0$ and $\bm{v}_j$ is the j-th eigenvector. If we denote $\bm{x}_j := w_j \bm{v}_j$, then we come to the desired results. $\bm{y}(t_n) = \sum_{j=1}^d e^{\lambda_j t_n} \bm{x}_j$. $\square$
+
+~\\
+(b.) We apply the $\nu$-stage RK method on this linear ode system, the formulation of IRK is given by (c.f. Iserles eq.3.9)
+\begin{equation}
+  \begin{cases}
+    \bm{\xi}_j = \bm{y}_n + h\sum_{i=1}^{\nu} a_{ji} \bm{f}(t_n+c_ih , \bm{\xi}_i)~~~~j=1,2,...,\nu \\
+    \bm{y}_{n+1} = \bm{y}_n + h\sum_{j=1}^{\nu} b_j \bm{f}(t_n+c_j h, \bm{\xi}_j)
+  \end{cases}
+\end{equation}
+And apply $\bm{f}(\cdot, \bm{y}) = \bm{\Lambda} \bm{y}$, the scheme becomes
+\begin{equation}
+    \begin{cases}
+    \bm{\xi}_j = \bm{y}_n + h \bm{\Lambda}\sum_{i=1}^{\nu} a_{ji} \bm{\xi}_i~~~~j=1,2,...,\nu \\
+    \bm{y}_{n+1} = \bm{y}_n + h \bm{\Lambda}\sum_{j=1}^{\nu} b_j \bm{\xi}_j
+  \end{cases}
+\end{equation}
+Notice that:
+\begin{itemize}
+  \item[$\cdot$] $\sum_{j=1}^{\nu} b_j \bm{\xi}_j$ is a linear combination of $\{\bm{\xi}_j\}_1^{\nu}$s, with weights being $\bm{b}=(b_1, ..., b_{\nu})^{\top}$. So we write it as $\bm{\Xi}\bm{b}$, where $\bm{\Xi}$ is $d\times \nu$ matrix, whose columns are the vectors $\{\bm{\xi}_j\}_1^{\nu}$s. Then the RK iteration formula can be written as
+  $$
+  \bm{y}_{n+1} = \bm{y}_n + h \bm{\Lambda} \bm{\Xi} \bm{b}~~~~(\dag)
+  $$
+  \item[$\cdot$] $\sum_{i=1}^{\nu} a_{ji} \bm{\xi}_i$ can be considered in the same way, i.e. $\sum_{i=1}^{\nu} a_{ji} \bm{\xi}_i = \bm{\Xi}\bm{a}_j$, $\bm{a}_j = (a_{j1}, a_{j2}, ..., a_{j\nu})^{\top}$. Stack $\bm{\xi}_j = \bm{y}_n + h \bm{\Lambda}\bm{\Xi}\bm{a}_j$ together on columns:
+  \begin{equation} \bm{\Xi} = 
+    \begin{pmatrix}
+      \bm{\xi}_1, ..., \bm{\xi}_{\nu}
+    \end{pmatrix} = 
+    \begin{pmatrix}
+      \bm{y}_n + h \bm{\Lambda}\bm{\Xi}\bm{a}_1, ...,\bm{y}_n + h \bm{\Lambda}\bm{\Xi}\bm{a}_{\nu}
+    \end{pmatrix} = \bm{y}_n \bm{1}^{\top} + h \bm{\Lambda}\bm{\Xi} \bm{A}
+  \end{equation}
+  Where $\bm{1}^{\top} = (1,1,..,1)$ is an $1\times \nu$ iota vector. So we have $ \bm{y}_n \bm{1}^{\top}  = \bm{\Xi} - h \bm{\Lambda}\bm{\Xi} \bm{A} = (\bm{I_d-h \bm{\Lambda}}) \bm{\Xi} (\bm{I}_{\nu}-\bm{A})$, where $\bm{I}_d, \bm{I}_{\nu}$ are $d\times d$ and $\nu \times\nu$ identity matrices respectively. Assume $\bm{I}_d-h \bm{\Lambda}$ and $\bm{I}_{\nu}-\bm{A}$ are nonsingular, we have
+  $$
+  \bm{\Xi} = (\bm{I}_d-h \bm{\Lambda})^{-1}\bm{y}_n \bm{1}^{\top} (\bm{I}_{\nu}-\bm{A})^{-1}~~~~(\ddagger)
+  $$
+\end{itemize}
+Insert $(\ddagger)$ into $(\dag)$, using diagonalization $\bm{\Lambda}=\bm{V}\bm{D}\bm{V}^{-1}$:
+\begin{equation}
+  \begin{split}
+    \bm{y}_{n+1} &= \bm{y}_n + h \bm{\Lambda} (\bm{I}_d-h \bm{\Lambda})^{-1}\bm{y}_n \bm{1}^{\top} (\bm{I}_{\nu}-\bm{A})^{-1} \bm{b} \\
+    &= \bm{y}_n + h \bm{V}\bm{D}\bm{V}^{-1}\left(\bm{V}(\bm{I}_d- h\bm{D})\bm{V}^{-1}\right)^{-1} \bm{y}_n \bm{1}^{\top} (\bm{I}_{\nu}-\bm{A})^{-1} \bm{b}\\
+    &= \bm{V}\bm{I}_d \bm{V}^{-1}\bm{y}_n\cdot 1 + h \bm{V}\bm{D}(\bm{I}_d- h\bm{D})^{-1}\bm{V}^{-1} \bm{y}_n \bm{1}^{\top} (\bm{I}_{\nu}-\bm{A})^{-1} \bm{b}\\
+    &= \bm{V}(\bm{I}_d+h \bm{D} (\bm{I}_d-h \bm{D})^{-1}) \bm{V}^{-1}\bm{y}_n (1+\bm{1}^{\top} (\bm{I}_{\nu}-\bm{A})^{-1} \bm{b})
+  \end{split}
+\end{equation}
+Notice that:
+\begin{itemize}
+   \item[$\cdot$] $(1+\bm{1}^{\top} (\bm{I}_{\nu}-\bm{A})^{-1} \bm{b})$ is just a scalar, totally determined by the coefficients of the RK method. We denote it as $\zeta$ and bring it forward, i.e. consider $\bm{y}_{n+1} = \bm{V}\zeta(\bm{I}_d+h \bm{D} (\bm{I}_d-h \bm{D})^{-1}) \bm{V}^{-1}\bm{y}_n$
+   \item[$\cdot$] $\zeta(\bm{I}_d+h \bm{D} (\bm{I}_d-h \bm{D})^{-1})$ is a diagonal matrix. And denote $\bm{D}_{\bar{h}} = h \bm{D} = \text{diag}\{h\lambda_1, ..., h\lambda_{d}\}$, this matrix is $\zeta(\bm{I}_d+ \bm{D}_{\bar{h}} (\bm{I}_d-\bm{D}_{\bar{h}})^{-1})$. By the lemma on the book, it must be of the form:
+   \begin{equation}
+     \zeta(\bm{I}_d+ \bm{D}_{\bar{h}} (\bm{I}_d-\bm{D}_{\bar{h}})^{-1}) = \begin{pmatrix}
+       r(h \lambda_1) \\
+       & \ddots \\
+       & & r(h \lambda_d)
+     \end{pmatrix}
+   \end{equation}
+   $r(\cdot)$ is the function of the type defined in (Iserles) section 4.3.
+ \end{itemize} 
+Therefore, by the discussion above, and using the same notation in our derivation of the exact solution: 
+\begin{equation}
+  \begin{split}
+    \bm{y}_{n} &= \bm{V} \begin{pmatrix}
+       r(h \lambda_1) \\
+       & \ddots \\
+       & & r(h \lambda_d)
+     \end{pmatrix} \bm{V}^{-1} \bm{y}_{n-1}
+    = \bm{V} \begin{pmatrix}
+       r(h \lambda_1) \\
+       & \ddots \\
+       & & r(h \lambda_d)
+     \end{pmatrix}^n \bm{V}^{-1} \bm{y}_0 \\
+     &=\bm{V} \begin{pmatrix}
+       r^n(h \lambda_1) \\
+       & \ddots \\
+       & & r^n(h \lambda_d)
+     \end{pmatrix}
+     \begin{pmatrix}
+       w_1 \\
+       \vdots\\
+       w_d
+     \end{pmatrix} = 
+     \bm{V} \begin{pmatrix}
+       w_1 [r(h\lambda_1)]^n \\
+       \vdots \\
+       w_d [r(h\lambda_d)]^n \\
+     \end{pmatrix} = \sum_{j=1}^d [r(h \lambda_j)]^n w_j \bm{v}_j
+  \end{split}
+\end{equation}
+Which equals to $\sum_{j=1}^d [r(h \lambda_j)]^n \bm{x}_j$ with same $\bm{x}_j=w_j \bm{v}_j$, finished the proof.
+
 \end{proof} 
 \noindent\rule{16cm}{0.4pt}
 %///////////////////////////////////////////////////////////////////////

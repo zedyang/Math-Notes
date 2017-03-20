@@ -58,8 +58,46 @@ We want to find roots for nonlinear equation $g(x)=0$.
 	$$
 	That is, if the error at $n$-th iteration $|\alpha - x_n|$ is already small, the next error at ($n+1$)-th iteration will be the square of it. Which implies a (locally) quadratic convergence rate.
 \end{itemize}
+
 \section{Implicit Methods}
-\subsection{Implicit Euler}
 \subsection{Implicit Runge-Kutta Method}
+We consider the Runge-Kutta method with table:
+\begin{center}
+	\begin{tabular}{c|ccccc}
+	$c_1$ & $a_{11}$ & $a_{12}$ & $\hdots$ & $a_{1,s-1}$ & $a_{1s}$\\
+	$c_2$ & $a_{21}$ & $a_{22}$ & $\hdots$ & $a_{2,s-1}$ & $a_{2s}$\\
+	$c_3$ & $a_{31}$ & $a_{32}$ & $\hdots$ & $a_{3,s-1}$ & $a_{3s}$\\
+	$\vdots$ & $\vdots$ & $\vdots$ & $\ddots$ & $\vdots$ & $\vdots$ \\
+	$c_s$ & $a_{s1}$ & $a_{s2} $ & $\hdots$ & $a_{s,s-1}$ & $a_{ss}$\\
+	\hline
+	 & $b_1$ & $b_2$ & $\hdots$ & $b_{s-1}$ & $b_s$
+	\end{tabular} = 
+	\begin{tabular}{c|ccc}
+	1/2 & 1/2\\
+	\hline
+	 & 1 
+	\end{tabular}
+\end{center}
+A table of this kind with a full matrix of entries $\bm{A}$ (instead of entries only in the lowertriangular area) suggests that this is an \emph{implicit} RK method. 
+
+~\\
+For the listed example, we have
+\begin{equation}
+	\begin{cases}
+	y_{n+1} = y_n + hb_1 k_1 \\
+	k_1 = f(t_n + c_1 h, y_n + ha_{11}k_1)
+	\end{cases}
+\end{equation}
+And insert the values of coefficients:
+$$
+y_{n+1} = y_n + h\left(f(t_n+\tfrac{1}{2}h, \tfrac{y_{n+1}}{2}+\tfrac{y_n}{2})\right)
+$$
+Which is usually referred to as the \emph{Implicit Midpoint Method}. This method is the simplest implicit RK method, the simplest \emph{Gauss-Legendre} method. And a \emph{Symplectic method}, which is energy-preserving.
+
+~\\
+The Midpoint method is of order 2 (see the first question in HW1).
+\begin{itemize}
+	\item[\textit{Ex.}] (\emph{Energy Preserving}) Consider the Hamilton system: $p'=-q, q'=p$; with $p(0)=q(0)=1$. We can find a Hamilton function $H$ such that $p'=-\frac{\partial H}{\partial q}$, $q'=\frac{\partial H}{\partial p}$. And hence $\frac{\partial H}{\partial t}=0$. However, when we use the explicit RK method to solve the system (for example, the \texttt{ode45} in \texttt{Matlab}), we will find that the method does not preserve energy, i.e. $\frac{\partial H}{\partial t}\ne 0$.
+\end{itemize}
 
 \end{document}
