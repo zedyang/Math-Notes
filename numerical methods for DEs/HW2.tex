@@ -597,7 +597,74 @@ $$
   \item[e.] Show that if $h \lambda \in \mathcal{D}$, where $\mathcal{D}$ is the linaer stability domain of the RK method, then $\lim\limits_{n\rightarrow\infty} \bm{y}_n = \bm{0}$.
 \end{itemize}
 \end{problem}
-\begin{proof} 
+\begin{proof} (a.) We can decompose $\bm{\Lambda} = \lambda \bm{I} + \bm{B}$, with $\bm{B}=\begin{pmatrix}
+  0 & 1\\
+  0 & 0
+\end{pmatrix}$. It is easy to see that $\bm{B}^n =0$ for $n\geq 2$. Hence
+$$
+\bm{\Lambda}^n = (\lambda\bm{I})^n + \binom{n}{1} (\lambda \bm{I})^{n-1} \bm{B} = \begin{pmatrix}
+  \lambda^n & n \lambda^{n-1} \\
+  0 & \lambda^n
+\end{pmatrix}~~~~\square
+$$ 
+(b.) By the given definition of $g(t\bm{\Lambda})$ (with $\bm{\Lambda}^0 :=\bm{I}$, $\bm{\Lambda}^n$ being the expression we obtained in (a)):
+\begin{equation}
+  \begin{split}
+    g(t\bm{\Lambda}) &= \sum_{n=0}^{\infty} \frac{g^{(n)}(0)}{n!} (t \bm{\Lambda})^n= \sum_{n=0}^{\infty} \frac{g^{(n)}(0)}{n!} 
+    \begin{pmatrix}
+  (t\lambda)^n & n t(t\lambda)^{n-1} \\
+  0 & (t\lambda)^n \\
+  \end{pmatrix} \\
+  &= \begin{pmatrix}
+  \sum_{n=0}^{\infty} \frac{g^{(n)}(0)}{n!}(t\lambda)^n & t\sum_{n=0}^{\infty} \frac{g^{(n)}(0)}{(n-1)!}(t\lambda)^{n-1} \\
+  0 & \sum_{n=0}^{\infty} \frac{g^{(n)}(0)}{n!}(t\lambda)^n \\
+  \end{pmatrix} \\
+  &= \begin{pmatrix}
+    g(t \lambda) & t g'(t \lambda) \\
+    0 & g(t \lambda)
+  \end{pmatrix}~~~~\square
+  \end{split}
+\end{equation}
+(c.) The solution of ode is $\bm{y}(t) = e^{\bm{\Lambda}t} \bm{y}_0$. Let $g(\bm{\Lambda}t) = e^{\bm{\Lambda}t}$, by the result of (b.) we get:
+\begin{equation}
+  \bm{y}(t) = e^{\bm{\Lambda}t}\bm{y}_0 = \begin{pmatrix}
+    e^{\lambda t} & t e^{\lambda t} \\
+    0 & e^{\lambda t}
+  \end{pmatrix}\bm{y}_0
+\end{equation}
+Since $\lambda \in \mathbb{C}^-$, it is clear that $\lim\limits_{t\rightarrow\infty}e^{\lambda t}=0$, and is of higher order of decay than the order of growth of $t$, i.e. $\lim\limits_{t\rightarrow\infty} t e^{\lambda t}=0$ too. Hence in the expression above, $\lim\limits_{t\rightarrow\infty}e^{\bm{\Lambda}t} = \bm{O}$, so $\lim\limits_{t\rightarrow\infty} e^{\Lambda t} \bm{y}_0 = \bm{0}$. 
+
+~\\
+(d.) By the result of b., we have
+\begin{equation}
+  \begin{split}
+    [r(h \bm{\Lambda})]^n = [g(h \bm{\Lambda})]^n = \begin{pmatrix}
+    g(h \lambda) & h g'(h \lambda) \\
+    0 & g(h \lambda)
+  \end{pmatrix}^n~~~~(*)
+  \end{split}
+\end{equation}
+And note that this is of the same form as $\bm{\Lambda}$ itself, we decompose
+\begin{equation}
+  (*) = \left[g(h \lambda) \bm{I} + \begin{pmatrix}
+  0 & h g'(h \lambda) \\
+  0 & 0
+\end{pmatrix}\right]^n = 
+\begin{pmatrix}
+  [g(h \lambda)]^n & n [g(h \lambda)]^{n-1}h g'(h \lambda) \\
+  0 & [g(h \lambda)]^n
+\end{pmatrix}
+=
+\begin{pmatrix}
+  [r(h \lambda)]^n & n [r(h \lambda)]^{n-1}h r'(h \lambda) \\
+  0 & [r(h \lambda)]^n
+\end{pmatrix}~~~~\square
+\end{equation}
+(e.) If $h \lambda \in \mathcal{D}$ (the stability region of RK method), by lemma 4.2 of (Iserles), $\mathcal{D}=\{z: |r(z)|<1\}$. So we have $|r(h \lambda) |<1$. Hence 
+$$
+\lim\limits_{n\rightarrow\infty} [r(h\lambda)]^n = 0~~~\text{and}~~~\lim\limits_{n\rightarrow\infty} n [r(h \lambda)]^{n-1} = 0
+$$
+So, $\lim\limits_{n\rightarrow\infty}\bm{y}_n = \lim\limits_{n\rightarrow\infty} [r(h \bm{\Lambda})]^n \bm{y}_0 = \bm{0}$, finished the proof.
 \end{proof} 
 \noindent\rule{16cm}{0.4pt}
 %///////////////////////////////////////////////////////////////////////
