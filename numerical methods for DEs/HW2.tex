@@ -75,7 +75,32 @@
   Justify the rate of convergence numerically.
 \end{itemize}
 \end{problem}
-\begin{solution} See the attached code.
+\begin{solution} We solve the test case 6: $y'=t^2 - y$ with all the five methods above.
+
+\begin{center}
+\includegraphics[scale=0.4]{hw2_p1.png}
+\end{center}
+Where the \emph{Adams-Bashforth} multistep method is intialized with a 3-order method (Heun's method). 
+
+~\\
+We plot $\log(n)$ against $\log(error)$ to check the rate of convergence. Theoretically, for a method of order $k$, we expect to get a line with slope $-k$.
+
+\begin{center}
+\includegraphics[scale=0.7]{hw2_p2.png}
+\end{center}
+
+~\\
+From the figure above we know that it is indeed the case. The curve for 4-th order Runge-Kutta method becomes flat in the end because the round-off error will dominate the error of the algorithm for $n$ sufficiently large. And from the figure we know that the round-off error may be $\sim 2^{-30}$.
+
+~\\
+We also investigate the running time. The slope of these curves are 1, because all the algorithms take $O(n)$ time, regardless of their orders.
+
+\begin{center}
+\includegraphics[scale=0.7]{hw2_p3.png}
+\end{center}
+
+
+Please also see the attached code for details.
 \end{solution} 
 \noindent\rule{16cm}{0.4pt}
 %///////////////////////////////////////////////////////////////////////
@@ -311,7 +336,7 @@ $$
 $$
 The region is give as the following plot (please also see the attached code).
 \begin{center}
-\includegraphics[scale=0.7]{hw2_p2.png}
+\includegraphics[scale=0.7]{hw2_p4.png}
 \end{center}
 \end{proof} 
 \noindent\rule{16cm}{0.4pt}
