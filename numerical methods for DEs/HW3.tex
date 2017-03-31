@@ -1,0 +1,149 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+
+\title{\textbf{Numerical Solutions for DEs HW3}}
+\author{YANG, Ze (5131209043)}
+
+
+\begin{document}
+\maketitle
+
+
+%------------------------------------------------------------------------
+~\\
+\fbox{
+  \parbox{\boxwidth}{
+  \textbf{A Note to TA}: 
+  ~\\
+  \emph{Hi, this is the senior student from Antai College who did not register for this course. I would like to do all the assignments for practice, but feel free to just skip my homework if you don't have time.
+  Thank you again for allowing me to access the assignments and other class material! : )}
+  ~\\
+  \emph{- Ze}
+  }
+}
+
+~\\
+~\\
+%------------------------------------------------------------------------
+
+\begin{problem} (Iserles 4.4) Determine all values of $\theta$ such that the theta method (1.13) is absolutely stable.
+\end{problem}
+\begin{proof} 
+
+\end{proof}
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} (Iserles 4.9) The two-step method 
+$$
+\bm{y}_{n+2} - \bm{y}_n = 2h \bm{f}(t_{n+1}, \bm{y}_{n+1}),~~~n=0,1,... 
+$$ 
+is called the explicit midpoint rule.
+\begin{itemize}
+  \item[a.] Denote by $w_1(z)$ and $w_2(z)$ the zeroes of the underlying function $\eta(z, \cdot)$, show that $w_1(z)w_2(z)\equiv -1$ for all $z\in \mathbb{C}$.
+  \item[b.] Show that $\mathcal{D}=\emptyset$.
+  \item[c.] We say that $\tilde{\mathcal{D}}$ is a \emph{weak linear stability domain} of a numerical method if, when applied to the scalar linear equation, it produces a uniformly bounded solution sequence. (It is easy to see that $\tilde{\mathcal{D}} = \text{cl}\mathcal{D}$ for most methods of interest.) Determine explicitly $\tilde{\mathcal{D}}$ for the method.
+\end{itemize}
+\end{problem}
+\begin{proof} 
+
+\end{proof} 
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+
+\begin{problem} (Iserles 5.8) Show that the \emph{H\'enon-Heiles system} (using the definition from wikipedia)
+\begin{equation}
+  \begin{split}
+    q_1' &= p_1 \\
+    p_1' &= -q_1 - 2 \lambda q_1 q_2\\
+    q_2' &= p_2 \\
+    p_2' &= -q_2 - \lambda (q_1^2 - q_2^2)
+  \end{split}
+\end{equation}
+is Hamiltonian and identify explicitly the hamiltonian energy.
+\end{problem}
+\begin{proof} 
+
+\end{proof} 
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} The symplectic Euler method for the Hamiltonian system reads
+\begin{equation}
+\begin{cases}
+  \bm{p}_{n+1} &= \bm{p}_n - h \frac{\partial H(\bm{p}_{n+1}, \bm{q}_n)}{\partial \bm{q}} \\
+  \bm{q}_{n+1} &= \bm{q}_n + h \frac{\partial H(\bm{p}_{n+1}, \bm{q}_n)}{\partial \bm{p}}
+\end{cases}
+\end{equation}
+\begin{itemize}
+  \item[a.] Show that this is a first order method.
+  \item[b.] Prove from basic principles that, as implied by its name, the method is indeed symplectic. (Hint: let $G=\nabla^2 H$, and write $G=[G_{11}, G_{12}; G_{21}, G_{22}]$).
+  \item[c.] Assuming that the Hamiltonian is separable, $H(\bm{p}, \bm{q})=T(\bm{p})+V(\bm{q})$, where $T$ and $V$ correspond to kinetic and potential energy respectively. Show that the method can be implemented explicitly.
+  \item[d.] Use symplectic Euler and explicit Euler to solve the problem of non-linear pendulum. The Hamiltonian is $H(p,q)=\frac{1}{2}p^2 - \cos({q})$, and the Hamiltonian equations are
+  $$
+  \dot{p} = -\sin q,~~~~\dot{q} = p
+  $$
+  with initial condition $p(0)=0$, $q(0)=1$. Plot the error of the numerical methods in the Hamiltonian $H$.
+\end{itemize}
+\end{problem}
+\begin{proof} 
+
+\end{proof} 
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} Implement implicit Euler, implicit midpoint method and trapezoid method, compare their rates of convergence and execution time. 
+
+\end{problem}
+\begin{solution} 
+
+\end{solution} 
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+\end{document}
