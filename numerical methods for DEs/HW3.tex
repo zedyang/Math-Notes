@@ -299,7 +299,14 @@ is an explicit method. Denote $\nabla_{\bm{q}} V = \bm{f}$ and $\nabla_{\bm{p}}T
 which is explicit, and resembles the Runge-Kutta method. $\square$
 
 ~\\
-(d)
+(d) The plots below gives the numerical solution of this problem choosing $n=300$, $h=0.2$. I.e. solve the ode for $t=0.2, 0.4, ..., 59.8, 60$ with both explicit euler and symplectic euler method.
+
+\begin{center}
+\includegraphics[scale=0.4]{hw3_p1.png}
+\end{center}
+
+~\\
+It is clear that for explicit euler method, $H$ gradually grows with $t$ as well as $q(t)$, and finally the object will go to infinitely faraway. For symplectic method $H$ is bounded in a range, and the motion of the pendulum has a regular behavior. 
 \end{proof} 
 \noindent\rule{16cm}{0.4pt}
 %///////////////////////////////////////////////////////////////////////
@@ -307,8 +314,31 @@ which is explicit, and resembles the Runge-Kutta method. $\square$
 \begin{problem} Implement implicit Euler, implicit midpoint method and trapezoid method, compare their rates of convergence and execution time. 
 
 \end{problem}
-\begin{solution} 
-See the attached code.
+\begin{solution} We plot $\log(n)$ against $\log(error)$ to check the rate of convergence. Theoretically, for a method of order $k$, we expect to get a line with slope $-k$.
+
+\begin{center}
+\includegraphics[scale=0.7]{hw3_p2.png}
+\end{center}
+
+~\\
+Which is indeed the case. We see that backward euler converges in order 1, other 2 methods have order 2.
+
+\begin{center}
+\includegraphics[scale=0.7]{hw3_p3.png}
+\end{center}
+
+~\\
+We used the \emph{Secant Method} find roots for these implicit methods. The execution time are all $O(nm)$. Where $m$ is the average number of iterations it takes to find the zeros of implicit updating rules.
+
+~\\
+Finally we applied these methods to the testcase 5 in last homework. And plotted the numerical solution as below.
+
+\begin{center}
+\includegraphics[scale=0.42]{hw3_p4.png}
+\end{center}
+
+~\\
+Please also see the attached code for details.
 \end{solution} 
 \noindent\rule{16cm}{0.4pt}
 %///////////////////////////////////////////////////////////////////////
