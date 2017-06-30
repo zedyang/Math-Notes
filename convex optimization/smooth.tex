@@ -1,0 +1,124 @@
+\documentclass[a4paper, 11pt]{article}   	
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in}	
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{booktabs}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\title{Notes}
+\author{Zed}
+
+\begin{document}
+\maketitle
+\section{Stochastic Problem \& Strong Convexity}
+$\mathbb{E}\left[G(x_t, \xi_t)\right] = \nabla f(x_t)$.\\
+Define the error $\delta_t:= \nabla f(x_t) - G(x_t, \xi_t)$, and make following assumptions:
+\begin{itemize}
+  \item[\textit{1.}] $\mathbb{E}\left[\delta_t\right] = 0$, and $\delta_t$ is independent of $\delta_t$.
+  \item[\textit{2.}] $\mathbb{E}\left[\left\|\delta_t\right\|^2\right] =\sigma^2$.
+\end{itemize}
+The subproblem for each iteration is 
+$$
+x_{t+1} = \text{argmin}_{x\in X} \gamma_t \langle G(x_t, \xi_t), x \rangle + \frac{1}{2} \left\|x-x_t\right\|^2 
+$$
+And the optimality condition becomes:
+$$
+\gamma_t \langle G(x_t, \xi_t), x_{t+1}-x \rangle \leq \frac{1}{2} \left(\left\|x-x_t\right\|^2 -\left\|x-x_{t+1}\right\|^2 -\left\|x_t-x_{t+1}\right\|^2 \right)
+$$
+call it (OPT2').
+
+
+
+
+\begin{equation}
+  \begin{split}
+    f(x_{t+1}) &\leq f(x_t) + \langle \nabla f(x_t), x_{t+1}-x_t \rangle + \frac{L}{2} \left\|x_{t+1}-x_t\right\|^2\\
+    &= \underbrace{f(x_t) + \langle \nabla f(x_t), x-x_t \rangle}_{\text{convexity}} + \langle \nabla f(x_t), x_{t+1}-x \rangle + \frac{L}{2} \left\|x_{t+1}-x_t\right\|^2\\
+    &\leq f(x) + \langle  \underbrace{\nabla f(x_t)-\delta_t}_{G(x_t, \xi_t)} + \delta_t, x_{t+1}-x \rangle+\frac{1}{2} \left\|x_{t+1}-x_t\right\|^2\\
+    & \leq f(x) + \underbrace{\langle  G(x_t, \xi_t), x_{t+1}-x \rangle}_{\text{OPT2'}}+ \langle \delta_t, x_{t+1}-x \rangle+\frac{1}{2} \left\|x_{t+1}-x_t\right\|^2\\
+    & \leq f(x) + \frac{1}{2\gamma_t} \left[\left\|x-x_t\right\|^2 - \left\|x-x_{t+1}\right\|^2\right] + \langle \delta_t, x_{t+1}-x_t \rangle - \frac{1}{2}\left(\frac{1}{\gamma_t}-L\right)\left\|x_{t+1}-x_t\right\|^2
+  \end{split}
+\end{equation}
+Note that $\mathbb{E}\left[\langle \delta_t, x_{t+1}-x \rangle\right]\ne 0$\footnote{$\mathbb{E}\left[\langle \delta_t, x_{t+1}-x \rangle\right] \ne \langle \mathbb{E}\left[\delta_t\right], \mathbb{E}\left[x_{t+1}-x\right] \rangle$}, since $\delta_t$ is dependent on $x_{t+1}-x$. However it is independent to $x_t -x$, so we want to replace $x_{t+1}$ with $x_t$.  
+Consider:
+\begin{equation}
+  \begin{split}
+    &~~~~\langle \delta_t, x_{t+1}-x \rangle - \frac{1}{2} \left(\frac{1}{\gamma_t}-L\right)\left\|x_{t+1}-x_t\right\|^2 \\
+    &=\langle \delta_t, x_{t}-x \rangle + \langle \delta_t, x_{t+1}-x_t \rangle - \frac{1}{2} \left(\frac{1}{\gamma_t}-L\right)\left\|x_{t+1}-x_t\right\|^2\\
+    &\leq  \langle \delta_t, x_{t}-x \rangle + \frac{\left\|\delta_t\right\|^2}{2(\gamma_t^{-1}-L)}~~~~\text{(with $\gamma_t < 1/L$)}~~(\dag)
+  \end{split}
+\end{equation}
+$\Rightarrow$
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[(\dag)\right] &= \mathbb{E}\left[\langle \delta_t, x_{t}-x \rangle + \frac{\left\|\delta_t\right\|^2}{2(\gamma_t^{-1}-L)}\right] \\
+    &= 0 + \mathbb{E}\left[ \frac{\left\|\delta_t\right\|^2}{2(\gamma_t^{-1}-L)}\right] \leq \frac{\sigma^2}{2(\gamma_t^{-1}-L)}
+  \end{split}
+\end{equation}
+Combine (1) and (3), we have, for $t=1,2,...,k$:
+\begin{equation}
+  \gamma_t \mathbb{E}\left[f(x_{t+1})-f(x)\right] \leq \frac{1}{2} \left[\left\|x-x_t\right\|^2 - \left\|x-x_{t+1}\right\|^2\right] + \frac{\gamma_t^2\sigma^2}{2(1-L \gamma_t)}
+\end{equation}
+Take summation (telescoping) of the equation above:
+\begin{equation}
+  \sum_{t=1}^k \gamma_t \mathbb{E}\left[f(x_{t+1})-f(x)\right] \leq \frac{1}{2} \left\|x-x_1\right\|^2 + \sum_{t=1}^k \frac{\gamma_t^2\sigma^2}{2(1-L \gamma_t)}
+\end{equation}
+Divide bothsides by $\sum \gamma_t$ $\Rightarrow$:
+\begin{equation}
+  \frac{1}{\sum_{t=1}^k \gamma_t}\sum_{t=1}^k \gamma_t \mathbb{E}\left[f(x_{t+1})-f(x)\right] \leq \frac{1}{\sum_{t=1}^k \gamma_t}\left(\frac{1}{2} \left\|x-x_1\right\|^2 + \sum_{t=1}^k \frac{\gamma_t^2\sigma^2}{2(1-L \gamma_t)}\right)
+\end{equation}
+And, as before, define the output as weighted avg:
+$$
+\overline{x}_{t+1} := \frac{\sum_{t=1}^k \gamma_t x_{t+1}}{\sum_{t=1}^k \gamma_t}
+$$
+And (6) becomes:
+\begin{equation}
+  \mathbb{E}\left[f(\overline{x}_{t+1})-f(x)\right] \leq \frac{1}{\sum_{t=1}^k \gamma_t}\left(\frac{1}{2} \left\|x-x_1\right\|^2 + \sum_{t=1}^k \frac{\gamma_t^2\sigma^2}{2(1-L \gamma_t)}\right)
+\end{equation}
+If $\gamma_t\leq 1/2L$: $1-L \gamma_t \geq 1-1/2 = 1/2$. And (7) becomes\footnote{$D_X:=$ diameter of $X$.}
+\begin{equation}
+  \mathbb{E}\left[f(\overline{x}_{t+1})-f(x)\right] \leq \frac{1}{\sum_{t=1}^k \gamma_t}\left(\frac{1}{2}D^2_X + \sigma^2 \sum_{t=1}^k \gamma_t^2\right)
+\end{equation}
+Suppose $\gamma_t \equiv \gamma \leq 1/2L$ for $t=1,...,k$. $\Rightarrow$
+\begin{equation}
+  \mathbb{E}\left[f(\overline{x}_{t+1})-f(x)\right] \leq \frac{D_X^2}{2 \gamma k} + \gamma \sigma^2
+\end{equation}
+Now we want to minimize RHS such that $\gamma \leq 1/2L$ (an extra constraint). The solution is $\gamma^* = \min\left\{\frac{D_X}{\sigma \sqrt{2k}}, \frac{1}{2L}\right\}$. Insert $\gamma^*$ into (9) in place of $\gamma$:
+\begin{equation}
+\begin{split}
+    \mathbb{E}\left[f(\overline{x}_{t+1})-f(x)\right] &\leq \frac{D_X^2}{2 k} \max\left\{\frac{\sigma \sqrt{2k}}{D_X}, 2L\right\} +  \sigma^2 \min\left\{\frac{D_X}{\sigma \sqrt{2k}}, \frac{1}{2L}\right\} \\
+    &\leq \max\left\{\frac{D_X\sigma}{\sqrt{2k}}, \frac{LD_X^2}{k}\right\} + \frac{D_X \sigma}{\sqrt{2k}}\\
+    &\leq \frac{LD_X^2}{k} + \frac{2D_X \sigma}{\sqrt{2k}}
+\end{split}
+\end{equation}
+Let $x=x^*$, if we want to control the error such that $\mathbb{E}\left[f(\overline{x}_{t+1})-f(x^*)\right] \leq \epsilon$, we can solve $k$ inversely: 
+$$
+k \geq \frac{2L D_X^2}{\epsilon} + \frac{8 D_X^2 \sigma^2}{\epsilon^2}
+$$
+
+\begin{itemize}
+  \item[\textit{Remark.1}] $f(x) = \mathbb{E}\left[F(x, \xi)\middle|\xi\right]$, SGD is nearly an optimal algorithm.
+  \item[\textit{Remark.2}] $f(x) = \sum_{i=1}^d f_i(x)$ is a deterministic problem but \emph{can be treated as an expectation problem}.  We can improve the rate of convergence in terms of the dependence on $\epsilon$. But the convergence depends on $d$.
+\end{itemize}
+\end{document}

@@ -1,0 +1,113 @@
+\documentclass[a4paper, 11pt]{book}   	
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in}	
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{booktabs}
+
+\DeclareMathOperator*{\argmax}{argmax} 
+\DeclareMathOperator*{\argmin}{argmin}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\title{Convex Analysis and Gradient Descent Algorithms}
+\author{Zed}
+
+\begin{document}
+\maketitle
+
+\chapter{Convex Analysis}
+The optimization problem ($\dag$)
+$$
+\min_{\bm{x}\in X} f(\bm{x})
+$$ 
+is \emph{guaranteed} to have an optimal solution if $X$ is a \emph{convex set} and $f: X\to \mathbb{R}$ is a \emph{convex function}. Such family of problems is called convex optimization problems.
+\section{Basic Concepts}
+The global optimum of $f$ in $\mathbb{R}^n$ may not fall within the feasible region of problem $(\dag)$, i.e. the convex set $X$. Hence it is natural to think about a way to somehow ``push back'' a point $\bm{x} = (x_1, ..., x_n)^{\top} \in \mathbb{R}^n$ into $X$. 
+\begin{itemize}
+  \item[\textit{Def.1}] \textbf{Projection onto Convex Set}: Let $X \subset \mathbb{R}^n$ be a closed convex set. For any $\bm{y}\in \mathbb{R}^n$, define the closest point to $\bm{y}$ in $X$ as
+  $$
+  \text{Proj}_X(\bm{y}) := \argmin\limits_{\bm{x}\in X} \left\|\bm{y}-\bm{x}\right\|^2
+  $$
+  The closedness of $X$ is needed to ensure the existence of the projection. Furthermore, it can be shown that the projection onto closed convex set is also unique.
+
+  \item[\textit{Def.2}] \textbf{Differentiable Convex Function}: Suppose $f: X\to \mathbb{R}$ is differentiable over $X$. Then $f$ is convex $\iff$ For any given $\bm{x}_0 \in \bm{X}$, and for all $\bm{x}\in \bm{X}$,
+  \begin{equation}\label{eq:convexgrad}
+    f(\bm{x}) - f(\bm{x}_0) \geq \langle \nabla f(\bm{x}_0), \bm{x-x}_0 \rangle
+  \end{equation}
+  Geometrically, this relation says the tangent plane of $f$\footnote{Note that the graph of $f$, i.e. the surface $f(\bm{x})-z =0$ is an $(n+1)$-dimensional object with an extra dimension $z$. At a given point $\bm{x}_0 \in X$, the equation of the tangent plane of $f$ is 
+  $$
+  z - f(\bm{x}_0) = \nabla f(\bm{x}_0)^{\top}(\bm{x} - \bm{x}_0)
+  $$
+  } \emph{lies below} the graph of $f$ at any point in $X$. In another word, the tangent plane underestimates $f$ everywhere in $X$.\\
+  A simple corollary: $\bm{x}^*$ minimizes differentiable convex function $f$ $\iff$ $\nabla f(\bm{x}^*)^{\top} = \bm{0}$. Because by definition we have $f(\bm{x}) - f(\bm{x}^*) \geq 0$ for all $\bm{x}\in X$. 
+\end{itemize}
+
+~\\
+The gradient can only be calculated for those $\bm{x}$ where $f$ is differentiable. So we introduce subgradient to extend the notion to non-differentiable points.
+\begin{itemize}
+  \item[\textit{Def.3}] \textbf{Subgradient}: The vector $\bm{g}=(g_1, ..., g_n)\in \mathbb{R}^n$ is a subgradient of \textit{convex function} $f$ at $\bm{x}_0\in X$ if $\forall \bm{x} \in X$,
+  \begin{equation}\label{eq:subgrad}
+    f(\bm{x}) - f(\bm{x}_0) \geq \langle \bm{g}, \bm{x-x}_0 \rangle
+  \end{equation}
+  And this is denoted by $\bm{g}\in \partial f(\bm{x}_0)$.\\
+  Geometrically, this relation says that the plane determined by point $\bm{x}_0$ and normal vector $(g_1, ..., g_n, -1)$ \emph{lies below} the graph of $f$ at any point in $X$.\\
+  Note that subgradient is defined specifically for convex functions, because it is an analogy to definition (\ref{eq:convexgrad}), which is only valid for convex functions.\\
+  The optimality corollary still holds for subgradient: $\bm{x}^*$ minimizes $f$ $\iff$ $\bm{0}\in \partial f(\bm{x}^*)$; since we have $f(\bm{x}) - f(\bm{x}^*) \geq 0$ for all $\bm{x}\in X$. 
+  ~\\
+  \item[\textit{Prop.1}] (\textit{Existence of Subgradient for Convex f}) Let $X\subset \mathbb{R}^n$ be a convex set, $f: X\to \mathbb{R}$. Then
+  \begin{itemize}
+    \item[1.] If $\partial f(\bm{x})\ne \emptyset$ for all $\bm{x}\in X$ $\Rightarrow$ $f$ is convex function.
+    \item[2.] If $f$ is convex function $\Rightarrow$ $\partial f(\bm{x})\ne \emptyset$ for all $\bm{x}\in \text{Int}(X)$.
+  \end{itemize}
+\end{itemize}
+
+
+\section{Optimality Condition}
+\begin{itemize}
+  \item[\textit{Prop.2.}] $f$ is a convex function and $X$ convex set. $\bm{x}^*$ is an optimal solution of problem ($\dag$) $\iff$ there exists $\bm{g}^* \in \partial f(\bm{x}^*)$ such that $\forall \bm{x}\in X$,
+  \begin{equation}\label{eq:opt1}
+    \langle \bm{g}^*, \bm{x-x}^* \rangle \geq 0
+  \end{equation}
+  \textit{Proof.~~} Define the (reverse) indicator function of $X$
+  \begin{equation}
+    \tilde{1}_X (\bm{x}) = \begin{cases}
+    0, &\bm{x}\in X\\
+    \infty, &\bm{x} \notin X
+    \end{cases}
+  \end{equation}
+  Clearly, $\tilde{1}_X (\bm{x})$ is a convex function. And the problem $(\dag)$ can be rewritten as unconstrained minimization, with the value at points beyond $X$ being $\infty$; i.e. $\min f(\bm{x}) + \tilde{1}_X (\bm{x})$. By Corollary, $\bm{x}^*$ is optimal point $\iff \bm{0} \in \partial (f(\bm{x}^*)+\tilde{1}_X(\bm{x}^*)) \iff$ $\exists \bm{g}^*\in \partial f(\bm{x}^*), \exists \bm{w}^*\in \partial \tilde{1}_X(\bm{x}^*)$, such that $\bm{g}^*+\bm{w}^*=\bm{0}$ ($\ddag$).\\
+
+  We want to study the property of the subgradient $\bm{w}$ of the artificially defined indicator. At a given point $\bm{x}_0 \in X$ and $\forall \bm{x}\in \mathbb{R}^n$, by definition
+  $$
+  \tilde{1}_X (\bm{x}) - 0 \geq \langle \bm{w}, \bm{x-x}_0 \rangle
+  $$
+  I.e. $0 \geq \langle \bm{w}, \bm{x-x}_0 \rangle$ if $\bm{x}\in X$; $\infty \geq \langle \bm{w}, \bm{x-x}_0 \rangle$ otherwise. $\Rightarrow$ 
+  $$
+  \partial 1_X(\bm{x}_0) = \{\bm{w}:  \langle \bm{w}, \bm{x-x}_0 \rangle \leq 0, \forall \bm{x}\in X\}$$
+  We have: $\bm{w}^* \in \partial 1_X(\bm{x}^*)$ $\iff$ $\langle \bm{w}^*, \bm{x-x}^* \rangle \leq 0$ for all $\bm{x}\in X$. \\
+  $\bm{g}^* = \bm{0} - \bm{w}^*$ $\iff$ $\langle \bm{g}^*, \bm{x-x}^* \rangle = 0 - \langle \bm{w}^*, \bm{x-x}^* \rangle \geq 0$ for all $\bm{x}\in X$. $(\ddag)$ becomes: $\bm{x}^*$ is optimal point $\iff$ $\exists \bm{g}^*\in \partial f(\bm{x}^*)$, such that $\langle \bm{g}^*, \bm{x-x}^* \rangle \geq 0$ for all $\bm{x}\in X$. $\square$
+\end{itemize}
+
+
+\section{Lagrange Duality}
+\end{document}

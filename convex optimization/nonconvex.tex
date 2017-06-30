@@ -1,0 +1,104 @@
+\documentclass[a4paper, 11pt]{article}   	
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in}	
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{booktabs}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\title{Non-Convex Optimization}
+\author{Zed}
+
+\begin{document}
+\maketitle
+%\section{Connor is a Stupid Litte Bastard}
+
+\subsection{Deterministic Version}
+Consider the problem $\min\limits_{x\in \mathbb{R}^n} f(x)$,  where $f$ is not necessarily convex. And we assume the gradient of $f$ is Lipschitz-continuous $\left\|\nabla f(x)- \nabla f(y)\right\| \leq L \left\|x - y\right\|$, $\forall x,y$.
+
+In such a formulation we cannot guarantee that the algorithm converges to optimum. So we are interest in, alternatively, the rate in which the gradient goes to zero, i.e. the algorithm converges to a .. point.
+
+By smoothness we have
+\begin{equation}
+  \begin{split}
+      f(x_{t+1}) &\leq f(x_t) +  \nabla f(x_t)^{\top} (x_{t+1}-x_t) + \frac{L}{2}\left\|x_{t+1}-x_t\right\|^2 \\
+      &=f(x_t) - \gamma_t \left\|\nabla f(x_t)\right\|^2 + \frac{L \gamma^2_t}{2} \left\|\nabla f(x_t)\right\|^2 \\
+      &= f(x) - \gamma_t\left(1-\frac{L \gamma_t}{2}\right) \left\|\nabla f(x_t)\right\|^2
+  \end{split}
+\end{equation}
+$\Rightarrow$ $\gamma_t (1-\frac{L \gamma_t}{2}) \left\|\nabla f(x_t)\right\|^2 \leq f(x_t) - f(x_{t+1})$. Taking summation:
+\begin{equation}
+  \sum_{t=1}^k \gamma_t (1-\frac{L \gamma_t}{2}) \left\|\nabla f(x_t)\right\|^2 \leq f(x_1) - f(x_{k+1}) \leq f(x_1) - f^*
+\end{equation}
+Pick output $\overline{x}_k$, such that $\left\|\nabla f(\overline{x}_k)\right\|= \min\limits_{t=1,...,k} \left\|\nabla f(\overline{x}_t)\right\|$. So
+\begin{equation}
+  \begin{split}
+      \sum_{t=1}^k \gamma_t \left(1-\frac{L \gamma_t}{2}\right) \left\|\nabla f(x_t)\right\|^2 &\geq  \left\|\nabla f(\overline{x}_k)\right\|^2\sum_{t=1}^k \gamma_t \left(1-\frac{L \gamma_t}{2}\right)  \\
+      \left\|\nabla f(\overline{x}_k)\right\|^2 &\leq \frac{f(x_1)-f^*}{\sum_{t=1}^k \gamma_t(1-L \gamma_t/2)}
+  \end{split}
+\end{equation}
+If $\gamma_t = 1/L$, then $\left\|\nabla f(\overline{x}_k)\right\|^2 \leq \frac{2(f(x_1) - f^*)}{k}$. 
+
+\subsection{Stochastic Version}
+$x_{t+1} = x_t  - \gamma_t G(x_t, \xi_t)$; $\delta_t = \nabla f(x_t) - G(x_t, \xi_t)$. $\mathbb{E}\left[\delta_t\right]= 0$, $\mathbb{E}\left[\left\|\delta_t\right\|^2\right] = \sigma^2$.
+\begin{equation}
+  \begin{split}
+      f(x_{t+1}) &\leq f(x_t) +  \nabla f(x_t)^{\top} (x_{t+1}-x_t) + \frac{L}{2}\left\|x_{t+1}-x_t\right\|^2 \\
+      &=f(x_t) - \gamma_t \nabla f(x_t)^{\top}[\nabla f(x_t)-\delta_t] + \frac{L \gamma^2_t}{2} \left\|\nabla f(x_t)-\delta_t\right\|^2 \\
+      &= f(x) - \gamma_t\left\|\nabla f(x_t)\right\|^2 + \gamma_t \nabla f(x_t)^{\top} \delta_t + \frac{L \gamma_t^2}{2} \left(\left\|\nabla f(x_t)\right\|^2 - 2 \nabla f(x_t)^{\top}\delta_t + \left\|\delta_t\right\|^2\right)
+  \end{split}
+\end{equation}
+Take expectation:
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[f(x_{t+1})\right] \leq \mathbb{E}\left[f(x_t)\right] - \gamma_t (1- L\gamma_t/2) \mathbb{E}\left[\left\|\nabla f(x_t)\right\|^2\right] + \frac{L\sigma^2 \gamma_t^2}{2}
+  \end{split}
+\end{equation}
+Take summation:
+\begin{equation}
+  \begin{split}
+      \sum_{t=1}^k \gamma_t(1-L \gamma_t/2) \mathbb{E}\left[ \left\|\nabla f(x_t)\right\|^2\right] &\leq f(x_1) - \mathbb{E}\left[f(x_{k+1}\right] + \sum_{t=1}^k \frac{L\sigma^2 \gamma_t^2}{2}\\
+      &\leq f(x_1) - f^* + \sum_{t=1}^k \frac{L\sigma^2 \gamma_t^2}{2}
+  \end{split}
+\end{equation}
+We run the algorithm for $k$ iterations. Randomly pick a solution $x_R$ as the output, such that 
+$$\mathbb{P}\left(R=t\right) = \frac{\gamma_t(1-L \gamma_t/2)}{\sum_{t=1}^k \gamma_t(1-L \gamma_t/2)}$$
+And then we find that 
+\begin{equation}
+  \mathbb{E}\left[\left\|\nabla f(x_R)\right\|^2\right] = \frac{\sum_{t=1}^k \gamma_t(1-L \gamma_t/2) \mathbb{E}\left[\left\|\nabla f(x_t)\right\|^2\right]}{\sum_{t=1}^k \gamma_t(1-L \gamma_t/2)}\leq \frac{f(x_1) - f^* + \sum_{t=1}^k \frac{L\sigma^2 \gamma_t^2}{2}}{\sum_{t=1}^k \gamma_t(1-L \gamma_t/2)}
+\end{equation}
+Take $\gamma_t = \gamma \leq 1/L$, $t=1,...,k$, then 
+\begin{equation}
+  \begin{split}
+    \text{RHS of (7)} \leq \frac{f(x_1) - f^* +  k\frac{L\sigma^2 \gamma^2}{2}}{k \gamma /2} = \frac{2(f(x_1)-f^*)}{\gamma k} + \gamma L \sigma^2
+  \end{split}
+\end{equation}
+
+\begin{equation}
+  \gamma = \min\left\{1/L, \sqrt{\frac{2L[f(x_1)-f^*]}{L^{-2}k}}\right\}
+\end{equation}
+\begin{equation}
+   \mathbb{E}\left[\left\|\nabla f(x_R)\right\|^2\right] \leq \frac{2L(f(x_1)-f^*)}{k} + 2\sigma \sqrt{\frac{2L[f(x_1)-f^*]}{L^{-2}k}}
+\end{equation}
+
+\end{document}
