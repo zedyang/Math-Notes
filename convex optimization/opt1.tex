@@ -110,4 +110,13 @@ The gradient can only be calculated for those $\bm{x}$ where $f$ is differentiab
 
 
 \section{Lagrange Duality}
+We add constraints to $(\dag)$, and obtain a problem of the type:
+\begin{equation}
+  \begin{split}\label{eq:lagrangeprimal}
+  &\min\limits_{\bm{x}\in X} f(\bm{x})\\
+  \text{s.t.}~~~&g_i(\bm{x}) \leq 0;~~i=1,...,m;\\
+  &h_j(\bm{x}) = 0;~~j=1,...,p
+  \end{split}
+\end{equation}
+where $X\subset \mathbb{R}^n$ is closed convex set. $f, g_i: X\to \mathbb{R}$ are convex functions. $h_j: X \to \mathbb{R}$, are affine functions of the form $h_j(\bm{x})= \bm{\theta}_j^{\top} \bm{x}+ b_j$
 \end{document}
