@@ -1,0 +1,378 @@
+\documentclass[10 pt]{hwtemplate} % Use the custom resume.cls style
+
+%-------------------------------------------------------------------------------
+% Document begins
+%-------------------------------------------------------------------------------
+
+\title{\textbf{Finance Assignment II}}
+\author{Ze Yang, Xue Rong, Mengjia Yi}
+
+\begin{document}
+\maketitle
+
+
+\section{Consumption and Savings}
+\subsection*{1.a}
+\begin{table}[htbp]
+  \begin{center}
+  \captionsetup{justification=centering}
+  \caption{\label{tab:twoprd}Two Period Saving-Consumption Profile}
+    \begin{tabular}{lC{4cm}C{4cm}}
+    \toprule
+    Time &  Today $(t=0)$ & One Year $(t=1)$ \\
+    \midrule
+    Income & 1000 & 0 \\
+    Trade & -237.5 & 250 \\
+    \midrule
+    Consume & 762.5 & 250 \\
+    \bottomrule
+    \end{tabular}
+  \end{center}
+\end{table}
+\subsection*{1.b} Define the 2-period utility function $U(c_0, c_1) = u(c_0) + \gamma u(c_1)$, where $\gamma = 0.98$, $u(c)=\log(c)$. Consumption of each period is determined by:
+\begin{equation}
+  \begin{split}
+    &c_0 = y - b X_0  = y- \frac{b}{1+r}\\
+    &c_1 = b X_1 = b
+  \end{split}
+\end{equation}
+Where $b$ is the share of asset (bond) invested, $y$ is the income, $r$ is the interest rate.
+The investor solves 2-period optimization problem:
+\begin{equation}
+  \begin{split}
+    &\max\limits_{b} U(c_0, c_1)\\
+    \text{i.e.~~}  &\max\limits_{b} \left(\log(y-\tfrac{1}{1+r}b) + \gamma \log(b)\right) \\
+  \end{split}
+\end{equation}
+The first order condition:
+$$
+0 = \frac{-1}{(1+r)y-b^*} + \gamma \frac{1}{b^*}~~\Rightarrow~~b^* = \frac{\gamma y(1+r)}{1+\gamma} \approx 520.984
+$$
+It follows that $c_1= b^*= 520.984$. $c_0=y-\tfrac{b^*}{1+r}=\frac{y}{1+\gamma}\approx505.05$.
+
+\subsection*{1.c}
+The investor solves 2-period optimization problem:
+\begin{equation}
+  \begin{split}
+    &\max\limits_{b} U(c_0, c_1)\\
+    \text{i.e.~~}  &\max\limits_{b} \left(\log(\tfrac{1}{1+r}b) + \gamma \log((1+r)y-b)\right) \\
+  \end{split}
+\end{equation}
+The first order condition:
+$$
+0 = \frac{1}{b^{**}} - \gamma \frac{1}{(1+r)y-b^{**}}~~\Rightarrow~~b^{**} = \frac{y(1+r)}{1+\gamma} \approx 531.616
+$$
+It follows that $c_1= (1+r)y - b^{**}=\frac{\gamma y(1+r)}{1+\gamma}\approx 520.984$. $c_0=\tfrac{b}{1+r}=\frac{y}{1+\gamma}\approx505.05$.\\
+We found that the investor consumes exactly the same amount as in (b). The consumption is not different in this case.
+
+\subsection*{1.d} The one year T-Bill rate as of Sept.18, 2017 is 1.30\%. 
+\begin{table}[htbp]
+  \begin{center}
+  \captionsetup{justification=centering}
+  \caption{\label{tab:twoprd2}Two Period Saving-Consumption Profile with Real Risk-Free Rate}
+    \begin{tabular}{lC{4cm}C{4cm}}
+    \toprule
+    Time &  Today $(t=0)$ & One Year $(t=1)$ \\
+    \midrule
+    Income & 1000 & 0 \\
+    Trade & -246.79 & 250 \\
+    \midrule
+    Consume & 753.21 & 250 \\
+    \bottomrule
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsection*{1.e} \textbf{Short Answer}: I would want to save \textit{less} if my marginal utility is diminishing with consumption, i.e. single period utility is concave. I would want to save \textit{more} if my marginal utility is increasing with consumption, i.e. single period utility is convex.\\
+
+\noindent\textbf{Analysis}:
+We consider the equilibrium model. Suppose the equilibrium consumption is $c_0^*$ and $c_1^*$ for two periods. We look into the situation in which the investor deviates from equilibrium by buying extra bond $\xi$, whose price is $\frac{\xi}{R}$ at time 0. $R=1+r$. Moreover the investor has general utility $U(c_0, c_1) = u(c_0) + \gamma u(c_1)$.
+The investor solves 2-period optimization problem:
+\begin{equation}
+  \begin{split}
+  \max\limits_{\xi} u(c_0^*-\tfrac{\xi}{R}) + \gamma u(c_1^*+\xi) \\
+  \end{split}
+\end{equation}
+The first order condition:
+\begin{equation}
+  0 = u'(c_0^*-\tfrac{\xi}{R})(-\tfrac{1}{R}) + \gamma u'(c_1^*+\xi)~~\Rightarrow~~\frac{1}{R}=\frac{\gamma u'(c_1^*+\xi)}{u'(c_0^*-\tfrac{\xi}{R})}
+\end{equation}
+At equilibrium, $\xi=0$ $\Rightarrow$ $\frac{1}{R^*}= \frac{\gamma u'(c_1^*)}{u'(c_0^*)}$. Now suppose $R$ decreases from $R^*$, the LHS becomes larger, the RHS will adjust to equal LHS. If $\frac{\partial^2 u}{\partial c^2}<0$, $u'\searrow$ with $c$. So
+$$
+    \xi<0~~ \Rightarrow ~~u'(c_1^*+\xi)\nearrow; u'(c_0^*-\tfrac{\xi}{R}) \searrow; RHS\nearrow
+$$
+Otherwise if $\frac{\partial^2 u}{\partial c^2}>0$, $u'\nearrow$ with $c$. So
+$$
+    \xi>0~~ \Rightarrow ~~u'(c_1^*+\xi)\nearrow; u'(c_0^*-\tfrac{\xi}{R}) \searrow; RHS\nearrow
+$$
+Therefore, if my marginal utility is diminishing with consumption, i.e. single period utility is concave, $\xi<0$, I consume less on period 1, equivalently I would want to save \textit{less} on period 0. If my marginal utility is increasing with consumption, i.e. single period utility is convex, $\xi>0$, I consume more on period 1, equivalently I would want to save \textit{more} on period 0
+
+
+\section{Means and Variances}
+\subsection*{2.a} The weights of three assets are: $w_a=0.4, w_b=0.4, w_f=0.2$. Denote $\mu_p, \sigma_p$ the expected return and standard deviation of the portfolio. 
+\begin{equation}
+  \begin{split}
+    &\mu_{p} = w_a\mu_a + w_b\mu_b + w_fr_f = 0.0728 \\
+    &\sigma_p = \left(w_a^2\sigma_a^2  + w_b^2\sigma_b^2  + 2w_aw_b\rho \sigma_a \sigma_b\right)^{\frac{1}{2}} = \tfrac{\sqrt{73}}{25} \approx 0.3418 \\
+    &\beta_p = w_a\beta_a + w_b\beta_b = 0.88\\
+    &\text{sharpe ratio} = \frac{\mu_p - r_f}{\sigma_p} = 0.1545
+  \end{split}
+\end{equation}
+
+\subsection*{2.b} We found that $\mu_a - r_f=0.048$, $\mu_b - r_f=0.084$, $\mu_m - r_f=0.06$. We have
+\begin{equation}
+  \begin{split}
+    &0.048=\mu_a - r_f = \beta_a (\mu_m - r_f) =0.8\times 0.06\\
+    &0.084=\mu_b - r_f = \beta_b (\mu_m - r_f) =1.4\times 0.06
+  \end{split}
+\end{equation}
+The returns of A and B are consistent with CAPM.
+
+\subsection*{2.c} Define $\lambda_m := \mathbb{E}\left[r_m\right] - r_f$ the market risk premium. Consider the equilibrium model where the investor hold market portfolio initially, and then decide to buy (sell) asset $i$ funded by risk free borrowing (lending). The portfolio return is written as
+$$
+r_p = r_m + x_ir_i - x_ir_f
+$$
+The investor picks optimal portfolio by maximizing Sharpe ratio
+\begin{equation}
+  \begin{split}
+      &\max\limits_{x_i} \frac{\mathbb{E}\left[r_p\right] - r_f}{\mathrm{\mathbb{V}ar}\left[r_p\right]} \\
+      \text{i.e.}~~~&\max\limits_{x_i} \frac{\mathbb{E}\left[r_m-r_f\right] + x_i(\mathbb{E}\left[r_i-r_f\right] )}{(\mathrm{\mathbb{V}ar}\left[r_m\right] + x_i^2\mathrm{\mathbb{V}ar}\left[r_i\right] + 2x_i \mathrm{\mathbb{C}ov}\left[r_i, r_m\right])^{\frac{1}{2}}}
+    \end{split}  
+\end{equation}
+Take the first order condition:
+
+\begin{equation}
+  \begin{split}
+    0 =&~\mathbb{E}\left[r_i - r_f\right]\left(\mathrm{\mathbb{V}ar}\left[r_m\right] + x_i^2\mathrm{\mathbb{V}ar}\left[r_i\right] + 2x_i \mathrm{\mathbb{C}ov}\left[r_i, r_m\right]\right)\\
+    &-\left(\mathbb{E}\left[r_m - r_f\right]+x_i\mathbb{E}\left[r_i - r_f\right]\right)(x_i \mathrm{\mathbb{V}ar}\left[r_i\right]+\mathrm{\mathbb{C}ov}\left[r_i, r_m\right])\\
+    =&~\mathbb{E}\left[r_i - r_f\right]\left(\mathrm{\mathbb{V}ar}\left[r_m\right]+x_i \mathrm{\mathbb{C}ov}\left[r_i, r_m\right]\right) -\lambda_m\left(x_i \mathrm{\mathbb{V}ar}\left[r_i\right]+\mathrm{\mathbb{C}ov}\left[r_i, r_m\right]\right)\\
+    =&~\{\mathbb{E}\left[r_i - r_f\right]\mathrm{\mathbb{V}ar}\left[r_m\right] - \lambda_m \mathrm{\mathbb{C}ov}\left[r_i, r_m\right]\}-x_i(\lambda_m \mathrm{\mathbb{V}ar}\left[r_i\right]-\mathbb{E}\left[r_i - r_f\right] \mathrm{\mathbb{C}ov}\left[r_i, r_m\right])~~~(\dag)
+  \end{split}
+\end{equation}
+Since asset A is consistent with CAPM, we have $\mathbb{E}\left[r_a - r_f\right] = \beta_a \lambda_m = \frac{\mathrm{\mathbb{C}ov}\left[r_a, r_m\right]}{\mathrm{\mathbb{V}ar}\left[r_m\right]} \lambda_m$. Plug into $(\dag)$ we have:
+$$
+\lambda_m \mathrm{\mathbb{C}ov}\left[r_a, r_m\right] - \lambda_m \mathrm{\mathbb{C}ov}\left[r_a, r_m\right] + x_a C = 0
+$$
+where $C = \lambda_m \left(\frac{\mathrm{\mathbb{C}ov}^2\left[r_a, r_m\right]}{\mathrm{\mathbb{V}ar}\left[r_m\right]}-\mathrm{\mathbb{V}ar}\left[r_a\right]\right)$, $C=0 \iff \mathrm{\mathbb{C}ov}\left[r_a, r_m\right]=\sigma_a \sigma_m$, i.e. aseet A and market are perfectly correlated, which is not the case. So $C\ne 0$. We conclude that $x_a = 0$.\\
+By same deduction we can show $x_b=0$ if the investor has the chance to choose to deviate from market portfolio and tilt to B.\\
+Therefore, given the equilibrium prices of asset A and B being $r_a$ and $r_b$ that are consistant to CAPM, the investor will neither tilt to A nor B, the tangency portfolio is to hold market portfolio to unit weight.\\
+~\\
+The investor than hold a combination of tangency portfolio and risk free rate to achieve the target return (current return):
+\begin{equation}
+  w_m r_m + (1-w_m) r_f = r^* = 0.0728 ~~\Rightarrow~~ w_m = 0.88
+\end{equation}
+Therefore, the investor hold 22 million dollars (88\%) market portfolio and 3 million dollars (12\%) T-Bill. The optimal portfolio has:
+\begin{equation}
+  \begin{split}
+    &r_p^* = 0.0728 \\
+    &\sigma_p^* = w_m \sigma_m = 0.176 \\
+    &\beta_p^* = w_m \beta_m = 0.88 \\
+    &\text{Sharpe}_p^* = \frac{r_p^* - r_f}{\sigma_p^*} = 0.3
+  \end{split}
+\end{equation}
+
+\subsection*{2.d} Denote the Tree Farm Backed Security asset c. Assume its price is $P_c$, then the expected return and standard deviation of return is given by:
+$$
+r_c = \frac{157.5}{P_c} - 1,~~~~\sigma_c = \frac{23.848}{P_c}
+$$
+Given $\mathrm{\mathbb{C}ov}\left[r_c, r_m\right] = 0$, $(\dag)$ becomes:
+\begin{equation}
+  x_c\lambda_m \mathrm{\mathbb{V}ar}\left[r_c\right]=\mathbb{E}\left[r_c - r_f\right]\mathrm{\mathbb{V}ar}\left[r_m\right]
+\end{equation}
+$\Rightarrow$ (define $\lambda_c$ the risk premium of security c)
+\begin{equation}
+  x_c = \frac{\lambda_c \mathrm{\mathbb{V}ar}\left[r_m\right]}{\mathrm{\mathbb{V}ar}\left[r_i\right]} \leq  0
+\end{equation}
+It follows that $\lambda_c \geq 0$, i.e. $r_c \geq r_f$, $P_c \leq 154.41176$, i.e. the clients are recommended to purchase this asset if its price is no more than $154.41176$ dollars.
+
+\subsection*{2.e} 
+\begin{equation}
+  \text{Sharpe}_c = \frac{\lambda_c}{\sigma_c} = \frac{157.5/P_c - 1.02}{23.848/P_c} = \frac{157.5 - 1.02P_c}{23.848} = 0.1887
+\end{equation}
+Given $P_c = 150$.
+
+\subsection*{2.f} If $\mathrm{\mathbb{C}ov}\left[r_c, r_m\right]\ne 0$, $(\dag)$ becomes
+\begin{equation}
+  x_i(\lambda_m \mathrm{\mathbb{V}ar}\left[r_i\right]-\mathbb{E}\left[r_i - r_f\right] \mathrm{\mathbb{C}ov}\left[r_i, r_m\right])=\mathbb{E}\left[r_i - r_f\right]\mathrm{\mathbb{V}ar}\left[r_m\right] - \lambda_m \mathrm{\mathbb{C}ov}\left[r_i, r_m\right]
+\end{equation}
+$\Rightarrow$ 
+\begin{equation}
+  x_c = \frac{\lambda_c\mathrm{\mathbb{V}ar}\left[r_m\right] - \lambda_m \mathrm{\mathbb{C}ov}\left[r_c, r_m\right]}{\lambda_m \mathrm{\mathbb{V}ar}\left[r_c\right]- \lambda_c \mathrm{\mathbb{C}ov}\left[r_c, r_m\right]}
+\end{equation}
+We want to solve price $P$ such that investor tilt toward security c at the equilibrium, i.e. $x_c\geq 0$. It follows that:
+\begin{equation}
+  \begin{cases}
+    \lambda_c\mathrm{\mathbb{V}ar}\left[r_m\right] - \lambda_m \mathrm{\mathbb{C}ov}\left[r_c, r_m\right] \geq 0\\
+    \lambda_m \mathrm{\mathbb{V}ar}\left[r_c\right]- \lambda_c \mathrm{\mathbb{C}ov}\left[r_c, r_m\right] \geq 0
+  \end{cases}~~\Rightarrow~~  \frac{\rho \sigma_c}{\sigma_m}\lambda_m \leq \lambda_c \leq \frac{\sigma_c}{\rho \sigma_m}\lambda_m~~~(\ddag)
+\end{equation}
+Where $\rho$ is the correlation coefficient between $r_c$ and $r_m$. \\
+We assume the return of security c is positively correlated with the market return, which is fully justifiable in this problem, i.e. $0 < \rho < 1$. It follows that there exists $\lambda_c$, such that $(\ddag)$ holds $\forall \rho \in (0,1)$; because $\rho<1/\rho$, and $\sigma_c, \sigma_m, \lambda_m \geq 0$.\\
+Now that we do not know the exact value of $\rho$, but we are sure that
+$$
+\lambda_c^* = \frac{1\times\sigma_c}{\sigma_m} \lambda_m
+$$
+satisfies $(\ddag)$ for any $\rho$. Let $P^*_c$ be the asset price that yields risk premium $\lambda_c^*$ satisfies
+$$
+\left(\frac{157.5}{P_c^*} - 1\right) -r_f = \frac{23.848}{P^*_c}\frac{1}{\sigma_m} \lambda_m~~\Rightarrow~~P_c^* = 147.397647
+$$
+We have in this case
+$$
+r_c^*=0.068538,~~\lambda_c^* = 0.048538,~~\sigma_c^* = 0.161794,~~\text{Sharpe}_c^* = 0.3
+$$
+Not surprisingly, the asset has its own sharpe ratio of $0.3$, which implies that it's on the CML.
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{\label{fig:span}The Frontier Spanned by Convex Combination of Market and C}
+  \vspace{-10pt}
+  \includegraphics[scale=0.5]{figures/fig1.png}
+\end{figure}
+This result can be illustrated in another way by considering the convex combinations (long position in both) of market and asset c. If asset c is on the CML, then the portfolio of convex combination of asset c and market will \textit{always} have higher sharpe ratio, regardless of correlation coefficient $\rho$. Otherwise there exists $\rho \in [0,1]$ such that all convex combinations have lower sharpe ratio than the market. So the investor won't choose to tilt toward asset c at equilibrium given that $\rho$.
+
+
+
+\section{CAPM}
+\subsection*{3.a} 
+We fit OLS for 
+$$
+r_{i,t} - r_f = \alpha_i + \beta_i (r_{m,t}-r_f) + \epsilon_i
+$$
+The summary is presented in the table below
+\begin{table}[htbp]
+  \begin{center}
+  \captionsetup{justification=centering}
+  \caption{\label{tab:lm}Linear Regression Summary}
+  \small
+    \begin{tabular}{lccccccccc}
+    \toprule
+      Ticker & \texttt{Aero} & \texttt{Guns} & \texttt{Steel}& \texttt{Ships}& \texttt{Beer}& \texttt{Toys}& \texttt{Fin}&  \texttt{Rtail}\\
+      \midrule
+      $\hat{\alpha}$ & 0.002110  &0.004183  & -0.006848  &-0.001078 & 0.004168  &-0.002336&
+      -0.0001516 & 0.001276 \\
+      $t$-stat. & 1.127  &1.726  & $-3.187^{**}$  &-0.433 & $2.306^{*}$  &-1.117&
+      -0.119 & 0.900 \\
+      \midrule
+      $\hat{\beta}$ & 1.113396  &0.761863  & 1.406023  &1.112897 & 0.703262  &1.117458&
+      1.2511179 & 0.981051 \\
+      $t$-stat. & $26.734^{***}$  &$14.139^{***}$  & $29.424^{***}$  &$20.121^{***}$ & $17.499^{***}$  &$24.023^{***}$&
+      $44.001^{***}$ & $31.120^{***}$ \\
+      \midrule
+      $R^2$ & 0.5845  &0.2824  & 0.6302  &0.4435 & 0.3761  &0.5318&
+      0.7922 & 0.6559 \\
+      SD$(r_i)$ & 0.0650 & 0.0640 & 0.0790 & 0.0746 & 0.0512 & 0.0684 & 0.0627 & 0.0541\\
+    \bottomrule
+    \end{tabular}
+  \end{center}
+  \vspace{-8pt}
+  \scriptsize~~~~\textit{Significance level: $0~~^{***}~~0.001~~^{**}~~0.01~~^{*}~~0.05~~^{.}~~0.1~~~~~1$.}
+\end{table}
+\normalsize
+\subsection*{3.b} If CAPM is correct, we should see zero alphas. In the fitted single factor model, the alphas are non-zero. In particular, for \texttt{Steel} and \texttt{Beer} are significantly non-zero at 0.01 and 0.05 significance level respectively. For other industries, non-zero alphas are not statistically significant. Hence we conclude that
+\begin{itemize}
+  \item[$\cdot$] The CAPM is wrong for \texttt{Steel} and \texttt{Beer} industry. We can reject the CAPM ($H_0: \alpha = 0$) at a significant confidence level.
+  \item[$\cdot$] We fail to reject the hypothesis that $\alpha = 0$. No evidence against CAPM.
+\end{itemize}
+We conclude that the the data does not support CAPM exactly.
+
+\subsection*{3.c} The beta's ordering from least to most risky is
+$$
+\texttt{Beer},~\texttt{Guns},~\texttt{Rtail},~\texttt{Ships},~\texttt{Aero},~\texttt{Toys},~\texttt{Fin},~\texttt{Steel}
+$$
+While the variance ordering from least to most risky is
+$$
+\texttt{Beer},~\texttt{Rtail},~\texttt{Fin},~\texttt{Guns},~\texttt{Aero},~\texttt{Toys},~\texttt{Ships},~\texttt{Steel}
+$$
+These two orderings are not consistent, in that
+\begin{equation}
+  \mathrm{\mathbb{V}ar}\left[r_i\right] = \beta_i^2 \mathrm{\mathbb{V}ar}\left[r_m\right] + \mathrm{\mathbb{V}ar}\left[\epsilon_i\right]
+\end{equation}
+where $\beta$ captures the systematic risk, but the variance of asset return is the sum of systematic risk and idiosyncratic risk. Different assets have different idiosyncratic risk.
+
+
+\section{Fama-French Three Factor Model}
+\subsection*{4.a} 
+We fit OLS for 
+$$
+r_{i,t} - r_f = \alpha_i + \beta_{i,m} (r_{m,t}-r_f) + \beta_{i,smb} (r_{smb,t}-r_f) + \beta_{i,hml} (r_{hml,t}-r_f) + \epsilon_i
+$$
+The summary is presented in the table below
+\begin{table}[htbp]
+  \begin{center}
+  \captionsetup{justification=centering}
+  \caption{\label{tab:lm2}Fama-French Linear Regression Summary}
+  \small
+    \begin{tabular}{lccccccccc}
+    \toprule
+      Ticker & \texttt{Aero} & \texttt{Guns} & \texttt{Steel}& \texttt{Ships}& \texttt{Beer}& \texttt{Toys}& \texttt{Fin}&  \texttt{Rtail}\\
+      \midrule
+      $\hat{\alpha}_i$      & 0.001005  &0.002604  & -0.008491  &-0.003089  & 0.004152  &-0.003555 & -0.001122 & 0.001043 \\
+      $t$-stat.             & 0.542  &0.278  & $-4.112^{***}$  &-1.269 & $2.301^{*}$  &$-1.729^{.}$& -0.893 & 0.728 \\
+      \midrule
+      $\hat{\beta}_{i,m}$   & 1.163966  &0.817595  & 1.371640   &1.150767   & 0.749862  &1.092476  & 1.268731 & 0.980475 \\
+      $\hat{\beta}_{i,smb}$ & -0.017854  &0.049650  & 0.471735  &0.213865   & -0.208677  &0.347531  & 0.106181 & 0.047363 \\
+      $\hat{\beta}_{i,hml}$ & 0.307100  &0.417089  & 0.312592   &0.487759   & 0.064922  &0.232538  & 0.234472 & 0.050004 \\
+      $R^2$ (FF)            & 0.6026    &0.3152    & 0.6666     &0.4794     & 0.3928    &0.5583    & 0.8040 & 0.6570 \\
+      $R^2$ (1 factor)      & 0.5845    &0.2824    & 0.6302     &0.4435     & 0.3761    &0.5318    & 0.7922 & 0.6559 \\
+      SD$(r_i)$             & 0.0650    & 0.0640    & 0.0790     & 0.0746   & 0.0512    & 0.0684    & 0.0627 & 0.0541\\
+    \bottomrule
+    \end{tabular}
+  \end{center}
+    \vspace{-8pt}
+  \scriptsize~~~~\textit{Significance level: $0~~^{***}~~0.001~~^{**}~~0.01~~^{*}~~0.05~~^{.}~~0.1~~~~~1$.}
+\end{table}
+
+\subsection*{4.b} If Fama-French Factor Model is correct is correct, we should see zero alphas. 
+In the fitted multifactor model, the alphas are non-zero. In particular, for \texttt{Steel} and \texttt{Beer} are significantly non-zero at 0.01 and 0.05 significance level respectively. For other industries, non-zero alphas are not statistically significant. Hence we conclude that
+\begin{itemize}
+  \item[$\cdot$] The CAPM is wrong for \texttt{Steel} and \texttt{Beer} industry. We can reject the FF ($H_0: \alpha = 0$) at a significant confidence level.
+  \item[$\cdot$] We fail to reject the hypothesis that $\alpha = 0$. No evidence against FF.
+\end{itemize}
+We conclude that the the data does not support FF exactly.
+
+In addition, the Fama-French model has higher $R^2$ than the single factor model, which implies that more risk (larger portion of variance) of asset returns is captured by factors, and is hence attributed to systematic risk. Less risk (smaller portion of variance) is attributed to idiosyncratic risk.
+
+\subsection*{4.c} Define $f_{m,t}:=r_{m,t}-r_f$, $f_{smb,t}:=r_{smb,t}-r_f$, $f_{hml,t}:=r_{hml,t}-r_f$. The Fama-French factor model reads:
+\begin{equation}
+  r_{i,t} - r_f =  \alpha_i + \beta_{i,m} f_{m,t}+ \beta_{i,smb} f_{smb,t} + \beta_{i,hml} f_{hml,t} + \epsilon_i
+\end{equation}
+in vector form
+\begin{equation}
+  \bm{r}_i - \bm{r}_f = \bm{\iota} \alpha_i + \bm{F} \bm{\beta}_i + \bm{\epsilon}_i
+\end{equation}
+where $\bm{r}_i, \bm{r}_f, \bm{\iota}, \bm{\epsilon}_i$ are $n\times 1$ vectors, $\bm{F}$ is $n\times d$ factor matrix. $\bm{\beta}$ is $d \time 1$ coefficient vector. $d=3$, $n$ is sample size. To aggregate factor risk, we have
+$$
+\mathrm{\mathbb{V}ar}\left[r_i\right] = \bm{\beta}_i^{\top} \mathrm{\mathbb{C}ov}\left[\bm{F}\right] \bm{\beta}_i + \mathrm{\mathbb{V}ar}\left[\epsilon_i\right] = \bm{\beta}_i^{\top} \bm{\Sigma}_{\bm{F}} \bm{\beta}_i + \sigma_{\epsilon_i}^2
+$$
+The question asks us to rank the portfolios by a measure of three betas, i.e. by the aggregation of systematic risk. It suffices to calcuate $\bm{\beta}_i^{\top} \bm{\Sigma}_{\bm{F}} \bm{\beta}_i$ for each portfolio, where $\bm{\Sigma}_{\bm{F}}$ is covariance matrix of factors. The results are summerized in the table below. 
+\begin{table}[htbp]
+  \begin{center}
+  \captionsetup{justification=centering}
+  \caption{\label{tab:risk1}Fama-French Systematic Risk}
+  \small
+    \begin{tabular}{lccccccccc}
+    \toprule
+      Ticker & \texttt{Aero} & \texttt{Guns} & \texttt{Steel}& \texttt{Ships}& \texttt{Beer}& \texttt{Toys}& \texttt{Fin}&  \texttt{Rtail}\\
+      \midrule
+      $\bm{\beta}_i^{\top} \bm{\Sigma}_{\bm{F}} \bm{\beta}_i$ &0.002542& 0.001290& 0.004155 & 0.002664 & 0.001027& 0.002605 & 0.003158 & 0.001915\\
+      $\mathrm{\mathbb{V}ar}\left[r_i\right]$             & 0.004224    & 0.004094    & 0.006248     & 0.005562   & 0.002619    & 0.004677    & 0.003936 & 0.002923\\
+      SD$(r_i)$             & 0.0650    & 0.0640    & 0.0790     & 0.0746   & 0.0512    & 0.0684    & 0.0627 & 0.0541\\
+    \bottomrule
+    \end{tabular}
+  \end{center}
+\end{table}
+\\
+The systematic risk ordering from least to most risky is
+$$
+\texttt{Beer},~\texttt{Guns},~\texttt{Rtail},~\texttt{Aero},~\texttt{Toys},~\texttt{Ships},~\texttt{Fin},~\texttt{Steel}
+$$
+Note that this ordering is different from the total risk ordering and the ordering with single factor that we have done in problem 3. The least risky is still \texttt{Beer}, and the most risky is \texttt{Steel}. Because they generally have low(high) beta exposures to all factors.
+
+
+\begin{thebibliography}{}
+ \bibitem{ap} 
+Cochrane, J. 
+\textit{Asset Pricing}. Princeton University Press, 2005.
+\end{thebibliography}
+
+\end{document}

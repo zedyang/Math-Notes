@@ -1,0 +1,295 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz, array, eurosym}
+\usepackage{float}
+\renewcommand{\arraystretch}{1.4}
+\newcolumntype{L}{>{\arraybackslash}m{10cm}}
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+
+\title{\textbf{Asset Pricing Assignment V}}
+\author{Ze Yang~~~~(zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+\begin{table}[h]
+\vspace{-10pt}
+\caption{\textit{Nomenclatures}}
+\vspace{3pt}
+\centering
+\def\arraystretch{1.15}
+\begin{tabular}{lL}
+\hline
+Notation & \hspace{4.6cm} Description \\ 
+\hline
+$X\,{\buildrel d \over =}\,Y$ & Random varaibles $X$ and $Y$ have identical distribution.\\
+$\bm{w}$ & The $N$-periods coin toss path, $\bm{w} = (w_1~~w_2~~...~~w_N)^{\top}$, where $w_n$ is the outcome for single period $n$.\\
+$\psi_n$ & The partial path till $i$-th period. I.e. the event of all $\bm{w}$ that has same trajectory until $i$: $\psi_n=\{\bm{w}: w_k=\hat{w}_k, k =1,2,...,n\}$\\
+$\tilde{p}(w), \tilde{\mathbb{P}}\left(w\right)$ & Risk neutral probabilities. In the coin toss space, we refer to $\tilde{p}(H)$ as $\tilde{p}$, $\tilde{p}(T)$ as $\tilde{q}$.\\
+$\#H(\bm{w})$, $\#T(\bm{w})$ & The number of heads (tails) in path $\bm{w}$. \\
+$d(i, j)$ & The discount factor from period $i$ to $j$. \\
+$\tilde{\mathbb{E}}_i\left[V_{j}\right](\psi_i)$ & The expectation of security payoff of period $j$ conditional on period $i<j$; it's a random variable with respect to partial path $\psi_i$. Tilde means the risk neutral probability measure.\\
+\hline 
+\end{tabular}
+\label{tab:Nomen}
+\end{table}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{solution} Consider the replicating portfolio:
+\begin{itemize}
+  \item[$\cdot$] Short face $F_0$ ZCB with maturity $N$.
+  \item[$\cdot$] Long face $1$ ZCB with maturity $M$.
+\end{itemize}
+The portfolio's cash flow is: $-F_0$ at time $N$, $1$ dollar at time $M$. Which is identical to that of the future contract. Hence the arbitrage free price of future contract is the initial capital of the portfolio. Since it costs nothing to enter future contract at time $0$:
+$$
+P_0 = X_0 ~~~\Rightarrow~~~0 = - F_0 d(0, N) + d(0,M)
+$$
+We have 
+\begin{equation}
+  F_0 = \frac{d(0,M)}{d(0, N)}
+\end{equation}
+Now we calculate the discount factor, i.e. the time-0 price of ZCB. By the short rate model given in the problem: 
+\begin{equation}
+  (1+r_n) = (1+r_{n-1})\epsilon_{n} =  (1+r_{n-2})\epsilon_{n-1}\epsilon_{n} = ... = (1+r_0) \prod_{j=1}^n \epsilon_j
+\end{equation}
+By the definition of risk neutral probability:
+\begin{equation}
+  \begin{split}
+    d(0, n) &= \tilde{\mathbb{E}}\left[\frac{1}{\prod_{i=0}^{n-1} (1+r_i)}\right] = \tilde{\mathbb{E}}\left[\frac{1}{(1+r_0)^n\prod_{i=1}^{n-1} \prod_{j=1}^i \epsilon_j}\right] \\
+    &= \frac{1}{(1+r_0)^n} \tilde{\mathbb{E}}\left[\frac{1}{\prod_{i=1}^{n-1} \epsilon_i^{n-i}}\right]~~~(\dag)
+  \end{split}
+\end{equation}
+Clearly, $\{\epsilon_i\}$ are i.i.d. random variables. So $\epsilon_1^{n-1} \perp \epsilon_2^{n-2} \perp ...\perp \epsilon_{n-2}^2 \perp \epsilon_{n-1} $; perpendicular sign means independent. Moreover, $\epsilon_k^{n-k} \,{\buildrel d \over =}\, \epsilon_1^{n-k}$. Therefore we have
+\begin{equation}
+   (\dag)= \frac{1}{(1+r_0)^n} \prod_{i=1}^{n-1}\tilde{\mathbb{E}}\left[\frac{1}{\epsilon_i^{n-i}}\right] = \frac{1}{(1+r_0)^n} \prod_{i=1}^{n-1}\tilde{\mathbb{E}}\left[\frac{1}{\epsilon_1^{i}}\right]
+\end{equation} 
+Where we do the production in reversed sequence to change the index of $\epsilon_1$ into $i$. It follows that
+\begin{equation}
+  \begin{split}
+    F_0(r_0, N,M) &= \frac{d(0,M)}{d(0,N)} = \frac{\frac{1}{(1+r_0)^M} \prod_{i=1}^{M-1}\tilde{\mathbb{E}}\left[\frac{1}{\epsilon_1^{i}}\right]}{\frac{1}{(1+r_0)^N} \prod_{i=1}^{N-1}\tilde{\mathbb{E}}\left[\frac{1}{\epsilon_1^{i}}\right]} = \frac{1}{(1+r_0)^{M-N}} \prod_{i=N}^{M-1}\tilde{\mathbb{E}}\left[\frac{1}{\epsilon_1^{i}}\right] \\
+    &= \frac{1}{(1+r_0)^{M-N}} \prod_{i=N}^{M-1} \frac{1}{2}\left(2^i + 2^{-i}\right)
+  \end{split}
+\end{equation}
+Take $r_0=1$, $N=2, M=3$:
+$$
+F_0 = \frac{1}{2} \cdot \frac{1}{2}\left(2^2 + 2^{-2}\right) = \frac{17}{16}
+$$
+\end{solution}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{solution} Consider the replicating strategy:
+\begin{itemize}
+  \item[$\cdot$] Long future contract at time $n$.
+  \item[$\cdot$] Short future contract at time $n+1$.
+\end{itemize}
+After time $n+1$ the payoffs from long and short position cancel out, and the delivery of stocks at maturity also cancel out. So the strategy has only one payoff: $F_{n+1}-F_{n}$ at time $n+1$. \\
+At time $n$, it requires zero initial capital to enter this replicating strategy. So the arbitrage price of single payoff $F_{n+1}-F_{n}$ is $P_n=X_n = 0$ at time $n$. By definition of risk neutral probability:
+\begin{equation}
+  0 = P_n = \tilde{\mathbb{E}}_n\left[\frac{X_{n+1}}{1+r}\right] = \frac{1}{1+r} \mathbb{E}_n\left[F_{n+1}-F_n\right]
+\end{equation}
+It follows that
+\begin{equation}
+  0 = \mathbb{E}_n\left[F_{n+1}-F_n\right] = \mathbb{E}_n\left[F_{n+1}\right] - F_n ~~~\Rightarrow ~~~\mathbb{E}_n\left[F_{n+1}\right] = F_n
+\end{equation}
+Which suggests that $\{F_n\}$ is a martingale. 
+We now consider the European option. By its definition, clearly $\tau$ is a stopping time. Since $\{F_n\}$ is a martingale, by optimal sampling lemma: $\Rightarrow \{F_{n\wedge \tau}\}$ is a martingale. \\
+The payoff of the European option, denote $V_N$, is dictated by
+\begin{equation}
+  V_N = \begin{cases}
+  F_{\tau} & \tau < N\\
+  F_N & \max \{F_1, ..., F_{N-1}\} < K 
+  \end{cases} = F_{N\wedge \tau}
+\end{equation}
+So at any time $n<N$, the arbitrage free price of option is
+\begin{equation}
+  V_n = \tilde{\mathbb{E}}_n\left[\frac{V_N}{(1+r)^{N-n}}\right] = \frac{1}{(1+r)^{N-n}} \tilde{\mathbb{E}}_n\left[F_{N\wedge \tau}\right] = \frac{F_{n\wedge \tau}}{(1+r)^{N-n}}
+\end{equation}
+\begin{equation}
+  \Rightarrow V_0 = \frac{F_{0 \wedge \tau}}{(1+r)^{N}} = \frac{F_{0}}{(1+r)^{N}} 
+\end{equation}
+Where we use the fact: $\{F_{n\wedge \tau}\}$ is martingale and $\tau \geq 0$.\\
+Plug in the numbers:
+\begin{equation}
+  V_0 = \frac{4}{(1+1)^6} = \frac{1}{16}
+\end{equation}
+Balance equations at time $0$:
+\begin{equation}
+  \begin{split}
+    V_1(H) &= (V_0)(1+r) + \Delta_0(F_1(H) - F_0)\\
+    V_1(T) &= (V_0)(1+r) + \Delta_0(F_1(T) - F_0)
+  \end{split}
+\end{equation}
+\begin{equation}
+  \Rightarrow \Delta_0 = \frac{V_1(H)-V_1(T)}{F_1(H)-F_1(T)} = \frac{1}{(1+r)^{N-1}} \frac{F_1(H)-F_1(T)}{F_1(H)-F_1(T)} = \frac{1}{2^5} = \frac{1}{32}
+\end{equation}
+The number of contracts in replicating portfolio is 1/32.
+\end{solution}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{solution} In problem (2) we have shown that $\{F_n\}$ is a martingale, therefore
+\begin{equation}
+  F_n = \tilde{\mathbb{E}}_n\left[F_{n+1}\right]
+\end{equation}
+Since $F_N = 1-r_N$, $r_{n+1} = r_n \epsilon_{n+1}$ $\Rightarrow$
+$$
+F_{N-1} = \tilde{\mathbb{E}}_{N-1}\left[1-r_{N-1} \epsilon_{N}\right] = 1-r_{N-1} \tilde{\mathbb{E}}_{N-1}\left[\epsilon_{N}\right] = 1-r_{N-1}(\tilde{p}u+\tilde{q}d)
+$$
+$$
+F_{N-2} = \tilde{\mathbb{E}}_{N-2}\left[1-r_{N-1}(\tilde{p}u+\tilde{q}d)\right] = 1-r_{N-2}(\tilde{p}u+\tilde{q}d) \tilde{\mathbb{E}}_{N-2}\left[\epsilon_{N-1}\right] = 1-r_{N-2}(\tilde{p}u+\tilde{q}d)^2
+$$
+Clearly there is a pattern. We want to construct an induction proof. Denote $\lambda:=\tilde{p}u+\tilde{q}d$, if we suppose 
+$$
+F_{n} = 1-r_{n}\lambda^{N-n}
+$$
+Then for $n-1$ we have
+\begin{equation}
+  \begin{split}
+    F_{n-1} &= \tilde{\mathbb{E}}_{n-1}\left[F_{n}\right] = \tilde{\mathbb{E}}_{n-1}\left[1-r_{n}\lambda^{N-n}\right] \\
+    &= \tilde{\mathbb{E}}_{n-1}\left[1-r_{n-1}\epsilon_n\lambda^{N-n}\right] \\
+    &= 1-r_{n-1}\lambda^{N-n}\tilde{\mathbb{E}}_{n-1}\left[\epsilon_n\right] \\
+    &= 1-r_{n-1}\lambda^{N-(n-1)}
+  \end{split}
+\end{equation}
+And we have the boundary case $F_N = 1-r_N$. By the principle of mathematical induction, the assumption is true: $F_{n} = 1-r_{n}\lambda^{N-n}$.\\
+Plug in the numerical values: $N=4$, $M=1$, $\lambda=0.2\times 2 + 0.8\times 0.5 = 0.8$, we have
+$$
+F_1(w) = 1-r_1(w)\times (0.8)^{3}
+$$
+In which $r_1(H)=r_0 u = 0.32$, $r_1(T)=r_0d = 0.08$, where $r_0=0.16$.
+$$
+F_1(H) = 1-0.32\times(0.8)^3 = 0.83616,~~~~F_1(T) = 1-0.08\times(0.8)^3 = 0.95904
+$$
+$$
+V_1(H) = 0,~~~~V_1(T)=F_1(T)-K = 0.03904
+$$
+So
+$$
+V_0 = \frac{1}{1+r_0}(\tilde{p}V_1(H)+\tilde{q}V_1(H)) = 0.026924
+$$
+Balance equations at time $0$:
+\begin{equation}
+  \begin{split}
+    V_1(H) &= (V_0)(1+r) + \Delta_0(F_1(H) - F_0)\\
+    V_1(T) &= (V_0)(1+r) + \Delta_0(F_1(T) - F_0)
+  \end{split}
+\end{equation}
+\begin{equation}
+  \Rightarrow \Delta_0 = \frac{V_1(H)-V_1(T)}{F_1(H)-F_1(T)} = \frac{0-0.03904}{0.83616-0.95904} \approx 0.3177
+\end{equation}
+The number of contracts in replicating portfolio is 0.3177.
+\end{solution}
+
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{solution} There are 3 traded securities in the market: domestic bank account, EURO stock, and EURO bank account. And there are three possible states for period 1: $\epsilon_1 = -1, 0$ or $1$. We use superscript $[d]$ to denote value in dollar.
+\begin{itemize}
+   \item[$\cdot$] Domestic bank: $1+r$ at time 1.
+   \item[$\cdot$] Stock: $S_1^{[d]} = S_1 R_1 = S_0 R_0 (ab)^{\epsilon_1} = S_0 (ab)^{\epsilon_1}$ (\$), with $R_0=1$.
+   \item[$\cdot$] Foreign bank: $(1+q)R_1 = (1+q)b^{\epsilon_1}$ (\$) at time 1.
+ \end{itemize} 
+Hence the payoff matrix at period 1 is
+\begin{equation}
+  \bm{A}_1 = \begin{pmatrix}
+    1+r & S_0\tfrac{1}{ab}& (1+q)\tfrac{1}{b} \\
+    1+r & S_0& (1+q) \\
+    1+r & S_0ab& (1+q)b\\
+  \end{pmatrix}
+\end{equation}
+If $\tilde{p}$ is risk neutral probability, then $\tilde{p}$ solves:
+\begin{equation}
+  \tfrac{1}{1+r}\bm{A}^{\top} \tilde{\bm{p}} = \bm{V_0} = (1~~S_0~~1)^{\top}
+\end{equation}
+\begin{equation}
+  \Rightarrow \begin{pmatrix}
+    1 & 1 & 1 \\
+    \tfrac{1}{ab} & 1& ab \\
+    \tfrac{1}{b} & 1& b\\
+  \end{pmatrix} \begin{pmatrix}
+    \tilde{p}_1\\
+    \tilde{p}_2 \\
+    \tilde{p}_3
+  \end{pmatrix} = \begin{pmatrix}
+    1 \\
+    1+r \\
+    \frac{1+r}{1+q}
+  \end{pmatrix}
+\end{equation}
+Solve with $r=0.25,~~q=0.125,~~a=4/3,~~b=3/2$. We obtain:
+\begin{equation}
+  \tilde{p}_1 = \frac{1}{6},~~~~\tilde{p}_2 = \frac{1}{2},~~~~\tilde{p}_3 = \frac{1}{3}
+\end{equation}
+Now we consider the quanto option. Suppose the option is not exercised before period $n$. Then at $n$, the $\tilde{\mathbb{P}}$-expection of discounted payoff at time $n+1$ is
+\begin{equation}
+  \begin{split}
+    \tilde{\mathbb{E}}_n\left[\frac{V_{n+1}}{1+r}\right] &= \frac{1}{1+r} \tilde{\mathbb{E}}\left[S_{n+1}\right] =\frac{1}{1+r}(\tilde{p}_1S_n\tfrac{1}{a}+\tilde{p}_2S_n+\tilde{p}_3S_n a) \\
+    &= \frac{1}{1.25}\left(\frac{1}{6}\frac{3}{4}S_n+\frac{1}{2}S_n + \frac{1}{3}\frac{4}{3}S_n\right) = \frac{77}{90}S_n
+  \end{split}
+\end{equation}
+If exercised at $n$, the payoff is $S_n > \frac{77}{90}S_n$, i.e. the discounted payoff of quanto option is a super-$\tilde{\mathbb{P}}$-martingle. The option should be exerised at $n$. Continue with induction, it follows that the option should be exerised \textit{immediately} if not exercised before.\\
+Hence, if we start at time 0, it should be exercised at $\hat{\tau}=1$; i.e. the optimal exercise strategy is to exercise at the first period. The value at time 0 is thus obtained by:
+\begin{equation}
+  V_0 = \frac{1}{1+r}\tilde{\mathbb{E}}\left[S_1\right] = \frac{77}{90}S_0 = \frac{77}{90}\times 12 \approx 10.2667
+\end{equation}
+\end{solution}
+
+
+
+
+
+
+\end{document}

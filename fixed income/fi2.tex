@@ -1,0 +1,350 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz, array, float}
+\renewcommand{\arraystretch}{1.3}
+\newcolumntype{L}{>{\arraybackslash}m{12cm}}
+
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+
+\title{\textbf{MSCF HW Template}}
+\author{Ze Yang~~~~(zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+\begin{table}[h]
+\vspace{-10pt}
+\caption{\textit{Nomenclatures}}
+\vspace{3pt}
+\centering
+\def\arraystretch{1.15}
+\begin{tabular}{lL}
+\hline
+Notation & \hspace{4.6cm} Description \\ 
+\hline
+$\bm{x}\succeq \bm{y}$ & Componentwise inequality between vectors.\\
+& Means: $x_i \geq y_i$ for $i=1,2,...,n$, $n$ is number of components of $\bm{x}, \bm{y}$.\\
+$\bm{x}\succ \bm{y}$ & Componentwise strict inequality between vectors.\\
+$(t, C_t)$ & Time t, and the dollar amount of cashflow paid at time $t$. \\
+$B$ & The cashflow profile of a bond, $B$ is a set of tuples $\{(t_1, C_{t_1}), ..., (t_n, C_{t_n})\}$. We denote $\bm{C}_{B} := (C_{t_1}~~C_{t_2}~~\cdots~~C_{t_n})^{\top}$, where $(t_i, C_{t_i}) \in B$ $\forall i = 1,2,...,n$; similar for $\bm{t}_B$.\\
+$d(t)$ & The discount factor as of time $t$.\\
+$\bm{d}(\bm{t})$ & Discount column vector. $\bm{d}(\bm{t}) = (d(t_1) ~~ d(t_2) ~~\cdots~~ d(t_n))^{\top}$ \\
+$\bm{d}(\bm{t}; y)$ & Single yield discount column vector, where $y$ is yield to maturity \\
+& $\bm{d}(\bm{t}; y) = (\tfrac{1}{(1+y/2)^{2t_1}} ~~ \tfrac{1}{(1+y/2)^{2t_2}} ~~\cdots~~ \tfrac{1}{(1+y/2)^{2t_n}})^{\top}$ \\
+$q$ & Coupon rate.\\
+$F$ & Face value of bond.\\
+$P(B)$ & The price of bond $B$, $P(B)=\sum_{(t,C_t) \in B}C_td(t)=\langle d(\bm{t_B}), \bm{C}_B \rangle = \bm{C}_B^{\top}\bm{d}(\bm{t}_B)$. In this assignment, $P$ is a linear function, i.e. $P(aB_1+bB_2) = aP(B_1)+bP(B_2).$\\
+$\overline{\bm{C}}_{B}(\bm{t})$ & Augmented cash flow,  $\overline{\bm{C}}_{B}(\bm{t}) := (\overline{C}_{t_1}~~\overline{C}_{t_2}~~\cdots~~\overline{C}_{t_n})^{\top}$, where $\overline{C}_{t_i} = C_{t_i}$ if $(t_i, C_{t_i}) \in B$, $\overline{C}_{t_n}=0$ otherwise.\\
+$\hat{r}(t)$ & Spot rate with maturity $t$.\\
+$r^{for}_{\tau, \eta, T}$ & Forward rate agreed at $\tau$, from $\eta$ to $T$.\\
+$f(t)$ & Equivalent to $r^{for}_{0, t-0.5, t}$. \\
+\hline 
+\end{tabular}
+\label{tab:Nomen}
+\end{table}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} Tuckman \& Serrat Ex. 3.3, 3.5, 3.6.
+\end{problem}
+\begin{solution} \textbf{3.3} The cashflow profile of $4\tfrac{3}{4}$s is 
+\begin{itemize}
+  \item[$\cdot$] $B_1 = \{(0.5, 2\tfrac{3}{8}), (1, 2\tfrac{3}{8}), (1.5, 2\tfrac{3}{8}), (2, 102\tfrac{3}{8})\}; P(B_1) = 107.9531$
+\end{itemize}
+The discount curve is $\bm{d}(\bm{t}; y)$ such that 
+$$
+\langle\bm{d}(\bm{t}; y), \bm{C}_{B_1} \rangle - P(B_1) = 0
+$$
+solve the equation with newton solver, we get: $y=0.0073676$. \\
+\textbf{3.5} The cashflow 6 months later is $B_2 = \{(0.5, 2\tfrac{3}{8}), (1, 2\tfrac{3}{8}), (1.5, 102\tfrac{3}{8})\}$. 
+$$
+P(B_2) = \langle\bm{d}(\bm{t}; y), \bm{C}_{B_2} \rangle = 105.9758
+$$
+\textbf{3.6} 
+\end{solution}
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} 
+\end{problem}
+\begin{solution} The formula of calculating price of coupon bond from yield to maturity is
+$$
+P = F\left(\lambda^{2T} + \frac{q}{2}\frac{\lambda (1-  \lambda^{2T})}{1- \lambda}\right)
+$$
+where $\lambda = \frac{1}{1+y/2}$. Here we have $\lambda_a = 0.9782$; $\lambda_b = 0.9773$. Therefore
+$$
+P_a = F\left(\lambda_a^{2T} + \frac{q}{2}\frac{\lambda_a (1-  \lambda_a^{2T})}{1- \lambda_a}\right) = 100\left(\lambda_a^{10} + \frac{0.04}{2}\frac{\lambda_a (1-  \lambda_a^{10})}{1- \lambda_a}\right) = 98.0025
+$$
+$$
+P_b = F\left(\lambda_b^{2T} + \frac{q}{2}\frac{\lambda_b (1-  \lambda_b^{2T})}{1- \lambda_b}\right) = 100\left(\lambda_b^{10} + \frac{0.04}{2}\frac{\lambda_b (1-  \lambda_b^{10})}{1- \lambda_b}\right) = 96.7226
+$$
+So $P_a - P_b = 1.2799$
+\end{solution}
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} 
+\end{problem}
+\begin{solution} For $T=1$, the pricing equation is quadratic with respect to $\lambda$:
+$$
+P = F\left(1+\frac{q}{2}\right)\lambda^2 + F\frac{q}{2} \lambda
+$$
+\textbf{a.} For bond (1) and (2):
+$$
+96.265 = 102\lambda_1^2 + 2 \lambda_1;~~~~103.885= 106\lambda_2^2 + 6 \lambda_2
+$$
+We have $\lambda_1=0.961726$, $\lambda_2 = 0.962076$. Hence $y^{(1)}=0.079594$, $y^{(2)}=0.078838$. \\
+\textbf{b.}
+$$
+99.962 = 102\lambda_1^2 + 2 \lambda_1;~~~~107.653= 106\lambda_2^2 + 6 \lambda_2
+$$
+We have $\lambda_1=0.980204$, $\lambda_2 = 0.979862$. Hence $y^{(1)}=0.040392$, $y^{(2)}=0.041103$. \\
+\end{solution}
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} 
+\end{problem}
+\begin{solution} According to the problem, $|F_1| = |F_2| =: F$ and $F_1F_2 < 0$; WLOG we assume $F_1=F, F_2=-F, F>0$. Then the IRR $Y>-1$ must solve the equation
+$$
+P = \frac{F}{(1+Y)} - \frac{F}{(1+Y)^2}~~~\Rightarrow~~~P(1+Y)^2 = F(1+Y)-F
+$$
+rearrange terms we obtain a quadratic equation:
+$$
+PY^2 + (2P-F)Y + P = 0
+$$
+The discriminant $\Delta = (2P-F)^2 - 4P^2 = F^2-4PF$. \\
+\textbf{i.} The equation does not have real root if $\Delta<0$. Example: $P^*=0.3F$. So there exists strictly positive price for the security of this kind which does not have effective IRR at $t=0$. \\
+\textbf{ii.} The equation has dual real root if $\Delta>0$. Example: $P_*=0.2F$. So there exists strictly positive price for the security of this kind which has more than one effective IRR at $t=0$. \\
+\end{solution}
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} 
+\end{problem}
+\begin{solution} \textbf{(a).} Consider a float note with 1 dollar par. The floating rate bond can be repicated by repeatedly reinvest the principle to the floating rate account.
+  \begin{table}[H]
+  \scriptsize
+  \vspace{-10pt}
+  \caption{\textit{Replicating Strategy for Float Note, (-) Denotes Cash Outflow}}
+  \vspace{3pt}
+  \centering
+  \def\arraystretch{2}
+  \begin{tabular}{|m{2cm}|m{1.6cm}|m{1.6cm}|m{1.6cm}|m{1.6cm}|m{2cm}|m{2cm}|}
+  \hline
+  Position/Time &$t=0$ & $t=0.5$ & $t=1$ & $\cdots$&$t=T-0.5$ & $t=T$\\ 
+  \hline
+  Invest at $t=0$ &$-1$ & $1+r_{0, 0.5}$ & & $\cdots$ &  & \\ 
+  Reinvest par & & $-1$ & $1+r_{0.5, 1}$ & $\cdots$&  & \\ 
+  Reinvest par & &  & $-1$ & $\cdots$& $1+r_{T-1, T-0.5}$ & \\ 
+  Reinvest par & &  &  & $\cdots$& $-1$ & $1+r_{T-0.5, T}$\\ 
+  \hline
+  Sum & $-1$ & $r_{0,0.5}$& $r_{0.5, 1}$& $\cdots$& $r_{T-1, T-0.5}$& $1+r_{T-0.5, T}$\\
+  \hline
+  \end{tabular}
+  \label{tab:rep1}
+  \end{table}
+The initial capital to set up replicating strategy is 1 dollar. Consequently, the price of floating rate bond must equal to par. \\
+\textbf{(b).} Since the swap rate is chosen such that no cash payment is required for either party at time $0$, we have $0 = P(B_{float}) - P(B_{fixed})$. Since we have
+\begin{equation}
+  \begin{split}
+    &P(B_{float}) = F \\
+    &P(B_{fixed}) = F\left(\sum_{i=1}^{2T} \frac{q}{2} d(\tfrac{i}{2}) +d(T)\right)
+  \end{split}
+\end{equation}
+Hence
+\begin{equation}
+  F = F\left(\sum_{i=1}^{2T} \frac{q}{2} d(\tfrac{i}{2}) + d(T)\right)~~\Rightarrow~~ q(T) = 2\frac{1 - d(T)}{\sum_{i=1}^{2T} d(i/2)}
+\end{equation}
+\textbf{(c).} By the formula in \textbf{(b)}:
+$$
+q(3) = 2\frac{1 - d(3)}{\sum_{i=1}^{6}  d(i/2)};~~~\text{where }d(t) = \frac{1}{\left(1+\frac{\hat{r}(t)}{2}\right)^{2t}}
+$$
+Plug in the values of spot rates: $q(3)=0.042044$. \\
+\textbf{(d).} $d(t)$ can be solved recursively.
+\begin{equation}
+  \begin{split}
+    q(\tfrac{n}{2})=2\frac{1-d(\tfrac{n}{2})}{\sum_{i=1}^{n-1}d(\tfrac{i}{2}) + d(\tfrac{n}{2})}~~\Rightarrow~~d(\tfrac{n}{2}) = \frac{2-q(\tfrac{n}{2})\sum_{i=1}^{n-1} d(\tfrac{i}{2})}{2+q(\tfrac{n}{2})}
+  \end{split}
+\end{equation}
+So
+\begin{equation}
+  \begin{split}
+    d(0.5) &= \frac{2}{2+q(0.5)} = 0.9774417\\
+    d(1.0) &= \frac{2-q(1)d(0.5)}{2+q(1)} = 0.953692\\
+    d(1.5) &= \frac{2-q(1.5)(d(0.5)+d(1))}{2+q(1.5)} = 0.935249\\
+    d(2.0) &= \frac{2-q(2)(d(0.5)+d(1)+d(1.5))}{2+q(2)} = 0.909327
+  \end{split}
+\end{equation}
+
+\end{solution} 
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{proof} \textbf{(a)}. The forward loan with $V(\eta)=1$ dollar can be replicated by the following portfolio at time $t=0$.
+\begin{itemize}
+  \item[$\cdot$] Long zero coupon bond with par $1$ and maturity $\eta$.
+  \item[$\cdot$] Short zero with par $\exp\left((T-\eta)\rho_{0,\eta, T}^{for}\right)$ and maturity $T$.
+\end{itemize}
+The price for the loan is zero, hence the replicating strategy must require $0$ initial capital to make the price arbitrage-free. Hence
+$$
+0 = d(\eta) - d(T)\exp\left((T-\eta)\rho_{0,\eta, T}^{for}\right)
+$$
+By definition $d(t)=e^{-t \hat{r}_c(t)}$ Hence
+\begin{equation}
+  \begin{split}
+    \rho_{0,\eta, T}^{for} = \frac{\log d(\eta) - \log d(T)}{T-\eta} = \frac{T\hat{r}_c(T) - \eta\hat{r}_c(\eta)}{T-\eta}
+  \end{split}
+\end{equation}
+\textbf{(b)}. Let $f(t) = t\hat{r}_c(t)$,
+\begin{equation}
+  \lim\limits_{T\rightarrow\eta^+} \rho_{0,\eta, T}^{for} = \lim\limits_{T\rightarrow\eta^+} \frac{f(T)-f(\eta)}{T-\eta} = \partial_{+}f(\eta)
+\end{equation}
+The question itself mentioned $\hat{r}_c'(\eta)$, so we assume $\hat{r}_c(t)$ is differentiable at $\eta$. Therefore $f(t)=t\hat{r}_c(t)$ is also differentiable at $\eta$. we have $\partial_{+}f(\eta)=f'(\eta)$.
+$$
+\lim\limits_{T\rightarrow\eta^+} \rho_{0,\eta, T}^{for} = f'(\eta) = \hat{r}_c(\eta) + \eta \hat{r}_c'(\eta)
+$$
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} 
+\end{problem}
+\begin{solution} Adopt same notation as in the lecture, we have $\tau=1-\eta = 1-48/182 =67/91$. The full price is
+$$
+P^{full}(B) = P^{flat}(B) + AI = 103.243 + \eta F\frac{q}{2} = 103.77047
+$$
+The yield to maturity is obtained by solving the equation numerically:
+$$
+P^{full}(B) = F \lambda^{K+\tau} + F\frac{q}{2}\sum_{i=0}^{K} \lambda^{\tau + i}
+$$
+$$
+103.77047 = 100 \lambda^{10+\tfrac{67}{91}} + 2\sum_{i=0}^{10} \lambda^{\tfrac{67}{91} + i}
+$$
+where $K$ is the number of coupon payments excluding the first one, $K=10$; $\lambda=(1+y/2)^{-1}$. Solve the equation numerically: $\lambda=0.9836$, $y=0.033345$.
+
+\end{solution}
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} 
+\end{problem}
+\begin{solution} Use the discount yield formula, note that $n=214$
+$$
+P = 100\left(1-\frac{ny_d}{360}\right) =100\left(1-\frac{214}{360}\times 0.03862\right) = 97.7042556
+$$
+Now plug into the formula of bond-equivalent yield for $n>182$, $y_{be}$ solves the equation
+$$
+P\left(1+\frac{y_{be}}{2}\right) + \frac{y_{be}}{365}\left(n-\frac{365}{2}\right)\left(1+\frac{y_{be}}{2}\right)P = 100
+$$
+With $n=214$, $P=97.7042556$. We have $y=0.0399589$
+
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} 
+\end{problem}
+\begin{solution} We analyze the cashflows in the following ways.
+\begin{itemize}
+  \item[$\cdot$] \textbf{Dollar}: The Japanese company receive 1 dollar every 3 months, which is equivalent to $E_{\$, t}^y$ yen for $t=1/4, ..., 1$. This cash flow can be replicated by saving
+  $$
+  \frac{1}{(1+R^{\$}(.25))^{.25}} + \frac{1}{(1+R^{\$}(.5))^{.5}} + \frac{1}{(1+R^{\$}(.75))^{.75}}+ \frac{1}{(1+R^{\$}(1))^{1}} = \sum_{i=1}^4 \frac{1}{(1+R^{\$}(i/4))^{i/4}}
+  $$
+  dollars to the U.S. bank at time $t=0$. Then retrieve 1 dollar every three months. The cost of replicating strategy is 
+  $$
+  P_0 = E_{\$,0}^y\sum_{i=1}^4 \frac{1}{(1+R^{\$}(i/4))^{i/4}}
+  $$
+  yen at $t=0$.
+  \item[$\cdot$] \textbf{Yen}: The yen payment is like an annuity. The price of it is
+  $$
+  P_1 = \mathcal{F}\sum_{i=1}^4 \frac{1}{(1+R^{y}(i/4))^{i/4}}
+  $$
+\end{itemize}
+The currency swap contract is set such that no cash payment between two parties is required at $t=0$. So
+$$
+\mathcal{F}\sum_{i=1}^4 \frac{1}{(1+R^{y}(i/4))^{i/4}} = E_{\$,0}^y\sum_{i=1}^4 \frac{1}{(1+R^{\$}(i/4))^{i/4}}
+$$
+$\Rightarrow$
+$$
+\mathcal{F} = \frac{E_{\$,0}^y\sum_{i=1}^4 1/(1+R^{\$}(i/4))^{i/4}}{\sum_{i=1}^4 1/(1+R^{y}(i/4))^{i/4}} =\frac{120\sum_{i=1}^4 1/(1+R^{\$}(i/4))^{i/4}}{\sum_{i=1}^4 1/(1+R^{y}(i/4))^{i/4}} = 117.1737
+$$
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{proof} Prove by contradiction. Assume $y^{(3)}>\max\{y^{(1)}, y^{(2)}\}$. Let $\bm{d}(\bm{t}; y) = (\tfrac{1}{(1+y/2)^{2t_1}} ~~ \tfrac{1}{(1+y/2)^{2t_2}} ~~\cdots~~ \tfrac{1}{(1+y/2)^{2t_n}})^{\top}$, we have:
+\begin{equation}
+  \bm{d}(\bm{t}; y^{(3)}) \prec \bm{d}(\bm{t}; y^{(2)});~~~\text{and}~~~\bm{d}(\bm{t}; y^{(3)}) \prec \bm{d}(\bm{t}; y^{(1)})
+\end{equation}
+Therefore
+\begin{equation}
+  \begin{split}
+    \langle \bm{d}(\bm{t}; y^{(3)}), \bm{F}^{(1)} \rangle < \langle \bm{d}(\bm{t}; y^{(1)}), \bm{F}^{(1)} \rangle = P_1 \\
+    \langle \bm{d}(\bm{t}; y^{(3)}), \bm{F}^{(2)} \rangle < \langle \bm{d}(\bm{t}; y^{(2)}), \bm{F}^{(2)} \rangle = P_2
+  \end{split}
+\end{equation}
+By the construction, 
+\begin{equation}
+  P_3 = \langle \bm{d}(\bm{t}; y^{(3)}),  \bm{F}^{(1)}+\bm{F}^{(2)}\rangle = \langle \bm{d}(\bm{t}; y^{(3)}), \bm{F}^{(1)} \rangle + \langle \bm{d}(\bm{t}; y^{(3)}), \bm{F}^{(2)} \rangle < P_1 + P_2
+\end{equation}
+Which leads to $P_3 < P_1 + P_2$. Contradiction.\\
+Similarly, if we assume $y^{(3)}<\min\{y^{(1)}, y^{(2)}\}$, then the fact
+\begin{equation}
+  \bm{d}(\bm{t}; y^{(3)}) \succ \bm{d}(\bm{t}; y^{(2)});~~~\text{and}~~~\bm{d}(\bm{t}; y^{(3)}) \succ \bm{d}(\bm{t}; y^{(1)})
+\end{equation}
+leads to 
+\begin{equation}
+  P_3 = \langle \bm{d}(\bm{t}; y^{(3)}),  \bm{F}^{(1)}+\bm{F}^{(2)}\rangle = \langle \bm{d}(\bm{t}; y^{(3)}), \bm{F}^{(1)} \rangle + \langle \bm{d}(\bm{t}; y^{(3)}), \bm{F}^{(2)} \rangle > P_1 + P_2
+\end{equation}
+by exactly same logic. $P_3 > P_1 + P_2$. Contradiction.\\
+
+\end{proof}
+
+
+\end{document}

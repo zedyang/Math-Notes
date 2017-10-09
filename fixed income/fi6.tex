@@ -1,0 +1,555 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{color}
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz, array}
+% Small bullet
+\usepackage{lscape}
+\usepackage{graphicx}
+\usepackage{rotating}
+
+\usepackage{float}
+\usepackage{caption} 
+\renewcommand{\arraystretch}{1.4}
+\newcolumntype{L}{>{\arraybackslash}m{12cm}}
+
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+
+\title{\textbf{Fixed Income Assignment V}}
+\author{Ze Yang~~~~(zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+
+\begin{table}[h]
+\vspace{-10pt}
+\caption{\textit{Nomenclatures}}
+\vspace{3pt}
+\centering
+\def\arraystretch{1.15}
+\begin{tabular}{lL}
+\hline
+Notation & \hspace{4.6cm} Description \\ 
+\hline
+$\bm{w}$ & The $N$-periods coin toss path, $\bm{w} = (w_1~~w_2~~...~~w_N)^{\top}$, where $w_n$ is the outcome for single period $n$.\\
+$\psi_n$ & The partial path till $i$-th period. I.e. the event of all $\bm{w}$ that has same trajectory until $i$: $\psi_n=\{\bm{w}: w_k=\hat{w}_k, k =1,2,...,n\}$\\
+$R_n$ & The short rate process, $R_n = R_n(\psi_n)$. \\
+$P(B)$ & The price of bond $B$, $P(B)=\sum_{(t,C_t) \in B}C_td(t)=\langle d(\bm{t_B}), \bm{C}_B \rangle = \bm{C}_B^{\top}\bm{d}(\bm{t}_B)$.  \\
+$\tilde{p}(w), \tilde{\mathbb{P}}\left(w\right)$ & Risk neutral probabilities. In the coin toss space, we refer to $\tilde{p}(H)$ as $\tilde{p}$, $\tilde{p}(T)$ as $\tilde{q}$.\\
+$\#H(\psi_n)$, $\#T(\psi_n)$ & The number of heads (tails) in partial path $\psi_n$. \\
+$d(i, j)$ & The discount factor from period $i$ to $j$. \\
+$V_n, C_n$ & Price of security at $n$ after cash payment; the cash payment at time $n$.\\
+$\tilde{\mathbb{E}}_i\left[V_{j}\right](\psi_i)$ & The expectation of security payoff of period $j$ conditional on period $i<j$; it's a random variable with respect to partial path $\psi_i$. Tilde means the risk neutral probability measure.\\
+\hline 
+\end{tabular}
+\label{tab:Nomen}
+\end{table}
+
+
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} 
+\end{problem}
+\begin{solution} \textbf{(a)} For security 1, we have to convert the price of underlying from $m=3$ to time 2, in order to calculate $For_{i, 2}$ and $Fut_{i,2}$.
+$$
+P_2 = \frac{P_3}{1+R_2}
+$$
+
+\begin{table}[h]
+\vspace{-1pt}
+\caption{\textit{Futures \& Forwards I}}
+\vspace{-7pt}
+\centering
+\def\arraystretch{1.15}
+\begin{tabular}{|r|ccccc|}
+\hline
+$n$ & $R_n$ & $D_{n}$ & $P_n$ & $D_{n}P_n$ & $\tilde{\mathbb{E}}_{n}\left[P_2\right]$\\ 
+\hline
+2 & 0.08 & 0.8850 & 740.741 & 655.546&\\
+2 & 0.07 & 0.8850 & 654.206 & 578.964&\\
+2 & 0.07 & 0.8968 & 654.206 & 586.668&\\
+2 & 0.05 & 0.8968 & 476.190 & 427.031&\\
+\hline
+1 & 0.066 & 0.9434 & && 697.474 \\
+1 & 0.052 & 0.9434 & &&565.198 \\
+\hline
+0 & 0.06 & 1 & &&631.336 \\
+\hline
+\end{tabular}
+\label{tab:ff1}
+\end{table}
+~\\
+Hence, as shown in the table we have:
+\begin{equation}
+  \begin{split}
+    &Fut_{0,2} = \tilde{\mathbb{E}}\left[P_2\right] = 631.336\\
+    &Fut_{1,2}(H) = \tilde{\mathbb{E}}_1\left[P_2\right](H) = 697.474,~~~~Fut_{1,2}(T) = \tilde{\mathbb{E}}_1\left[P_2\right](T) = 565.198
+  \end{split}
+\end{equation}
+And $\tilde{\mathbb{E}}\left[P_2D_2\right] = (655.546+578.964+586.668+427.031)/4 = 562.052136$. $\tilde{\mathbb{E}}\left[D_2\right] = (0.8850+0.8968)/2 = 0.890876$. Therefore
+$$
+For_{0,2} = \frac{\tilde{\mathbb{E}}\left[P_2D_2\right]}{\tilde{\mathbb{E}}\left[D_2\right]} = 630.898438
+$$
+\textbf{(b)}
+\begin{table}[h]
+\vspace{-1pt}
+\caption{\textit{Futures \& Forwards II}}
+\vspace{-7pt}
+\centering
+\def\arraystretch{1.15}
+\begin{tabular}{|r|ccccc|}
+\hline
+$n$ & $R_n$ & $D_{n}$ & $P_n$ & $D_{n}P_n$ & $\tilde{\mathbb{E}}_{n}\left[P_2\right]$\\ 
+\hline
+2 & 0.08 & 0.8850 & 800 & 707.990&\\
+2 & 0.07 & 0.8850 & 700 & 619.491&\\
+2 & 0.07 & 0.8968 & 700 & 627.735&\\
+2 & 0.05 & 0.8968 & 500 & 448.382&\\
+\hline
+1 & 0.066 & 0.9434 & && 750 \\
+1 & 0.052 & 0.9434 & && 600 \\
+\hline
+0 & 0.06 & 1 & && 675 \\
+\hline
+\end{tabular}
+\label{tab:ff2}
+\end{table}
+\begin{equation}
+  \begin{split}
+    &Fut_{0,2} = \tilde{\mathbb{E}}\left[P_2\right] = 675\\
+    &Fut_{1,2}(H) = \tilde{\mathbb{E}}_1\left[P_2\right](H) = 750,~~~~Fut_{1,2}(T) = \tilde{\mathbb{E}}_1\left[P_2\right](T) = 600
+  \end{split}
+\end{equation}
+$$
+For_{0,2} = \frac{\tilde{\mathbb{E}}\left[P_2D_2\right]}{\tilde{\mathbb{E}}\left[D_2\right]} = \frac{(707.990+619.491+627.735+448.382)/4}{0.890876} = 674.50425
+$$
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} 
+\end{problem}
+\begin{solution} 
+
+\begin{table}[h]
+\vspace{-1pt}
+\caption{\textit{Futures \& Forwards III}}
+\vspace{-7pt}
+\centering
+\def\arraystretch{1.15}
+\begin{tabular}{|r|ccccccc|}
+\hline
+$n$ & $R_n$ & $D_{n}$ & $P_n$ & $D_{n}P_n$ & $\tilde{\mathbb{E}}_{n}\left[P_2\right]$ & $\tilde{\mathbb{E}}_{n}\left[D_2P_2\right]$ & $\tilde{\mathbb{E}}_{n}\left[D_2P_2\right]/ \tilde{\mathbb{E}}_n\left[D_2\right]$\\ 
+\hline
+2 & 0.06 & 0.9027 & 94.3396 & 87.6317&&&\\
+2 & 0.05 & 0.9027 & 95.2381 & 86.7970&&&\\
+2 & 0.05 & 0.9114 & 95.2381 & 85.9744&&&\\
+2 & 0.04 & 0.9114 & 96.1538 & 85.1633&&&\\
+\hline
+1 & 0.055 & 0.9524 & && 95.6960 & 87.2144 & 96.6117\\
+1 & 0.045 & 0.9524 & && 94.7889 & 85.5688 & 93.8904\\
+\hline
+0 & 0.05 & 1 & && 95.2424 & 86.3916 & 95.2446\\
+\hline
+\end{tabular}
+\label{tab:ff3}
+\end{table}
+
+As shown in the table:
+\begin{equation}
+  \begin{split}
+    &Fut_{0,2} = \tilde{\mathbb{E}}\left[P_2\right] = 95.24241482\\
+    &Fut_{1,2}(H) = \tilde{\mathbb{E}}_1\left[P_2\right](H) = 95.6960,~~~~Fut_{1,2}(T) = \tilde{\mathbb{E}}_1\left[P_2\right](T) = 94.7889
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    &For_{0,2} = \frac{\tilde{\mathbb{E}}\left[D_2P_2\right]}{\tilde{\mathbb{E}}\left[D_2\right]} = \frac{86.39160}{0.90705} = 95.2445746\\
+    &For_{1,2}(H) = \frac{\tilde{\mathbb{E}}_1\left[D_2P_2\right](H)}{\tilde{\mathbb{E}}_1\left[D_2\right](H)} = \frac{87.2144}{0.9027} = 96.6117216\\
+    &For_{1,2}(T) = \frac{\tilde{\mathbb{E}}_1\left[D_2P_2\right](T)}{\tilde{\mathbb{E}}_1\left[D_2\right](T)} = \frac{85.5688}{0.9114} = 93.89038634
+  \end{split}
+\end{equation}
+
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} 
+\end{problem}
+\begin{solution} ~\\
+% Table generated by Excel2LaTeX from sheet 'Sheet2'
+\begin{table}[H]
+  \centering
+  \caption{\textit{Callable Bond I}}
+  \vspace{-7pt}
+  \def\arraystretch{1.15}
+    \begin{tabular}{|r|rrrr|}
+    \hline
+    $n$ & $R_n$ & $C_n$ & $V_n$ & $C_n+V_n$\\ 
+    \hline
+    3     &       & 1061.004 &       & 1061.00407 \\
+    3     &       & 1061.004 &       & 1061.00407 \\
+    3     &       & 1061.004 &       & 1061.00407 \\
+    \hline
+    2     & 0.07  & 61.00407 & 991.592586 & 1052.59665 \\
+    2     & 0.06  & 61.00407 & 1000  & 1061.00407 \\
+    2     & 0.05  & 61.00407 & 1000  & 1061.00407 \\
+    \hline
+    1     & 0.065 & 61.00407 & 992.300807 & 1053.30487 \\
+    1     & 0.055 & 61.00407 & 1005.69106 & 1066.69513 \\
+    \hline
+    0     & 0.06  & 0     & 1000  & 1000 \\
+    \hline
+    \end{tabular}%
+  \label{tab:cb1}%
+\end{table}%
+~\\
+Computed with solver: $q^{(4)} = 0.06100407$.
+
+% Table generated by Excel2LaTeX from sheet 'Sheet2'
+\begin{table}[htbp]
+  \centering
+    \caption{\textit{Callable Bond II}}
+  \vspace{-7pt}
+  \def\arraystretch{1.15}
+    \begin{tabular}{|r|rrrr|}
+    \hline
+    $n$ & $R_n$ & $C_n$ & $V_n$ & $C_n+V_n$\\
+     \hline
+    3     &       & 1062.6889 &       & 1062.6889 \\
+    3     &       & 1062.6889 &       & 1062.6889 \\
+    3     &       & 1062.6889 &       & 1062.6889 \\
+    2     & 0.07  & 62.68894 & 993.16723 & 1055.8562 \\
+    2     & 0.06  & 62.68894 & 1000  & 1062.6889 \\
+    2     & 0.05  & 62.68894 & 1000  & 1062.6889 \\
+    1     & 0.065 & 62.68894 & 994.62212 & 1057.3111 \\
+    1     & 0.055 & 62.68894 & 1000  & 1062.6889 \\
+    \hline
+    0     & 0.06  & 0     & 1000  & 1000 \\
+    \hline
+    \end{tabular}%
+  \label{tab:cb2}%
+\end{table}%
+~\\
+Computed with solver: $q^{(5)} = 0.06268894$.
+
+
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} 
+\end{problem}
+\begin{solution} \textbf{(a)} At time 0, the mortgage has "fair price", i.e. the price is equal to outstanding principle. Adopting same notations as the lecture notes, we have
+\begin{equation}
+  P_0 = A \sum_{i=1}^3 \lambda^i = A \sum_{i=1}^3 \frac{1}{(1+y)^i}
+\end{equation}
+We can solve $A$ with $P_0=100$, $y=0.1$: $A=40.21148$. The cashflow profile of IO and PO strips is calculated in the table below.
+\begin{table}[H]
+  \centering
+  \caption{Mortgage Cashflow Profile}
+    \vspace{-7pt}
+  \def\arraystretch{1.15}
+    \begin{tabular}{|r|rrrr|}
+    \hline
+    $n$ & $A$ & $I_n$ & $P_n$ & $P_{remain}$\\
+    \hline
+    0     &       &       &       & 100 \\
+    1     & 40.2114804 & 10    & 30.21148036 & 69.78851964 \\
+    2     & 40.2114804 & 6.97885196 & 33.2326284 & 36.55589124 \\
+    3     & 40.2114804 & 3.65558912 & 36.55589124 & 0 \\
+    \hline
+    \end{tabular}%
+  \label{tab:mtge}%
+\end{table}%
+~\\
+The price of IO and PO is calculated in two tables below.
+
+% Table generated by Excel2LaTeX from sheet 'Sheet4'
+\begin{table}[H]
+  \centering
+  \caption{\textit{IO Strip I}}
+  \vspace{-7pt}
+  \def\arraystretch{1.15}
+  \begin{tabular}{|r|rrrr|}
+  \hline
+  $n$ & $R_n$ & $C_n$ & $V_n$ & $C_n+V_n$\\
+    \hline
+    3     &       & 3.65558912 &       & 3.65558912 \\
+    3     &       & 3.65558912 &       & 3.65558912 \\
+    3     &       & 3.65558912 &       & 3.65558912 \\
+    \hline
+    2     & 0.14  & 6.97885196 & 3.20665713 & 10.1855091 \\
+    2     & 0.1   & 6.97885196 & 3.32326284 & 10.3021148 \\
+    2     & 0.06  & 6.97885196 & 3.44866898 & 10.4275209 \\
+    \hline
+    1     & 0.12  & 10    & 9.14626067 & 19.1462607 \\
+    1     & 0.08  & 10    & 9.59705359 & 19.5970536 \\
+    \hline
+    0     & 0.1   &       & 17.6105974 & 17.6105974 \\
+    \hline
+    \end{tabular}%
+  \label{tab:addlabel}%
+\end{table}%
+
+% Table generated by Excel2LaTeX from sheet 'Sheet4'
+\begin{table}[H]
+  \centering
+  \caption{\textit{PO Strip I}}
+  \vspace{-7pt}
+  \def\arraystretch{1.15}
+  \begin{tabular}{|r|rrrr|}
+  \hline
+  $n$ & $R_n$ & $C_n$ & $W_n$ & $C_n+W_n$\\
+    \hline
+    3     &       & 36.55589124 &       & 36.55589124 \\
+    3     &       & 36.55589124 &       & 36.55589124 \\
+    3     &       & 36.55589124 &       & 36.55589124 \\
+    \hline
+    2     & 0.14  & 33.2326284 & 32.0665713 & 65.29919966 \\
+    2     & 0.1   & 33.2326284 & 33.2326284 & 66.4652568 \\
+    2     & 0.06  & 33.2326284 & 34.4866898 & 67.71931825 \\
+    \hline
+    1     & 0.12  & 30.21148036 & 58.8234181 & 89.03489842 \\
+    1     & 0.08  & 30.21148036 & 62.1224884 & 92.33396881 \\
+    \hline
+    0     & 0.1   &       & 82.4403942 &  82.4403942\\
+    \hline
+    \end{tabular}%
+  \label{tab:addlabel}%
+\end{table}%
+~\\
+We have: $V_0=  17.6105974$; $W_0 = 82.4403942$.\\
+~\\
+\textbf{(b)} The price of IO and PO is calculated in two tables below.
+% Table generated by Excel2LaTeX from sheet 'Sheet4'
+\begin{table}[H]
+  \centering
+  \caption{\textit{IO Strip II}}
+  \vspace{-7pt}
+  \def\arraystretch{1.15}
+  \begin{tabular}{|r|rrrr|}
+  \hline
+  $n$ & $R_n$ & $C_n$ & $V_n$ & $C_n+V_n$\\
+    \hline
+    3     &       & 2.96  &       & 2.96 \\
+    3     &       & 2.96  &       & 2.96 \\
+    3     &       & 2.63  &       & 2.63 \\
+    3     &       & 1.76  &       & 1.76 \\
+    \hline
+    2     & 0.14  & 6.28  & 2.59649123 & 8.87649123 \\
+    2     & 0.1   & 6.28  & 2.69090909 & 8.97090909 \\
+    2     & 0.1   & 5.58  & 2.39090909 & 7.97090909 \\
+    2     & 0.06  & 5.58  & 1.66037736 & 7.24037736 \\
+    \hline
+    1     & 0.12  & 10    & 7.96758943 & 17.9675894 \\
+    1     & 0.08  & 10    & 7.04226225 & 17.0422622 \\
+    \hline
+    0     & 0.1   &       & 15.9135689 & 15.9135689 \\
+    \hline
+    \end{tabular}%
+  \label{tab:addlabel}%
+\end{table}%
+
+% Table generated by Excel2LaTeX from sheet 'Sheet4'
+\begin{table}[H]
+  \centering
+  \caption{\textit{PO Strip II}}
+  \vspace{-7pt}
+  \def\arraystretch{1.15}
+  \begin{tabular}{|r|rrrr|}
+  \hline
+  $n$ & $R_n$ & $C_n$ & $W_n$ & $C_n+W_n$\\
+    \hline
+    3     &       & 29.61 &       & 29.61 \\
+    3     &       & 29.61 &       & 29.61 \\
+    3     &       & 26.32 &       & 26.32 \\
+    3     &       & 17.55 &       & 17.55 \\
+    \hline
+    2     & 0.14  & 33.2  & 25.9736842 & 59.17368421 \\
+    2     & 0.1   & 33.2  & 26.9181818 & 60.11818182 \\
+    2     & 0.1   & 29.51 & 23.9272727 & 53.43727273 \\
+    2     & 0.06  & 38.28 & 16.5566038 & 54.83660377 \\
+    \hline
+    1     & 0.12  & 37.19 & 53.2552973 & 90.44529733 \\
+    1     & 0.08  & 44.17 & 50.1267947 & 94.29679468 \\
+    \hline
+    0     & 0.1   &       & 83.9736782 & 83.97367819 \\
+    \hline
+    \end{tabular}%
+  \label{tab:addlabel}%
+\end{table}%
+~\\
+We have: $V_0=  15.9135689 $; $W_0 = 83.97367819$.\\
+~\\
+
+
+
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} 
+\end{problem}
+\begin{solution} Suppose the (single) callable times are $\tau \in \mathcal{T}$. At $\tau$, the buyer should put back the bond if the post-coupon price of the bond is smaller than par. We have
+\begin{equation}
+  \begin{split}
+  V_n 
+  &=\begin{cases}
+  0 & n=N\\
+  \frac{1}{1+R_{n}}\left(C_{n+1} + \tilde{p}V_{n+1}(\psi_n, H) + \tilde{q}V_{n+1}(\psi_n, T)\right) & 0\leq n < N, n\notin \mathcal{T}\\
+  \max\{F, \frac{1}{1+R_{n}}\left(C_{n+1} + \tilde{p}V_{n+1}(\psi_n, H) + \tilde{q}V_{n+1}(\psi_n, T)\right)\} & n \in \mathcal{T} \\
+  \end{cases}
+  \end{split}
+\end{equation}
+The calculation is presented in the tables below.
+
+% Table generated by Excel2LaTeX from sheet 'Sheet3'
+\begin{table}[H]
+  \centering
+  \caption{\textit{Putable Bond I}}
+  \vspace{-7pt}
+  \def\arraystretch{1.15}
+  \begin{tabular}{|r|rrrr|}
+  \hline
+  $n$ & $R_n$ & $C_n$ & $V_n$ & $C_n+V_n$\\
+    \hline
+    3     &       & 1060  &       & 1060 \\
+    3     &       & 1060  &       & 1060 \\
+    3     &       & 1060  &       & 1060 \\
+    \hline
+    2     & 0.07  & 60    & 1000  & 1060 \\
+    2     & 0.06  & 60    & 1000  & 1060 \\
+    2     & 0.05  & 60    & 1009.52381 & 1069.52381 \\
+    \hline
+    1     & 0.065 & 60    & 995.3051643 & 1055.305164 \\
+    1     & 0.055 & 60    & 1009.25299 & 1069.25299 \\
+    \hline
+    0     & 0.06  & 0     & 1002.150073 & 1002.150073 \\
+    \hline
+    \end{tabular}%
+  \label{tab:put1}%
+\end{table}%
+~\\ 
+\textbf{(a)} We have $V_0^{[\#1]} = 1002.150073$.\\
+
+% Table generated by Excel2LaTeX from sheet 'Sheet3'
+\begin{table}[H]
+  \centering
+  \caption{\textit{Putable Bond II}}
+  \vspace{-7pt}
+  \def\arraystretch{1.15}
+  \begin{tabular}{|r|rrrr|}
+  \hline
+  $n$ & $R_n$ & $C_n$ & $V_n$ & $C_n+V_n$\\
+    \hline
+    3     &       & 1060  &       & 1060 \\
+    3     &       & 1060  &       & 1060 \\
+    3     &       & 1060  &       & 1060 \\
+    \hline
+    2     & 0.07  & 60    & 1000  & 1060 \\
+    2     & 0.06  & 60    & 1000  & 1060 \\
+    2     & 0.05  & 60    & 1009.52381 & 1069.52381 \\
+    \hline
+    1     & 0.065 & 60    & 1000  & 1060 \\
+    1     & 0.055 & 60    & 1009.25299 & 1069.25299 \\
+    \hline
+    0     & 0.06  & 0     & 1004.364618 & 1004.364618 \\
+    \hline
+    \end{tabular}%
+  \label{tab:pb2}%
+\end{table}%
+~\\ 
+\textbf{(b)} We have $V_0^{[\#2]} = 1004.364618$.\\
+
+
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} 
+\end{problem}
+\begin{solution} 
+\textbf{(a)} The DV01 of the ZCB is
+\begin{equation}
+  DV01_{ZCB} = \frac{1}{10^4}\frac{FT}{(1+\frac{y}{2})^{2T+1}} = \frac{1}{10^4}\frac{5\times10^5\times 30}{(1+\frac{0.05}{2})^{61}} = 332.6101286
+\end{equation}
+And use 30-yr par coupon bond to match this DV01:
+$$
+DV01_{ZCB} = DV01_{pc} = \frac{F_{pc}}{10^4 y} \left(1-\frac{1}{(1+\frac{y}{2})^{2T}}\right)
+$$
+$$
+F_{pc} = \frac{10^4 y\times DV01_{ZCB}}{(1-\frac{1}{(1+\frac{y}{2})^{2T}})} = 332.6101286\times  \frac{10^4 \times 0.05}{(1-\frac{1}{(1+\frac{0.05}{2})^{60}})} = 215234.27
+$$
+So we long $215234.27$ face of the par bond.\\
+~\\
+\textbf{(b)}
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{\label{fig:span}Spread Sheet Calculation}
+  \vspace{-10pt}
+  \includegraphics[scale=0.6]{figures/fig2.png}
+\end{figure}
+We use the spreadsheet posted on Canvas to calculate the DV01 for each par coupon bond. And use formula:
+$$
+DV01(T) = \frac{F}{10^4 y_{pc}(T)} \left(1-\frac{1}{(1+\frac{y_{pc}(T)}{2})^{2T}}\right)
+$$
+to solve face $F$ for each par coupon bond that matches corresponding $DV01$. Let $F_1, F_2, F_3, F_4$ be the face of 2-, 5-, 10-, and 30-year par coupon bond, we have
+$$
+F_1 = -20065.02,~~~F_2=-33162.67,~~~F_3= -209062.01,~~~F_4=332282.79
+$$
+So we Short 20065.02 of the 2-yr bond, short 33162.67 of the 5-yr bond, short 209062.01 of the 10-yr bond, and Long 332282.79 of the 30-yr bond.
+\end{solution}
+
+
+
+
+
+\end{document}

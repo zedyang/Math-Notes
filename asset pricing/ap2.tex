@@ -1,0 +1,304 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz, array, eurosym}
+\usepackage{float}
+\renewcommand{\arraystretch}{1.4}
+\newcolumntype{L}{>{\arraybackslash}m{10cm}}
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+
+\title{\textbf{Asset Pricing Assignment II}}
+\author{Ze Yang~~~~(zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+\begin{table}[h]
+\vspace{-10pt}
+\caption{\textit{Nomenclatures}}
+\vspace{3pt}
+\centering
+\def\arraystretch{1.15}
+\begin{tabular}{lL}
+\hline
+Notation & \hspace{4.6cm} Description \\ 
+\hline
+$\bm{x}\succeq \bm{y}$ & Componentwise inequality between vectors.\\
+& Means: $x_i \geq y_i$ for $i=1,2,...,n$, $n$ is number of components of $\bm{x}, \bm{y}$.\\
+$\bm{x}\succ \bm{y}$ & Componentwise strict inequality between vectors.\\
+$\tilde{p}(w), \tilde{\mathbb{P}}\left(w\right)$ & Risk neutral probabilities. We refer to $\tilde{p}(w_j)$ as $\tilde{p}_j$.\\
+$\tilde{\bm{p}}$ & The $n \times 1$ probability vector such that $\tilde{\bm{p}}\succeq \bm{0}$; $\tilde{\bm{p}}^{\top} \bm{1}=1$.\\
+$\bm{A}_i$ & The $n\times m$ payoff matrix at period $i$, where $n=|\Omega|$, $m$ is number of traded securities.\\
+$\bm{\Delta}_i$ & The $m\times 1$ vector of positions holdings at period $i$.\\
+$\mathbb{E}_{\mathbb{Q}}\left[S_{i+1}\middle|\mathcal{F}_{i}\right](\bm{w})$ & The expectation of security payoff at period $i$ conditional on period $i-1$; it's a random variable with respect to realized path $\bm{w} = (w^{[1]}~~w^{[2]}~~...~~w^{[i]})^{\top}$, where $w^{[i]}$ is the outcome for single period $i$. $\mathbb{Q}$ denotes the probability measure.\\
+\hline 
+\end{tabular}
+\label{tab:Nomen}
+\end{table}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{solution} \textbf{(1) \& (2).} The payoff matrix for two traded security and 3 states is:
+$$
+\bm{A}_1 = \begin{pmatrix}
+	1+r & S_1(w_1) \\[2pt]
+	1+r & S_1(w_2) \\[2pt]
+	1+r & S_1(w_3) \\[2pt]
+\end{pmatrix} = 
+\begin{pmatrix}
+	1.25 & 1 \\[2pt]
+	1.25 & 2 \\[2pt]
+	1.25 & 4 \\[2pt]
+\end{pmatrix}
+$$
+The risk neutral probability is given by: $\frac{1}{1+r}\bm{A}_1^{\top} \tilde{\bm{p}} = \begin{pmatrix}1 & S_0\end{pmatrix}^{\top}$. The system is underdetermined, the solution satisfies: 
+\begin{equation}
+	\tilde{p}_1=2\tilde{p}_3-0.5 ~~~;~~~ \tilde{p}_2 = 1.5 - 3\tilde{p}_3
+\end{equation}
+which implies $\tilde{\mathcal{P}} \ne \emptyset$ and $|\tilde{\mathcal{P}}| = \infty$. By FTAPs: the model is arbitrage free but not complete. \\
+\textbf{(3).} By the fact $\tilde{\bm{p}}\succeq \bm{0}$ we can deduce that:
+\begin{equation}
+	\tilde{p}_1=2\tilde{p}_3-0.5 \geq 0 ~~~;~~~ \tilde{p}_2 = 1.5 - 3\tilde{p}_3 \geq 0~~~ \Rightarrow ~~~ \tilde{p}_3 \in \left[\frac{1}{4}, \frac{1}{2}\right]
+\end{equation}
+The extended payoff matrix (add the call option) becomes
+$$
+\overline{\bm{A}}_1 = \begin{pmatrix}
+	1+r & S_1(w_1) & (S_1(w_1)-K)^{+}\\[2pt]
+	1+r & S_1(w_2) & (S_1(w_2)-K)^{+}\\[2pt]
+	1+r & S_1(w_3) & (S_1(w_3)-K)^{+}\\[2pt]
+\end{pmatrix} = 
+\begin{pmatrix}
+	1.25 & 1 & 0\\[2pt]
+	1.25 & 2 & 0\\[2pt]
+	1.25 & 4 & 2\\[2pt]
+\end{pmatrix}
+$$
+If $v$ is the arbitrage free price of call option, the extended market should be arbitrage free, i.e.:
+\begin{equation}
+	\frac{1}{1+r}\overline{\bm{A}}_1^{\top} \tilde{\bm{p}} = \begin{pmatrix}1 \\ S_0 \\ v\end{pmatrix}
+\end{equation}
+The third linear equation is:
+$$
+v = \frac{1}{1+r}(0\cdot\tilde{p}_1 + 0\cdot\tilde{p}_2 + 2 \tilde{p}_3) = 1.6 \tilde{p}_3
+$$
+since $\tilde{p}_3 \in [\frac{1}{4}, \frac{1}{2}]$, we obtain upper and lower bound for $v$, $v_* < v < v^*$, where $v_*=0.4$ and $v^* = 0.8$. \\
+However, neither $v_*$ nor $v^*$ is arbitrage free.\\
+\begin{itemize}
+	\item[$\cdot$] If $v=v_* = 0.4$, consider the portfolio $\bm{\Delta}_{0*} = \begin{pmatrix}
+		1.6 & -1 & 1
+	\end{pmatrix}^{\top}$. I.e. long 1 share of call option, short 1 share of stock and save $1.6$ dollars to bank account. The portfolio payoff is
+	$$
+	\bm{\pi}_{1*} = \overline{\bm{A}}_1 \bm{\Delta}_{0*} = \begin{pmatrix}
+		1.6 \times 1.25 - 1 + 0\\
+		1.6 \times 1.25 - 2 + 0\\
+		1.6 \times 1.25 - 4 + 2\\
+	\end{pmatrix} = \begin{pmatrix}
+		1 \\
+		0 \\
+		0
+	\end{pmatrix} = \begin{pmatrix}
+		\pi_{1*}(w_1) \\
+		\pi_{1*}(w_2) \\
+		\pi_{1*}(w_3)
+	\end{pmatrix}
+	$$
+	The payoff satisfies $\bm{\pi}_{1*}\succeq \bm{0}$, $\pi_{1*}(w) > 0$ for some $w$. But the initial capital $V_{0*} = \bm{A}_0 \bm{\Delta}_{0*} = 0$. So there exists arbitrage opportunity.
+	\item[$\cdot$] If $v=v^* = 0.8$, consider the portfolio $\bm{\Delta}_{0}^* = \begin{pmatrix}
+		-0.8 & 1 & -1.5
+	\end{pmatrix}^{\top}$. I.e. short $1.5$ share of call option, long 1 share of stock and borrow $0.8$ dollars from bank account. The portfolio payoff is
+	$$
+	\bm{\pi}_{1}^* = \overline{\bm{A}}_1 \bm{\Delta}_{0}^* = \begin{pmatrix}
+		-0.8 \times 1.25 + 1 - 0\\
+		-0.8 \times 1.25 + 2 - 0\\
+		-0.8 \times 1.25 + 4 - 2 \times 1.5\\
+	\end{pmatrix} = \begin{pmatrix}
+		0 \\
+		1 \\
+		0
+	\end{pmatrix} = \begin{pmatrix}
+		\pi_{1}^*(w_1) \\
+		\pi_{1}^*(w_2) \\
+		\pi_{1}^*(w_3)
+	\end{pmatrix}
+	$$
+	The payoff satisfies $\bm{\pi}_{1}^*\succeq \bm{0}$, $\pi_{1}^*(w) > 0$ for some $w$. But the initial capital $V_0^* = \bm{A}_0 \bm{\Delta}_{0}^* = 0$. So there exists arbitrage opportunity.
+\end{itemize}
+\end{solution}
+
+
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{solution} Denote stock price $S_i=S_i(\bm{w})$. First off, we analyze the forward price. We know that:
+\begin{itemize}
+	\item[$\cdot$] The forward price is determined such that the arbitrage-free price of the forward contract itself is zero at current time. At time $t$, define the value of forward contract entered at $\tau$, expried at time $T$ as $f_{\tau, t, T}$, we have $f_{t, t, T} = 0$.
+	\item[$\cdot$] The payoff of forward contract at expiry time $T$ is $V_{\tau, T} = f_{\tau, T, T} = S_T -F$.
+\end{itemize}
+Assume there exists risk-neutral measure $\tilde{\mathbb{P}}$. For the forward contract entered at $t=1$,
+\begin{equation}
+	0= f_{1,1,2}(w^{[1]}) = \frac{1}{1+r}\mathbb{E}_{\tilde{\mathbb{P}}}\left[S_2 - F_1\middle|\mathcal{F}_1\right](w^{[1]}) = \frac{1}{1+r}\left(\mathbb{E}_{\tilde{\mathbb{P}}}\left[S_2|\mathcal{F}_1\right](w^{[1]}) - F_1(w^{[1]})\right)
+\end{equation}
+We have $\mathbb{E}_{\tilde{\mathbb{P}}}\left[S_2|\mathcal{F}_1\right](w^{[1]}) = F_1(w^{[1]})$. However, the forward contract entered at $t=0$ has non-zero value at $t=1$:
+\begin{equation}
+	\begin{split}
+		f_{0,1,2}(w^{[1]}) &= \frac{1}{1+r}\mathbb{E}_{\tilde{\mathbb{P}}}\left[S_2 - F_0\middle|\mathcal{F}_1\right](w^{[1]}) = \frac{1}{1+r}\left(\mathbb{E}_{\tilde{\mathbb{P}}}\left[S_2|\mathcal{F}_1\right](w^{[1]}) - F_0\right) \\
+		&=\frac{1}{1+r}\left(F_1(w^{[1]}) - F_0\right) 
+	\end{split}
+\end{equation}
+Hence
+$$
+f_{0,1,2}(w^{[1]}_1) =\frac{1}{1.25}(2-4)= -1.6,~~~~f_{0,1,2}(w^{[1]}_2)=\frac{1}{1.25}(4-4) = 0, ~~~~f_{0,1,2}(w^{[1]}_3) =\frac{1}{1.25}(9-4)= 4
+$$
+Secondly, consider the put option on forward. 
+\begin{itemize}
+	\item[$\cdot$] The put option, if executed, becomes a short forward contract with strike $K$. As stated above, this forward contract has non-negative value at time $t=1$. Therefore, the option is executed $\iff$ this forward contract has positive value.
+\end{itemize}
+Denote put price as $v(\cdot)$. At time $t=1$, the arbitrage-free value of put option is
+\begin{equation}
+	v(w^{[1]}) = \frac{1}{1+r}\left(\mathbb{E}_{\tilde{\mathbb{P}}}\left[K-S_2\middle|\mathcal{F}_1\right](w^{[1]})\right)^{+} = \frac{1}{1+r}\left(K-F_1(w^{[1]})\right)^+
+\end{equation}
+Hence
+$$
+v(w^{[1]}_1) =\frac{1}{1.25}(4-2)^+= 1.6,~~~~v(w^{[1]}_2)=\frac{1}{1.25}(4-4)^+ = 0, ~~~~v(w^{[1]}_3) =\frac{1}{1.25}(4-9)^+= 0
+$$
+Now we can write down the payoff matrix at period $1$:
+\begin{equation}
+	\bm{A}_1 = \begin{pmatrix}
+	1+r & f_{0,1,2}(w^{[1]}_1) & v(w^{[1]}_1)\\[2pt]
+	1+r & f_{0,1,2}(w^{[1]}_2) & v(w^{[1]}_2)\\[2pt]
+	1+r & f_{0,1,2}(w^{[1]}_3) & v(w^{[1]}_3)\\[2pt]
+\end{pmatrix} = 
+\begin{pmatrix}
+	1.25 & -1.6 & 1.6\\[2pt]
+	1.25 & 0 & 0\\[2pt]
+	1.25 & 4 & 0\\[2pt]
+\end{pmatrix}
+\end{equation}
+$\bm{A}_1$ has full rank, so $\exists 1$ risk neutral measure for period 1. Which is calculted by
+\begin{equation}
+	\frac{1}{1+r}\bm{A}_1^{\top} \tilde{\bm{p}} = \bm{V}_0=\begin{pmatrix}1 \\ 0 \\ P_0\end{pmatrix} ~~\Rightarrow ~~\tilde{\bm{p}} = (1+r) \bm{A}_1^{-\top}\bm{V}_0 = \begin{pmatrix}
+		\frac{5}{8} \\[2pt] \frac{1}{8} \\[2pt] \frac{1}{4} \\[2pt]
+	\end{pmatrix}
+\end{equation}
+\end{solution}
+
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{solution} By the FTOI:
+\begin{equation}
+	\frac{1}{\hat{X}_1(w)}= U'(\hat{X}_1(w)) = \lambda \frac{\tilde{\mathbb{P}}(w)}{\mathbb{P}(w)} ~~\Rightarrow~~\mathbb{P}\left(w\right) = \lambda \hat{X}_1(w) \tilde{\mathbb{P}}(w)
+\end{equation}
+Take summation over all dimensions of the state space:
+\begin{equation}
+	1 = \langle \mathbb{P}, \bm{1} \rangle = \lambda \langle \tilde{\mathbb{P}}, \hat{\bm{X}}_1 \rangle
+\end{equation}
+By the construction of risk-neutral measure we have $\langle \tilde{\mathbb{P}}, \hat{\bm{X}}_1 \rangle = (1+r)X_0$. Plug into the FTOI equation yields: $1 = (1+r)X_0 \lambda$, so $\lambda = \tfrac{1}{(1+r)X_0}$. \\
+Look at the FTOI equation again:
+\begin{equation}
+	\mathbb{P}\left(w\right) = \frac{\hat{X}_1(w) \tilde{\mathbb{P}}(w)}{X_0(1+r)}~~\Rightarrow~~\frac{\mathbb{P}(w)X_0(1+r)}{\hat{X}_1(w)} = \tilde{\mathbb{P}}(w)
+\end{equation}
+Hence
+\begin{equation}
+	X_0(1+r)\left\langle \mathbb{P}, \begin{pmatrix}
+		\frac{1}{\hat{X}_1(w_1)} & \frac{1}{\hat{X}_1(w_2)} & ...
+	\end{pmatrix}\right\rangle = \langle \tilde{\mathbb{P}}, \bm{1} \rangle = 1
+\end{equation}
+which is true for every optimal strategy $\hat{X}_1$. Threfore:
+\begin{equation}
+	\begin{cases}
+	2\left(p_1 + \frac{1}{2}p_2 + \frac{1}{4}p_3\right) = 1\\
+	2\left(\frac{1}{2}p_1 + \frac{1}{4}p_2 + p_1\right) = 1 \\
+	\langle \bm{p}, \bm{1} \rangle = 1
+	\end{cases}
+\end{equation}
+We obtain: $\bm{p} = (p_1~~p_2~~p_3)^{\top} = (\tfrac{1}{7}~~\tfrac{4}{7}~~\tfrac{2}{7})^{\top}$.
+\end{solution}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{solution} \textbf{(1).} Same as problem (3), we have
+\begin{equation}
+	\frac{1}{\hat{X}_1(w)}= U'(\hat{X}_1(w)) = \lambda \frac{\tilde{\mathbb{P}}(w)}{\mathbb{P}(w)} ~~\Rightarrow~~\mathbb{P}\left(w\right) = \lambda \hat{X}_1(w) \tilde{\mathbb{P}}(w)
+\end{equation}
+Take summation over all dimensions of the state space:
+\begin{equation}
+	1 = \langle \mathbb{P}, \bm{1} \rangle = \lambda \langle \tilde{\mathbb{P}}, \hat{\bm{X}}_1 \rangle
+\end{equation}
+By the construction of risk-neutral measure we have $\langle \tilde{\mathbb{P}}, \hat{\bm{X}}_1 \rangle = (1+r)X_0$. Plug into the FTOI equation yields: $1 = (1+r)X_0 \lambda$, so $\lambda = \tfrac{1}{(1+r)X_0} = 1$. Plug into the FTOI formula we have $\mathbb{P}\left(w\right) = \hat{X}_1(w) \tilde{\mathbb{P}}(w)$, where $\hat{X}_1(w) = \hat{\Delta}_0 S_1(w) + (1-S_0\hat{\Delta}_0 )$. I.e. $p_i =  \hat{\Delta}_0 S_1(w_i) + (1-S_0\hat{\Delta}_0 )\tilde{p}_i$ for $i=1,2,3$.
+\begin{equation}
+	\begin{cases}
+	0.1/\tilde{p}_1 = \hat{\Delta}_0 + (1-2\hat{\Delta}_0) = 1 - \hat{\Delta}_0\\
+	0.4/\tilde{p}_2 = 2\hat{\Delta}_0 + (1-2\hat{\Delta}_0) = 1\\
+	0.5/\tilde{p}_3 = 3\hat{\Delta}_0 + (1-2\hat{\Delta}_0) = 1+\hat{\Delta}_0\\
+	\end{cases}
+\end{equation}
+Additional equations are provided by the calculation of risk neutural probabilities:
+\begin{equation}
+	\frac{1}{1+r}\bm{A}_1^{\top} \tilde{\bm{p}} = \bm{V}_0=\begin{pmatrix}1 \\ 2 \end{pmatrix} ~~~~\Rightarrow~~~~ \begin{cases}
+	\tilde{p}_1 + \tilde{p}_2 + \tilde{p}_3 = 1\\
+	\tilde{p}_1 + 2\tilde{p}_2 + 3\tilde{p}_3 = 2
+	\end{cases}
+\end{equation}
+Combine all equations: $\tilde{p}_2 = 0.4, \tilde{p}_3 = 0.3, \tilde{p}_1 = 0.3$; $\hat{\Delta}_0=\frac{2}{3}$.\\
+\textbf{(2).} We have $U'(\hat{X}_1(w)) = \frac{\tilde{\mathbb{P}}(w)}{\mathbb{P}(w)}$. Since $\mathbb{P}$ is given, the first order condition depend only on $\tilde{\mathbb{P}}$. \\
+The current wealth at period 1, i.e. $\hat{X}_1(w)$ maximizes the expected utility. If $\tilde{P}$ as we calculated in question 1 remains to be a risk-neutral probability, $\hat{X}_1(w)$ will still be optimal. \\
+Therefore, the investor won't alter her strategy as long as $\tilde{\mathbb{P}}$ is still a risk-neutral probability $\iff$ the call option is compatible with $\tilde{\mathbb{P}}$.\\
+Hence
+\begin{equation}
+	C_{indifferent} = \frac{1}{1+r} \mathbb{E}_{\tilde{\mathbb{P}}}\left[(S_1-K)^+\right] = (3-2)\times \tilde{p}_3 = 0.3
+\end{equation}
+\end{solution}
+
+
+\end{document}

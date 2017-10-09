@@ -1,0 +1,235 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz, array, eurosym}
+\usepackage{float}
+\renewcommand{\arraystretch}{1.4}
+%\newcolumntype{L}{>{\arraybackslash}m{4cm}}
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+
+\title{\textbf{Asset Pricing Assignment I}}
+\author{Ze Yang~~~~(zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} 
+\end{problem}
+\begin{solution} Denote domestic currency \$ and foreign currency \euro. Consider the following replicating strategy and its payoffs:
+\begin{itemize}
+  \item[$\cdot$] At $t=0$, long forward contract on $1$\euro~that delievers at $T=12$. Denote its price as $f_0(t)$.
+  \item[$\cdot$] At $t=6$, short forward contract on $1$\euro~that delievers at $T=12$. Denote its price as $f_1(t)$.
+\end{itemize}
+Since the forward contract is a fair deal at the time of signing, so both counterparties don't pay for entering the forward contract. I.e. $f_0(0) = 0$, $f_1(6)=0$. The paroff is summarized in the table below.
+
+\begin{table}[h]
+\vspace{-10pt}
+\caption{\textit{Replicating Strategy}}
+\vspace{3pt}
+\centering
+\def\arraystretch{1.15}
+\begin{tabular}{|m{5cm}|m{3cm}|m{3cm}|m{3cm}|}
+\hline
+Position/Time &$t=0$ & $t=6$ & $t=12$\\ 
+\hline
+At $t=0$, long forward contract on $1$\euro~that delievers at $T=12$. & $f_0(0) = 0$& & $1\text{\euro} - F(0, 12)\$$\\
+\hline
+At $t=6$, short forward contract on $1$\euro~that delievers at $T=12$. & & $-f_1(6) = 0$ & $F(6, 12)\$-1\text{\euro}$\\
+\hline 
+Portfolio Sum (in dollar) &$X_0 = 0$ & 0 & $F(6, 12) - F(0, 12)$\\
+\hline 
+\end{tabular}
+\label{tab:rep1}
+\end{table}
+By theorem, the arbitrage-free price of this derivative security equals the initial capital of replicating strategy. So $P = X_0 = 0$.
+
+
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} 
+\end{problem}
+\begin{solution}
+Let $\lambda := \frac{1}{1+\frac{1}{12}r(12)}$. Consider the following replicating strategy and its payoffs:
+\begin{itemize}
+  \item[$\cdot$] \textbf{Bank Account}: Suppose the bank account is compounded monthly. Save 
+  $$
+  C_i = \frac{1}{12(1+\frac{1}{12}r(12))^{12-i}} S\left(\tfrac{i}{12}\right) = \frac{1}{12}\lambda^{12-i} S\left(\tfrac{i}{12}\right)  $$
+  to the bank account at the end of month $i$, for $i=1,2,...,12$. Then 1 year later, the repaid amount is
+  $$
+  \sum_{i=1}^{12} C_i \left(1+\tfrac{1}{12}r(12)\right)^{12-i} = \frac{1}{12}\sum_{i=1}^{12} S\left(\tfrac{i}{12}\right)
+  $$
+  \item[$\cdot$] \textbf{Stock}: At the end of month $i$, sell $a_i = \frac{1}{12(1+\frac{1}{12}r(12))^{12-i}}$ shares of stocks, such that the cash inflow finances the bank deposit exactly. To be able to sell these shares of stocks at each month, we start with $a_0$ long position in stock, we have
+  $$
+  a_0 = \sum_{i=1}^{12} a_i = \sum_{i=1}^{12}\frac{1}{12}\lambda^{12-i} = \frac{1}{12} \sum_{k=0}^{11} \lambda^k = \frac{1}{12}\frac{1- \lambda^{12}}{1- \lambda}
+  $$
+\end{itemize}
+The payoffs of replicating strategy is described in the table below
+
+\begin{table}[H]
+\scriptsize
+\vspace{-10pt}
+\caption{\textit{Replicating Strategy, (-) Denotes Cash Outflow}}
+\vspace{3pt}
+\centering
+\def\arraystretch{2}
+\begin{tabular}{|m{2cm}|m{1.5cm}|m{1.5cm}|m{1.5cm}|m{1.5cm}|m{1.5cm}|m{2cm}|}
+\hline
+Position/Time &$t=0$ & $t=1$ & $t=2$ & $\cdots$ & $t=11$ & $t=12$\\ 
+\hline
+Bank Account & $0$ & $\frac{-1}{12}\lambda^{11} S\left(\tfrac{1}{12}\right)$ & $\frac{-1}{12}\lambda^{10} S\left(\tfrac{2}{12}\right)$ &$\cdots$&$\frac{-1}{12}\lambda^{1} S\left(\tfrac{11}{12}\right)$ & $\tfrac{1}{12}\sum_{i=1}^{11} S(\tfrac{i}{12})$\\
+\hline
+Stock &$\frac{-1}{12}\frac{1- \lambda^{12}}{1- \lambda}S(0)$& $\frac{1}{12}\lambda^{11} S\left(\tfrac{1}{12}\right)$&
+$\frac{1}{12}\lambda^{10} S\left(\tfrac{2}{12}\right)$& $\cdots$&$\frac{1}{12}\lambda^{1} S\left(\tfrac{11}{12}\right)$&$\frac{1}{12} S\left(\tfrac{12}{12}\right)$\\
+\hline
+Sum &$\frac{-1}{12}\frac{1- \lambda^{12}}{1- \lambda}S(0)$&  0&0&0&0&$\tfrac{1}{12}\sum_{i=1}^{12}S(\tfrac{i}{12})$\\
+\hline
+\end{tabular}
+\label{tab:rep2}
+\end{table}
+
+~\\
+Since the initial capital to establish this replicating portfolio is: (negative sign denotes cash outflow in the table)
+$$
+X_0 = \frac{1}{12}\frac{1- \lambda^{12}}{1- \lambda}S(0) = 94.73
+$$
+By theorem, the arbitrage-free price of this derivative security is $P = X_0 = 94.73$.
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{solution} Suppose the principle is 1 dollar. Consider the two legs of the swap contract.
+\begin{itemize}
+  \item[$\cdot$] \textbf{Floater}: The floating rate bond can be repicated by repeatedly reinvest the principle to the floating rate account. Consequently, the price of floating rate bond must equal to par. The replicating strategy is demonstrated as follows:
+  \begin{table}[H]
+  \scriptsize
+  \vspace{-10pt}
+  \caption{\textit{Replicating Strategy for Floater, (-) Denotes Cash Outflow}}
+  \vspace{3pt}
+  \centering
+  \def\arraystretch{2}
+  \begin{tabular}{|m{2cm}|m{1.6cm}|m{1.6cm}|m{1.6cm}|m{1.6cm}|m{2cm}|m{2cm}|}
+  \hline
+  Position/Time &$t=0$ & $t=\tfrac{1}{m}$ & $t=1$ & $\cdots$&$t=T-\frac{T}{m}$ & $t=T=n/m$\\ 
+  \hline
+  Invest at $t=0$ &$-1$ & $1+L(0,\tfrac{1}{m})$ & & $\cdots$ &  & \\ 
+  Reinvest par & & $-1$ & $1+L(\tfrac{1}{m},\tfrac{2}{m})$ & $\cdots$&  & \\ 
+  Reinvest par & &  & $-1$ & $\cdots$& $1+L(\tfrac{n-2}{m},\tfrac{n-1}{m})$ & \\ 
+  Reinvest par & &  &  & $\cdots$& $-1$ & $1+L(\tfrac{n-1}{m},\tfrac{n}{m})$\\ 
+  \hline
+  Sum & $-1$ & $L(0,\tfrac{1}{m})$& $L(\tfrac{1}{m},\tfrac{2}{m})$& $\cdots$& $L(\tfrac{n-2}{m},\tfrac{n-1}{m})$& $1+L(\tfrac{n-1}{m},\tfrac{n}{m})$\\
+  \hline
+  \end{tabular}
+  \label{tab:rep3}
+  \end{table}
+  Hence the price of floating rate bond must equal to par: $P_{float} = 1$.
+  \item[$\cdot$] \textbf{Fixed Leg (Coupon Bond)}: The price of the coupon bond is given by summation of discounted cashflows:
+  $$
+  P_{coupon} = \sum_{i=1}^n \frac{R}{m} \frac{1}{d(\tfrac{i}{m})} + \frac{1}{d(\tfrac{n}{m})}
+  $$
+\end{itemize}
+
+The interest swap contract for $A$ is essentially longing the floater and shorting the coupon bond (Equivalently, from $B$'s perspective, it's longing the coupon bond and shorting the floater), the principle payment at maturity will cancel out each other. Therefore, the arbitrage-free price of the swap contract is equal to the initial capital of replicating portfolio:
+$$
+P = X_0 = P_{float} - P_{coupon} 
+$$ 
+And entering swap contract requires no cash transaction for both of the counterparties. Hence $P=0$. $\Rightarrow$
+\begin{equation}
+  \begin{split}
+    0 &= P = X_0 = P_{float} - P_{coupon} \\
+    &= 1 - \left(\sum_{i=1}^n \frac{R}{m} d(\tfrac{i}{m}) + d(\tfrac{n}{m})\right)\\
+  \end{split}
+\end{equation}
+Hence
+\begin{equation}
+  1 - d(\tfrac{n}{m}) = \frac{R}{m}\sum_{i=1}^n  d(\tfrac{i}{m})
+\end{equation}
+$$
+\Rightarrow R = m\frac{1 - d(n/m)}{\sum_{i=1}^n  d(i/m)}
+$$
+Plug in the data of discount factors, $n=4, m=2$:
+$$
+\Rightarrow R = 2\frac{1 - d(2)}{\sum_{i=1}^4  d(i/2)} = 2\frac{1 - 0.8}{0.95+ 0.9 + 0.85 + 0.8} \approx 0.1143
+$$
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{solution} Let's consider the two choices respectively.
+\begin{itemize}
+  \item[$\cdot$] \textbf{Choice 1.} The initial cost of choice 1 consists of the cost of buying cotton at $t=0$ and saving to the bank account to finance subsequent monthly storage cost. 
+  \begin{itemize}
+    \item[1.] \textit{Cotton}: the cost is $NS(0)$.
+    \item[2.] \textit{Bank Account}: $N\frac{q(12)}{12}d(1/12)$ dollars is saved to bank account at $t=0$, which grows to $N\frac{q(12)}{12}$ dollars after 1 month to finance the first payment. Similarly for next payments of storage cost.
+  \end{itemize}
+  Hence, the initial capital required for the first choice is
+  \begin{equation}
+    \begin{split}
+        P_1 &= N\left(S(0) + \frac{q(12)}{12}d(1/12) + \frac{q(12)}{12}d(2/12)\right) \\
+        & = 500000\left(0.45+\frac{0.01}{12}\frac{1}{1.01}+\frac{0.01}{12}\frac{1}{1.01^2}\right)\\
+        &\approx 225821
+    \end{split}
+  \end{equation}
+  \item[$\cdot$] \textbf{Choice 2.} We can lock the price of cotton at $K$ at time $T$ by long call option with strike $K$ and maturity $T$ and write put option with same strike and same maturity. Denote $S(t)$ the price of 1 pound of cotton at time $t$. Then at time $T$, we have the option to execute the call to purchase cotton at $K$, and we are required to buy cotton at price $K$ when out counterparty of the put execute the option. There are two outcomes:
+  \begin{itemize}
+    \item[$\omega_0$]: $S(T) \geq K$. We will execute the call option, the put option is not executed. We end up with 1 cotton and $-K$ dollars.
+    \item[$\omega_1$]: $S(T) < K$. We won't execute the call option, yet the put option is executed by our counterparty. We end up with 1 cotton and $-K$ dollars.
+  \end{itemize}
+  Now that we have locked the price of cotton at $K$, we save $Kd(T)$ dollars in the bank account to finance the delivery at time $T$. No subsequent cost is incurred, hence the initial capital is simply
+  $$
+  P_2 = NKd(T) = 500000\left(0.46\frac{1}{1.01^2}\right) = 225468 < P_1
+  $$
+\end{itemize}
+Hence, choice 2 is a better deal, given the fact that the company only cares about whether the cotton is delieverd at time $T$. (Indifferent about it before $T$.)
+\end{solution}
+
+
+\end{document}

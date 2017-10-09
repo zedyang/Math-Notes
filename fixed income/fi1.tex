@@ -1,0 +1,326 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs, booktabs, tikz}
+\usepackage{array}
+\renewcommand{\arraystretch}{1.4}
+\newcolumntype{L}{>{\arraybackslash}m{12cm}}
+
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+
+\title{\textbf{MSCF HW Template}}
+\author{Ze Yang~~~~(zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+\begin{table}[h]
+\vspace{-10pt}
+\caption{\textit{Nomenclatures}}
+\vspace{3pt}
+\centering
+\def\arraystretch{1.15}
+\begin{tabular}{lL}
+\hline
+Notation & \hspace{4.6cm} Description \\ 
+\hline
+$(t, C_t)$ & Time t, and the dollar amount of cashflow paid at time $t$. \\
+$B$ & The cashflow profile of a bond, $B$ is a set of tuples $\{(t_1, C_{t_1}), ..., (t_n, C_{t_n})\}$. We denote $\bm{C}_{B} := (C_{t_1}~~C_{t_2}~~\cdots~~C_{t_n})^{\top}$, where $(t_i, C_{t_i}) \in B$ $\forall i = 1,2,...,n$; similar for $\bm{t}_B$.\\
+$d(t)$ & The discount factor as of time $t$.\\
+$\bm{d}(\bm{t})$ & Discount column vector. $\bm{d}(\bm{t}) = (d(t_1) ~~ d(t_2) ~~\cdots~~ d(t_n))^{\top}$ \\
+$P(B)$ & The price of bond $B$, $P(B)=\sum_{(t,C_t) \in B}C_td(t)=\langle d(\bm{t_B}), \bm{C}_B \rangle = \bm{C}_B^{\top}\bm{d}(\bm{t}_B)$. In this assignment, $P$ is a linear function, i.e. $P(aB_1+bB_2) = aP(B_1)+bP(B_2).$\\
+$\overline{\bm{C}}_{B}(\bm{t})$ & Augmented cash flow,  $\overline{\bm{C}}_{B}(\bm{t}) := (\overline{C}_{t_1}~~\overline{C}_{t_2}~~\cdots~~\overline{C}_{t_n})^{\top}$, where $\overline{C}_{t_i} = C_{t_i}$ if $(t_i, C_{t_i}) \in B$, $\overline{C}_{t_n}=0$ otherwise.\\
+$\hat{r}(t)$ & Spot rate with maturity $t$.\\
+$r^{for}_{\tau, \eta, T}$ & Forward rate agreed at $\tau$, from $\eta$ to $T$.\\
+$f(t)$ & Equivalent to $r^{for}_{0, t-0.5, t}$. \\
+\hline 
+\end{tabular}
+\label{tab:Nomen}
+\end{table}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} Tuckman \& Serrat Ex. 1.2, 1.3, 1.4.
+\end{problem}
+\begin{solution} \textbf{1.2} The cashflow profiles of the three treasury bonds are
+\begin{itemize}
+  \item[] $B_1 = \{(0.5, 102\tfrac{1}{4})\}; P(B_1) = 102.15806$
+  \item[] $B_2 = \{(1, 100)\}; P(B_2) = 99.60120$
+  \item[] $B_3 = \{(0.5, \tfrac{7}{8}), (1, \tfrac{7}{8}), (1.5, 100\tfrac{7}{8})\}; P(B_3) = 101.64355$
+\end{itemize}
+Therefore
+\begin{equation}
+  \begin{split}
+    P(B_1) &= C_{0.5} d(0.5) ~~\Rightarrow~~d(0.5) = \frac{P(B_1)}{C_{0.5}} = \frac{102.15806}{102\tfrac{1}{4}} = 0.999101\\
+    P(B_2) &= C_1d(1) ~~ \Rightarrow~~ d(1) = \frac{P(B_2)}{C_1} = \frac{99.60120}{100} = 0.996012\\
+    P(B_3) &= \langle \bm{C}_{B_3}, \bm{d}(\bm{t}_{B_3}) \rangle = \tfrac{7}{8}d(0.5) + \tfrac{7}{8}d(1) + 100\tfrac{7}{8}d(1.5) \\
+    &=1.745724 + 100\tfrac{7}{8}d(1.5) ~~\Rightarrow  ~~d(1.5) = 0.990313
+  \end{split}
+\end{equation}
+\textbf{1.3} $B_4 = \{(0.5, 1), (1, 1), (1.5, 101)\}$.
+$$
+P(B_4) = \langle \bm{C}_{B_4}, \bm{d}(\bm{t}_{B_4}) \rangle = d(0.5) + d(1) + 101d(1.5) = 102.01673
+$$
+\textbf{1.4} Consider the replicating portfolio $\bm{\Xi w}$, in which $\bm{w}=(w_1 ~~ w_2 ~~ w_3)^{\top}$. $\bm{\Xi} = (\bm{C}_{B_3}~~ \overline{\bm{C}}_{B_2}(\bm{t}_{B_4})~~\overline{\bm{C}}_{B_1}(\bm{t}_{B_4}))$. We want to solve linear system
+$$
+\bm{C}_{B_4} =  \bm{\Xi w}
+$$
+\begin{equation}
+\begin{split}
+  &\bm{w} = \bm{\Xi}^{-1} \bm{C}_{B_4} = 
+  \begin{pmatrix}
+    7/8 & 0 & 102\tfrac{1}{4}\\
+    7/8 & 100 & 0\\
+    100\tfrac{7}{8} & 0 & 0
+  \end{pmatrix}^{-1}
+  \begin{pmatrix}
+    1 \\
+    1 \\
+    101\\
+  \end{pmatrix} = 
+  \begin{pmatrix}
+    \frac{808}{807} \\
+    \frac{100}{807} \\
+    \frac{100}{807}\frac{1}{102\tfrac{1}{4}} \\
+  \end{pmatrix} 
+\end{split}
+\end{equation}
+The price of replicating portfolio is
+\begin{equation}
+    P\left(\sum_{i=1}^3 w_i B_i\right) = \sum_{i=1}^3 w_i P(B_i)= 102.016728
+\end{equation}
+So we earn an arbitrage profit of $102.016728-101 = 1.016728$ by shorting $\bm{\Xi w}$ and longing $B_4$.
+
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} Tuckman \& Serrat Ex. 2.3, 2.5
+\end{problem}
+\begin{solution} \textbf{2.3} For the semiannually compounded spot rates, we have
+$$
+\frac{1}{d(t)} = \left(1+\frac{\hat{r}(t)}{2}\right)^{2t}~~\Rightarrow~~\hat{r}(t) = 2\left(d(t)^{-\frac{1}{2t}} - 1\right)
+$$
+Calculate from the discount factors table: $\hat{r}(0.5) = 0.25\%,~~\hat{r}(1) = 0.325\%,~~\hat{r}(1.5) = 0.433\%$. \\
+For the forward rates, we have
+\begin{equation}
+  \begin{split}
+    \left(1+\frac{\hat{r}(t-0.5)}{2}\right)^{2t-1}\left(1+\frac{f(t)}{2}\right) = \left(1+\frac{\hat{r}(t)}{2}\right)^{2t}~~\Rightarrow~~f(t) = 2\left(\frac{d(t-0.5)}{d(t)} - 1\right)
+  \end{split}
+\end{equation}
+We have
+\begin{equation}
+  \begin{split}
+    &f(0.5) = \hat{r}(0.5) = 0.25\%\\
+    &f(1) = 2\left(\frac{d(0.5)}{d(1)} - 1\right) = 0.4\%\\
+    &f(1.5) = 2\left(\frac{d(1)}{d(1.5)} - 1\right) = 0.653\%
+  \end{split}
+\end{equation}
+\textbf{2.5} $B=\{(0.5, 0.25), (1, 0.25), (1.5, 100.25)\}$.
+$$
+P(B) = \langle \bm{C}_B,  \bm{d}(\bm{t_B}) \rangle = 0.25d(0.5) + 0.25d(1) + 100.25d(1.5) = 100.10016
+$$
+After 6 months, the same bond's price will be
+$$
+P(B') = \langle \bm{C}_{B'},  \bm{d}(\bm{t_{B'}}) \rangle = 0.25d'(0.5) + 100.25d'(1)
+$$
+where $d'(\cdot)$ is the yield curve after 6 month. By assumption, $d'=d$. So the price will rise if and only if
+\begin{equation}
+  \begin{split}
+    & P(B') - P(B) = 100d(1) - 100.25d(1.5) > 0 \\
+    & ~~ \iff ~~\frac{d(1)}{d(1.5)} > \frac{100.25}{100} \\
+    & ~~ \iff ~~2\left(\frac{d(1)}{d(1.5)} - 1\right)> 2\left(\frac{100.25}{100} - 1\right) \\
+    & ~~ \iff ~~ f(1.5) > 0.5\%
+  \end{split}
+\end{equation}
+Since 0.5\% is below the forward rate from 1 to 1.5, the price of bond will rise. This can be verified by calculing $P(B')$ directly, we have $P(B')=100.1746775 > P(B)$.
+
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} 
+\end{problem}
+\begin{solution} We want to replicate a 5-year 1\$ zero with the two traded bonds. I.e. $B_{zc} = \{(5, 1)\}$. The traded bonds are:
+\begin{itemize}
+  \item[] $A = \{(0.5, 1000), (1, 1000), ..., (5, 1000)\}$, $P(A)=8000$. (the annuity)
+  \item[] $B_c = \{(0.5, 50), (1, 50), ..., (4.5, 50), (5, 1050)\}$, $P(B_c)=1000$. (the coupon bond)
+\end{itemize}
+Let $\bm{\Xi} = (\bm{C}_A~~ \bm{C}_{B_c})$. It suffices to solve
+$$
+\overline{\bm{C}}_{B_{zc}}(\bm{t}_A) = \bm{\Xi} \bm{w} ~~\Rightarrow~~ \bm{w} = \begin{pmatrix}
+  -\frac{1}{20000} \\
+  \frac{1}{1000}
+\end{pmatrix}
+$$
+Hence
+$d(5) = P(B_{zc}) = P(w_1 A + w_2 B_c) = 0.7$. $\hat{r}(5) = 2(d(5)^{-1/10}-1)=0.72622$.\\
+$\hat{R}(5) = d(5)^{-1/5}-1 = 0.07394$.
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} 
+\end{problem}
+
+\begin{solution} We want to replicate the securities in question (a), (b) and (c) respectively. The traded bonds, and the unpriced securies in the three questions are:
+\begin{itemize}
+  \item[] $B_1 = \{(0.5, 200), (1, 200), ..., (10, 10200)\}$, $P(B_1)=9060$. 
+  \item[] $B_2 = \{(0.5, 200), (1, 200), ..., (10, 5200)\}$, $P(B_2)=6146.5$.
+  \item[] $B_a = \{(10, 20000)\}$.
+  \item[] $B_b = \{(0.5, 500), ..., (10, 500)\}$.
+  \item[] $B_c = \{(0.5, 225), (1, 225), ..., (10, 7725)\}$.
+\end{itemize}
+Let $\bm{\Xi} = (\bm{C}_{B_1}~~\bm{C}_{B_2})$, it suffices to solve:\\
+(\textbf{a}):
+$$
+\overline{\bm{C}}_{B_{a}}(\bm{t}_1) = \bm{\Xi} \bm{w}_a ~~\Rightarrow~~ \bm{w}_a = \begin{pmatrix}
+  4 \\
+  -4
+\end{pmatrix};~~~P(B_a) = P(4B_1 - 4B_2) = 11654
+$$
+(\textbf{a}):
+$$
+\overline{\bm{C}}_{B_{b}}(\bm{t}_1) = \bm{\Xi} \bm{w}_b ~~\Rightarrow~~ \bm{w}_b = \begin{pmatrix}
+  -2.5 \\
+  5
+\end{pmatrix};~~~P(B_b) = P(-2.5B_1 + 5B_2) = 8082.5
+$$
+(\textbf{a}):
+$$
+\overline{\bm{C}}_{B_{c}}(\bm{t}_1) = \bm{\Xi} \bm{w}_c ~~\Rightarrow~~ \bm{w}_c = \begin{pmatrix}
+  0.375 \\
+  0.75
+\end{pmatrix};~~~P(B_c) = P(0.375B_1 + 0.75B_2) = 8007.375
+$$
+\end{solution}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} 
+\end{problem}
+\begin{solution} For per 1 dollar borrowed at $\eta$, the amount to be repaid at $T$ is $(1+R_{0, \eta, T})^{T-\eta}$, which is agreed at time $0$. By the replication argument in the lecture,
+$$
+(1+R_{0, \eta, T})^{T-\eta} = \frac{d(\eta)}{d(T)} = \frac{(1+\frac{\hat{r}(T)}{2})^{2T}}{(1+\frac{\hat{r}(\eta)}{2})^{2\eta}}
+$$
+Use $T=2$, $\eta=0.5$, $\hat{r}(\cdot)$ as given, we have
+$$
+(1+R_{0, 0.5, 2})^{1.5} = \frac{d(0.5)}{d(2)} = \frac{(1+\frac{\hat{r}(2)}{2})^{4}}{(1+\frac{\hat{r}(0.5)}{2})^{1}} = 1.075268
+$$
+Therefore, the customer needs to pay back $107526.8$ at $t=2$.
+\end{solution}
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} 
+\end{problem}
+\begin{solution} The cash flow of 1 dollar loan is 
+$$B_{Loan} = \left\{(\eta, 1), \left(T, -\left(1+\frac{\tilde{r}^{for}_{0, \eta, T}}{4}\right)^{4(T-\eta)}\right)\right\}$$
+which can be replicated by long 1 dollar zero with maturity $\eta$ and writing $\left(1+\frac{\tilde{r}^{for}_{0, \eta, T}}{4}\right)^{4(T-\eta)}$ dollars zero that matures at $T$. Since the price of loan is zero at $t=0$, the price of replicating cashflow should also be zero. I.e.
+\begin{equation}
+  \begin{split}
+    &\qquad 0 = d(\eta) - d(T) \left(1+\frac{\tilde{r}^{for}_{0, \eta, T}}{4}\right)^{4(T-\eta)}\\
+    & \Rightarrow \left(1+\frac{\tilde{r}^{for}_{0, \eta, T}}{4}\right)^{4(T-\eta)} = \frac{d(\eta)}{d(T)} \\
+    & \Rightarrow \tilde{r}^{for}_{0, \eta, T} = 4\left(\left(\frac{d(\eta)}{d(T)}\right)^{\frac{1}{4(T-\eta)}} - 1\right)
+  \end{split}
+\end{equation}
+Hence
+\begin{equation}
+  \tilde{r}^{for}_{0, 3, 3.75} = 4\left(\left(\frac{d(3)}{d(3.75)}\right)^{\frac{1}{3}} - 1\right) = 0.039248
+\end{equation}
+\end{solution}
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} $\hat{R}(\eta)$ and $\hat{R}(T)$ the effective spot rates for date $\eta, T$. $R^{for}_{0, \eta, T}$ is the effective forward rate agreed at time $0$ for borrowing between $\eta$ and $T$. Suppose $\hat{R}(T) > \hat{R}(\eta)$, show
+$$
+R^{for}_{0, \eta, T} > \hat{R}(T)
+$$
+\end{problem}
+\begin{proof} Recall that
+\begin{equation}
+  \begin{split}
+  (1+R^{for}_{0, \eta, T})^{T-\eta} &= \frac{d(\eta)}{d(T)} = \frac{(1+\hat{R}(T))^{T}}{(1+\hat{R}(\eta))^\eta} \\
+  &> \frac{(1+\hat{R}(T))^{T}}{(1+\hat{R}(T))^\eta} ~~~(\text{Since }\hat{R}(T) > \hat{R}(\eta)) \\
+  &= (1+\hat{R}(T))^{T-\eta}
+  \end{split}
+\end{equation}
+$$
+\Rightarrow 1+ R^{for}_{0, \eta, T} > 1+\hat{R}(T) \Rightarrow R^{for}_{0, \eta, T} > \hat{R}(T)
+$$
+\end{proof}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} Let $\hat{r}_c(t)$ be the spot rate for time $t$ using continuou compounding so that 
+$$
+d(t) = e^{-t\hat{r}_c(t)}
+$$
+Assume $\hat{r}_c:(0,\infty) \to \mathbb{R}$ is $\mathcal{C}^1$. Determine a condition on the function $\hat{r}_c$ that is necessary and sufficient for the discount factor to satisfy
+$$
+d(t_1)\geq d(t_2)~~~~~\text{for all }t_1, t_2 \in (0, \infty), t_1 \leq t_2~~(\dag)
+$$
+\end{problem}
+\begin{proof} Essentially we have
+\begin{equation}
+  (\dag) \iff d(t) \text{ is monotonically decreasing on } t\in(0, \infty)
+\end{equation}
+Since $\hat{r}_c(t) \in \mathcal{C}^1$, we can differentiate the discount factor function with respect to $t$, and the conditional above $\iff$ $d'(t) \leq 0~~\text{for }t \in (0, \infty)$.
+$$
+d'(t) = -e^{-t\hat{r}_c(t)}(t\hat{r}'_c(t) + \hat{r}_c(t)) = -d(t)(t\hat{r}'_c(t) + \hat{r}_c(t))
+$$
+Since $d(t) = e^{-t\hat{r}_c(t)} > 0$, $d'(t)\leq 0 \iff$
+$$
+t\hat{r}'_c(t) + \hat{r}_c(t) \geq 0
+$$
+
+\end{proof}
+
+
+
+\end{document}

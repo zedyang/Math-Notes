@@ -1,0 +1,331 @@
+\documentclass[10 pt]{hwtemplate} % Use the custom resume.cls style
+
+%-------------------------------------------------------------------------------
+% Document begins
+%-------------------------------------------------------------------------------
+
+\title{\textbf{Finance Assignment I}}
+\author{Ze Yang, Xue Rong, Mengjia Yi}
+
+\begin{document}
+\maketitle
+
+\noindent\textit{Note: Please refer to the appendix to see the code.}
+\section{Return and Risk - Time Series}
+\subsection*{1.a }
+Suppose we invested 1 dollar on January 1st, 1975, and suppose returns are continuously compounded. The cumulative wealth at period $t\geq 1$ is
+\begin{equation}
+  \log(X_t) = \log\left(X_0\prod_{i=1}^{t}e^{r_i}\right) = \log\left(X_0e^{\sum_{i=1}^tr_i}\right) = \log(X_0) + \sum_{i=1}^tr_i
+\end{equation}
+And for $t=0$, the log wealth is $\log(1)=0$. The wealth curve is shown in the plot below. Note that we start from zero at the beginning, which corresponds to $t=0$.
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{\label{fig:ret}Cumulative Log Wealth of Portfolios from 1975 to 2017}
+  \vspace{-10pt}
+  \includegraphics[scale=0.5]{figures/fig1.png}
+\end{figure}
+
+\subsection*{1.b}
+The market portfolio is a weighted combination of all listed stocks, most of which can be classified into 49 industries. Since the 8 industries is chosen evenly from all the industries and the market can somewhat naively be seen as a portfolio of the 8 industries, the log cumulative returns of the market can be approximated by the mean of the log cumulative returns of these industry portfolios, thus market lying in the middle of these industries.
+
+
+\subsection*{1.c}
+On Monday, October 19, 1987\cite{crash}, a day later infamously known as “Black Monday”, the first contemporary worldwide financial crisis occurred starting from Hong Kong, spreading west to Europe, and hitting the United States at last. Dow Jones Industrial Average dropped 22.6 percent that day which remains to be the hugest one-day loss in history. 
+
+The US stock market was driven up into economic bubble by excessive speculation until April 2000, especially for Internet-based companies. The NASDAQ fell 78\% in following months after its peak in March, 2000\cite{techbubble}.
+
+The financial crisis in 2008\cite{risk} began in 2007 with a crisis in the subprime mortgage market in the US, and developed into a full-blown international banking crisis with the collapse of the investment bank Lehman Brothers on September 15, 2008.
+
+\section{Return and Risk - Portfolio Choice}
+\subsection*{2.a Expected Excess Return}
+The expected excess returns are estimated from sample mean, assuming that each observation of time series data are independent (Which is not at all realistic, but gives an approximate estimate). The boxplot is also included to demonstrate range and dispersion of excess returns.
+
+\begin{table}[htbp]
+  \begin{center}
+  \captionsetup{justification=centering}
+  \caption{\label{tab:mean}Expected Excess Return of Sectors; Estimated via Sample Mean}
+  \small
+    \begin{tabular}{lccccccccc}
+    \toprule
+      Ticker & \texttt{Aero} & \texttt{Guns} & \texttt{Steel}& \texttt{Ships}& \texttt{Beer}& \texttt{Toys}& \texttt{Fin}&  \texttt{Rtail}\\
+      \midrule
+      Expected Excess Return & 0.1035  &0.1036  & 0.0167  &0.0652 & 0.0993  &0.0505&
+   0.0860 & 0.0842 \\
+    \bottomrule
+    \end{tabular}
+  \end{center}
+\end{table}
+
+
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{\label{fig:exretbox}Boxplot of Excess Returns' Distribution}
+  \vspace{-10pt}
+  \includegraphics[scale=0.5]{figures/fig2.png}
+\end{figure}
+\subsection*{2.b Covariance and Correlation Matrix}
+The covariance matrix is estimated via sample covariance and variance. The numerical results are shown below. Here we also present the heatmap of the matrix of correlation coefficient. Note that the color map corresponds to correlation that ranges from $0$ to $1$ since there is no negative correlation.
+\begin{table}[htbp]
+  \begin{center}
+  \captionsetup{justification=centering}
+  \caption{\label{tab:mean}Covariance Matrix of Sectors; Estimated via Sample Covariance}
+  \small
+    \begin{tabular}{lccccccccc}
+    \toprule
+      Ticker & \texttt{Aero} & \texttt{Guns} & \texttt{Steel}& \texttt{Ships}& \texttt{Beer}& \texttt{Toys}& \texttt{Fin}&  \texttt{Rtail}\\
+      \midrule
+      \texttt{Aero}&0.0506 & 0.0317 & 0.0398 & 0.0392 & 0.0205 & 0.0339 & 0.0317 & 0.0273 \\
+      \texttt{Guns}&0.0317 & 0.0490 & 0.0266 & 0.0352 & 0.0151 & 0.0290 & 0.0199 & 0.0189 \\
+      \texttt{Steel}&0.0398 & 0.0266 & 0.0748 & 0.0418 & 0.0180 & 0.0404 & 0.0434 & 0.0288 \\
+      \texttt{Ships}&0.0392 & 0.0352 & 0.0418 & 0.0666 & 0.0183 & 0.0340 & 0.0317 & 0.0265 \\
+      \texttt{Beer}&0.0205 & 0.0151 & 0.0180 & 0.0183 & 0.0314 & 0.0215 & 0.0191 & 0.0194 \\
+      \texttt{Toys}&0.0339 & 0.0290 & 0.0404 & 0.0340 & 0.0215 & 0.0560 & 0.0327 & 0.0300 \\
+      \texttt{Fin}&0.0317 & 0.0199 & 0.0434 & 0.0317 & 0.0191 & 0.0327 & 0.0471 & 0.0291 \\
+      \texttt{Rtail}&0.0273 & 0.0189 & 0.0288 & 0.0265 & 0.0194 & 0.0300 & 0.0291 & 0.0350 \\
+    \bottomrule
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\begin{table}[htbp]
+  \begin{center}
+  \captionsetup{justification=centering}
+  \caption{\label{tab:mean}Correlation Coefficient Matrix of Sectors; Estimated via Sample Correlation}
+  \small
+    \begin{tabular}{lccccccccc}
+    \toprule
+      Ticker & \texttt{Aero} & \texttt{Guns} & \texttt{Steel}& \texttt{Ships}& \texttt{Beer}& \texttt{Toys}& \texttt{Fin}&  \texttt{Rtail}\\
+      \midrule
+      \texttt{Aero}&1.0000 & 0.6360 & 0.6475 & 0.6748 & 0.5144 & 0.6369 & 0.6501 & 0.6476 \\
+      \texttt{Guns}&0.6360 & 1.0000 & 0.4397 & 0.6157 & 0.3847 & 0.5533 & 0.4134 & 0.4573 \\
+      \texttt{Steel}&0.6475 & 0.4397 & 1.0000 & 0.5923 & 0.3711 & 0.6235 & 0.7304 & 0.5628 \\
+      \texttt{Ships}&0.6748 & 0.6157 & 0.5923 & 1.0000 & 0.4005 & 0.5561 & 0.5658 & 0.5493 \\
+      \texttt{Beer}&0.5144 & 0.3847 & 0.3711 & 0.4005 & 1.0000 & 0.5127 & 0.4957 & 0.5853 \\
+      \texttt{Toys}&0.6369 & 0.5533 & 0.6235 & 0.5561 & 0.5127 & 1.0000 & 0.6373 & 0.6781 \\
+      \texttt{Fin}&0.6501 & 0.4134 & 0.7304 & 0.5658 & 0.4957 & 0.6373 & 1.0000 & 0.7152 \\
+      \texttt{Rtail}&0.6476 & 0.4573 & 0.5628 & 0.5493 & 0.5853 & 0.6781 & 0.7152 & 1.0000 \\
+    \bottomrule
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{\label{fig:exretcorr}Heatmap of Correlation Matrix}
+  \vspace{-10pt}
+  \includegraphics[scale=0.6]{figures/fig3.png}
+\end{figure}
+
+
+\subsection*{2.c Sharpe Ratio}
+The Sharpe ratio is calculated as
+\begin{equation}
+  Sharpe_i = \frac{\mathbb{E}\left[r_i\right]-r_f}{\sigma_i}
+\end{equation}
+The numerical results are
+\begin{table}[htbp]
+  \begin{center}
+  \captionsetup{justification=centering}
+  \caption{\label{tab:sharpe}Sharpe Ratio of Sectors}
+  \small
+    \begin{tabular}{lccccccccc}
+    \toprule
+      Ticker & \texttt{Aero} & \texttt{Guns} & \texttt{Steel}& \texttt{Ships}& \texttt{Beer}& \texttt{Toys}& \texttt{Fin}&  \texttt{Rtail}\\
+      \midrule
+      Sharpe Ratio &0.4600 &
+      0.4679 &
+      0.0611 &
+      0.2528 &
+      0.5607 &
+      0.2134 &
+      0.3963 &
+      0.4499 \\
+    \bottomrule
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsection*{2.d/2.e Efficient Frontier and Tangency Portfolio: Two Assets}
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{\label{fig:meanvar2}Mean-Variance Optimization of Two-Assets Portfolio}
+  \vspace{-10pt}
+  \includegraphics[scale=0.5]{figures/fig4.png}
+\end{figure}
+\textit{Notes: }
+\begin{itemize}
+  \item[$\cdot$] The black-dotted curve is the efficient frontier, we calculate $(\mathbb{E}\left[r_p\right], \sigma_p)$ pairs for each of the dot, and connect them together.
+  \item[$\cdot$] The red solid line is the \textit{Capital Market Line}, which we obtain by connecting risk free asset to the tengency portfolio.
+  \item[$\cdot$] The big grey dot represents the tengency portfolio. We calculated it by maximizing sharpe ratio. Denote it as $m$, the expected return, standard deviation, sharpe ratio and weights are
+  \begin{equation}
+    \begin{split}
+      &\mathbb{E}\left[r_m\right] = 0.09653\\
+      &\sigma_m = 0.1673\\
+      &Sharpe_m = 0.5770 \\
+      &\bm{w}^{\top} = \begin{pmatrix}
+        0.7904 & 0.2096
+      \end{pmatrix}
+    \end{split}
+  \end{equation}
+  Where $\bm{w}^{\top} = (w_{beer}~~w_{fin})$.
+\end{itemize}
+
+
+\subsection*{2.f/2.g Efficient Frontier and Tangency Portfolio: Three Assets}
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{\label{fig:meanvar2}Mean-Variance Optimization of Three-Assets Portfolio}
+  \vspace{-10pt}
+  \includegraphics[scale=0.5]{figures/fig5.png}
+\end{figure}
+\textit{Notes: }
+\begin{itemize}
+  \item[$\cdot$] The black-dotted curve is the efficient frontier, we calculate $(\mathbb{E}\left[r_p\right], \sigma_p)$ pairs for each of the dot, and connect them together.
+  \item[$\cdot$] The blue solid line is the \textit{Capital Market Line}, which we obtain by connecting risk free asset to the tengency portfolio.
+  \item[$\cdot$] The grey dashed curve and red dashed line are our previous results for 2 assets.
+  \item[$\cdot$] The big green dot represents the tengency portfolio. We calculated it by maximizing sharpe ratio. Denote it as $m$, the expected return, standard deviation, sharpe ratio and weights are
+  \begin{equation}
+    \begin{split}
+      &\mathbb{E}\left[r_m\right] = 0.1351\\
+      &\sigma_m = 0.2016\\
+      &Sharpe_m = 0.6701 \\
+      &\bm{w}^{\top} = \begin{pmatrix}
+        0.8304 & 0.7184 & -0.5488
+      \end{pmatrix}
+    \end{split}
+  \end{equation}
+  Where $\bm{w}^{\top} = (w_{beer}~~w_{fin}~~w_{steel})$.
+\end{itemize}
+
+\subsection*{2.h Explaination}
+This is a general result. After we add \texttt{Steel}, we have wider choice. In the three asset case, if we set the proportion of \texttt{Steel} to 0 and it turns into the two asset case. Thus the optimum solution in the two asset case is a feasible solution in the three asset case. Thus the optimum solution in the three asset case must be no worse than the two asset case. If you add a new asset which is not perfectly correlated with any other chosen asset, you can always keep the expected return unchanged and reduce the risk by incorporating the new asset into portfolio.
+
+\section{Many Assets Portfolio Choice}
+\subsection*{3.a Efficient Frontier and Tangency Portfolio: Many Assets}
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{\label{fig:exretcorr}Heatmap of Correlation Matrix}
+  \vspace{-10pt}
+  \includegraphics[scale=0.5]{figures/fig6.png}
+\end{figure}
+
+\begin{itemize}
+  \item[$\cdot$] The black-dotted curve is the efficient frontier, we calculate $(\mathbb{E}\left[r_p\right], \sigma_p)$ pairs for each of the dot, and connect them together.
+  \item[$\cdot$] The red solid line is the \textit{Capital Market Line}, which we obtain by connecting risk free asset to the tengency portfolio.
+  \item[$\cdot$] The big blue dot represents the tengency portfolio. We calculated it by maximizing sharpe ratio. Denote it as $m$, the expected return, standard deviation, sharpe ratio and weights are
+  \begin{equation}
+    \begin{split}
+      &\mathbb{E}\left[r_m\right] = 0.1572\\
+      &\sigma_m = 0.1948\\
+      &Sharpe_m = 0.8070 \\
+      &\bm{w} = \begin{pmatrix}
+        w_{\mathtt{Aero}}\\
+        w_{\mathtt{Guns}}\\
+        w_{\mathtt{Steel}}\\
+        w_{\mathtt{Ships}}\\
+        w_{\mathtt{Beer}}\\
+        w_{\mathtt{Toys}}\\
+        w_{\mathtt{Fin}}\\
+        w_{\mathtt{Rtail}}
+      \end{pmatrix}=
+      \begin{pmatrix}
+        0.3293\\
+        0.4579\\
+        -0.4880\\
+        -0.1732\\
+        0.5232\\
+        -0.3780\\
+        0.5034\\
+        0.2254
+      \end{pmatrix}
+    \end{split}
+  \end{equation}
+\end{itemize}
+\begin{itemize}
+  \item[$\circ$] The tangency portfolio is feasible since we allow short selling. And it's also \textit{sensible}, since there are no extreme weights that are put on some assets. This sensibility follows the fact that the covariance matrix is far from singular. In other cases, however, when the covariance matrix is nearly singular, the weights can be very abnormal (extreme).
+  \item[$\circ$] Similar to 2.h, adding asset increases the Sharpe ratio since it provides you a wider choice. The optimum solution in the old asset case is a feasible solution in the larger asset case.
+\end{itemize}
+
+\subsection*{3.b Efficient Frontier and Tangency Portfolio: Different Time Window}
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{\label{fig:exretcorr}Heatmap of Correlation Matrix}
+  \vspace{-10pt}
+  \includegraphics[scale=0.5]{figures/fig7.png}
+\end{figure}
+In this question we drop the data after December 2007 and use the remaining data to estimate expected return and covariance matrix. Since the 2008 crisis are dropped, we are likely to overestimate expected return and underestimate variance, hence result in a higher sharpe ratio of tangency portfolio.
+\begin{itemize}
+  \item[$\cdot$] The black-dotted curve is the efficient frontier, we calculate $(\mathbb{E}\left[r_p\right], \sigma_p)$ pairs for each of the dot, and connect them together.
+  \item[$\cdot$] The red solid line is the \textit{Capital Market Line}, which we obtain by connecting risk free asset to the tengency portfolio.
+  \item[$\cdot$] The big blue dot represents the tengency portfolio. We calculated it by maximizing sharpe ratio. Denote it as $m$, the expected return, standard deviation, sharpe ratio and weights are
+  \begin{equation}
+    \begin{split}
+      &\mathbb{E}\left[r_m\right] = 0.1875\\
+      &\sigma_m = 0.2263\\
+      &Sharpe_m = 0.8286 \\
+      &\bm{w} = \begin{pmatrix}
+        w_{\mathtt{Aero}}\\
+        w_{\mathtt{Guns}}\\
+        w_{\mathtt{Steel}}\\
+        w_{\mathtt{Ships}}\\
+        w_{\mathtt{Beer}}\\
+        w_{\mathtt{Toys}}\\
+        w_{\mathtt{Fin}}\\
+        w_{\mathtt{Rtail}}
+      \end{pmatrix}=
+      \begin{pmatrix}
+        0.4155\\
+        0.6043\\
+        -0.3904\\
+        -0.4843\\
+        0.4940\\
+        -0.5664\\
+        0.8651\\
+        0.0623
+      \end{pmatrix}
+    \end{split}
+  \end{equation}
+\end{itemize}
+\begin{itemize}
+  \item[$\circ$] The Sharpe ratio is very sensitive to the recent stock price change.
+  \begin{itemize}
+    \item[1.] The mean-variance optimization is sensitive to its input: the expected return and covariance matrix.
+    \item[2.] The sample mean and sample covariance are very crude estimates of population mean and covariance matrix. The estimation changes drastically with data.
+  \end{itemize}
+  Therefore, the sharpe ratio will sensitive to the change of data. In fact, we can perceive that the weights of optimal portfolio calculated in 3.a and 3.b are very different. 
+\end{itemize}
+
+
+
+\appendix
+\section{The Code}
+\subsection{Manipulate Data}
+\lstinputlisting[language=Python]{code/data.py}
+\newpage
+\subsection{Implementing Mean Variance Portfolio Class}
+\lstinputlisting[language=Python]{code/class.py}
+\newpage
+\subsection{Generate Plots}
+\lstinputlisting[language=Python]{code/plot.py}
+
+
+\begin{thebibliography}{}
+\bibitem{crash} 
+Bernhardt, D. and M. Eckblad,
+\textit{Stock Market Crash of 1987}. Working Paper, Federal Reserve Bank of Chicago, 2013.
+\bibitem{techbubble}
+James K,
+\textit{Three Lessons for Investors From the Tech Bubble}. Kiplinger's Personal Finance, 2015.
+\bibitem{risk}
+Mark, W.
+\textit{Uncontrolled Risk}. McGraw-Hill Education, 2010.
+\end{thebibliography}
+
+\end{document}

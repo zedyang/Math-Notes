@@ -1,0 +1,619 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{color}
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz, array}
+% Small bullet
+\usepackage{lscape}
+\usepackage{graphicx}
+\usepackage{rotating}
+
+\usepackage{float}
+\usepackage{caption} 
+\renewcommand{\arraystretch}{1.4}
+\newcolumntype{L}{>{\arraybackslash}m{12cm}}
+
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+
+\title{\textbf{Fixed Income Assignment V}}
+\author{Ze Yang~~~~(zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+
+\begin{table}[h]
+\vspace{-10pt}
+\caption{\textit{Nomenclatures}}
+\vspace{3pt}
+\centering
+\def\arraystretch{1.15}
+\begin{tabular}{lL}
+\hline
+Notation & \hspace{4.6cm} Description \\ 
+\hline
+$\bm{w}$ & The $N$-periods coin toss path, $\bm{w} = (w_1~~w_2~~...~~w_N)^{\top}$, where $w_n$ is the outcome for single period $n$.\\
+$\psi_n$ & The partial path till $i$-th period. I.e. the event of all $\bm{w}$ that has same trajectory until $i$: $\psi_n=\{\bm{w}: w_k=\hat{w}_k, k =1,2,...,n\}$\\
+$R_n$ & The short rate process, $R_n = R_n(\psi_n)$. \\
+$P(B)$ & The price of bond $B$, $P(B)=\sum_{(t,C_t) \in B}C_td(t)=\langle d(\bm{t_B}), \bm{C}_B \rangle = \bm{C}_B^{\top}\bm{d}(\bm{t}_B)$.  \\
+$\tilde{p}(w), \tilde{\mathbb{P}}\left(w\right)$ & Risk neutral probabilities. In the coin toss space, we refer to $\tilde{p}(H)$ as $\tilde{p}$, $\tilde{p}(T)$ as $\tilde{q}$.\\
+$\#H(\psi_n)$, $\#T(\psi_n)$ & The number of heads (tails) in partial path $\psi_n$. \\
+$d(i, j)$ & The discount factor from period $i$ to $j$. \\
+$V_n, C_n$ & Price of security at $n$ after cash payment; the cash payment at time $n$.\\
+$\tilde{\mathbb{E}}_i\left[V_{j}\right](\psi_i)$ & The expectation of security payoff of period $j$ conditional on period $i<j$; it's a random variable with respect to partial path $\psi_i$. Tilde means the risk neutral probability measure.\\
+\hline 
+\end{tabular}
+\label{tab:Nomen}
+\end{table}
+
+
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} 
+\end{problem}
+\begin{solution} The floorlet only pays one signle payment at $n=3$. The backward induction equation is given by:
+\begin{equation}
+  V_n = \begin{cases}
+  1000(0.12 - R_{N-1})^+ & n=N\\
+  \frac{1}{1+R_{N-1}}V_N & n=N-1\\
+  \frac{1}{1+R_n}(\tilde{p}V_{n+1}(\psi_n, H)+\tilde{q}V_{n+1}(\psi_n, T)) & 0\leq n<N-1
+  \end{cases}
+\end{equation}
+The calculation is presented in the table below. It follows that the arbitrage free price is $V_0=19.4272$.
+\begin{table}[h]
+\vspace{-1pt}
+\caption{\textit{Floorlet}}
+\vspace{-7pt}
+\centering
+\def\arraystretch{1.15}
+\begin{tabular}{|r|ccc|}
+\hline
+$n$ & $R_n$ & $C_n$ & $V_n$\\ 
+\hline
+3 &  & 0 & 0\\
+3 &  & 20 & 20\\
+3 &  & 60 & 60 \\
+\hline
+2 & 0.14 &  & 0\\
+2 & 0.10 &  & 18.181818\\
+2 & 0.06 &  & 56.603774\\
+\hline
+1 & 0.12 &  & $8.116883$\\
+1 & 0.08 & & $34.622959$\\
+\hline
+0 & 0.10 &  & 19.427201\\
+\hline
+\end{tabular}
+\label{tab:put}
+\end{table}
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{solution} \textbf{(1)} The Ho-Lee short rate process is given by
+\begin{equation}
+  R_n(\psi_n) = a_n + b_n\#H(\psi_n)
+\end{equation}
+Define $V_n$ the price of coupon bond at time $n$ after the coupon payment, $C_n$, we have
+\begin{equation}
+  \begin{split}
+  V_n &= \begin{cases}
+  0 & n=N\\
+  \frac{1}{1+R_{n}}\tilde{\mathbb{E}}_n\left[V_{n+1} + C_{n+1}\right] & 0\leq n < N
+  \end{cases} \\
+  &=\begin{cases}
+  0 & n=N\\
+  \frac{1}{1+R_{n}}\left(C_{n+1} + \tilde{p}V_{n+1}(\psi_n, H) + \tilde{q}V_{n+1}(\psi_n, T)\right) & 0\leq n < N
+  \end{cases}
+  \end{split}
+\end{equation}
+
+\begin{table}[h]
+\vspace{-1pt}
+\caption{\textit{Coupon Bond 1}}
+\vspace{-7pt}
+\centering
+\def\arraystretch{1.15}
+\begin{tabular}{|r|cccc|}
+\hline
+$n$ & $R_n$ & $C_n$ & $V_n$ & $C_n+V_n$\\ 
+\hline
+3 &  & 1060 & 0& 1060\\
+3 &  & 1060 & 0& 1060\\
+3 &  & 1060 & 0& 1060\\
+\hline
+2 & 0.07 & 60 & 990.954206 & 1050.954206\\
+2 & 0.06 & 60 & 1000 & 1060\\
+2 & 0.05 & 60 & 1009.52381 & 1069.52381 \\
+\hline
+1 & 0.065 & 60 & 990.917467 & 1050.917467\\
+1 & 0.055 & 60 & 1009.25299 & 1069.25299\\
+\hline
+0 & 0.06 & 0 & 1000.080405 & 1000.080405\\
+\hline
+\end{tabular}
+\label{tab:bc1}
+\end{table}
+~\\
+So the time-0 price is $P(B_1) = 1000.080405$. The yield is obtained by solving equation
+$$
+P(B_1) = \langle d(\bm{t}, y), \bm{C}_{B_1} \rangle
+$$
+where $d(n, y)=\frac{1}{(1+y)^n}$. We obtain $y_{B_1}=0.05996992$.\\
+~\\
+\textbf{(2)} Suppose the (single) callable time is $\tau$. At $n=\tau$, the seller should recall the bond if the post-coupon price of the bond is larger than par. We have
+\begin{equation}
+  \begin{split}
+  V_n 
+  &=\begin{cases}
+  0 & n=N\\
+  \frac{1}{1+R_{n}}\left(C_{n+1} + \tilde{p}V_{n+1}(\psi_n, H) + \tilde{q}V_{n+1}(\psi_n, T)\right) & 0\leq n < N, n\ne \tau \\
+  \min\{F, \frac{1}{1+R_{n}}\left(C_{n+1} + \tilde{p}V_{n+1}(\psi_n, H) + \tilde{q}V_{n+1}(\psi_n, T)\right)\} & n = \tau \\
+  \end{cases}
+  \end{split}
+\end{equation}
+The calculation is presented in the table below, where red entry indicates the node where the bond is called. It follows that $P(B_2) = 995.715786$.
+\begin{table}[H]
+\vspace{-1pt}
+\caption{\textit{Callable Bond 2}}
+\vspace{-7pt}
+\centering
+\def\arraystretch{1.15}
+\begin{tabular}{|r|cccc|}
+\hline
+$n$ & $R_n$ & $C_n$ & $V_n$ & $C_n+V_n$\\ 
+\hline
+3 &  & 1060 & 0& 1060\\
+3 &  & 1060 & 0& 1060\\
+3 &  & 1060 & 0& 1060\\
+\hline
+2 & 0.07 & 60 & 990.954206 & 1050.954206\\
+2 & 0.06 & 60 & 1000 & 1060\\
+2 & 0.05 & 60 & 1009.52381 & 1069.52381 \\
+\hline
+1 & 0.065 & 60 & 990.917467 & 1050.917467\\
+1 & 0.055 & 60 & \color{red}{1000} & 1060\\
+\hline
+0 & 0.06 & 0 & 995.715786 & 995.715786\\
+\hline
+\end{tabular}
+\label{tab:cbc2}
+\end{table}
+~\\
+The yield to call is obtained by solving equation
+$$
+P(B_2) = \langle d(\bm{t}^{[c]}, Y_c), \bm{C}_{B_2}^{[c]} \rangle
+$$
+where $\bm{t}^{[c]}, \bm{C}_{B_2}^{[c]}$ are the cashflow profile assuming the bond is called at the earliest call date, i.e. $\bm{t}^{[c]}=(1)$, $\bm{C}_{B_2}^{[c]}=(1060)$. In this case the yield is the yield of a ZCB with maturity 1 and price $P(B_2)$. We solve the equation and obtain:
+$$
+Y_c = 0.064560806
+$$
+Assume the bond is not called, we solve $P(B_2) = \langle d(\bm{t}, Y), \bm{C}_{B_2} \rangle$ $\Rightarrow Y = 0.061607535$. Since there is only one call date and $Y<Y_c$, we conclude that
+$$
+Y_w = Y = 0.061607535
+$$
+~\\
+\textbf{(3)} Same logic as (2), we just omit the intermediate steps and explaination for this one.
+\begin{table}[H]
+\vspace{-1pt}
+\caption{\textit{Callable Bond 3}}
+\vspace{-7pt}
+\centering
+\def\arraystretch{1.15}
+\begin{tabular}{|r|cccc|}
+\hline
+$n$ & $R_n$ & $C_n$ & $V_n$ & $C_n+V_n$\\ 
+\hline
+3 &  & 1060 & 0& 1060\\
+3 &  & 1060 & 0& 1060\\
+3 &  & 1060 & 0& 1060\\
+\hline
+2 & 0.07 & 60 & 990.954206 & 1050.954206\\
+2 & 0.06 & 60 & 1000 & 1060\\
+2 & 0.05 & 60 & \color{red}{1000} & 1060 \\
+\hline
+1 & 0.065 & 60 & 990.917467 & 1050.917467\\
+1 & 0.055 & 60 & 1004.736336 & 1064.736336\\
+\hline
+0 & 0.06 & 0 & 997.951323 & 997.951323\\
+\hline
+\end{tabular}
+\label{tab:cbc3}
+\end{table}
+$\Rightarrow P(B_3) = 997.951323$. Assume the bond is called, $\bm{C}_{B_3}^{[c]}=(60, 1060)$. 
+$$
+P(B_2) = \langle d(\bm{t}^{[c]}, Y_c), \bm{C}_{B_3}^{[c]} \rangle~~\Rightarrow~~Y_c = 0.061119177
+$$
+$$
+P(B_2) = \langle d(\bm{t}, Y), \bm{C}_{B_3} \rangle~~\Rightarrow~~Y = 0.060767519 = Y_w
+$$
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{solution} \textbf{(i)} We have been very familiar with the fact that the floating rate payment can be replicated by repeatedly reinvest 1 dollar in 1-year bond: Suppose we invest 1\$ at $n$, then we will get $1+R_{n}$ at $n+1$, we then reinvest the par. We also bollow $B_{n,m}$ at $n$ and repay 1\$ at maturity $m$. This replicating strategy gives us the floating rate $R_{i}$ at time $i+1$, for $i=n, n+1, ..., m-1$, and the price is $(1-B_{n,m})$. \\
+It is clear that the price of fixed rate payment at time $n$ is $KA_{n,m}$. So the price of swap is longing the fixed rate and shorting the floating rate:
+$$
+\text{Swap}_{n,m}^K = KA_{n,m} - (1-B_{n,m})
+$$
+\textbf{(ii)} By definition
+\begin{equation}
+  0 = \text{SR}_{n,m}A_{n,m} - (1-B_{n,m})~~\Rightarrow~~\text{SR}_{n,m}=\frac{1-B_{n,m}}{A_{n,m}}
+\end{equation}
+\textbf{(iii)} If the option is exercised, we will enter a receiver swap set at time $n$ and terminates at $m$ in which we receive fixed payment $K$. Entering the swap costs nothing, so the value of the option at $n$ is $\text{Swap}_{n,m}^K$. We will not exercise the option if this swap has negative value. Hence
+$$
+V_{n,m}^{rec}(n) = (\text{Swap}_{n,m}^K - 0)^+ = (KA_{n,m} - (1-B_{n,m}))^+
+$$
+From \textbf{(ii)} we know: $\text{SR}_{n,m}A_{n,m}=(1-B_{n,m})$. So
+$$
+V_{n,m}^{rec}(n) = (KA_{n,m} - \text{SR}_{n,m}A_{n,m})^+ = (K - \text{SR}_{n,m})^+A_{n,m}
+$$
+\textbf{(iv)} Same as (iii), except that this time we enter a payer swap if the option is exercised. By same arguments:
+\begin{equation}
+  \begin{split}
+    V_{n,m}^{pay}(n) &= (-\text{Swap}_{n,m}^K )^+ = ((1-B_{n,m})-KA_{n,m})^+ \\
+    &= (\text{SR}_{n,m}A_{n,m}-KA_{n,m})^+ = (\text{SR}_{n,m}-K)^+A_{n,m}
+  \end{split}
+\end{equation}
+\textbf{(vi)} We have:
+$$
+A_{1,3} = B_{1,3}+B_{1,2}
+$$
+$$
+\text{Swap}_{1,3}^K = KA_{1,3} - (1-B_{1,3})
+$$
+See the table below for numerical values. By definition we have:
+\begin{equation}
+  \begin{split}
+      V_{1,3}^{rec}(0) &= \frac{1}{1+R_0} \tilde{\mathbb{E}}\left[V_{1,3}^{rec}(1)\right] = \frac{1}{1+R_0} \tilde{\mathbb{E}}\left[(\text{Swap}_{1,3}^K)^+\right]\\
+      &=\frac{1}{1.05}\left(0.5\times0 + 0.5\times0.00938535  \right) \\
+      &=0.00446921
+  \end{split}
+\end{equation}
+\begin{table}[H]
+\vspace{-1pt}
+\caption{\textit{Receiver Swaption}}
+\vspace{-7pt}
+\centering
+\def\arraystretch{1.15}
+\begin{tabular}{|r|ccccc|cc|}
+\hline
+$n$ & $R_n$ & $B_{n,2}$& $B_{n,3}$ &$A_{1,3}$ & $\text{Swap}_{1,3}^{K}$ & $\text{SR}_{1,3}$ & $(K-\text{SR}_{1,3})A_{1,3}$\\ 
+\hline
+2 & 0.06 &  & 0.943396 & & &&\\
+2 & 0.05 &  & 0.952381 & & &&\\
+2 & 0.04 &  & 0.961538 & & &&\\
+\hline
+1 & 0.055 & 0.947867 & 0.898473 & 1.846340 & -0.009210 & 0.054988 & -0.009210\\
+1 & 0.045 & 0.956938 & 0.915751 & 1.872689 & 0.009385 & 0.044988 & 0.009385\\
+\hline
+0 & 0.05 & 0.907050 & 0.863916 & & & &\\
+\hline
+\end{tabular}
+\label{tab:swpt3}
+\end{table}
+~\\
+\textbf{(vii)} We calculate another column in the table above:
+$$
+\text{SR}_{1,3} = \frac{1-B_{1,3}}{A_{1,3}}
+$$
+And the cashflow $(K-\text{SR}_{1,3})A_{1,3}$ is exactly the same as $\text{Swap}_{1,3}^{K}$. Hence we should obtain same result by doing so, namely
+\begin{equation}
+  \begin{split}
+    V_{1,3}^{rec}(0) &= \frac{1}{1+R_0} \tilde{\mathbb{E}}\left[V_{1,3}^{rec}(1)\right] = \frac{1}{1+R_0} \tilde{\mathbb{E}}\left[(K-\text{SR}_{1,3})^+A_{1,3}\right]\\
+      &=\frac{1}{1.05}\left(0.5\times0 + 0.5\times0.00938535  \right) \\
+      &=0.00446921
+  \end{split}
+\end{equation}
+
+
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{solution} The Ho-Lee short rate process is given by
+\begin{equation}
+  R_n(\psi_n) = a_n + b_n\#H(\psi_n)
+\end{equation}
+Define $V_n$ the price of coupon bond at time $n$ after the coupon payment, $C_n$, we have
+\begin{equation}
+  \begin{split}
+  V_n 
+  &=\begin{cases}
+  0 & n=N\\
+  \frac{1}{1+R_{n}}\left(C_{n+1} + \tilde{p}V_{n+1}(\psi_n, H) + \tilde{q}V_{n+1}(\psi_n, T)\right) & 0\leq n < N
+  \end{cases}
+  \end{split}
+\end{equation}
+where we have $\tilde{p}=\tilde{q}=0.5$, $a_n=0.06-0.005n$, $b_n=0.01$, $C_{n}=5$ for $n=1,2,...,9$, and $C_{10}=105$. The calculation is presented in the tables below. It follows that $P(B)=V_0=92.87939807$.
+
+\begin{landscape}
+
+% Table generated by Excel2LaTeX from sheet 'coupon'
+\begin{table}[htbp]
+  \small
+  \centering
+  \caption{Short Rate Tree: Ho-Lee Model \\ $a_n=0.06-0.005n$, $b_n=0.01$}
+    \begin{tabular}{|r|rrrrrrrrrr|}
+    \hline
+    $\#H$& $n=0$     & $n=1$     & $n=2$     & $n=3$     & $n=4$     & $n=5$     & $n=6$     & $n=7$     & $n=8$     & $n=9$     \\
+    \hline
+    9     &       &       &       &       &       &       &       &       &       & 0.105 \\
+    8     &       &       &       &       &       &       &       &       & 0.1   & 0.095 \\
+    7     &       &       &       &       &       &       &       & 0.095 & 0.09  & 0.085 \\
+    6     &       &       &       &       &       &       & 0.09  & 0.085 & 0.08  & 0.075 \\
+    5     &       &       &       &       &       & 0.085 & 0.08  & 0.075 & 0.07  & 0.065 \\
+    4     &       &       &       &       & 0.08  & 0.075 & 0.07  & 0.065 & 0.06  & 0.055 \\
+    3     &       &       &       & 0.075 & 0.07  & 0.065 & 0.06  & 0.055 & 0.05  & 0.045 \\
+    2     &       &       & 0.07  & 0.065 & 0.06  & 0.055 & 0.05  & 0.045 & 0.04  & 0.035 \\
+    1     &       & 0.065 & 0.06  & 0.055 & 0.05  & 0.045 & 0.04  & 0.035 & 0.03  & 0.025 \\
+    0     & 0.06  & 0.055 & 0.05  & 0.045 & 0.04  & 0.035 & 0.03  & 0.025 & 0.02  & 0.015 \\
+    \hline
+    \end{tabular}%
+  \label{tab:hltree}%
+\end{table}%
+
+
+% Table generated by Excel2LaTeX from sheet 'coupon'
+\begin{table}[H]
+  \centering
+  \small
+  \caption{Coupon Bond Tree}
+    \begin{tabular}{|r|rrrrrrrrrrr|}
+    \hline
+    $\#H$& $n=0$     & $n=1$     & $n=2$     & $n=3$     & $n=4$     & $n=5$     & $n=6$     & $n=7$     & $n=8$     & $n=9$     & $n=10$\\
+    \hline
+    9     &       &       &       &       &       &       &       &       &       & 95.022624 & 105.000000 \\
+    8     &       &       &       &       &       &       &       &       & 91.324107 & 95.890411 & 105.000000 \\
+    7     &       &       &       &       &       &       &       & 88.716677 & 92.965415 & 96.774194 & 105.000000 \\
+    6     &       &       &       &       &       &       & 87.057189 & 91.067995 & 94.652135 & 97.674419 & 105.000000 \\
+    5     &       &       &       &       &       & 86.238611 & 90.080597 & 93.506094 & 96.385966 & 98.591549 & 105.000000 \\
+    4     &       &       &       &       & 86.183707 & 89.918196 & 93.243524 & 96.035048 & 98.168687 & 99.526066 & 105.000000 \\
+    3     &       &       &       & 86.840453 & 90.523267 & 93.801596 & 96.553876 & 98.659169 & 100.002160 & 100.478469 & 105.000000 \\
+    2     &       &       & 88.178844 & 91.862272 & 95.143372 & 97.902352 & 100.020087 & 101.383014 & 101.888339 & 101.449275 & 105.000000 \\
+    1     &       & 90.188851 & 93.923409 & 97.255356 & 100.065429 & 102.235048 & 103.651163 & 104.211406 & 103.829272 & 102.439024 & 105.000000 \\
+    0     & 92.879398 & 96.715473 & 100.146238 & 103.051745 & 105.312718 & 106.815406 & 107.456728 & 107.149454 & 105.827108 & 103.448276 & 105.000000 \\
+    \hline
+    \end{tabular}%
+  \label{tab:cptree}%
+\end{table}%
+\end{landscape}
+
+
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{solution} The Ho-Lee short rate process is given by
+\begin{equation}
+  R_n(\psi_n) = a_n + b_n\#H(\psi_n)
+\end{equation}
+Define $V_n$ the price of coupon bond at time $n$ after the coupon payment, $C_n$, we have
+\begin{equation}
+  \begin{split}
+  V_n 
+  &=\begin{cases}
+  0 & n=N\\
+  \frac{1}{1+R_{n}}\left(C_{n+1}(\psi_n) + \tilde{p}V_{n+1}(\psi_n, H) + \tilde{q}V_{n+1}(\psi_n, T)\right) & 0\leq n < N
+  \end{cases}
+  \end{split}
+\end{equation}
+where $C_n(\psi_{n-1})$ is the coupon payment at period $n$, which satisfies
+\begin{equation}
+  C_n = 1000Q_n = \begin{cases}
+  35 & R_{n-1}>0.085 \\
+  120 - 1000R_{n-1} & 0.035\leq R_{n-1} \leq 0.085\\
+  85 & R_{n-1}<0.035
+  \end{cases}
+\end{equation}
+By its definition $C_n$ is an adapted process to $\mathcal{F}_{n-1}$, i.e. $C_{n}(\psi_{n-1})$ is a deterministic value. Moreover we have $\tilde{p}=\tilde{q}=0.5$, $a_n=0.06-0.005n$, $b_n=0.01$, $C_{n}=5$ for $n=1,2,...,9$. The calculation is presented in the tables below. It follows that $P(B)=V_0=1004.82473686$.
+
+\begin{landscape}
+
+\begin{table}[htbp]
+  \centering
+  \small
+  \caption{Floating Coupon Rate Tree}
+    \begin{tabular}{|r|rrrrrrrrrr|}
+    \hline
+    $\#H$    & $n=1$     & $n=2$     & $n=3$     & $n=4$     & $n=5$     & $n=6$     & $n=7$     & $n=8$     & $n=9$ & $n=10$     \\
+    \hline
+    9     &       &       &       &       &       &       &       &       &       & 0.035 \\
+    8     &       &       &       &       &       &       &       &       & 0.035 & 0.035 \\
+    7     &       &       &       &       &       &       &       & 0.035 & 0.035 & 0.035 \\
+    6     &       &       &       &       &       &       & 0.035 & 0.035 & 0.04  & 0.045 \\
+    5     &       &       &       &       &       & 0.035 & 0.04  & 0.045 & 0.05  & 0.055 \\
+    4     &       &       &       &       & 0.04  & 0.045 & 0.05  & 0.055 & 0.06  & 0.065 \\
+    3     &       &       &       & 0.045 & 0.05  & 0.055 & 0.06  & 0.065 & 0.07  & 0.075 \\
+    2     &       &       & 0.05  & 0.055 & 0.06  & 0.065 & 0.07  & 0.075 & 0.08  & 0.085 \\
+    1     &       & 0.055 & 0.06  & 0.065 & 0.07  & 0.075 & 0.08  & 0.085 & 0.085 & 0.085 \\
+    0     & 0.06  & 0.065 & 0.07  & 0.075 & 0.08  & 0.085 & 0.085 & 0.085 & 0.085 & 0.085 \\
+    \hline
+    \end{tabular}%
+  \label{tab:addlabel}%
+\end{table}%
+
+
+\begin{table}[H]
+  \centering
+  \small
+  \caption{Inverse Floater Tree}
+    \begin{tabular}{|r|rrrrrrrrrrr|}
+    \hline
+    $\#H$& $n=0$     & $n=1$     & $n=2$     & $n=3$     & $n=4$     & $n=5$     & $n=6$     & $n=7$     & $n=8$     & $n=9$     & $n=10$\\
+    \hline
+    9     &       &       &       &       &       &       &       &       &       & 936.651584 & 1035.000000 \\
+    8     &       &       &       &       &       &       &       &       & 887.207756 & 945.205479 & 1035.000000 \\
+    7     &       &       &       &       &       &       &       & 849.531951 & 903.267216 & 953.917051 & 1035.000000 \\
+    6     &       &       &       &       &       &       & 823.861649 & 876.486444 & 928.708368 & 972.093023 & 1045.000000 \\
+    5     &       &       &       &       &       & 812.715857 & 869.731760 & 922.134157 & 963.880071 & 990.610329 & 1055.000000 \\
+    4     &       &       &       &       & 820.777499 & 880.163540 & 932.619852 & 973.672325 & 1000.041982 & 1009.478673 & 1065.000000 \\
+    3     &       &       &       & 845.117283 & 906.224659 & 959.157230 & 1000.385049 & 1027.143979 & 1037.231813 & 1028.708134 & 1075.000000 \\
+    2     &       &       & 884.244099 & 947.165089 & 1001.236981 & 1043.465169 & 1071.326457 & 1082.641582 & 1075.489093 & 1048.309179 & 1085.000000 \\
+    1     &       & 937.534253 & 1002.703860 & 1058.567093 & 1102.339586 & 1131.447961 & 1143.399782 & 1135.629965 & 1105.264934 & 1058.536585 & 1085.000000 \\
+    0     & 1004.824737 & 1072.694189 & 1130.680880 & 1175.862755 & 1205.213571 & 1215.396267 & 1202.470491 & 1171.459246 & 1126.226521 & 1068.965517 & 1085.000000 \\
+    \hline
+    \end{tabular}%
+  \label{tab:addlabel}%
+\end{table}%
+
+
+
+\end{landscape}
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{solution} At time 0, suppose we hold the portfolio that consists of
+\begin{itemize}
+  \item[$\cdot$] Long 1 share of European Call $V_0$
+  \item[$\cdot$] Long ZCB $KB_{0, m}$ that pays face $K$ at time $m$.
+  \item[$\cdot$] Short ZCB $B_{0, N}$ with face $1$ and maturity $N$.
+\end{itemize}
+At time $m$, the option has value $V_m=(B_{m,N}-K)^+$, hence the portfolio has value
+$$
+V_m + K - B_{m,N} = (B_{m,N}-K)^+ - (B_{m, N}-K) \geq 0
+$$
+So the portfolio has to have non-negative value at time 0, otherwise there is arbitrage. $\Rightarrow$
+$$
+V_0 + KB_{0,m} - B_{0,N} \geq 0~~~\Rightarrow~~~V_0 \geq B_{0,N}-KB_{0,m}
+$$
+Because the interest rates are non-negative $\Rightarrow$ $0\leq B_{0,m}\leq 1$, i.e. the discount factor is less than 1. Therefore we have:
+$$
+V_0 \geq B_{0,N}-KB_{0,m}\geq B_{0,N}-K~~(\dag)
+$$
+Since american option can be used as European option, but not vice versa, it must be at least as valuable as European option:
+$$
+W_0 \geq V_0
+$$
+Therefore, combine with $(\dag)$:
+$$
+W_0 \geq V_0  \geq B_{0,N}-KB_{0,m}\geq B_{0,N}-K
+$$
+So, if early exercise at time $0$ has positive payoff $B_{0,N}-K$, it is always that case that the american option is always strictly more valuable than the early exercise payoff. Therefore, it's should not be exercised at any time earlier than $m$, which implies that it's equivalent to European call.
+$$
+W_0 = V_0
+$$ 
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{solution} No, it won't always be the case that $V_0=W_0$. \\
+\textit{Proof of Claim}: The American Caplet has close mathematical expression to American option, except that the random part in the payoff is $R_{n-1}$.\\
+We consider the opposite, if it's always the case that $V_0=W_0$, then we want to construct a similar replicating portfolio as we did in problem (6), and show that the value of Caplet is greater than or equal to the early exercise payoff. At time $1$, the early exercise payoff is
+$$
+(R_0 - K)^+
+$$
+we can replicate the payoff $R_{N-1}$ at time $N$ by:
+\begin{itemize}
+  \item Long $B_{1,N-1}$, then invest the $1$ dollar par to $B_{N-1,N}$ at time $N-1$.
+  \item Short $B_{1,N}$.
+\end{itemize}
+We short the whole thing above, long the European caplet and long ZCB $KB_{1,N}$ that pays $K$ at $N$ to optain replicating portfolio with similar mathematical expression as (6)
+$$
+V_1 + KB_{1,N} - (B_{1,N-1}-B_{1,N}) \geq 0
+$$
+However, this is not going to work, i.e. not going to reduce to an inequality relation between $V_1$ and $(R_0 - K)$. Because the initial capital to replicate $R_{n-1}$, i.e. $(B_{1,N-1}-B_{1,N})$ is not $R_0$. In fact, it does not have anything to do with $R_0$. So we run into trouble following the proof for American stock options.\\
+~\\
+\textit{Counter Example}: Now we construct a counter example to illustrate. Consider the short rate process:
+$$
+R_0 = 0.1,~~~~R_1(H) = 0.09,~~~~R_1(T) = 0.08
+$$
+It's a case in which the short rate goes down in all states at period 1. Consider an American Caplet entered at time $0$, with $K=0.05$, $N=2$. We deduce that
+$$
+(R_0-K)^+ = 0.05
+$$
+$$
+(R_1(T)-K)^+ = 0.04
+$$
+$$
+(R_1(H)-K)^+ = 0.03
+$$
+$$
+V_{n} = 
+\begin{cases}
+G_n & n=N\\
+\max\{G_n, B_{n,n+1}\tilde{\mathbb{E}}_n\left[V_{n+1}\right]\} & 1\leq n<N
+\end{cases}
+$$
+
+\begin{table}[H]
+\vspace{-1pt}
+\caption{\textit{American Caplet}}
+\vspace{-7pt}
+\centering
+\def\arraystretch{1.15}
+\begin{tabular}{|r|cccc|}
+\hline
+$n$ & $R_n$ & $G_n$ & $B_{n,n+1}\tilde{\mathbb{E}}_n\left[V_{n+1}\right]$ & $V_n$\\ 
+\hline
+2 &  & 0.04 & & 0.04\\
+2 &  & 0.03 & & 0.03\\
+\hline
+1 & 0.09 & 0.05 & 0.0367 & $\max\{0.05, 0.0367\}$\\
+1 & 0.08 & 0.05 & 0.0278 & $\max\{0.05, 0.0278\}$\\
+\hline
+0 & 0.10 &  &  & \\
+\hline
+\end{tabular}
+\label{tab:cbc2}
+\end{table}
+In this case, it's optimal to exercise the caplet at time 1, instead of waiting for the expiration.
+~\\
+\end{solution}
+
+
+
+\end{document}

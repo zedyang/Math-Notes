@@ -1,0 +1,354 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz, array, eurosym}
+\usepackage{float}
+\renewcommand{\arraystretch}{1.4}
+\newcolumntype{L}{>{\arraybackslash}m{10cm}}
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+
+\title{\textbf{Asset Pricing Assignment IV}}
+\author{Ze Yang~~~~(zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+\begin{table}[h]
+\vspace{-10pt}
+\caption{\textit{Nomenclatures}}
+\vspace{3pt}
+\centering
+\def\arraystretch{1.15}
+\begin{tabular}{lL}
+\hline
+Notation & \hspace{4.6cm} Description \\ 
+\hline
+$\bm{w}$ & The $N$-periods coin toss path, $\bm{w} = (w_1~~w_2~~...~~w_N)^{\top}$, where $w_n$ is the outcome for single period $n$.\\
+$\psi_n$ & The partial path till $i$-th period. I.e. the event of all $\bm{w}$ that has same trajectory until $i$: $\psi_n=\{\bm{w}: w_k=\hat{w}_k, k =1,2,...,n\}$\\
+$S_n \in m \mathcal{F}_n$ & Adaptive process to filtration $\{\mathcal{F}_n\}$. If $\{\mathcal{F}_n\}$ is coin toss filtration, then $S_n = S_n(\bm{w}^{[n]})$.\\
+$\tilde{p}(w), \tilde{\mathbb{P}}\left(w\right)$ & Risk neutral probabilities. In the coin toss space, we refer to $\tilde{p}(H)$ as $\tilde{p}$, $\tilde{p}(T)$ as $\tilde{q}$.\\
+$\#H(\bm{w})$, $\#T(\bm{w})$ & The number of heads (tails) in path $\bm{w}$. \\
+$d(i, j)$ & The discount factor from period $i$ to $j$. \\
+$\tilde{\mathbb{E}}_j\left[S_{i}\right](\psi_i)$ & The expectation of security payoff at period $i$ conditional on period $i<j$; it's a random variable with respect to partial path $\psi_i$. Tilde means the risk neutral probability measure.\\
+\hline 
+\end{tabular}
+\label{tab:Nomen}
+\end{table}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{solution} \textbf{(1)} For the boundary condition $n=N$ we have:
+\begin{equation}
+  v_N(S_N) = S_N \left(\mathbbm{1}_{\{S_N \leq L\}} + \mathbbm{1}_{\{S_N \geq U\}}\right)
+\end{equation}
+For $0\leq n<N$:
+\begin{equation}
+  \begin{split}
+      v_n(S_n) &= S_n \left(\mathbbm{1}_{\{S_n \leq L\}} + \mathbbm{1}_{\{S_n \geq U\}}\right) +\frac{\mathbbm{1}_{\{L<S_n<U\}}}{1+r} \tilde{\mathbb{E}}_n\left[v_{n+1}\right] \\
+      &= S_n \left(\mathbbm{1}_{\{S_n \leq L\}} + \mathbbm{1}_{\{S_n \geq U\}}\right) +\frac{\mathbbm{1}_{\{L<S_n<U\}}}{1+r} \left(\tilde{p}v_{n+1}(uS_n)+\tilde{q}v_{n+1}(dS_n)\right)
+  \end{split}
+\end{equation}
+So in summary,
+\begin{equation}
+  v_n(s) = \begin{cases}
+    s \left(\mathbbm{1}_{\{s \leq L\}} + \mathbbm{1}_{\{s \geq U\}}\right) & n=N\\
+    s \left(\mathbbm{1}_{\{s \leq L\}} + \mathbbm{1}_{\{s \geq U\}}\right) +\frac{\mathbbm{1}_{\{L<s<U\}}}{1+r} \left(\tilde{p}v_{n+1}(us)+\tilde{q}v_{n+1}(ds)\right) & 0\leq n< N
+  \end{cases}
+\end{equation}
+where $\tilde{p}, \tilde{q}$ are risk neutral probabilities, $\tilde{p}=\frac{1+r-d}{u-d}, \tilde{q}=1- \tilde{p}$. \\
+~\\
+\textbf{(2)} Plug in the numbers we have $\tilde{p}=\frac{1+0.25-0.5}{2-0.5}=0.5$, $\tilde{q}=0.5$.\\
+At $n=2$ we have:
+$$
+  v_2(16) = 16;~~~~v_2(4) = 0;~~~~v_2(1) = 1
+$$
+At $n=1$:
+$$
+v_1(8) = 8\cdot(0) +\frac{1}{1.25} \left(0.5\times16+0.5\times0\right) = 6.4
+$$
+$$
+v_1(2) = 2\cdot(1) +0 = 2
+$$
+At $n=0$:
+$$
+v_0(4) = 4\cdot(0) +\frac{1}{1.25} \left(0.5\times6.4+0.5\times 2\right) = 3.36
+$$
+Hence the arbitrage free price of the option is $V_0 = v_0(4)=3.36$.
+\end{solution}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem}
+\end{problem}
+\begin{solution} \textbf{(1)} Since $f_n$ stands for the price of option at $n$ assuming the stock price was inside the band for all $k=1,2,...,n-1$; for the boundary condition $n=N$, $f_N$ must be at least $F\frac{N-1}{N}$, so we have
+\begin{equation}
+  f_N(S_N) = \frac{F}{N} \mathbbm{1}_{\{L\leq S_N \leq U\}} + F\frac{N-1}{N}
+\end{equation}
+For $0\leq n<N$, since the stock was inside the band before, the option will pay $F\frac{n-1}{N}$ if the stock price break through the band at this period.
+\begin{equation}
+  \begin{split}
+    f_n(S_n) &= F\frac{n-1}{N} \mathbbm{1}_{\{L\leq S_n \leq U\}} + \left(\mathbbm{1}_{\{S_n \leq L\}} + \mathbbm{1}_{\{S_n \geq U\}}\right) \frac{1}{1+r} \tilde{\mathbb{E}}_n\left[f_n(S_{n+1})\right] \\
+    &=F\frac{n-1}{N} \mathbbm{1}_{\{L\leq S_n \leq U\}} + \left(\mathbbm{1}_{\{S_n \leq L\}} + \mathbbm{1}_{\{S_n \geq U\}}\right) \frac{1}{1+r} \left(\tilde{p}f_{n+1}(uS_n)+\tilde{q}f_{n+1}(dS_n)\right)
+  \end{split}
+\end{equation}
+So in summary,
+\begin{equation}
+  f_n(s) = \begin{cases}
+    \frac{F}{N} \mathbbm{1}_{\{L\leq s \leq U\}} + F\frac{N-1}{N} & n=N\\
+    F\frac{n-1}{N} \mathbbm{1}_{\{L\leq s \leq U\}} + \left(\mathbbm{1}_{\{s \leq L\}} + \mathbbm{1}_{\{s \geq U\}}\right) \frac{1}{1+r} \left(\tilde{p}f_{n+1}(us)+\tilde{q}f_{n+1}(ds)\right) & 0\leq n< N
+  \end{cases}
+\end{equation}
+where $\tilde{p}, \tilde{q}$ are risk neutral probabilities, $\tilde{p}=\frac{1+r-d}{u-d}, \tilde{q}=1- \tilde{p}$. \\
+~\\
+\textbf{(2)} Plug in the numbers we have $\tilde{p}=\frac{1+0.25-0.5}{2-0.5}=0.5$, $\tilde{q}=0.5$.\\
+At $n=3$ we have:
+\begin{equation}
+  \begin{split}
+    f_3(32) &= 150\times \frac{2}{3} = 100,~~~~~f_3(8) = 150 \\
+    f_3(2) &= 150\times \frac{2}{3} = 100,~~~~~f_3(0.5) = 150\times \frac{2}{3} = 100 \\
+  \end{split}
+\end{equation}
+At $n=2$:
+$$
+f_2(16) = 150\times \frac{1}{3} = 50,~~~~f_2(1) = 150\times \frac{1}{3} = 50
+$$
+$$
+f_2(4) = \frac{1}{1.25}(0.5\times f_3(8)+0.5\times f_3(2)) = 100
+$$
+At $n=1$:
+$$
+f_1(8) = \frac{1}{1.25}(0.5\times f_2(16)+0.5\times f_2(4)) = 60,~~~~f_1(2)=0
+$$
+At $n=0$:
+$$
+f_0(4) =  \frac{1}{1.25}(0.5\times f_1(8)+0.5\times f_1(2)) = 24
+$$
+$$
+\Delta_0 = \frac{f_1(uS_0)-f_1(dS_0)}{uS_0-dS_0} = \frac{60-0}{8-2} = 10
+$$
+Hence, the arbitrage-free price at time 0 is $V_0=24$, and the number of shares in replicating strategy is $\Delta_0=10$.
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{solution} Denote $G_n=g_n(S_n)$ the payment received at time $n$ if the option is exercised at that period. Denote $f_n$ the price of american option at time $n$, then by the example we've learned in the class:
+\begin{equation}
+  f_N(S_N) = g_N(S_N)
+\end{equation}
+and for $0\leq n<N$:
+\begin{equation}
+  \begin{split}
+    f_n(S_n) &= \max\left\{G_n, \tfrac{1}{1+r}\tilde{\mathbb{E}}_n\left[f_{n+1}(S_{n+1})\right]\right\}\\
+    &= \max\left\{g_n(S_n), \tfrac{1}{1+r}\left(\tilde{p}f_{n+1}(uS_n)+\tilde{q}f_{n+1}(dS_n)\right)\right\}\\
+  \end{split}
+\end{equation}
+where $\tilde{p}, \tilde{q}$ are risk neutral probabilities, $\tilde{p}=\frac{1+r-d}{u-d}, \tilde{q}=1- \tilde{p}$. In this problem we have $\tilde{p}=\tilde{q}=0.5$. \\
+~\\
+\textbf{(1)} For American Put
+$$
+G_n = (K - S_n)^+
+$$
+The backward induction calculation is shown in the table, where $*$ denotes the node where the option should be (early) executed.
+\begin{table}[h]
+\vspace{-10pt}
+\caption{\textit{American Put}}
+\vspace{3pt}
+\centering
+\def\arraystretch{1.15}
+\begin{tabular}{|r|ccc|}
+\hline
+$n$ & $S_n$ & $G_n=(4-S_n)^+$ & $f_n$\\ 
+\hline
+3 & 32 & 0 & 0\\
+3 & 8 & 0& 0\\
+3 & 2 & 2 & $2^*$\\
+3 & 0.5 & 3.5 & $3.5^*$\\
+\hline
+2 & 16 & 0 & 0\\
+2 & 4 & 0& 0.8\\
+2 & 1 & 3 & $3^*$\\
+\hline
+1 & 8 & 0 & 0.32\\
+1 & 2 & 2 & $2^*$\\
+\hline 
+0 & 4 & 0 & 0.928\\
+\hline
+\end{tabular}
+\label{tab:put}
+\end{table}
+It follows that price of American Put is $f_0 = 0.928$. \\
+~\\
+\textbf{(2)} For the American Call
+$$
+G_n = (S_n-K)^+
+$$
+The backward induction calculation is shown in the table, where $*$ denotes the node where the option should be (early) executed.
+\begin{table}[h]
+\vspace{-10pt}
+\caption{\textit{American Call}}
+\vspace{3pt}
+\centering
+\def\arraystretch{1.15}
+\begin{tabular}{|r|ccc|}
+\hline
+$n$ & $S_n$ & $G_n=(S_n-4)^+$ & $f_n$\\ 
+\hline
+3 & 32 & 28 & $28^*$\\
+3 & 8 & 4& $4^*$\\
+3 & 2 & 0 & 0\\
+3 & 0.5 & 0 & 0\\
+\hline
+2 & 16 & 12 & $12.8$\\
+2 & 4 & 0& $1.6$\\
+2 & 1 & 0 & 0\\
+\hline
+1 & 8 & 4 & 5.76\\
+1 & 2 & 0 & 0.64\\
+\hline 
+0 & 4 & 0 & 2.56\\
+\hline
+\end{tabular}
+\label{tab:call}
+\end{table}
+It follows that price of American Call is $f_0 = 2.56$. \\
+~\\
+\textbf{(3)} For the American Straddle
+$$
+G_n = |S_n-K|
+$$
+The backward induction calculation is shown in the table, where $*$ denotes the node where the option should be (early) executed.
+\begin{table}[H]
+\vspace{-10pt}
+\caption{\textit{American Straddle}}
+\vspace{3pt}
+\centering
+\def\arraystretch{1.15}
+\begin{tabular}{|r|ccc|}
+\hline
+$n$ & $S_n$ & $G_n=|S_n-4|$ & $f_n$\\ 
+\hline
+3 & 32 & 28 & $28^*$\\
+3 & 8 & 4& $4^*$\\
+3 & 2 & 2 & $2^*$\\
+3 & 0.5 & 3.5 & $3.5^*$\\
+\hline
+2 & 16 & 12 & $12.8$\\
+2 & 4 & 0& $2.4$\\
+2 & 1 & 3 & $3^*$\\
+\hline
+1 & 8 & 4 & 6.08\\
+1 & 2 & 2 & 2.16\\
+\hline 
+0 & 4 & 0 & 3.296\\
+\hline
+\end{tabular}
+\label{tab:call}
+\end{table}
+\end{solution}
+It follows that price of American Call is $f_0 = 3.296$. \\
+~\\
+\textbf{(4)} We observe that 
+$$
+f_0^{Straddle} = 3.296 < 3.488 = f_0^{Put} + f_0^{Call}
+$$
+Although
+$$
+G_n^{Straddle} = G_n^{Put} + G_n^{Call}
+$$
+for any $n$. This does not implies that their price should be equal, because the price is path-dependent and involves early execution. From the calculation we can see that American Straddle has different optimal execution time from American Put. Namely, the put should be executed at $\psi_1 = T$, whereas the straddle should not. As a result, 
+$$
+f_1^{Straddle}(S_1(T)) = 2.16 < 2 + 0.64 = f_1^{Put}(S_1(T)) + f_1^{Call}(S_1(T))
+$$
+And hence has strictly lower price at $n=0$.
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{solution} By same construction as problem 3, denote $G_n=g_n(S_n)$ the payment received at time $n$ if the option is exercised at that period. Denote $f_n$ the price of american option at time $n$, we have, for boundary condition:
+\begin{equation}
+  f_N(S_N) = g_N(S_N) = \sqrt{S_N}
+\end{equation}
+and for $1\leq n<N$:
+\begin{equation}
+  \begin{split}
+    f_n(S_n) &= \max\left\{G_n, \tfrac{1}{1+r}\tilde{\mathbb{E}}_n\left[f_{n+1}(S_{n+1})\right]\right\}\\
+    &= \max\left\{\sqrt{S_n}, \tfrac{1}{1+r}\left(\tilde{p}f_{n+1}(uS_n)+\tilde{q}f_{n+1}(dS_n)\right)\right\}\\
+  \end{split}
+\end{equation}
+and $n=0$:
+\begin{equation}
+  f_0(S_0) =\tfrac{1}{1+r}\left(\tilde{p}f_{1}(uS_0)+\tilde{q}f_{1}(dS_0)\right)
+\end{equation}
+where $\tilde{p}, \tilde{q}$ are risk neutral probabilities, $\tilde{p}=\frac{1+r-d}{u-d}, \tilde{q}=1- \tilde{p}$. In this setting we have $\tilde{p}=\tilde{q}=0.5$.\\
+~\\
+By Jensen's inequality:
+\begin{equation}
+  \tilde{p}\sqrt{us} + \tilde{q}\sqrt{ds} \leq \sqrt{\tilde{p}us + \tilde{q}ds}~~(\dag)
+\end{equation}
+By the definition of risk neutral probability:
+$\tilde{p}u + \tilde{q}d = 1+r$. So
+\begin{equation}
+  (\dag) = \sqrt{\tilde{p}us + \tilde{q}ds} = \sqrt{(1+r)s} < \sqrt{s}
+\end{equation}
+It follows that 
+\begin{equation}
+  f_{N-1}(S_{N-1}) = \max\left\{\sqrt{S_{N-1}}, \tfrac{1}{1+r}\left(\tilde{p}\sqrt{uS_{N-1}} + \tilde{q}\sqrt{dS_{N-1}}\right)\right\} = \sqrt{S_{N-1}}
+\end{equation}
+Then by induction, we obtain that $f_n(S_n) = \sqrt{S_n}$ for each $n=1,2,...,N-1$, i.e. the optimal exercise time is $\hat{\tau}=1$.
+$$
+f_1(S_1(H)) = \sqrt{4} = 2;~~~~f_1(S_1(T)) = \sqrt{1} = 1
+$$
+So the arbitrage free price is
+$$
+f_0 = \frac{1}{1+0.25}(0.5\times 2 + 0.5\times 1) = 1.2
+$$
+\end{solution}
+
+
+
+\end{document}

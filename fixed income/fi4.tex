@@ -1,0 +1,492 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz, array}
+% Small bullet
+\usepackage{graphicx}
+
+\usepackage{float}
+\usepackage{caption} 
+\renewcommand{\arraystretch}{1.4}
+\newcolumntype{L}{>{\arraybackslash}m{12cm}}
+
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+
+\title{\textbf{Fixed Income Assignment IV}}
+\author{Ze Yang~~~~(zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+
+\begin{table}[h]
+\vspace{-10pt}
+\caption{\textit{Nomenclatures}}
+\vspace{3pt}
+\centering
+\def\arraystretch{1.15}
+\begin{tabular}{lL}
+\hline
+Notation & \hspace{4.6cm} Description \\ 
+\hline
+$\mathcal{R}(\bm{A})$ & The range of $\bm{A}$: $\{\bm{x}: \bm{Ab}=\bm{x}, \forall \bm{b}\in \mathbb{R}^n\}$. \\
+$\langle \bm{x}, \bm{y} \rangle$ & Inner product of vector $\bm{x}$ and $\bm{y}$. \\
+$\bm{x}\succeq \bm{y}$ & Componentwise inequality between vectors.\\
+& Means: $x_i \geq y_i$ for $i=1,2,...,n$, $n$ is number of components of $\bm{x}, \bm{y}$.\\
+$\bm{x}\succ \bm{y}$ & Componentwise strict inequality between vectors.\\
+$\tilde{p}(w), \tilde{\mathbb{P}}\left(w\right)$ & Risk neutral probabilities. We refer to $\tilde{p}(w_j)$ as $\tilde{p}_j$.\\
+$\tilde{\bm{p}}$ & The $n \times 1$ probability vector such that $\tilde{\bm{p}}\succeq \bm{0}$; $\tilde{\bm{p}}^{\top} \bm{1}=1$.\\
+$\bm{A}_i$ & The $n\times m$ payoff matrix at period $i$, where $n=|\Omega|$, $m$ is number of traded securities.\\
+$\bm{\Delta}_i$ & The $m\times 1$ vector of positions holdings at period $i$.\\
+$P(B)$ & The price of bond $B$, $P(B)=\sum_{(t,C_t) \in B}C_td(t)=\langle d(\bm{t_B}), \bm{C}_B \rangle = \bm{C}_B^{\top}\bm{d}(\bm{t}_B)$.  \\
+$\mathbb{E}_{\mathbb{Q}}\left[S_{i+1}\middle|\mathcal{F}_{i}\right](\bm{w})$ & The expectation of security payoff at period $i$ conditional on period $i-1$; it's a random variable with respect to realized path $\bm{w} = (w^{[1]}~~w^{[2]}~~...~~w^{[i]})^{\top}$, where $w^{[i]}$ is the outcome for single period $i$. $\mathbb{Q}$ denotes the probability measure.\\
+\hline 
+\end{tabular}
+\label{tab:Nomen}
+\end{table}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} 
+\end{problem}
+\begin{proof} Following the hint we let the payoff in two scenarios equal:
+\begin{equation}
+  88.6920\Delta_1 +  78.6628\Delta_2 + 58.2748\Delta_3 = 92.3116\Delta_1 + 85.2144\Delta_2 + 69.7676\Delta_3
+\end{equation}
+Combine with the first eqaution on period 0:
+$$
+\begin{cases}
+  -36193 = 6.5516\Delta_2 + 11.4928\Delta_3 \\
+  -860708 = 77.8801\Delta_2 + 60.6531\Delta_3 
+\end{cases}
+$$
+$\Rightarrow~~\Delta_2 = -15465.04022$, $\Delta_3=5666.831191$. Take $\Delta_2 = -15465$, $\Delta_3=5666$, we can verify:
+\begin{equation}
+  \begin{split}
+    &P_0 = 86.0708\Delta_1 + 77.8801\Delta_2 + 60.6531\Delta_3 = -47.2819\\
+    &P_1(T) = 88.6920\Delta_1 + 78.6628\Delta_2 + 58.2748\Delta_3 = 584.8148>0\\
+    &P_1(H) = 92.3116\Delta_1 + 85.2144\Delta_2 + 69.7676\Delta_3 = 578.5256>0\\
+  \end{split}
+\end{equation}
+Hence by definition, we've identified a strong arbitrage, where $\Delta_1 = 10000, \Delta_2 = -15465$, $\Delta_3=5666$.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} 
+\end{problem}
+\begin{solution} \textbf{(i)} By definition we have:
+\begin{equation}
+  \bm{B \Delta} = \bm{\alpha}
+\end{equation}
+If $\bm{B}$ is invertible, then $\mathbb{R}^3 \subseteq \mathcal{R}(\bm{B})$. Let $\bm{\alpha}^*$ be an arbitrage payoff vector, then $\bm{\alpha}^* \in \mathcal{R}(\bm{B})$ with $\bm{\Delta}^* = \bm{B}^{-1}\bm{\alpha}^*$. Contradicts to non-arbitrage assumption. Hence $\bm{B}$ is not invertible $\iff$ columns of $\bm{B}$ are linearly dependent. \\
+~\\
+\textbf{(ii)} Suppose $\bm{B}$ has rank 1, then 
+$$
+\bm{B}^{\top} = \begin{pmatrix}
+  b_1 & b_1^d & b_1^u \\
+  b_2 & b_2^d & b_2^u \\
+  b_3 & b_3^d & b_3^u \\
+\end{pmatrix} = \begin{pmatrix}
+  \bm{r}^{\top} & \bm{r}_d^{\top} & \bm{r}_u^{\top}
+\end{pmatrix}
+$$
+has rank 1. Since all entries of $\bm{B}^{\top}$ are strictly positive, there exists positive scalar pair $c^d, c^u$ such that
+$$
+\bm{r}^{\top} = c^d\bm{r}_d^{\top} = c^u\bm{r}_u^{\top}~~\Rightarrow~~\bm{r}^{\top} = \tfrac{c^d}{2}\bm{r}_d^{\top} + \tfrac{c^u}{2}\bm{r}_u^{\top}
+$$
+i.e. $b_i = q^u b_i^u + q^d b_i^d$ for $i=1,2,3$, where $q^u = c^u/2, q^d = c^d/2$ are also positive.\\
+~\\
+\textbf{(iii)} $\bm{e}_1 = (-1~~0~~0)^{\top}$ is an arbitrage payoff as defined above, in that $\alpha_1=1>0, \alpha_2\geq 0, \alpha_3 \geq 0$. \\
+By non-arbitrage assumption: $\bm{e}_1 \notin \mathcal{R}(\bm{B})$. Since $\bm{n} \perp \mathcal{R}(\bm{B})$, we have
+\begin{equation}
+  \langle \bm{n}, \bm{x} \rangle =  0 \iff \bm{x} \in \mathcal{R}(\bm{B})
+\end{equation}
+Therefore $\langle \bm{n}, \bm{e}_1 \rangle = -n_1 \ne 0$.\\
+~\\
+\textbf{(iv)} First off, $q^u \ne 0$ and $q^d \ne 0$. We can consider arbitrage payoff $\bm{e}_2 = (0~~1~~0)^{\top}$ and $\bm{e}_2 = (0~~0~~1)^{\top}$; then use similar argument as \textbf{(iii)}. \\
+Next, exactly two columns of $\bm{B}$ are linearly independent. WLOG assume they are $\bm{b}_1$ and $\bm{b}_2$. We have:
+$$
+\begin{cases}
+b_1^d q^d + b_1^u q^u = b_1 \\
+b_2^d q^d + b_2^u q^u = b_2 \\
+\end{cases} \Rightarrow~~~q^d = \frac{b_2^u b_1 - b_2 b_1^u}{b_1^d b_2^u - b_2^d b_1^u}
+$$
+If numerator $b_2^u b_1 - b_2 b_1^u>0$, we have
+$$
+\frac{b_1}{b_1^u} > \frac{b_2}{b_2^u}
+$$
+Then we must have
+$$
+\frac{b_1^d}{b_1^u} > \frac{b_2^d}{b_2^u} \iff b_1^d b_2^u - b_2^d b_1^u>0
+$$
+Otherwise we can short $1/b_1^u$ share of bond 1 and long $1/b_2^u$ share of bond 2, which has cost less than zero at period 0 and positive payoff at period 1. Hence $q^d > 0$. Same analysis follows for numerator $<0$ case and $q^u$. Finally we conclude that $q^d >0, q^u>0$.\\
+~\\
+\textbf{(v)} $\bm{B}=(\bm{b}_1~~\bm{b}_2~~\bm{b}_3)$; $\bm{b}_1, \bm{b}_2, \bm{b}_3 \in \mathcal{R}(\bm{B})$. Hence
+$$
+\langle \bm{q}, \bm{b}_1 \rangle = \langle \bm{q}, \bm{b}_2 \rangle = \langle \bm{q}, \bm{b}_3 \rangle =0
+$$
+So $-b_i + q^d b_i^d + q^u b_i^u = 0$ for $i=1,2,3$.\\
+~\\
+\textbf{(vi)} We have
+$$
+\bm{b}_1 = F \begin{pmatrix}
+  e^{-r}\\
+  1\\
+  1
+\end{pmatrix} \in \mathcal{R}(\bm{B})
+$$
+Since $\bm{q} \perp \mathcal{R}(\bm{B})$ $\Rightarrow$ 
+$$
+\langle \bm{q}, \bm{b}_1 \rangle =  F\left( -e^{-r} + q^d + q^u\right) = 0~~\Rightarrow q^d + q^u = e^{-r}
+$$
+~\\
+\textbf{(vii)} (To construct this result we need the existance of the 1 year bond in \textbf{(vi)}, which is ambiguous in the question. We just assume it exists) 
+\begin{equation}
+\begin{split}
+  &q^d + q^u = e^{-r}\\
+  &\langle \bm{q}, \bm{b}_i \rangle = -b_i + q^d b_i^d+ q^u b_i^u = 0
+\end{split}
+\end{equation}
+Let $\bm{p} = e^{r}\bm{q}$. We have $e^{r}q^d + e^{r}q^u = 1 \Rightarrow p^d + p^u = 1$. And
+\begin{equation}
+  \langle \bm{p}, \bm{b}_i \rangle = -e^rb_i + p^d b_i^d+ p^u b_i^u = 0~~\Rightarrow~~ e^{-r}[p^d b_i^d+ p^u b_i^u] = b_i
+\end{equation}
+~\\
+\textbf{(viii)} Since $q^u, q^d$ satisfies
+$$
+b_i = q^d b_i^d + q^u b_i^u\text{~~~for~} i =1,2,3
+$$
+i.e. $\langle \bm{q}, \bm{b}_i \rangle = 0$ for $i=1,2,3$, where $\bm{q}=(-1, q^d, q^u)^{\top}$.\\
+Since $\mathcal{R}(\bm{B}) = \text{span}\{\bm{b}_1, \bm{b}_2, \bm{b}_3\}$, $\Rightarrow$
+$$
+\bm{q} \perp \mathcal{R}(\bm{B})
+$$
+For all payoff $\bm{\alpha}$, if $\bm{\alpha}\in \mathcal{R}(\bm{B})$ $\Rightarrow \langle \bm{q}, \bm{\alpha} \rangle =0$. \\
+Hence if $ \langle \bm{q}, \bm{\alpha} \rangle \ne 0 \Rightarrow \bm{\alpha} \notin \mathcal{R}(\bm{B})$. It suffices to show arbitrage payoff $\langle \bm{q},\bm{\alpha}^* \rangle \ne 0$. We have
+$$
+\langle \bm{q},\bm{\alpha}^* \rangle = \alpha_1 + q^d \alpha_2+ q^u \alpha_3
+$$
+Where $\alpha_i\geq 0$ for $i=1,2,3$. Then if some $\alpha_i>0$ (exists arbitrage opportuniy), we will have
+$\langle \bm{q},\bm{\alpha}^* \rangle > 0$ since all coefficients are positive. Then $\bm{\alpha}^* \notin \mathcal{R}(\bm{B})$, i.e. the aribitrage payoff cannot be replicated by traded securities.
+
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem}
+\end{problem}
+\begin{solution} \textbf{(i)} By the formula we derived in problem 2:
+\begin{equation}
+  \begin{split}
+    &q^d = \frac{b_2^u b_1 - b_2 b_1^u}{b_1^d b_2^u - b_2^d b_1^u} = 0.490085\\
+    &q^u = \frac{b_2^d b_1 - b_2 b_1^d}{b_1^u b_2^d - b_2^u b_1^d} = 0.461526
+  \end{split}
+\end{equation}
+\textbf{(ii)} Let $\bm{b}_0 = (P_0/F, 1, 1)^{\top}$, $\bm{q}=(-1, q^u, q^d)^{\top}$, where $P_0 = Fe^{-r}$. They must admits
+$$
+\langle \bm{q}, \bm{b}_0 \rangle = -\tfrac{P_0}{F} + q^u + q^d = 0~~~\Rightarrow~~~P_0 = F(q^u+q^d) = 95.1611
+$$
+$$
+r = -\log \tfrac{P_0}{F} = 0.0495989
+$$
+\textbf{(iii)} Let $\bm{b}_3 = (b_3, b_3^d, b^u_3)^{\top}$.
+\begin{equation}
+  \langle \bm{q}, \bm{b}_3 \rangle = -b_3 + q^u b_3^u + q^db_3^d = 0~~~\Rightarrow~~~b_3 = b_3^u q^u+b_3^d q^d = 60.7592
+\end{equation}
+\textbf{(iii)} Let $\bm{f}$ be the option payoff in state space.
+$$
+\bm{f} = (f, (b_3^d-K)^+, (b^u_3-K)^+)^{\top} = (f, 0, 4.7676)^{\top}
+$$
+\begin{equation}
+  \langle \bm{q}, \bm{f} \rangle = -f + q^u \times 4.7676  = 0~~~\Rightarrow~~~f = 2.20037
+\end{equation}
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem}
+\end{problem}
+\begin{solution} \textbf{(a)} We have $u=P_1(H)/P_0 = 1.2$, $d=P_1(T)/P_0 =0.9$. By the formula of pricing probability in binomial tree framework:
+\begin{equation}
+  \begin{split}
+    \tilde{p} = \frac{1+R_0-d}{u-d}= \frac{2}{3};~~ \tilde{q} = 1- \tilde{p} = \frac{1}{3} 
+  \end{split}
+\end{equation}
+\textbf{(b)} Let $\bm{c} = (C_0, (P_1^u-K)^+, (P_1^d-K)^+)^{\top} = (C_0, 5, 0)$; $\tilde{\bm{p}} = (-(1+R_0), \tilde{p}, \tilde{q})$. We have
+\begin{equation}
+  \langle \bm{c}, \tilde{\bm{p}} \rangle = -(1+R_0)C_0 + 5 \tilde{p} = 0~~\Rightarrow~~C_0 = 5 \tilde{p} / (1+R_0) = \frac{100}{33} \approx 3.0303
+\end{equation}
+$\Delta_0$ solves the system
+\begin{equation}
+  \begin{cases}
+  (1+r)(C_0 - \Delta_0P_0) + \Delta_0P_1(H) = C_1(H)\\
+  (1+r)(C_0 - \Delta_0P_0) + \Delta_0P_1(T) = C_1(T)\\
+  \end{cases}
+\end{equation}
+\begin{equation}
+  \Rightarrow~~\Delta_0 = \frac{C_1(H) - C_1(T)}{P_1(H) - P_1(T)} = \frac{5}{uP_0 - dP_0} = \frac{1}{3}
+\end{equation}
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem}
+\end{problem}
+\begin{solution}
+\begin{itemize}
+  \item[(1).] If the spot rate curve is unchanged, then this is true. Because
+  $$
+  P = \sum_{i=1}^{2T} \frac{qF/2}{(1+\frac{\hat{r}(i/2)}{2})^i} + \frac{F}{(1+\frac{\hat{r}(T)}{2})^{2T}} 
+  $$
+  increases with $q$.
+  \item[(2).] False. Bonds with higher price may have same yield as bond with lower price, if it has higher coupon rate. Consider
+  $$
+  P_1 = \sum_{i=1}^{2T} \frac{2qF/2}{(1+\frac{y}{2})^i} + \frac{F}{(1+\frac{y}{2})^{2T}} > \sum_{i=1}^{2T} \frac{qF/2}{(1+\frac{y}{2})^i} + \frac{F}{(1+\frac{y}{2})^{2T}} = P_2
+  $$
+  Two bonds have same yield, the first bond pays twice coupon, hence higher price.
+  \item[(3).] False. (2) is not True itself. See the counterexample in (2).
+\end{itemize}
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem}
+\end{problem}
+\begin{solution} Let $\bm{\Delta}=(\Delta_1, \Delta_2, \Delta_3)^{\top}$ be the number of share purchased for each ZCB. Since spot curve is flat, each ZCB is discounted by same single rate $y$. The price:
+\begin{equation}
+  \frac{\Delta_1 F}{(1+\tfrac{y}{2})^{2T_1}} + \frac{\Delta_2 F}{(1+\tfrac{y}{2})^{2T_2}} + \frac{\Delta_3 F}{(1+\tfrac{y}{2})^{2T_3}} = P
+\end{equation}
+The Macaulay duration:
+\begin{equation}
+  \frac{1}{P}\left(\frac{\Delta_1 FT_1}{(1+\tfrac{y}{2})^{2T_1}} + \frac{\Delta_2 FT_2}{(1+\tfrac{y}{2})^{2T_2}} + \frac{\Delta_3 FT_3}{(1+\tfrac{y}{2})^{2T_3}}\right) = \delta
+\end{equation}  
+The convexity:
+\begin{equation}
+  \frac{1}{P}\left(\frac{\Delta_1 FT_1(T_1+\frac{1}{2})}{(1+\tfrac{y}{2})^{2T_1+2}} + \frac{\Delta_2 FT_2(T_2+\frac{1}{2})}{(1+\tfrac{y}{2})^{2T_2+2}} + \frac{\Delta_3 FT_3(T_3+\frac{1}{2})}{(1+\tfrac{y}{2})^{2T_3+2}}\right) = \gamma
+\end{equation}
+Let $\bm{w}= (w_1, w_2, w_3)^{\top} = (\frac{\Delta_1 F}{(1+\tfrac{y}{2})^{2T_1}}, \frac{\Delta_2 F}{(1+\tfrac{y}{2})^{2T_2}}, \frac{\Delta_3 F}{(1+\tfrac{y}{2})^{2T_3}})^{\top}$. The equations become:
+\begin{equation}
+  \begin{split}
+    &w_1 + w_2 + w_3 = P\\
+    &w_1T_1 + w_2T_2 + w_3T_3 = P\delta\\
+    &(w_1T_1^2 + w_2T_2^2 + w_3T_3^2)+\frac{1}{2}(w_1T_1 + w_2T_2 + w_3T_3) = P\gamma(1+\tfrac{y}{2})^{2}\\
+    \Rightarrow~~&w_1T_1^2 + w_2T_2^2 + w_3T_3^2 = P\gamma(1+\tfrac{y}{2})^{2} - \tfrac{1}{2}P\delta
+  \end{split}
+\end{equation}
+So it suffices to solve
+\begin{equation}
+  \begin{pmatrix}
+    1 & 1 & 1\\
+    T_1 & T_2 & T_3\\
+    T_1^2 & T_2^2 & T_3^2\\
+  \end{pmatrix}\bm{w} = \begin{pmatrix}
+    P \\
+    P\delta\\
+    P\gamma(1+\tfrac{y}{2})^{2} - \tfrac{1}{2}P\delta
+  \end{pmatrix}
+\end{equation}
+Since $0<T_1 <T_2<T_3$ (distinct), by the hint file, the matrix is invertible. So there exists such portfolio. We can solve the linear system for $\bm{w}$ then go back to $\bm{\Delta}$.
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem}
+\end{problem}
+\begin{solution} First off, we show that the par coupon yield curve is also upward sloping when the spot rate curve is upward sloping.
+\begin{itemize}
+  \item[$\cdot$] \textit{Claim 1.} Coupon bond $B_1$ has maturity $T$, $B_2$ has maturity $T+0.5$, they have same coupon rate $q$. $P(B_2)>P(B_1)\iff q>f(T+0.5)$. \\
+  \textit{Proof of Claim 1:} Consider portfolio: long $B_2$, short $B_1$. The coupon payoffs are canceled out; remaining part is: (1) pay $F$ at time $T$, (2) receive $F(1+\tfrac{q}{2})$ at time $T+0.5$. To finance the payment at time $T$, we borrow forward loan that pays us $F$ at time $T$, and we repay $F(1+f(T+0.5)/2)$ at $T+0.5$. Entering forward loan contract requires zero cost at $t=0$. So the payoff of the portfolio is
+  $$
+  F\left(\frac{q}{2} - \frac{f(T+0.5)}{2}\right)~~\text{at~}T+0.5
+  $$
+  The initial capital is $P(B_2)-P(B_1)$, which is the arbitrage-free price of the portfolio. Finally we have
+  $$
+  q > f(T+0.5)~~\iff~~P(B_2) > P(B_1)
+  $$
+  \item[$\cdot$] \textit{Claim 2.} Denote spot rate curve $\hat{r}(t)$, par coupon yield curve $y_{pc}(t)$. Then $f(T+0.5)>\hat{r}(T+0.5)>y_{pc}(T+0.5)$. This result follows by the fact that $\hat{r}(t)$ is increasing.
+  \item[$\cdot$] \textit{Claim 3.} Consider Bond 1: coupon bond with maturity $T$, coupon rate $y_{pc}(T+0.5)$; Bond 2: par coupon bond with maturity $T+0.5$. These two bonds match to the situation in claim 1. Since $q=y_{pc}(T+0.5)<f(T+0.5)$ from claim 2, we have $F=P(B_2)<P(B_1)$. So bond 1 is a premium bond. It follows that its coupon rate is greater than the corresponding par-coupon rate for the same maturity, i.e. $y_{pc}(T+0.5)>y_{pc}(T)$. 
+\end{itemize}
+Hence, the par coupon curve is upward sloping. We have
+$$
+y_{pc}(5) > y_{pc}(3) > y_{pc}(2)
+$$
+Now we consider investor A and B's capital (denote $V_A, V_B$) at time $t=2$ years. For A:
+\begin{equation}
+  V_A = \sum_{i=1}^{3} F\frac{y_{pc}(2)}{2}\left(1+\frac{\hat{r}(\frac{i}{2})}{2}\right)^{i} + F\frac{y_{pc}(2)}{2} + F
+\end{equation}
+The summation is the value of reinvested coupon payments at previous periods. Last two terms are coupon and par payment at last period. \\
+For B:
+\begin{equation}
+  V_B = \sum_{i=1}^{3} F\frac{y_{pc}(5)}{2}\left(1+\frac{\hat{r}(\frac{i}{2})}{2}\right)^{i} + F\frac{y_{pc}(5)}{2} + \left(\sum_{i=1}^{6}\frac{y_{pc}(5)}{2}\frac{F}{(1+\hat{r}(\frac{i}{2}))^i}+\frac{F}{(1+\hat{r}(3))^6}\right)
+\end{equation}
+The first summation is the value of reinvested coupon payments at previous periods. The middle single term is are coupon payment at year 2. The last summation is the price of remaining part of the bond at year 2, given that the spot rate curve is unchanged. Note that the remaining part is nothing but a 3-year coupon bond with coupon rate $y_{pc}(5)$. Since $y_{pc}(3)<y_{pc}(5)$, it is a premium bond, i.e.
+$$
+\sum_{i=1}^{6}\frac{y_{pc}(5)}{2}\frac{F}{(1+\hat{r}(\frac{i}{2}))^i}+\frac{F}{(1+\hat{r}(3))^6} > F
+$$
+Therefore
+$$
+V_B > \sum_{i=1}^{3} F\frac{y_{pc}(5)}{2}\left(1+\frac{\hat{r}(\frac{i}{2})}{2}\right)^{i} + F\frac{y_{pc}(5)}{2} + F > V_A
+$$
+Because $y_{pc}(5)>y_{pc}(2)$. So investor B is better off at year 2.
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem}
+\end{problem}
+\begin{solution} The flattener will cause 
+$$
+\hat{r}_{new}(30) - \hat{r}_{new}(5) < \hat{r}(30) - \hat{r}(5)~~\Rightarrow~~\Delta\hat{r}(30) < \Delta\hat{r}(5)
+$$
+So we want to long $\Delta y_5 - \Delta y_{30}$, $y_T$ denotes yield of $T$ years ZCB. We have
+$$
+DV01_{ZCB(5)} = \frac{F}{10^4}\frac{T}{(1+\frac{y}{2})^{2T+1}} = \frac{10^8}{10^4}\frac{5}{(1+\frac{0.04}{2})^{11}} = 40213.15195
+$$
+$$
+DV01_{ZCB(30)} = \frac{F^*}{10^4}\frac{30}{(1+\frac{0.06}{2})^{61}} = DV01_{ZCB(5)}
+$$
+$\Rightarrow F^* = 81342509.59$. We want exposure to $\Delta y_5 - \Delta y_{30}$, so we long 30-year ZCB (face 81342509.59), short 5-year ZCB (face 100000000).\\
+\textbf{(b)} The linear approximation is
+\begin{equation}
+  \Delta P = DV01(\Delta y_5 - \Delta y_{30}) = 40213.15195 \times 7 = 281492.0637
+\end{equation}
+\textbf{(c)} For the ZCB:
+$$
+P'' = \frac{\partial^2 P}{\partial y^2} = \frac{F(T^2+0.5T)}{(1+\frac{y}{2})^{2T+2}}
+$$
+\begin{equation}
+  \begin{split}
+    &P''_{ZCB(5)} = \frac{10^8(5^2+2.5)}{(1+\frac{0.04}{2})^{12}} = 2.168356\times10^9\\
+    &P''_{ZCB(30)} = \frac{F^*(30^2+15)}{(1+\frac{0.06}{2})^{62}} = 1.151736\times10^{10}\\
+  \end{split}
+\end{equation}
+The quadratic approximation is
+\begin{equation}
+  \begin{split}
+    \Delta P &= DV01(\Delta y_5 - \Delta y_{30}) + \frac{P''_{ZCB(30)}}{2\times10^8}\Delta y_{30}^2 - \frac{P''_{ZCB(5)}}{2\times10^8}\Delta y_{5}^2 \\
+    &=40213.15(\Delta y_5 - \Delta y_{30}) + 57.59\Delta y_{30}^2 - 10.84\Delta y_5^2
+  \end{split}
+\end{equation}
+So the convexity impact is $57.59\Delta y_{30}^2 - 10.84\Delta y_5^2$ ($\Delta y$'s in basis point). \\
+For example, in question 2 we know $\Delta y_5-\Delta y_{30}=7BP$, if there is no absolute change, i.e. $\Delta y_{30}=0$, then this impact will diminish profit by $10.84\Delta y_5^2=531$.
+\end{solution}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem}
+\end{problem}
+\begin{solution} \textbf{(a)} 
+$$
+DV01= -\frac{1}{10^4}\frac{\partial P}{\partial y} = \frac{1}{10^4}\left(FTe^{-yT} + Fq\int_0^T te^{-yt}dt\right)
+$$
+\begin{equation}
+  \begin{split}
+    \frac{\partial DV01}{\partial T} &= \frac{1}{10^4}\left(Fe^{-yT} -FyTe^{-yT} + Fq Te^{-yT}\right) \\
+    &=\frac{1}{10^4}\left[Fe^{-yT} +FTe^{-yT}(q-y)\right] >0
+  \end{split}
+\end{equation}
+For $q\geq y$. Hence DV01 increases with T.\\
+\textbf{(b)} 
+$$
+\frac{\partial DV01}{\partial T}> 0~~\Rightarrow~~e^{-yT}  >Te^{-yT}(y-q)~~\Rightarrow~~T<\frac{1}{y-q} = T^{**}
+$$
+And if $T>T^{**}$ we have $\frac{\partial DV01}{\partial T}<0$. Therefore, there exists critical maturity $T^{**}=\frac{1}{y-q}$ such that DV01 increases with $T$ for $T<T^{**}$, DV01 decreases with $T$ when $T<T^{**}$.
+
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem}
+\end{problem}
+\begin{solution}
+
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{\label{fig:span}Spread Sheet Calculation}
+  \vspace{-10pt}
+  \includegraphics[scale=0.6]{figures/fig1.png}
+\end{figure}
+We use the spreadsheet posted on Canvas to calculate the DV01 for each par coupon bond. And use
+$$
+DV01(T) = \frac{F}{10^4 y_{pc}(T)} \left(1-\frac{1}{(1+\frac{y_{pc}(T)}{2})^{2T}}\right)
+$$
+to solve face $F$ for each par coupon bond. Let $F_1, F_2, F_3, F_4$ be the face of 2-, 5-, 10-, and 30-year par coupon bond, we have
+$$
+F_1 = 3630.98,~~~F_2=6218.17,~~~F_3= 43782.33,~~~F_4=41894.62
+$$
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem}
+\end{problem}
+\begin{solution} Define $P_0$: price of the coupon bond at initial spot rates. $P_1$: price of this coupon bond after 1bp increase in key rate $y_1$; $P_2$: price of this coupon bond after 1bp increase in key rate $y_2$. We have
+$$
+P_0 = \sum_{i=1}^{20}\frac{qF}{(1+\frac{\hat{r}(i/2)}{2})^{i}} + \frac{F}{(1+\frac{\hat{r}(10)}{2})^{20}}
+$$
+$$
+P_1 = \sum_{i=1}^{20}\frac{qF}{(1+\frac{\hat{r}(i/2)+Y_1(i/2)}{2})^{i}} + \frac{F}{(1+\frac{\hat{r}(10)+Y_1(10)}{2})^{20}}
+$$
+$$
+P_2 = \sum_{i=1}^{20}\frac{qF}{(1+\frac{\hat{r}(i/2)+Y_2(i/2)}{2})^{i}} + \frac{F}{(1+\frac{\hat{r}(10)+Y_2(10)}{2})^{20}}
+$$
+And 
+$$
+DV01_1 = -\left(P_1 - P_0\right);~~~~DV01_2 = -\left(P_2 - P_0\right)
+$$
+Calculate in spreadsheet, we obtain:
+$$
+DV01_1 = 121.7407866;~~~~DV01_2 = 704.0891244
+$$
+Denote faces of 2- and 10-year zero coupon bond as $F_1, F_2$, to match the DV01:
+$$
+DV01_1 = \frac{1}{10^4}\frac{2F_1}{(1+\frac{\hat{r}(2)}{2})^{5}};~~~~DV01_2 = \frac{1}{10^4}\frac{10F_1}{(1+\frac{\hat{r}(10)}{2})^{21}}
+$$
+$\Rightarrow$ $F_1= 697132.389$; $F_2= 1287738.199$.
+\end{solution}
+
+
+\end{document}

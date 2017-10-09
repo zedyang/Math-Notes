@@ -1,0 +1,329 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz, array, eurosym}
+\usepackage{float}
+\renewcommand{\arraystretch}{1.4}
+\newcolumntype{L}{>{\arraybackslash}m{10cm}}
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+
+\title{\textbf{Asset Pricing Assignment III}}
+\author{Ze Yang~~~~(zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+\begin{table}[h]
+\vspace{-10pt}
+\caption{\textit{Nomenclatures}}
+\vspace{3pt}
+\centering
+\def\arraystretch{1.15}
+\begin{tabular}{lL}
+\hline
+Notation & \hspace{4.6cm} Description \\ 
+\hline
+$\bm{w}$ & The $n$-periods coin toss vector, $\bm{w} = (w_1~~w_2~~...~~w_n)^{\top}$, where $w_j$ is the outcome for single period $j$.\\
+$\bm{w}^{[i]}$ & The partial path till $i$-th period. $\bm{w}^{[i]} = (w_1~~w_2~~...~~w_i)^{\top}$. The total path $\bm{w} \in \Omega $ has $n$ entries, $n\geq i$.\\
+$S_n \in m \mathcal{F}_n$ & Adaptive process to filtration $\{\mathcal{F}_n\}$. If $\{\mathcal{F}_n\}$ is coin toss filtration, then $S_n = S_n(\bm{w}^{[n]})$.\\
+$\tilde{p}(w), \tilde{\mathbb{P}}\left(w\right)$ & Risk neutral probabilities. In the coin toss space, we refer to $\tilde{p}(H)$ as $\tilde{p}$, $\tilde{p}(T)$ as $\tilde{q}$.\\
+$\#H(\bm{w})$, $\#T(\bm{w})$ & The number of heads (tails) in path $\bm{w}$. \\
+$d(i, j)$ & The discount factor from period $i$ to $j$. \\
+$\tilde{\mathbb{E}}\left[S_{j}\middle|\mathcal{F}_{i}\right](\bm{w}^{[i]})$ & The expectation of security payoff at period $i$ conditional on period $i<j$; it's a random variable with respect to partial path $\bm{w}^{[i]}$. Tilde means the risk neutral probability measure. We also write $\tilde{\mathbb{E}}_i\left[S_{j}\right](\bm{w}^{[i]})$.\\
+\hline 
+\end{tabular}
+\label{tab:Nomen}
+\end{table}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{solution} Consider the payoff for path $\bm{w}$. By definition
+\begin{equation}
+  V_N(\bm{w}) = \frac{1}{N} \sum_{n=1}^N \left(\log\left(\frac{S_{n}(w_n)}{S_{n-1}(w_{n-1})}\right)\right)^2 - K^2
+\end{equation}
+In which $S_{n}(H) = S_{n-1}(w_{n-1})u$, $S_{n}(T) = S_{n-1}(w_{n-1})d = S_{n-1}(w_{n-1})\frac{1}{u}$. Hence
+\begin{equation}
+  \begin{split}
+    V_N(\bm{w}) &= \frac{1}{N} \sum_{n=1}^N  \left(\log\left( u\mathbbm{1}_{\{w_n=T\}} + \tfrac{1}{u}\mathbbm{1}_{\{w_n=T\}}\right)\right)^2 - K^2 \\
+    &= \frac{1}{N}\left[\#H(\bm{w})(\log u)^2 + \#T(\bm{w})(-\log u)^2\right] - K^2\\
+    &= (\log u)^2 - K^2
+  \end{split}
+\end{equation}
+Which implies that the variance swap has \textit{deterministic} payoff, regardless of $\bm{w}$. By the problem, we want to choose $K$ such that the non-arbitrage price of this payoff is zero. So we have
+$$
+0 = P_0 = d(N) \mathbb{E}_{\mathbb{Q}}\left[V_N(\bm{w})\right]~~\Rightarrow~~(\log u)^2 - K^2=0
+$$
+So $K=\log u = \log 1.2$.
+\end{solution}
+\newpage
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{solution} \textbf{(2.1)} For the boundary $n=N$, we have
+\begin{equation}
+  V_N = S_N f_N(X_N) = \max\{S_N - A_N, 0\}
+\end{equation}
+Divide $S_N$ on both sides:
+\begin{equation}
+  f_N(X_N) = \max\left\{1 - \frac{A_N}{S_N}, 0\right\}~~\Rightarrow~~f_N(x) = \max\left\{1 - x, 0\right\}
+\end{equation}
+Now suppose we are at period $1\leq n<N$. $V_n = S_nf_n(X_n)$. For the next period:
+\begin{equation}
+  \begin{split}
+    A_{n+1} &= \frac{1}{n+2}\sum_{k=0}^{n+1} S_k = \frac{n+1}{n+2}\frac{1}{n+1}\sum_{k=0}^{n} S_k + \frac{1}{n+2}S_{n+1}\\
+    &=\frac{n+1}{n+2}A_n + \frac{1}{n+2}S_{n+1}
+  \end{split}
+\end{equation}
+And
+\begin{equation}
+  \begin{split}
+    &V_{n+1} = S_{n+1} f_{n+1}\left(\frac{A_{n+1}}{S_{n+1}}\right) = S_{n+1} f_{n+1}\left(\frac{n+1}{n+2}\frac{A_n}{S_{n+1}}+\frac{1}{n+2}\right)\\
+    &V_{n+1}(\bm{w}^{[n]}, H) = uS_{n} f_{n+1}\left(\frac{n+1}{n+2}\frac{X_n}{u}+\frac{1}{n+2}\right)\\
+    &V_{n+1}(\bm{w}^{[n]}, T) = dS_{n} f_{n+1}\left(\frac{n+1}{n+2}\frac{X_n}{d}+\frac{1}{n+2}\right)\\
+  \end{split}
+\end{equation}
+So the arbitrage-free value for previous period is
+\begin{equation}
+  V_n = \frac{1}{1+r} \mathbb{E}_{\mathbb{Q}}\left[V_{n+1}| \mathcal{F}_n\right] = \frac{1}{1+r}\left(\tilde{p}V_{n+1}(\bm{w}^{[n]}, H) + \tilde{q}V_{n+1}(\bm{w}^{[n]}, T)\right)
+\end{equation}
+Hence
+\begin{equation}
+  \begin{split}
+    &S_nf_n(X_n) = \tfrac{1}{1+r}\left(\tilde{p}uS_{n} f_{n+1}\left(\tfrac{n+1}{n+2}\tfrac{X_n}{u}+\tfrac{1}{n+2}\right) + \tilde{q}dS_{n} f_{n+1}\left(\tfrac{n+1}{n+2}\tfrac{X_n}{d}+\tfrac{1}{n+2}\right)\right) \\
+    \Rightarrow ~~~&f_n(x) = \tfrac{1}{1+r}\left(\tilde{p}u f_{n+1}\left(\tfrac{n+1}{n+2}\tfrac{x}{u}+\tfrac{1}{n+2}\right) + \tilde{q}d f_{n+1}\left(\tfrac{n+1}{n+2}\tfrac{x}{d}+\tfrac{1}{n+2}\right)\right)
+  \end{split}
+\end{equation}
+In summary:
+\begin{equation}
+  f_n(x) = \begin{cases}
+  \tfrac{1}{1+r}\left(\tilde{p}u f_{n+1}\left(\tfrac{n+1}{n+2}\tfrac{x}{u}+\tfrac{1}{n+2}\right) + \tilde{q}d f_{n+1}\left(\tfrac{n+1}{n+2}\tfrac{x}{d}+\tfrac{1}{n+2}\right)\right) & 0\leq n< N\\
+  \max\left\{1 - x, 0\right\} & n=N
+  \end{cases}
+\end{equation}
+where $\tilde{p}=\tfrac{1+r-d}{u-d}, \tilde{q}=1- \tilde{p}$.\\
+\textbf{(2.2)} We have $\tilde{p} = \tilde{q} = 0.5$. Using backward induction:
+$$
+A_2(HH) = \frac{28}{3};~~A_2(HT) = \frac{16}{3};~~A_2(TH) = \frac{10}{3};~~A_2(TT) = \frac{7}{3}
+$$
+$$
+V_2(HH) = \frac{20}{3};~~V_2(HT) = 0;~~V_2(TH) = \frac{2}{3};~~V_2(TT) = 0
+$$
+$$
+V_1(H) = \frac{8}{3};~~V_1(T) = \frac{4}{15}
+$$
+$$
+V_0 = \frac{88}{75} \approx 1.7333
+$$
+$\Delta_0$ solves the system
+\begin{equation}
+  \begin{cases}
+  (1+r)(V_0 - \Delta_0S_0) + \Delta_0S_1(H) = V_1(H)\\
+  (1+r)(V_0 - \Delta_0S_0) + \Delta_0S_1(T) = V_1(T)\\
+  \end{cases}
+\end{equation}
+$\Rightarrow$ $\Delta_0 = 0.4$.
+\end{solution} 
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{solution} \textbf{(3.1)} For the boundary $n=N$, we have
+\begin{equation}
+  V_N = \frac{F}{N} \mathbbm{1}_{\{L \leq S_N \leq U\}} = f_N(S_N)
+\end{equation}
+So by definition $f_N(x) = \frac{F}{N} \mathbbm{1}_{\{L \leq x \leq U\}}$. \\
+Denote $V_{i, N}$ the payoff of the option at period $i$ and pays at $N$, i.e. the option defined in the problem whose price is $f_i(x)$ at time $i$. Consider period $n+1 \in [2, N]$, we have
+\begin{equation}
+  f_{n+1}(S_{n+1}) = \frac{1}{(1+r)^{N-(n+1)}}\tilde{\mathbb{E}}\left[V_{n+1, N}\middle|\mathcal{F}_{n+1}\right] = \frac{1}{(1+r)^{N-(n+1)}}\tilde{\mathbb{E}}\left[\frac{F}{N}\sum_{k=n+1}^N \mathbbm{1}_{\{L\leq S_k \leq U\}}\middle|\mathcal{F}_{n+1}\right]~~(\dag)
+\end{equation}
+The expected payoff is at time $N$, hence is discounted by $d(n+1, N)$. Now consider period $n \in [1, N-1]$:
+\begin{equation}
+  \begin{split}
+      f_{n}(S_{n}) &= \frac{1}{(1+r)^{N-n}}\tilde{\mathbb{E}}\left[V_{n, N}\middle|\mathcal{F}_{n}\right] \\
+      &= \frac{1}{(1+r)^{N-n}}\tilde{\mathbb{E}}\left[\frac{F}{N}\sum_{k=n}^N \mathbbm{1}_{\{L\leq S_k \leq U\}}\middle|\mathcal{F}_{n}\right] \\
+      &= \frac{1}{(1+r)^{N-n}}\tilde{\mathbb{E}}\left[\frac{F}{N}\mathbbm{1}_{\{L\leq S_n\leq U\}} + \frac{F}{N}\sum_{k=n+1}^N \mathbbm{1}_{\{L\leq S_k \leq U\}}\middle|\mathcal{F}_{n}\right] \\
+      &= \frac{1}{(1+r)^{N-n}}\left(\frac{F}{N}\mathbbm{1}_{\{L\leq S_n\leq U\}} +\tilde{\mathbb{E}}\left[\tilde{\mathbb{E}}\left[\frac{F}{N}\sum_{k=n+1}^N \mathbbm{1}_{\{L\leq S_k \leq U\}}\middle|\mathcal{F}_{n+1}\right]\middle|\mathcal{F}_{n}\right]\right) \\
+  \end{split}
+\end{equation}
+The first term is taken out since $S_n\in m \mathcal{F}_n$, the second term is due to tower property, $\mathcal{F}_n \subseteq \mathcal{F}_{n+1}$. Plug in $(\dag)$ in to the formula above, replace the inner ($\mathcal{F}_{n+1}$) conditional expectation with $f_{n+1}(S_{n+1})$:
+\begin{equation}
+  \begin{split}
+    f_{n}(S_{n}) &= \frac{1}{(1+r)^{N-n}}\left(\frac{F}{N}\mathbbm{1}_{\{L\leq S_n\leq U\}} +\tilde{\mathbb{E}}\left[(1+r)^{N-(n+1)}f_{n+1}(S_{n+1})\middle|\mathcal{F}_{n}\right]\right) \\
+    &=\frac{1}{(1+r)^{N-n}}\frac{F}{N}\mathbbm{1}_{\{L\leq S_n\leq U\}} + \frac{1}{1+r}\tilde{\mathbb{E}}\left[f_{n+1}(S_{n+1})\middle|\mathcal{F}_{n}\right]\\
+    &= \frac{1}{(1+r)^{N-n}}\frac{F}{N}\mathbbm{1}_{\{L\leq S_n\leq U\}} + \frac{1}{1+r}\left(\tilde{p}f_{n+1}(uS_n) + \tilde{q}f_{n+1}(dS_n)\right)
+  \end{split}
+\end{equation}
+In particular for $n=0$, there is no $\mathbbm{1}_{\{L\leq S_0 \leq U\}}$ term involved by definition. So
+\begin{equation}
+  f_0(S_0) = \frac{1}{1+r}\left(\tilde{p}f_{1}(uS_0) + \tilde{q}f_{1}(dS_0)\right)
+\end{equation}
+As summary:
+\begin{equation}
+  f_n(x) = \begin{cases}
+  \frac{1}{1+r}\left(\tilde{p}f_{1}(ux) + \tilde{q}f_{1}(dx)\right) & n=0 \\
+  \frac{1}{(1+r)^{N-n}}\frac{F}{N}\mathbbm{1}_{\{L\leq x\leq U\}} + \frac{1}{1+r}\left(\tilde{p}f_{n+1}(ux) + \tilde{q}f_{n+1}(dx)\right) & 1\leq n< N\\
+  \frac{F}{N} \mathbbm{1}_{\{L \leq x \leq U\}} & n=N
+  \end{cases}
+\end{equation}
+where $\tilde{p}=\tfrac{1+r-d}{u-d}, \tilde{q}=1- \tilde{p}$.\\
+\textbf{(3.2)} We have $\tilde{p} = \tilde{q} = 0.5$. Using backward induction:
+$$
+f_2(HH) = 0;~~f_2(HT)=50;~~f_2(TH)=50;~~f_2(TT)=0
+$$
+$$
+f_1(H) = \frac{50}{1+r}+\frac{50+0}{2(1+r)}=60;~~f_1(T)=0+\frac{50+0}{2(1+r)}=20
+$$
+$$
+f_0 = \frac{60+20}{2(1+r)} = 32 = V_0
+$$
+$\Delta_0$ solves the system
+\begin{equation}
+  \begin{cases}
+  (1+r)(f_0 - \Delta_0S_0) + \Delta_0S_1(H) = f_1(H)\\
+  (1+r)(f_0 - \Delta_0S_0) + \Delta_0S_1(T) = f_1(T)\\
+  \end{cases}
+\end{equation}
+$\Rightarrow$ $\Delta_0 = 20/3$.
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{solution} \textbf{(4.1)} We choose the state process to be $Z_n = (Y_n, S_n)$. We check the criteria for state process:
+\begin{equation}
+  \begin{split}
+    &Y_{n+1} = \mathbbm{1}_{\{M_{n+1}\geq L\}} = \prod_{k=1}^{n+1} \mathbbm{1}_{\{S_k \geq L\}} = Y_n \mathbbm{1}_{\{S_{n+1}\geq L\}} \\
+    &S_{n+1} = S_n\left(u \mathbbm{1}_{\{w_{n+1}=H\}}+d \mathbbm{1}_{\{w_{n+1}=T\}}\right)\\
+    &Z_{n+1}(w_{n+1} = H) = (Y_n \mathbbm{1}_{\{uS_n\geq L\}}, uS_n)\\
+    &Z_{n+1}(w_{n+1} = T) = (Y_n \mathbbm{1}_{\{dS_n\geq L\}}, dS_n)\\
+  \end{split}
+\end{equation}
+Hence $Z_{n+1}$ is a deterministic function of $Z_n$ and $w_{n+1}$, so it's a state process indeed. By theorem, the option price at period $n$ admits the form
+$$
+V_n = f_n(Y_n, S_n)
+$$
+For the boundary $n=N$, we have
+$$
+f_N(Y_N, S_N) = V_N = 1-Y_N
+$$
+Threfore $f_N(y,s) = 1-y$. Now consider period $n<N$:
+\begin{equation}
+  \begin{split}
+    f_n(Y_n, S_n) &= \frac{1}{1+r}\tilde{\mathbb{E}}\left[f_{n+1}(Y_{n+1}, S_{n+1})\middle|\mathcal{F}_n\right] \\
+    &= \frac{1}{1+r} \left(\tilde{p}f_{n+1}(Y_n \mathbbm{1}_{\{uS_n\geq L\}}, uS_n) + \tilde{q}f_{n+1}(Y_n \mathbbm{1}_{\{dS_n\geq L\}}, dS_n) \right)
+  \end{split}
+\end{equation}
+As summary:
+\begin{equation}
+  f_n(y, s) = \begin{cases}
+  \frac{1}{1+r} \left(\tilde{p}f_{n+1}(y \mathbbm{1}_{\{us\geq L\}}, us) + \tilde{q}f_{n+1}(y \mathbbm{1}_{\{ds\geq L\}}, ds) \right) & 0\leq n< N\\
+  1-y & n=N
+  \end{cases}
+\end{equation}
+where $\tilde{p}=\tfrac{1+r-d}{u-d}, \tilde{q}=1- \tilde{p}$.\\
+\textbf{(4.2)} We have $\tilde{p} = 0.75,  \tilde{q} = 0.25$. Using backward induction (we write $Z_{n+1}(Z_n, w_{n+1})$ for $n\geq 0$):
+$$
+Z_0 = (Y_0, S_0) = (1, 40)
+$$
+$$
+Z_1((1, 40), H) = (1, 48);~~~Z_1((1, 40), T) = (0, 32)
+$$
+$$
+Z_2((1, 48), H) = (1, 57.6);~~~Z_2((1, 48), T) = (1, 38.4);~~~Z_2((0, 32), H) = (0, 38.4);~~~Z_2((0, 32), T) = (0, 25.6)
+$$
+\\
+$$
+Z_3((1, 57.6), H) = (1, 69.12);~~~Z_3((1, 57.6), T) = (1, 46.08);
+$$
+$$
+Z_3((1, 38.4), H) = (1, 46.08);~~~Z_3((1, 38.4), T) = (0, 30.72)
+$$
+$$
+Z_3((0, 38.4), H) = (0, 46.08);~~~Z_3((0, 38.4), T) = (0, 30.72)
+$$
+$$
+Z_3((0, 25.6), H) = (0, 30.72);~~~Z_3((0, 25.6), T) = (0, 20.48)
+$$
+We can perceive the reduction in calculations. For next step we only need to consider 5 states. (10 calculations instead of 16)\\
+Now we go backwards:
+\begin{itemize}
+  \item[$n=3$:]
+  $$
+  f_3(1, 69.12) = 0;~~f_3(1, 46.08) = 0;~~f_3(0, 46.08) = 1;~~f_3(0, 30.72) = 1;~~f_3(0, 20.48) = 1
+  $$
+  \item[$n=2$:]
+  \begin{equation}
+  \begin{split}
+    &f_2(1, 57.6) = \tfrac{1}{1.1}\left(0.75f_3(1, 69.12)+0.25f_3(1, 46.08)\right) = 0\\
+    &f_2(1, 38.4) = \tfrac{1}{1.1}\left(0.75f_3(1, 46.08)+0.25f_3(0, 30.72)\right) = \tfrac{0.25}{1.1}\\
+    &f_2(0, 38.4) = \tfrac{1}{1.1}\left(0.75f_3(0, 46.08)+0.25f_3(0, 30.72)\right) = \tfrac{1}{1.1}\\
+    &f_2(0, 25.6) = \tfrac{1}{1.1}\left(0.75f_3(0, 30.72)+0.25f_3(0, 20.48)\right) = \tfrac{1}{1.1}\\
+  \end{split}
+  \end{equation}
+  \item[$n=1$:]
+  \begin{equation}
+  \begin{split}
+    &f_1(1, 48) = \tfrac{1}{1.1}\left(0.75f_2(1, 57.6)+0.25f_2(1, 38.4)\right) = (\tfrac{0.25}{1.1})^2\\
+    &f_1(0, 32) = \tfrac{1}{1.1}\left(0.75f_2(0, 38.4)+0.25f_2(0, 25.6)\right) = (\tfrac{1}{1.1})^2\\
+  \end{split}
+\end{equation}
+\item[$n=0$:]
+\begin{equation}
+  f_0(1, 40) = \tfrac{1}{1.1}\left(0.75f_1(1, 48)+0.25f_2(0, 32)\right) = \tfrac{0.75}{1.1}(\tfrac{0.25}{1.1})^2 + \tfrac{0.25}{1.1}(\tfrac{1}{1.1})^2  = \tfrac{2375}{10648}\approx 0.223\\
+\end{equation}
+\begin{equation}
+  \Delta_0 = \frac{f_1(1,48)- f_1(0,32)}{48 - 32} = -\tfrac{375}{7744} \approx-0.0484
+\end{equation}
+\end{itemize}
+
+
+
+
+\end{solution}
+
+
+\end{document}
