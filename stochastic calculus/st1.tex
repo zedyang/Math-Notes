@@ -1,0 +1,270 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz, array, eurosym}
+\usepackage{float}
+\renewcommand{\arraystretch}{1.4}
+\newcolumntype{L}{>{\arraybackslash}m{10cm}}
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+\title{\textbf{Stochastic Calculus Assignment I}}
+\author{Ze Yang~~~~(zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} (Moment Generating Function)
+\end{problem}
+\begin{proof} \textbf{(a)} Since $M_X$ is infinitely differentiable wrt. $t$, we have
+$$
+\frac{d^n M_X}{d t^n} = \mathbb{E}\left[\frac{d^n}{d t^n} e^{tX}\right] = \mathbb{E}\left[X^n e^{tX}\right]
+$$
+So $M^{(n)}_X(0)=\frac{d^n M_X}{d t^n}(0) = \mathbb{E}\left[X^n\right]$, i.e. the $n^{th}$ derivative of $M_X$ evaluated at $t=0$ is equal to the $n^{th}$ moment of $X$. \\
+\textbf{(b)} If $X\sim \text{Exp}(\lambda)$, $f_X(x) = \lambda e^{-\lambda x}$ for all $x > 0$, $f_X(x)=0$ otherwise. We have
+\begin{equation}
+	\begin{split}
+		M_X(t) &= \mathbb{E}\left[e^{tX}\right] = \int_{0}^{\infty} e^{tx} f_X(x)dx \\
+		& = \int_{0}^{\infty} \lambda e^{(t-\lambda) x}dx ~~\text{(\textit{finite if and only if }}t<\lambda)\\
+		&= \left.\frac{\lambda }{t- \lambda} e^{(t- \lambda)x} \right\rvert_0^{\infty} = \frac{\lambda}{\lambda-t}(0-1) = \frac{\lambda}{\lambda-t}
+	\end{split}
+\end{equation}
+Therefore, $\mathbb{E}\left[e^{tX}\right] = \frac{\lambda}{\lambda-t}$ for $t\in (-\lambda, \lambda)$; otherwise it's infinite. By definition, 
+$$
+M_X(t) = \begin{cases}
+\frac{\lambda}{\lambda-t} & t \in  (-\lambda, \lambda) \\
+\infty & \text{otherwise}
+\end{cases}
+$$
+\textbf{(c)} If $X\sim \text{N}(\mu, \sigma^2)$, $f_X(x) = \frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{(x-\mu)^2}{2\sigma^2}}$. Hence
+\begin{equation}
+	\begin{split}
+		M_X(t) &= \mathbb{E}\left[e^{tX}\right] = \int_{-\infty}^{\infty} e^{tx} f_X(x)dx \\
+		& = \int_{-\infty}^{\infty} e^{tx} \frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{(x-\mu)^2}{2\sigma^2}}dx \\
+		&= \frac{1}{\sqrt{2\pi}\sigma} \int_{-\infty}^{\infty} \exp\left\{-\frac{1}{2\sigma^2}(x^2 - 2\mu x + \mu^2 - 2\sigma^2 tx)\right\} dx \\
+		&= \frac{1}{\sqrt{2\pi}\sigma} \int_{-\infty}^{\infty} \exp\left\{-\frac{1}{2\sigma^2}[x^2 - 2(\mu + \sigma^2 t)x + (\mu + \sigma^2 t)^2 - \sigma^4 t^2 - 2\mu \sigma^2 t]\right\} dx \\
+		&= e^{\frac{\sigma^4 t^2 + 2\mu \sigma^2 t}{2\sigma^2}}\frac{1}{\sqrt{2\pi}\sigma} \int_{-\infty}^{\infty} e^{-\frac{(x- (\mu+\sigma^2t))^2}{2\sigma^2}} dx\\
+		&= e^{\frac{\sigma^4 t^2 + 2\mu \sigma^2 t}{2\sigma^2}} \cdot 1 = e^{\frac{\sigma^2 t^2 + 2\mu t}{2}} = \exp\left\{\mu t + \frac{1}{2}\sigma^2 t^2\right\}
+	\end{split}
+\end{equation}
+So by definition, $M_X(t) = \exp\left\{\mu t + \frac{1}{2}\sigma^2 t^2\right\}$.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} (Correlation and Independence)
+\end{problem}
+\begin{proof} \textbf{(a)}
+\begin{equation}
+	\begin{split}
+		\mathrm{\mathbb{C}ov}\left[aX+b, cY+d\right] &= \mathbb{E}\left[(aX+b)(cY+d)\right] - \mathbb{E}\left[aX+b\right] \mathbb{E}\left[cY+d\right] \\
+		&= \mathbb{E}\left[acXY + adX+bcY + ad\right] - (a \mathbb{E}\left[X\right] + b)(c \mathbb{E}\left[Y\right]+d) \\
+		&= ac(\mathbb{E}\left[XY\right]-\mathbb{E}\left[X\right]\mathbb{E}\left[Y\right]) = ac~\mathrm{\mathbb{C}ov}\left[X,Y\right]
+	\end{split}
+\end{equation}
+$\Rightarrow \mathrm{\mathbb{C}ov}\left[aX+b, cY+d\right] = ac~\mathrm{\mathbb{C}ov}\left[X,Y\right]$.\\
+~\\
+\textbf{(b)} If $X\perp Y$ $\Rightarrow \mathbb{E}\left[XY\right] = \mathbb{E}\left[X\right] \mathbb{E}\left[Y\right]$, hence $\mathrm{\mathbb{C}ov}\left[X,Y\right]=0$ $\Rightarrow$ $X,Y$ are uncorrelated.\\
+~\\
+\textbf{(c)} Consider discrete random variable $X,Y$. $X\in {-1,1,0}$ with equal probability, i.e. $\mathbb{P}\left(X=1\right)=\mathbb{P}\left(X=-1\right)=\mathbb{P}\left(X=0\right)=\frac{1}{3}$. $Y$ is defined as
+$$
+Y = \begin{cases}
+1 & X=0\\
+0 & \text{otherwise}
+\end{cases}
+$$
+Clearly, $X,Y$ are not independent. However $XY\equiv 0$ $\Rightarrow$ $\mathbb{E}\left[XY\right] =0$ and we have $\mathbb{E}\left[X\right]=0$. Hence $\mathrm{\mathbb{C}ov}\left[X,Y\right] = 0$, which implies that $X,Y$ are uncorrelated. \\
+~\\
+\textbf{(d)} Let $\bm{X} = (X~~Y)^\top$. $\bm{X} \sim \mathcal{N}(\bm{\mu}, \bm{\Sigma}_{\bm{X}})$. By the fact that $\mathrm{\mathbb{C}ov}\left[X,Y\right]=0$, we have:
+$$
+\bm{\mu} = \begin{pmatrix}
+	\mu_X \\
+	\mu_Y
+\end{pmatrix},~~~
+\bm{\Sigma}_{\bm{X}} = \begin{pmatrix}
+	\sigma_X^2 & 0\\
+	0 & \sigma_Y^2
+\end{pmatrix}
+$$
+Let $\bm{t} = (t_1~~t_2)^{\top}$, $Z:= \bm{t}^{\top}\bm{X}$. Then by the property of multivariate normal distribution, the linear combination $Z\sim \mathcal{N}(\bm{t}^{\top}\bm{\mu}, \bm{t}^{\top}\bm{\Sigma_{\bm{X}}\bm{t}})$, i.e. $\mathbb{E}\left[Z\right]=t_1\mu_1 + t_2 \mu_2$, $\sigma_Z^2 = t_1^2 \sigma_X^2 + t_2^2 \sigma_Y^2$. \\
+The moment generating function of random vector $\bm{X}$ is: 
+$$M_{\bm{X}}(\bm{t}) = \mathbb{E}\left[e^{\bm{t}^{\top}\bm{X}}\right] = \mathbb{E}\left[e^{tZ}\right]$$
+By our result in 1.(c): 
+$$
+M_{\bm{X}}(\bm{t}) = \mathbb{E}\left[e^{Z}\right] = M_Z(1) = \exp\left\{\mu_Z + \frac{1}{2}\sigma_Z^2\right\} = \exp\left\{t_1\mu_1 + t_2 \mu_2 + \frac{1}{2}(t_1^2 \sigma_X^2 + t_2^2 \sigma_Y^2)\right\}
+$$
+On the otherhand, let $\tilde{\bm{X}} = (\tilde{X}~~\tilde{Y})^{\top}$ where $\tilde{X}\perp\tilde{Y}$, $\tilde{X}\sim \mathcal{N}(\mu_X, \sigma_X^2)$, $\tilde{Y}\sim \mathcal{N}(\mu_Y, \sigma_Y^2)$. By the fact that $\tilde{X}\perp \tilde{Y}$, we deduce that 
+$$
+M_{\tilde{\bm{X}}}(\bm{t}) = M_{\tilde{X}}(t_1) M_{\tilde{Y}}(t_2) = \exp\left\{t_1\mu_1 + t_2 \mu_2 + \frac{1}{2}(t_1^2 \sigma_X^2 + t_2^2 \sigma_Y^2)\right\} = M_{\bm{X}}(\bm{t})
+$$
+Since the joint pdf is uniquely determined by the moment generating function, we deduce that the pair $(X,Y)$ has same distribution as the pair $(\tilde{X},\tilde{Y})$. As a result $\tilde{X}\perp \tilde{Y}$ $\Rightarrow$ $X\perp Y$.
+
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} (Equalities)
+\end{problem}
+\begin{proof} \textbf{(a)} (\textit{Chebychev's Inequality}) Consider
+\begin{equation}
+	\lambda^p \mathbbm{1}_{\{X> \lambda\}} = \begin{cases}
+	0 & X \leq \lambda\\
+	\lambda^p & X > \lambda
+	\end{cases}
+\end{equation}
+Since $\lambda, p>0$ $\Rightarrow$ If $X \leq \lambda$, $|X|^p \geq 0$, if $X>\lambda$, $|X|^p>\lambda^p$. Hence we have $\lambda^p \mathbbm{1}_{\{X> \lambda\}} \leq |X|^p$. Take expectation both sides:
+\begin{equation}
+	 \mathbb{E}\left[\lambda^p\mathbbm{1}_{\{X> \lambda\}}\right] \leq \mathbb{E}\left[|X|^p\right]
+\end{equation}
+\begin{equation}
+	LHS = \lambda^p \int  \mathbbm{1}_{\{X> \lambda\}} d \mathbb{P} = \lambda^p\mathbb{P}\left(X>\lambda\right)  \leq \mathbb{E}\left[|X|^p\right]
+\end{equation}
+It follows that $\mathbb{P}\left(X> \lambda \right) < \mathbb{E}\left[|X|^p\right] / \lambda^p$. \\
+~\\
+\textbf{(b)} By the property of convex function, at the point $(\mathbb{E}\left[X\right], \varphi(\mathbb{E}\left[X\right]))$, there exists a line $y=ax+b$ such the convex function is supported by this line:
+$$
+a x + b \leq \varphi(x)~~~(\dag)
+$$
+where the line $y = ax+b $ passes the \textit{tangent} point $(\mathbb{E}\left[X\right], \varphi(\mathbb{E}\left[X\right]))$, hence $\varphi(\mathbb{E}\left[X\right]) = a \mathbb{E}\left[X\right]+b$. \\
+($\dag$) holds for any real value $x\in \mathbb{R}$, so it holds for random varaible $X$:
+$$
+a X + b \leq \varphi(X)
+$$
+Take expectation both sides:
+$$
+\mathbb{E}\left[a X + b\right] \leq \mathbb{E}\left[\varphi(X)\right]
+$$
+Where $RHS= a \mathbb{E}\left[X\right]+b = \varphi(\mathbb{E}\left[X\right])$ is the value of $\varphi$ as the tangent point. Hence $\varphi(\mathbb{E}\left[X\right]) \leq \mathbb{E}\left[\varphi(X)\right]$. \\
+\textit{Note: I didn't use the construction in hint, since $\varphi$ may not be differentiable at $(\mathbb{E}\left[X\right], \varphi(\mathbb{E}\left[X\right]))$}.
+
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} (Borel $\sigma$-Algebra)
+\end{problem}
+\begin{proof} First off, for all $\alpha \in \mathbb{R}$
+$$
+B_{\alpha} := (-\infty, \alpha]  = \bigcap_{n = 1}^{\infty} (-\infty, a+\tfrac{1}{n}) = \left(\bigcup_{n =1}^{\infty} A_{\alpha + \frac{1}{n}}^{\complement} \right)^{\complement} \in \mathcal{B}
+$$
+Since $A_{\alpha + \frac{1}{n}} \in \mathcal{B}$, and the representation involves only countable union and complement. Hence
+$$
+(0,1] = \left((-\infty, 0] \cup (1, +\infty)\right)^{\complement} = \left((-\infty, 0] \cup (-\infty,1]^{\complement}\right)^{\complement} = (B_{0}\cup B_1^{\complement})^{\complement} \in \mathcal{B}
+$$
+$$
+\{0\} = \left((-\infty, 0) \cup (0, +\infty)\right)^{\complement} = \left((-\infty, 0) \cup (-\infty,0]^{\complement}\right)^{\complement} = (A_{0}\cup B_0^{\complement})^{\complement} \in \mathcal{B}
+$$
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem}
+\end{problem}
+\begin{proof} \textbf{(a)} By definition, $H(x) = \mathbbm{1}_{\{2|\left \lfloor{x}\right \rfloor\}}$ is a periodic function with period length $T=2$:
+$$
+H(x) = \begin{cases}
+0 & x \in [2t, 1+2t)\\
+1 & x \in [1+2t, 2+2t)
+\end{cases}
+$$
+Where $t\in \mathbb{N}$. \\
+Therefore, $X_n: [0,1)\to \mathbb{R}, X(y)=H(2^ny)$ is also a periodic function with period length $T=2^{1-n}$:
+$$
+X_n(y) = \begin{cases}
+0 & y \in [2^{1-n}k,~~2^{-n}+2^{1-n}k)\\
+1 & y \in [2^{-n}+2^{1-n}k,~~2^{1-n}+2^{1-n}k)
+\end{cases}~~~0\leq k\leq 2^{n-1}-1
+$$
+The range of $X_n$ is $\mathcal{R}(X_n) = \{\emptyset, \{0\}, \{1\},\{0,1\}\}$. By definition: $X_n$ is a random variable $\iff$ $\forall A \in \mathcal{R}(X_n)$, $X^{-1}(A) \in \mathcal{B}(\mathbb{R})$. Where $X^{-1}(A)$ is the preimage of $A$, $\mathcal{B}([0,1))$ is the Borel $\sigma$-algebra on $\Omega = [0,1)$. Clearly
+\begin{equation}
+	\begin{split}
+		&X_n^{-1}(\emptyset) = \emptyset;~~~~X_n^{-1}(\{0,1\}) = \Omega\\
+		&X_n^{-1}(\{0\}) = \bigcup_{k = 0}^{2^{n-1}-1} [2^{1-n}k,~2^{-n}+2^{1-n}k) \in \mathcal{B}([0,1))\\
+		&X_n^{-1}(\{1\}) = \bigcup_{k=0}^{2^{n-1}-1} [2^{-n}+2^{1-n}k,~2^{1-n}+2^{1-n}k) \in \mathcal{B}([0,1))\\
+	\end{split}
+\end{equation}
+So $X_n$ is $\mathcal{B}$-measurable, and hence a random variable $\Omega \to \mathbb{R}$ for all $n=1,2,..$.\\
+~\\
+\textbf{(b)} Since $\mathbb{P}\left(H(x)=0\right)=\mathbb{P}\left(H(x)=1\right)=\frac{1}{2}$. For arbitrary $n\geq 1$: 
+\begin{equation}
+	\mathbb{P}\left(X_n< a\right) = \begin{cases}
+	0 & a \leq 0\\
+	\frac{1}{2} & 0 < a \leq 1\\
+	1 & a > 1
+	\end{cases}
+\end{equation}
+Therefore
+\begin{equation}
+	\mathbb{P}\left(X_n< a\right)\mathbb{P}\left(X_m< a\right) = \begin{cases}
+	0 & a \leq 0\\
+	\frac{1}{4} & 0 < a \leq 1\\
+	1 & a > 1
+	\end{cases}
+\end{equation}
+~\\
+\textbf{(c)} WLOG suppose $m < n$. Then the period $T_m = 2^{n-m}T_n$. For $0<a\leq 1$: $\mathbb{P}\left(X_m < a~\&~ X_n < a\right) = \mathbb{P}\left(X_m=0\right)\mathbb{P}\left(X_n=0|X_m=0\right) = \frac{1}{2}\times \frac{1}{2}=\frac{1}{4}$.
+\begin{equation}
+	\mathbb{P}\left(X_m < a~\&~ X_n < a\right) = \begin{cases}
+	0 & a \leq 0\\
+	\frac{1}{4} & 0 < a \leq 1\\
+	1 & a > 1
+	\end{cases}
+\end{equation}
+~\\
+\textbf{(d)} Clearly
+$$
+\mathbb{E}\left[X_n\right] = \int_{\Omega} X_n d \mathbb{P} = \mathbb{P}\left(X_n=1\right) = \frac{1}{2}
+$$
+$$
+\mathbb{E}\left[X_n^2\right] =\int_{\Omega} X_n^2 d \mathbb{P}= 1^2 \times \mathbb{P}\left(X_n=1\right) = \frac{1}{2}
+$$
+For $n\ne m$:
+$$
+\mathbb{E}\left[X_n X_m\right] = \int_{\Omega} X_nX_m d \mathbb{P}= \mathbb{P}\left(X_n = 1 \text{ and } X_m=1\right) = \frac{1}{4}
+$$
+\end{proof}
+
+
+
+
+\end{document}
