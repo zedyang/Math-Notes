@@ -1,0 +1,314 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz, array, eurosym}
+\usepackage{float}
+\renewcommand{\arraystretch}{1.4}
+\newcolumntype{L}{>{\arraybackslash}m{10cm}}
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\argmax}{argmax}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+
+\title{\textbf{Econometrics III}}
+\author{Zed}
+
+\begin{document}
+\maketitle
+
+\begin{table}[h]
+\vspace{-10pt}
+\caption{\textit{Nomenclatures}}
+\vspace{3pt}
+\centering
+\def\arraystretch{1.15}
+\begin{tabular}{lL}
+\hline
+Notation & \hspace{4.6cm} Description \\ 
+\hline
+$X\,{\buildrel d \over =}\,Y$ & Random varaibles $X$ and $Y$ have identical distribution.\\
+\hline 
+\end{tabular}
+\label{tab:Nomen}
+\end{table}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} Suppose $X_i \sim i.i.d~~\mathcal{N}(0,\sigma^2)$ define 
+$$
+\hat{\sigma}^2 = \frac{1}{n} \sum_{i=1}^n X_i^2
+$$
+\begin{itemize}
+  \item[a.] Show $\hat{\sigma}^2$ is unbiased.
+  \item[b.] Compute the variance of $\hat{\sigma}^2$.
+  \item[c.] Compute the Cramer-Rao lower bound on the variance of any unbiased estimator of $\sigma^2$.
+\end{itemize}
+\end{problem}
+\begin{proof} \textbf{(a)}
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\hat{\sigma}^2 = \frac{1}{n}\mathbb{E}\left[\sum_{i=1}^n X_i^2\right] = \frac{1}{n}\sum_{i=1}^n \mathbb{E}\left[X_i^2\right] = \sigma^2
+  \end{split}
+\end{equation}
+\textbf{(b)} We have $X_i^2 \,{\buildrel d \over =}\, \sigma^2 \chi^2(1)$. Where $\chi^2(k)$ is the Chi-squared random variable with degrees of freedom $k$. Since $\mathrm{\mathbb{V}ar}[\chi^2(k)]=2k$, it follows that $\mathrm{\mathbb{V}ar}[X_i^2] = 2\sigma^4$.
+\begin{equation}
+  \mathrm{\mathbb{V}ar}\left[\hat{\sigma}^2\right] = \frac{1}{n^2}\sum \mathrm{\mathbb{V}ar}\left[X_i^2\right] = \frac{1}{n^2} 2n\sigma^4 = \frac{2\sigma^4}{n}
+\end{equation}
+\textbf{(c)} We have $\log f(x|\sigma^2) = -\log \sqrt{2\pi} - \log \sqrt{\sigma^2} - \frac{x^2}{2\sigma^2}$. The score function and second order derivative are
+\begin{equation}
+  S(x,\theta) = \frac{\partial \log f(x|\sigma^2)}{\partial (\sigma^2)} = -\frac{1}{2\sigma^2} + \frac{x^2}{2(\sigma^2)^2}
+\end{equation}
+\begin{equation}
+  \frac{\partial^2 \log f(x|\sigma^2)}{\partial (\sigma^2)^2} =\frac{1}{2(\sigma^2)^2} - \frac{x^2}{(\sigma^2)^3}
+\end{equation}
+Fisher information is
+\begin{equation}
+  I(\sigma^2) = -\mathbb{E}\left[\frac{\partial^2 \log f(x|\sigma^2)}{\partial (\sigma^2)^2}\right] = -\frac{1}{2(\sigma^2)^2} + \frac{\mathbb{E}\left[X^2\right]}{(\sigma^2)^3} = \frac{1}{2\sigma^4}
+\end{equation}
+Therefore
+$$
+\mathrm{\mathbb{V}ar}\left[\hat{\sigma}^2\right] \geq \frac{1}{nI(\sigma^2)} = \frac{2\sigma^4}{n}
+$$
+\end{proof}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} Under the assumption of problem 1,
+\begin{itemize}
+  \item[a.] Derive $\hat{\sigma}^2_{mle}$.
+  \item[b.] Derive the asymptotic distribution of $\sqrt{n}(\hat{\sigma}^2_{mle}-\sigma^2)$.
+  \item[c.] Derive $\hat{s}_{mle}$ for the population standard deviation $\sigma$.
+  \item[d.] Is $\hat{s}_{mle}$ unbiased?
+  \item[e.] Derive the asymptotic distribution of $\sqrt{n}(\hat{s}_{mle}-\sigma)$.
+  \item[f.] Derive the asymptotic distribution of $\sqrt{n}(\hat{s}_{mle}^2 - \sigma^2)$.
+\end{itemize}
+\end{problem}
+\begin{solution} \textbf{(a)}
+\begin{equation}
+  \log L(\sigma^2|\bm{x}) = \sum_{i=1}^n\log f(x_i|\sigma^2) = -n\log \sqrt{2\pi} - n\log \sqrt{\sigma^2} - \sum_{i=1}^n\frac{x_i^2}{2\sigma^2}
+\end{equation}
+\begin{equation}
+  FOC:~~\frac{\partial \log L(\sigma^2|\bm{x})}{\partial (\sigma^2)} = -\frac{n}{2\sigma^2} + \frac{1}{2(\sigma^2)^2}\sum_{i=1}^n x_i^2 = 0
+\end{equation}
+$\hat{\sigma}^2_{mle} = \frac{1}{n}\sum_{i=1}^n x_i^2 = \hat{\sigma}^2$ in problem 1.\\
+~\\
+\textbf{(b)} By theorem (asymptotic normality of MLE): 
+\begin{equation}
+  \sqrt{n}(\hat{\sigma}_{mle}^2-\sigma^2) \xrightarrow{D} \mathcal{N}\left(0, I^{-1}(\sigma^2) \right) \,{\buildrel d \over =}\, \mathcal{N}\left(0, 2\sigma^4 \right)
+\end{equation}
+Where the Fisher information is calculated in problem 1. \\
+~\\
+\textbf{(c)} 
+\begin{equation}
+  \log L(\sigma|\bm{x}) = \sum_{i=1}^n\log f(x_i|\sigma) = -n\log \sqrt{2\pi} - n\log \sigma - \sum_{i=1}^n\frac{x_i^2}{2\sigma^2}
+\end{equation}
+\begin{equation}
+  FOC:~~\frac{\partial \log L(\sigma|\bm{x})}{\partial \sigma} = -\frac{n}{\sigma} + \frac{1}{\sigma^3}\sum_{i=1}^n x_i^2 = 0
+\end{equation}
+$\hat{s}_{mle} = \sqrt{\frac{1}{n}\sum_{i=1}^n x_i^2} = \sqrt{\hat{\sigma}^2_{mle}}$. \\
+~\\
+\textbf{(d)} Consider
+\begin{equation}
+  \mathbb{E}\left[\hat{s}_{mle}\right] = \mathbb{E}\left[\sqrt{\frac{1}{n}\sum_{i=1}^n x_i^2}\right] \leq \sqrt{\mathbb{E}\left[\frac{1}{n}\sum_{i=1}^n x_i^2\right]} = \sqrt{\mathbb{E}\left[\hat{\sigma}_{mle}^2\right]} = \sigma
+\end{equation}
+Due to Jensen's Inequality. So $\hat{s}_{mle}$ is biased downward.\\
+~\\
+\textbf{(e)} By (b): $\sqrt{n}(\hat{\sigma}^2_{mle}-\sigma^2) \xrightarrow{D} \mathcal{N}(0, 2\sigma^4)$. Using Delta method, it follows that
+\begin{equation}
+  \sqrt{n}(g(\hat{\sigma}^2_{mle})-g(\sigma^2)) \xrightarrow{D} \mathcal{N}\left(0, 2\sigma^4 \left(\frac{\partial g}{\partial x}(\sigma^2)\right)^2 \right)
+\end{equation}
+Here we get $g(x)=\sqrt{x}$. Therefore $\frac{\partial g}{\partial x}(\sigma^2) = \frac{1}{2\sigma}$
+\begin{equation}
+  \sqrt{n}(\sqrt{\hat{\sigma}_{mle}}-\sigma) = \sqrt{n}(\hat{s}_{mle}-\sigma)\xrightarrow{D} \mathcal{N}\left(0, \frac{\sigma^2}{2} \right)
+\end{equation}
+\textbf{(f)}
+\begin{equation}
+  \sqrt{n}(\hat{s}_{mle}^2-\sigma^2) = \sqrt{n}(\hat{\sigma}_{mle}^2-\sigma^2) \xrightarrow{D} \mathcal{N}\left(0, 2\sigma^4 \right)
+\end{equation}
+Same as the result in (b).
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} (\textit{Finite Sample Efficiency}) $\{X_i\}$ i.i.d., taking value 0,1,2 with probability $1-3p$, $p$ and $2p$. $0<p<1/3$.
+\begin{itemize}
+  \item[a.] Find MLE of $p$.
+  \item[b.] Find the Cramer-Rao lower bound for unbiased estimators.
+  \item[c.] Find the conditions in which
+  $$
+  \hat{p} = \frac{1}{n}\sum_{i=1}^n a_1 \mathbbm{1}_{\{x_i=1\}} + a_2 \mathbbm{1}_{\{x_i=2\}}
+  $$
+  an unbiased estimator of $p$.
+  \item[d.] Suppose $a_1, a_2$ are chosen such that $\hat{p}$ is unbiased, find its asymptotic distribution.
+  \item[e.] Suppose $a_1, a_2$ are chosen such that $\hat{p}$ is unbiased. What choice of the pair minimizes the variance? What about asymptotic variance?
+\end{itemize}
+\end{problem}
+\begin{solution} \textbf{(1)} Denote $f(x|p)$ the probability mass function of $X$ parametrized by $p$. We have
+\begin{equation}
+  f(x|p) = \mathbbm{1}_{\{x=0\}}(1-3p) + \mathbbm{1}_{\{x=1\}}p + \mathbbm{1}_{\{x=2\}}2p
+\end{equation}
+Given the sample $\bm{x}=(x_1, ..., x_n)$ of size $n$, the log likelihood function is therefore
+\begin{equation}
+  \begin{split}
+    \log L(p|\bm{x}) = \sum_{i=1}^n \log f(x_i|p) =  \sum_{i=1}^n\log\left\{\mathbbm{1}_{\{x_i=0\}}(1-3p) + \mathbbm{1}_{\{x_i=1\}}p + \mathbbm{1}_{\{x_i=2\}}2p\right\}
+  \end{split}
+\end{equation}
+We have $\hat{p}_{mle}=\argmax_{p}\log L(p|\bm{x})$. Take first order derivative:
+\begin{equation}
+  \begin{split}
+    \frac{\partial \log L(p|\bm{x})}{\partial p} &= \sum_{i=1}^n \frac{-3\mathbbm{1}_{\{x_i=0\}} + \mathbbm{1}_{\{x_i=1\}} + 2\mathbbm{1}_{\{x_i=2\}}}{f(x_i|p)} \\
+    &= -\frac{3}{f(0|p)}\sum_{i=1}^n \mathbbm{1}_{\{x_i=0\}} +  \frac{1}{f(1|p)}\sum_{i=1}^n \mathbbm{1}_{\{x_i=1\}}  +  \frac{2}{f(2|p)}\sum_{i=1}^n \mathbbm{1}_{\{x_i=2\}}\\
+    &=  -\frac{3n_0}{1-3p} + \frac{n_1}{p} + \frac{2n_2}{2p}
+  \end{split}
+\end{equation}
+Where we denote $n_0:= \sum_{i=1}^n \mathbbm{1}_{\{x_i=0\}}$, $n_1:= \sum_{i=1}^n \mathbbm{1}_{\{x_i=1\}}$. $n_2:= \sum_{i=1}^n \mathbbm{1}_{\{x_i=2\}}$, i.e. the number of 0, 1, 2 observations in the sample. With first order condition:
+\begin{equation}
+  \hat{p}_{mle} = \frac{n_1 + n_2}{3n_0 + 3n_1 + 3n_2} = \frac{1}{n}\sum_{i=1}^n\frac{n_1+n_2}{3} = \frac{1}{n}\sum_{i=1}^n\left(\tfrac{1}{3}\mathbbm{1}_{\{x_i=1\}} + \tfrac{1}{3}\mathbbm{1}_{\{x_i=2\}}\right) = \frac{1}{n}\sum_{i=1}^n\left(\tfrac{1}{3}U_i + \tfrac{1}{3}V_i\right) 
+\end{equation}
+\textbf{(b)} The score function is
+\begin{equation}
+  S(x, p) = \frac{\partial }{\partial p}\log f(x|p) =  \frac{-3\mathbbm{1}_{\{x=0\}} + \mathbbm{1}_{\{x=1\}} + 2\mathbbm{1}_{\{x=2\}}}{f(x|p)} = \begin{cases}
+  -\frac{3}{1-3p} & x=0\\
+  \frac{1}{p} & x=1 \text{ or }2
+  \end{cases}
+\end{equation}
+Hence the Fisher information
+$$
+I(p) = \mathbb{E}\left[S^2(x, p)\right] = \frac{9}{(1-3p)^2} \cdot (1-3p) + \frac{1}{p^2}\cdot 3p = \frac{3}{p(1-3p)}
+$$
+The Cramer-Rao lower bound is
+$$
+\mathrm{\mathbb{V}ar}\left[\hat{p}\right] \geq \frac{1}{nI(p)} = \frac{1}{n}\left(\frac{1}{3}-p\right)p
+$$
+\textbf{(c)}
+\begin{equation}
+  \mathbb{E}\left[\hat{p}\right] = \frac{1}{n}\sum_{i=1}^n \left(a_1 \mathbb{P}\left(X_i=1\right) + a_2 \mathbb{P}\left(X_i=2\right)\right) = (a_1 + 2a_2)p
+\end{equation}
+Hence, as long as $a_1+2a_2 = 1$, $\hat{p}$ is unbiased estimator of $p$.\\
+~\\
+\textbf{(d)} First off we show $\hat{p}$ is aymptotically normal. Consider $P_i:=a_1U_i + a_2V_i$. Clearly $\{P_i\}$ are i.i.d. $\mathbb{E}\left[P_i\right]=(a_1+2a_2)p$. When the unbiasedness condition in (c) holds, i.e. $a_1 + 2a_2=1$, we have $\mathbb{E}\left[P_i\right] = p$. \\
+Since $\hat{p}=\frac{1}{n} \sum_{i=1}^nP_i = \bar{P}$, by CLT $\Rightarrow$
+$$
+\sqrt{n}(\bar{P} - \mathbb{E}\left[P_i\right]) \xrightarrow{D} \mathcal{N}(0, \mathrm{\mathbb{V}ar}\left[P_i\right])
+$$
+It suffices to find the variance of $P_i$.\\
+We have $a_1 = 1-2a_2$. \\
+$U_i\sim Bernoulli(p)$, hence $\mathrm{\mathbb{V}ar}\left[U_i\right]=p(1-p)$.\\
+$V_i\sim Bernoulli(2p)$, hence $\mathrm{\mathbb{V}ar}\left[V_i\right]=2p(1-2p)$.\\
+Moreover, $U_iV_i=0$ all the time, since $X_i$ can not take $1,2$ at the same time. $\mathbb{E}\left[U_iV_i\right]=0$; but $\mathbb{E}\left[U_i\right]\mathbb{E}\left[V_i\right]=p\cdot 2p = 2p^2$. It follows that $\mathrm{\mathbb{C}ov}\left[U_i, V_i\right] = -2p^2$.
+\begin{equation}
+  \begin{split}
+    \mathrm{\mathbb{V}ar}\left[P_i\right] &= \left(a_1^2 \mathrm{\mathbb{V}ar}\left[U_i\right] + a_2^2 \mathrm{\mathbb{V}ar}\left[V_i\right] + 2a_1a_2 \mathrm{\mathbb{C}ov}\left[U_i, V_i\right]\right)\\
+    &=(1-2a_2)^2 p(1-p) + 2a_2^2p(1-2p) - 4(1-2a_2)a_2p^2\\
+    &=\left(1-4a_2+6a_2^2-p\right)p
+  \end{split}
+\end{equation}
+Hence the asymptotic distribution of $\hat{p}$ is
+$$
+\sqrt{n}(\hat{p} - p) \xrightarrow{D} \mathcal{N}(0, \left(1-4a_2+6a_2^2-p\right)p)
+$$
+\textbf{(e)} The MLE estimator is asymptotically efficient, hence $\hat{p}_{mle}$ minimizes the asymptotic variance with $a_1=a_2=\frac{1}{3}$. \\
+For the finite-sample variance, since $\{P_i\}$'s are i.i.d., we have
+\begin{equation}
+  \mathrm{\mathbb{V}ar}\left[\hat{p}\right] = \frac{1}{n^2}\sum_{i=1} \mathrm{\mathbb{V}ar}\left[P_i\right] = \frac{1}{n} \mathrm{\mathbb{V}ar}\left[P_i\right]
+\end{equation}
+So minimizing in-sample is essentially minimizing $\mathrm{\mathbb{V}ar}\left[P_i\right]$ variance with respect to $a_2$. We have
+\begin{equation}
+  \frac{\partial \mathbb{V}ar\left[P_i\right]}{\partial a_2} =  p(12a_2-4) = 0~~~\Rightarrow ~~~a_2^*=\frac{1}{3}
+\end{equation}
+And $a_1^*=1-2a_2^* = \frac{1}{3}$. So the finite-sample efficient unbiased estimator is $\hat{p}^* = \frac{1}{n}\sum_{i=1}^n (\frac{1}{3}U_i+\frac{1}{3}V_i)$, same as the MLE. The minimum finite-sample variance is
+\begin{equation}
+  \mathrm{\mathbb{V}ar}\left[\hat{p}^*\right] = \frac{1}{n} \left(\frac{1}{3}-p\right)p
+\end{equation}
+\end{solution}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+
+\begin{problem} (\textit{MLE of the Population V.S. Sample Mean}) Consider $X$ whose pdf is
+$$
+f_{X}(x, \theta) = \begin{cases}\frac{\theta}{1-\theta} x^{\frac{2\theta-1}{1-\theta}} & 0<x\leq 1\\
+0 & \text{otherwise}
+\end{cases}
+$$
+where $1/2 < \theta <1$.
+\begin{itemize}
+  \item[a.] Find $\mathbb{E}\left[X\right]$.
+  \item[b.] If $X_1, X_2, ..., X_N$ is a random sample from the above distribution, find MLE of $\theta$.
+\end{itemize}
+\end{problem}
+\begin{solution} \textbf{(a)}
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[X\right] = \int_0^1 x \frac{\theta}{1-\theta} x^{\frac{2\theta-1}{1-\theta}}dx = \int_0^1  \frac{\theta}{1-\theta} x^{\frac{\theta}{1-\theta}}dx = \theta
+  \end{split}
+\end{equation}
+\textbf{(b)}
+\begin{equation}
+  \begin{split}
+    \log L(\theta |\bm{x}) &= \sum_{i=1}^N \log \left(\frac{\theta}{1-\theta}x_i^{\frac{2\theta-1}{1-\theta}}\right)\\
+    &= N\log \theta -  N\log (1-\theta) +  \frac{2\theta-1}{1-\theta}\sum_{i=1}^N\log x_i
+  \end{split}
+\end{equation}
+First order condition:
+\begin{equation}
+  \begin{split}
+    \frac{\partial \log L(\theta| \bm{x})}{\partial \theta} = \frac{N}{\theta} + \frac{N}{1-\theta} - \frac{1}{(1-\theta)^2} \sum_{i=1}^N \log \frac{1}{x_i} = 0
+  \end{split}
+\end{equation}
+It follows that
+\begin{equation}
+  \sum_{i=1}^N \log \tfrac{1}{x_i} = N\left(\tfrac{(1-\theta)^2}{\theta}+(1-\theta)\right) = N(\tfrac{1}{\theta}-1)
+\end{equation}
+$$
+\hat{\theta}_{mle} = \frac{1}{1+\frac{1}{N}\sum_{i=1}^N \log (1/x_i)}
+$$
+\end{solution}
+
+
+
+
+\end{document}
