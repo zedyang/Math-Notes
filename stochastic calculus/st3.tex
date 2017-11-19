@@ -1,0 +1,376 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz, array, eurosym}
+\usepackage{float}
+\renewcommand{\arraystretch}{1.4}
+\newcolumntype{L}{>{\arraybackslash}m{10cm}}
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+\title{\textbf{Stochastic Calculus Assignment III}}
+\author{Ze Yang~~~~(zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+~\\
+\textit{Note:} \textit{I will use the following notations throughout this assignment:}
+\begin{itemize}
+	\item[$\cdot$] $W_t := W(t)$.
+	\item[$\cdot$] $\Delta_{s,t} := W(t) - W(s)$.
+	\item[$\cdot$] $X\in m \mathcal{F}$: $X$ is $\mathcal{F}$-measurable.
+	\item[$\cdot$] $X\perp \mathcal{F}$: Random variable $X$ is independent to sigma algebra $\mathcal{F}$. 
+	\item[$\cdot$] $X\stackrel{d}{=} Y$: Random variable $X,Y$ have identical distribution.
+\end{itemize}
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem}
+\end{problem}
+\begin{proof} (\textit{The first part}) First we show that $I(t)$ is a martingale, i.e. for $s<t$ we want to show $\mathbb{E}\left[I(t)\middle|\mathcal{F}_s\right]=I(s)$. There are only three different cases in terms of the relationship among $s,t,$ and $t_1$: 
+\begin{itemize}
+	\item[1.] $s<t<t_1$: $I(s)= \xi_0 W_s$, $I(t) = \xi_0 W_t$. So
+	\begin{equation}
+		\begin{split}
+			\mathbb{E}\left[I(t)\middle|\mathcal{F}_s\right] &= \mathbb{E}\left[\xi_0 W_t\middle|\mathcal{F}_s\right] = \mathbb{E}\left[\xi_0(W_s + \Delta_{s,t})\middle|\mathcal{F}_s\right] \\
+			&= \xi_0 W_s + \mathbb{E}\left[\Delta_{s,t}\right] = \xi_0 W_s + 0= I(s)
+		\end{split}
+	\end{equation}
+	Where we used the fact that $\xi_0 \in m \mathcal{F}_0 \iff \forall \alpha \in \mathbb{R}, \xi_0^{-1}((-\infty, \alpha]) \in \mathcal{F}_0 \subseteq \mathcal{F}_s$. Hence $\xi_0 \in m \mathcal{F}_s$. Moreover, $W_s \in m \mathcal{F}_s$, $\Delta_{s,t}\perp \mathcal{F}_s$. 
+	\item[2.] $s<t_1\leq t$: $I(s)= \xi_0 W_s$, $I(t) = \xi_0 W_{t_1} + \xi_1 \Delta_{t_1, t}$. Hence
+	\begin{equation}
+		\begin{split}
+			\mathbb{E}\left[I(t)\middle|\mathcal{F}_s\right] &= \mathbb{E}\left[ \xi_0 W_{t_1} + \xi_1 \Delta_{t_1, t}\middle|\mathcal{F}_s\right] \\
+			&=\mathbb{E}\left[\xi_0(W_s + \Delta_{s,t_1}) + \mathbb{E}\left[\xi_1 \Delta_{t_1, t}\middle|\mathcal{F}_{t_1}\right]\middle|\mathcal{F}_s\right] \\
+			&= \xi_0 W_s + \mathbb{E}\left[\Delta_{s,t_1}\right] + \mathbb{E}\left[\xi_{1} \mathbb{E}\left[\Delta_{t_1, t}\right]\middle|\mathcal{F}_s\right] \\
+			&= \xi_0 W_s + 0 + \mathbb{E}\left[\xi_{1} \cdot 0\middle|\mathcal{F}_s\right] = I(s)
+		\end{split}
+	\end{equation}
+	Where we used the tower property in the second equility (for the third term $\xi_1 \Delta_{t_1,t}$). Moreover, the third equility is due to $\Delta_{t_1, t}\perp \mathcal{F}_{t_1}, \xi_1 \in m \mathcal{F}_{t_1}$, and the facts we've used in the first situation.
+	\item[3.] $t_1 \leq s < t$: $I(s)= \xi_0 W_{t_1} + \xi_1 \Delta_{t_1, s}$; $~~I(t) = \xi_0 W_{t_1} + \xi_1 \Delta_{t_1, t}$. Hence
+	\begin{equation}
+		\begin{split}
+			\mathbb{E}\left[I(t)\middle|\mathcal{F}_s\right] &= \mathbb{E}\left[ \xi_0 W_{t_1} + \xi_1 \Delta_{t_1, t}\middle|\mathcal{F}_s\right] \\
+			&=  \xi_0 W_{t_1}  + \mathbb{E}\left[\xi_1 (W_t - W_s + W_s - W_{t_1})\middle|\mathcal{F}_s\right]\\ 
+			&= \xi_0 W_{t_1} + \xi_1 \mathbb{E}\left[\Delta_{t,s}\middle|\mathcal{F}_s\right] + \xi_1 (W_s - W_{t_1})\\
+			&=\xi_0 W_{t_1} + \xi_1 \cdot 0+ \xi_1 \Delta_{t_1, s} = I(s)
+		\end{split}
+	\end{equation}
+	Where we used the fact that $\xi_1 \in m \mathcal{F}_{t_1} \iff \forall \alpha \in \mathbb{R}, \xi_1^{-1}((-\infty, \alpha]) \in \mathcal{F}_{t_1} \subseteq \mathcal{F}_s$. Hence $\xi_1 \in m \mathcal{F}_s$. Similarly $W_{t_1} \in m \mathcal{F}_{s}$, so we can take $\xi_1(W_s-W_{t_1})$ out of the conditional expectation on $\mathcal{F}_s$.
+\end{itemize}
+Therefore, we conclude that $\mathbb{E}\left[I(t)\middle|\mathcal{F}_s\right] = I(s)$ $\forall s < t$. \\
+Clearly by its definition, $I(t)$ is adapted to the filtration $\{\mathcal{F}_t\}$. Hence, $I(t)$ is a martingale w.r.t. $\{\mathcal{F}_t\}$.\\
+~\\
+(\textit{The second part}) Now we show $I^2 - A$ is martingale. Call the new process $Y(t)$, we have
+\begin{equation}
+	Y(t):=I^2(t) - A(t) = \begin{cases}
+	\xi_0^2 (W^2_t - t) & t < t_1 \\
+	\xi_0^2 (W_{t_1}^2 - t_1) + \xi_1^2 (\Delta_{t_1,t}^2 - (t-t_1)) + 2\xi_0 \xi_1 W_{t_1}\Delta_{t_1, t} & t\geq t_1
+	\end{cases}
+\end{equation}
+We still proceed by considering the three cases:
+\begin{itemize}
+	\item[1.] $s<t<t_1$: $Y(t)=\xi_0^2 (W^2_t - t)$, $Y(s)=\xi_0^2 (W^2_s - s)$. Note that $W_t^2 - t$ is a martingale (\textit{Chapter.3 corollary 3.3}), and we've already shown that $\xi_0 \in m \mathcal{F}_s$. So we have:
+	\begin{equation}
+		\begin{split}
+			\mathbb{E}\left[Y(t)\middle|\mathcal{F}_s\right] = \xi_0^2\mathbb{E}\left[ (W^2_t - t)\middle|\mathcal{F}_s\right] = \xi_0^2(W^2_s - s) = I(s)
+		\end{split}
+	\end{equation}
+	\item[2.] $s<t_1\leq t$: $Y(t)=\xi_0^2 (W_{t_1}^2 - t_1) + \xi_1^2 (\Delta_{t_1,t}^2 - (t-t_1)) + 2\xi_0 \xi_1 W_{t_1}\Delta_{t_1, t}$;  $Y(s)=\xi_0^2 (W^2_s - s)$:
+	\begin{equation}
+		\begin{split}
+			\mathbb{E}\left[Y(t)\middle|\mathcal{F}_s\right] &= \mathbb{E}\left[\xi_0^2 (W_{t_1}^2 - t_1) + \xi_1^2 (\Delta_{t_1,t}^2 - (t-t_1)) + 2\xi_0 \xi_1 W_{t_1}\Delta_{t_1, t}\middle|\mathcal{F}_s\right] \\
+			&= \xi_0^2 (W_{s}^2 - s) + \mathbb{E}\left[\mathbb{E}\left[\xi_1^2 (\Delta_{t_1,t}^2 - (t-t_1)) + 2\xi_0 \xi_1 W_{t_1}\Delta_{t_1, t}\middle|\mathcal{F}_{t_1}\right]\middle|\mathcal{F}_s\right] \\
+			&= \xi_0^2 (W_{s}^2 - s) + \mathbb{E}\left[\xi_1^2 \{\mathbb{E}\left[\Delta_{t_1,t}^2\right] - (t-t_1)\} + 2\xi_0 \xi_1 W_{t_1}\mathbb{E}\left[\Delta_{t_1, t}\right]\middle|\mathcal{F}_s\right] \\
+			&= \xi_0^2 (W_{s}^2 - s) + \mathbb{E}\left[\xi_1^2\cdot 0 + 2\xi_0 \xi_1 W_{t_1}\cdot 0\middle|\mathcal{F}_n\right] \\
+			&= \xi_0^2 (W_{s}^2 - s) = Y(s)
+		\end{split}
+	\end{equation}
+	Where we've used the tower property in the second equility. Moreover, $\Delta^2_{t_1, t}, \Delta_{t_1, t}\perp \mathcal{F}_{t_1}$.
+	\item[3.] $t_1\leq s<t$: $Y(s)=\xi_0^2 (W_{t_1}^2 - t_1) + \xi_1^2 (\Delta_{t_1,s}^2 - (s-t_1)) + 2\xi_0 \xi_1 W_{t_1}\Delta_{t_1, s}$; ~~$Y(t)=\xi_0^2 (W_{t_1}^2 - t_1) + \xi_1^2 (\Delta_{t_1,t}^2 - (t-t_1)) + 2\xi_0 \xi_1 W_{t_1}\Delta_{t_1, t}$. We have $\xi_0, \xi_1, W_{t_1}, W_{t_1}^2, \Delta_{s,t_1}, \Delta_{s,t_1}^2 \in m \mathcal{F}_s$: 
+	\begin{equation}
+		\begin{split}
+			\mathbb{E}\left[Y(t)\middle|\mathcal{F}_s\right] &= \mathbb{E}\left[\xi_0^2 (W_{t_1}^2 - t_1) + \xi_1^2 (\Delta_{t_1,t}^2 - (t-t_1)) + 2\xi_0 \xi_1 W_{t_1}\Delta_{t_1, t}\middle|\mathcal{F}_s\right] \\
+			&= \xi_0^2 (W_{t_1}^2 - t_1) + \xi_1^2 (\mathbb{E}\left[\Delta_{t_1,t}^2\middle|\mathcal{F}_s\right] - (t-t_1)) + 2\xi_0 \xi_1 W_{t_1}\mathbb{E}\left[\Delta_{t_1,t}\middle|\mathcal{F}_s\right] \\
+			&= \xi_0^2 (W_{t_1}^2 - t_1) + \xi_1^2 (\mathbb{E}\left[\Delta_{t_1,s}^2+\Delta_{s,t}^2+2\Delta_{t_1,s}\Delta_{s,t}\middle|\mathcal{F}_s\right] - (t-t_1)) \\
+			&~~~~+ 2\xi_0 \xi_1 W_{t_1}\mathbb{E}\left[\Delta_{t_1,s}+\Delta_{s,t}\middle|\mathcal{F}_s\right] \\
+			&=\xi_0^2 (W_{t_1}^2 - t_1) + \xi_1^2 \{\Delta_{t_1,s}^2+\mathbb{E}\left[\Delta_{s,t}^2\right]+2\Delta_{t_1,s}\mathbb{E}\left[\Delta_{s,t}\right] - (t-t_1)\} \\
+			&~~~~+ 2\xi_0 \xi_1 W_{t_1}(\Delta_{t_1,s}+\mathbb{E}\left[\Delta_{s,t}\right]) \\
+			&=\xi_0^2 (W_{t_1}^2 - t_1) + \xi_1^2 \{\Delta_{t_1,s}^2+(t-s)+0-(t-t_1)\} + 2\xi_0 \xi_1 W_{t_1}(\Delta_{t_1,s}+0) \\
+			&=\xi_0^2 (W_{t_1}^2 - t_1) + \xi_1^2 (\Delta_{t_1,s}^2 - (s-t_1)) + 2\xi_0 \xi_1 W_{t_1}\Delta_{t_1, s}\\
+			&=Y(s)
+		\end{split}
+	\end{equation}
+\end{itemize}
+Therefore, we conclude that $\mathbb{E}\left[Y(t)\middle|\mathcal{F}_s\right] = Y(s)$ $\forall s < t$. \\
+Clearly by its definition, $Y(t)$ is adapted to the filtration $\{\mathcal{F}_t\}$. Hence, $Y(t)=I^2(t)-A(t)$ is a martingale w.r.t. $\{\mathcal{F}_t\}$.\\
+Moreover by definition, $A(0) = 0$, $A(t)$ is continuous, and $A(t)\nearrow$ with $t$. So by \textit{Chapter.3 theorem 3.5}: $A(t) = [I,I](t)$ as desired.
+~\\
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem}
+\end{problem}
+\begin{proof} \textbf{(a).} Let $Y=X_1 - \frac{\rho}{\sigma_2^2} X_2$. Since $\mathbb{E}\left[Y\right] = \mathbb{E}\left[X_1\right] = \mathbb{E}\left[X_2\right] = 0$, we have
+\begin{equation}
+	\begin{split}
+		\mathrm{\mathbb{C}ov}\left[Y, X_2\right] &= \mathbb{E}\left[YX_2\right] = \mathbb{E}\left[\left(X_1 - \frac{\rho}{\sigma_2^2} X_2\right)X_2\right] \\
+		&= \mathbb{E}\left[X_1X_2\right] - \frac{\rho}{\sigma_2^2} \mathbb{E}\left[X_2^2\right] = \rho - \frac{\rho}{\sigma_2^2}\sigma_2^2 = 0
+	\end{split}
+\end{equation}
+By normal property, $(Y,X_2)$ is still jointly normal. Hence $\mathrm{\mathbb{C}ov}\left[Y,X_2\right] = 0 \iff Y\perp X_2$. Rewrite $Y$:
+$$
+X_1 = Y + \frac{\rho}{\sigma^2_2} X_2
+$$
+Hence, by the fact that $Y\perp \sigma(X_2)$, $X_2 \in m \sigma(X_2) \Rightarrow$
+\begin{equation}
+	\begin{split}
+		\mathbb{E}\left[X_1\middle| X_2\right] &=  \mathbb{E}\left[ Y + \frac{\rho}{\sigma^2_2} X_2\middle|X_2\right] = \mathbb{E}\left[Y\right] + \frac{\rho}{\sigma^2_2} X_2 = \frac{\rho}{\sigma^2_2} X_2
+	\end{split}
+\end{equation}
+\textbf{(b).} Given $s<t$, we can write $\bm{W} = (W(s)~~W(t))^{\top} = (W(s)~~W(s)+\Delta_{s,t})^{\top}$. So for any $\bm{a}=(a_1~~a_2)^{\top} \in \mathbb{R}^2$
+\begin{equation}
+	\bm{a}^{\top} \bm{W} = (a_1 + a_2)W_s + a_2 \Delta_{s,t}
+\end{equation}
+clearly has a univariate normal distribution, because is just a linear combination of two independent normal variables. Hence by definition, $(W_s, W_t)$ follows bivariate normal distribution. And we have $\mathbb{E}\left[W_sW_t\right] = s$, $\mathbb{E}\left[W_t^2\right] = t$. Use the results in (a): we construct $Y=W_s - \frac{s}{t}W_t \perp W_t$, and
+\begin{equation}
+	\mathbb{E}\left[W_s\middle|W_t\right] = \mathbb{E}\left[Y+\frac{s}{t}W_t\middle|W_t\right] = \frac{s}{t}W_t
+\end{equation}
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem}
+\end{problem}
+\begin{proof} \textbf{(a).} $S(t) = S(s) Y$, where $Y=\exp\{(\alpha - \frac{\sigma^2}{2})(t-s) + \sigma \Delta_{s,t}\}$. Since $S(s)\in m \mathcal{F}_s$, $Y\perp \mathcal{F}_s$, by \textit{Chapter.2 lemma 4.12} we have:
+\begin{equation}
+	\begin{split}
+		\mathbb{E}\left[f(S(s)Y)\middle|\mathcal{F}_s\right] = \int_{\mathbb{R}} f(S(s)e^{(\alpha - \frac{\sigma^2}{2})(t-s) + \sigma x}) p_{\Delta_{s,t}}(x)dx
+	\end{split}
+\end{equation}
+Where $p_{\Delta_{s,t}}(x)$ is the pdf of $\Delta_{s,t} \sim \mathcal{N}(0, t-s)$. $p_{\Delta_{s,t}}(x) = \frac{1}{\sqrt{2\pi(t-s)}}e^{-\frac{x^2}{2(t-s)}}$. I.e.
+\begin{equation}
+	\mathbb{E}\left[f(S(s)Y)\middle|\mathcal{F}_s\right] = \int_{\mathbb{R}} f(S(s)e^{(\alpha - \frac{\sigma^2}{2})(t-s) + \sigma x}) \frac{1}{\sqrt{2\pi(t-s)}}e^{-\frac{x^2}{2(t-s)}}dx = g(S(s))
+\end{equation}
+\textbf{(b).} By Ito's formula:
+\begin{equation}
+	\begin{split}
+		dS(t,W_t) &= \partial_t S(t,W_t) dt +  \partial_x S(t,W_t) dW_t + \frac{1}{2} \partial_{xx} S(t,W_t) d[W, W](t)  \\
+		&= (\alpha - \tfrac{\sigma^2}{2})S(t,W_t) dt + \sigma S(t,W_t) dW_t + \frac{1}{2}\sigma^2  S(t,W_t)dt \\
+		&= \alpha S(t,W_t) dt + \sigma S(t,W_t) dW_t
+	\end{split}
+\end{equation}
+In the integral format:
+\begin{equation}
+	S(t) = S(0) + \int_0^t \alpha S(s) ds + \int_0^t \sigma S(s) dW_s~~~(*)
+\end{equation}
+i.e. $f(s,S(s)) = \alpha S(s)$; $g(s, S(s))=\sigma S(s)$.\\
+~\\
+\textbf{(c).} Assume $s<t$:
+\begin{equation}
+	\begin{split}
+		\mathbb{E}\left[S(t)\middle|\mathcal{F}_s\right] &= \mathbb{E}\left[S(0)\exp\left\{\left(\alpha -\frac{\sigma^2}{2}\right)t + \sigma W_t\right\} \middle|\mathcal{F}_s\right]\\
+		&= \mathbb{E}\left[S(0)\exp\left\{\left(\alpha -\frac{\sigma^2}{2}\right)t + \sigma (W_s+\Delta_{s,t})\right\}\middle|\mathcal{F}_s\right] \\
+		&= S(0)\exp\left\{\left(\alpha -\frac{\sigma^2}{2}\right)t + \sigma W_s\right\} \mathbb{E}\left[e^{\sigma \Delta_{s,t}}\right]~~~(\ddag)
+	\end{split}
+\end{equation}
+The final equality uses the fact that $e^{\sigma \Delta_{s,t}} \perp \mathcal{F}_s$ and $S(0)\exp\left\{\left(\alpha -\frac{\sigma^2}{2}\right)t + \sigma W_s\right\} \in m \mathcal{F}_s$. \\
+Note that $\Delta_{s,t} \sim \mathcal{N}(0,t-s)$, so the value of $ \mathbb{E}\left[e^{\sigma \Delta_{s,t}}\right]$ is the moment generating function of $\Delta_{s,t}$ evaluated at $\sigma$. Note that the mgf $M_{\Delta_{s,t}}(x) = e^{\frac{(t-s)x^2}{2}}$, we have
+$$
+\mathbb{E}\left[e^{\sigma \Delta_{s,t}}\right] = M_{\Delta_{s,t}}(\sigma) = e^{\frac{(t-s)\sigma^2}{2}}
+$$
+Plug into $(\ddag)~\Rightarrow$
+\begin{equation}
+	\begin{split}
+		\mathbb{E}\left[S(t)\middle|\mathcal{F}_s\right] &= S(0)\exp\left\{\left(\alpha -\frac{\sigma^2}{2}\right)t + \sigma W_s\right\} e^{\frac{(t-s)\sigma^2}{2}} \\
+		&=S(0)\exp\left\{\alpha t -\frac{\sigma^2}{2}s + \sigma W_s\right\} e^{\frac{(t-s)\sigma^2}{2}}\\
+		&=S(0)\exp\left\{\left(\alpha  -\frac{\sigma^2}{2}\right)s + \sigma W_s\right\} e^{\frac{(t-s)\sigma^2}{2}} e^{\alpha(t-s)}\\
+		&=S(s)e^{\alpha(t-s)}
+	\end{split}
+\end{equation}
+$S(t)$ is a martingale $\Rightarrow$ $\mathbb{E}\left[S(t)\middle|\mathcal{F}_s\right] = S(s)$. So $S(s)e^{\alpha(t-s)} = S(s)$ for all $t,s \in \mathbb{R}, t>s$. Hence, the only solution of $\alpha$ is $\alpha = 0$.\\
+~\\
+\textbf{(d).} Essentially, the decompostion we obtained in (b) is the semi-martingle decomposition of $S(t)$. We have
+\begin{itemize}
+	\item[$\cdot$] $A_t := \int_0^t \alpha S(s) ds$ is of finite first variation.
+	\item[$\cdot$] $M_t :=S(0) + \int_0^t \sigma S(s) dW_s$ is a martingale. Hence $\mathbb{E}\left[M_t\right] = \mathbb{E}\left[M_0\right] = S(0)$.
+\end{itemize}
+To obtain $\mu(t)$, we take expectation of $(*)$:
+\begin{equation}
+	\begin{split}
+		\mathbb{E}\left[S(t)\right] = \mu(t) &= \mathbb{E}\left[A_t\right] + \mathbb{E}\left[M_t\right]  \\
+		&= \mathbb{E}\left[ \int_0^t \alpha S(s) ds \right] + 0 \\
+		& =  \int_0^t \alpha \mu(s) ds
+	\end{split}
+\end{equation}
+Now take first derivative with respect to $t$:
+\begin{equation}
+	\frac{\partial \mu(t)}{\partial t} = \frac{\partial }{\partial t}\int_0^t \alpha \mu(s) ds = \alpha \mu(t)
+\end{equation}
+We get $\partial_t \mu(t) = \alpha \mu(t) = h(t,\mu(t))$.\\
+~\\
+\textbf{(e).} By \textit{Chapter.3 proposition 5.3}:
+\begin{equation}
+	[S,S](t) = \int_0^t g^2(s,S(s)) dt = \int_0^t \sigma^2 S^2(s) dt
+\end{equation}
+So $h(s,S(s)) = \sigma^2 S^2(s)$. \\
+~\\
+\textbf{(f).} For $s<t$ and any function $f: \mathbb{R}\to \mathbb{R}$, we have
+\begin{equation}
+	\mathbb{E}\left[f(W_t)\middle|\mathcal{F}_s\right] = \mathbb{E}\left[f(W_s + \Delta_{s,t})\middle|\mathcal{F}_s\right] = \mathbb{E}\left[f(W_s, \Delta_{s,t})\middle|\mathcal{F}_s\right]
+\end{equation}
+Where we know that $W_s \in m \mathcal{F}_s$, and $\Delta_{s,t}\perp \mathcal{F}_s$. So by \textit{Chapter.2 lemma 4.12}(independence lemma) we have:
+\begin{equation}
+	\mathbb{E}\left[f(W_t)\middle|\mathcal{F}_s\right]=\mathbb{E}\left[f(W_s, \Delta_{s,t})\middle|\mathcal{F}_s\right] = g(W_s)
+\end{equation}
+Where 
+$$
+g(y) = \mathbb{E}\left[f(y, \Delta_{s,t})\right]
+$$
+which is our desired result. Hence the Browian motion $W_t$ is a Markov process.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem}
+\end{problem}
+\begin{proof} \textbf{(a).} Denote $y(t, W_t) = W_t^4$.
+By Ito's formula:
+\begin{equation}
+	\begin{split}
+		dy(t,W_t) &= \partial_t y(t,W_t) dt +  \partial_x y(t,W_t) dW_t + \frac{1}{2} \partial_{xx} y(t,W_t) d[W, W](t)  \\
+		&=  4W_t^3 dW_t + \frac{1}{2} 12 \cdot W_t^2dt \\
+		&= 4W_t^3 dW_t +6W_t^2dt
+	\end{split}
+\end{equation}
+In the integral format:
+\begin{equation}
+	\begin{split}
+		W_t^4 - W_0^4  = W_t^4 = \int_0^t 6W_s^2ds+ \int_0^t 4W_s^3 dW_s 
+	\end{split}
+\end{equation}
+Hence we find $f(s, W_s) = 6W_s^2$, $g(s, W_s) = 4W_s^3$.  \\
+~\\
+\textbf{(b).}  Since $W_t \sim \mathcal{N}(0, t)$, $\mathbb{E}\left[W_t^4\right]$ is just 4-th moment of normal random variable, which equals $(4-1)!!(\sqrt{t})^4 = 3t^2$. Let's pretend we don't know this formula for 4-th moment. We have $W^4_t = (W_t^2)^2$, and $W_t^2 = \int_0^t 2W_s dW_s + t$.
+\begin{equation}
+	\begin{split}
+		\mathbb{E}\left[(W_t^2)^2\right] &= \mathbb{E}\left[\left(\int_0^t 2W_s dW_s\right)^2 + 2 t\int_0^t 2W_s dW_s + t^2\right] \\
+		& = \mathbb{E}\left[\int_0^t (2W_s)^2 dt\right] + 4t \mathbb{E}\left[\int_0^t W_s dW_s\right] + t^2 \\
+	\end{split}
+\end{equation}
+The first part follows by Ito isometry, and its value is $\int_0^t \mathbb{E}\left[4W_s^2\right] dt = \int_0^t 4t dt = 2t^2$. Since $\mathbb{E}\left[\int_0^t W_s^2 dt\right] = \frac{t^2}{2} < \infty$, the integral $\int_0^t W_s dW_s$ is a martingale. So the second part is
+$$
+4t \mathbb{E}\left[\int_0^t W_s dW_s\right] = 4t \mathbb{E}\left[\mathbb{E}\left[\int_0^t W_s dW_s\middle|\mathcal{F}_0\right]\right] = 4t \mathbb{E}\left[\int_0^0 W_s dW_s\right] = 0
+$$
+So we conclude that $\mathbb{E}\left[W_t^4\right] = 2t^2 + t^2 = 3t^2$.\\
+~\\
+\textbf{(c).} By \textit{Chapter.3 proposition 5.3}: since $ W_t^4 = \int_0^t 6W_s^2ds+ \int_0^t 4W_s^3 dW_s = \int_0^t f(s, W_s)ds+ \int_0^t g(s, W_s) dW_s$, 
+\begin{equation}
+	\begin{split}
+		[W^4, W^4](t) &= \int_0^t g^2(s,W_s) ds= \int_0^t (4W_s^3)^2 ds \\
+		&=\int_0^t 16W_s^6 ds
+	\end{split}
+\end{equation}
+i.e. $h(s, W_s) = 16W_s^6$.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem}
+\end{problem}
+\begin{proof} \textbf{(a). True.} Denote $f(t, W_t) = e^{2t} \sin(2W_t)$. $[W,W](t) = t$;  $f(0,W_0) = e^0 \sin(0)=0$.
+\begin{equation}
+	\begin{split}
+		&\partial_t f(t,W_t) = 2e^{2t} \sin(2W_t)\\ 
+		&\partial_x f(t,W_t) = 2e^{2t} \cos(2W_t)\\ 
+		&\partial_{xx} f(t,W_t) = -4e^{2t} \sin(2W_t)\\ 
+	\end{split}
+\end{equation}
+By Ito's formula:
+\begin{equation}
+	\begin{split}
+		df(t,W_t) &= \partial_t f(t,W_t) dt +  \partial_x f(t,W_t) dW_t + \frac{1}{2} \partial_{xx} f(t,W_t) d[W, W](t)  \\
+		&= 2e^{2t} \sin(2W_t) dt + 2e^{2t} \cos(2W_t) dW_t + \frac{1}{2} (-4e^{2t} \sin(2W_t))dt \\
+		&= 2e^{2t} \cos(2W_t) dW_t
+	\end{split}
+\end{equation}
+In the integral format:
+\begin{equation}
+	\begin{split}
+		e^{2t} \sin(2W_t)  &= f(t,W_t) = f(0,W_0) + \int_0^t 2e^{2s} \cos(2W_s) dW_s \\
+		&=\int_0^t 2e^{2s} \cos(2W_s) dW_s
+	\end{split}
+\end{equation}
+\textbf{(b). False.} We construct a contradiction proof. Assume this relation holds, i.e.\\
+$$
+|W_t| = \int_0^t \text{sgn}(W_s)dW_s~~(\dag)
+$$
+Let $D_t := \text{sgn}(W_t)$, clearly, $D_t$ is adapted with respect to $\{\mathcal{F}_t\}$. And
+\begin{equation}
+	\int_0^t D_s^2 ds = \int_0^t 1 ds = t < \infty
+\end{equation}
+By \textit{Chapter.3 Theorem 4.2}, we can examine the limiting process $I_t:=\int_0^t D_s dW_s = \int_0^t \text{sgn}(W_s)dW_s$. Moreover we have
+\begin{equation}
+	\mathbb{E}\left[\int_0^t D_s^2 ds\right] = \mathbb{E}\left[\int_0^t 1 ds\right] = t < \infty
+\end{equation}
+By theorem 4.2, $I_t$ is a martingale. Consequently, the expectation of the RHS of $(\dag)$ is
+\begin{equation}
+	\mathbb{E}\left[I_t\right] = \mathbb{E}\left[\mathbb{E}\left[I_t\middle|\mathcal{F}_0\right]\right] = \mathbb{E}\left[I_0\right]= \mathbb{E}\left[\int_0^0 \text{sgn}(W_s)dW_s\right] = 0
+\end{equation}
+But the expectation of LHS is
+\begin{equation}
+	\begin{split}
+		\mathbb{E}\left[|W_t|\right] &= 2\int_0^{\infty} x \frac{1}{\sqrt{2\pi t}} e^{-\frac{x^2}{2t}} dx = \frac{-2t}{\sqrt{2\pi t}}\int_0^{\infty}  e^{-\frac{x^2}{2t}} d\left(-\frac{x^2}{2t}\right) \\
+		&=\frac{-2t}{\sqrt{2\pi t}} e^{-y}\biggr\rvert_{y=0}^{\infty} = \frac{-2t}{\sqrt{2\pi t}}(0-1) = \frac{\sqrt{2t}}{\sqrt{\pi}} > 0
+	\end{split}
+\end{equation}
+So for any $t>0$, we have $\mathbb{E}\left[|W_t|\right] \ne 0 = \mathbb{E}\left[\int_0^t \text{sgn}(W_s)dW_s\right]$, which contradicts the fact that $|W_t|=\int_0^t \text{sgn}(W_s)dW_s, \forall t$. We conclude that the assumption is false. $RHS \ne LHS$.\\
+~\\
+In fact, we have
+\begin{equation}
+	|W_t| = \int_0^t \text{sgn}(W_s)dW_s + \lim\limits_{\epsilon \rightarrow 0}|\{s\in [0,t]|W_s \in (-\epsilon, + \epsilon)\}|
+\end{equation}
+Which is \textit{Tanaka's formula}.
+\end{proof}
+
+
+
+
+\end{document}

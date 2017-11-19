@@ -1,0 +1,208 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz, array, eurosym}
+\usepackage{float}
+\renewcommand{\arraystretch}{1.4}
+\newcolumntype{L}{>{\arraybackslash}m{10cm}}
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\argmax}{argmax}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+
+\title{\textbf{Financial Data Science HWII}}
+\author{Ze Yang (zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+~\\
+\textbf{Question. 2}
+\begin{solution} Since $\{X_i\}_1^n\sim\text{i.i.d}~\Gamma(\alpha, \beta)$, we can find the \textit{population moments} from the table of common distributions' sheet in probability course. 
+\begin{equation}
+\begin{split}
+    \mathbb{E}\left[X\right] &= \alpha \beta\\
+    \mathrm{\mathbb{V}ar}\left[X\right] &= \alpha \beta^2 \\
+    \mathbb{E}\left[X^2\right]&= \mathrm{\mathbb{V}ar}\left[X\right] + \mathbb{E}\left[X\right]^2 = \alpha\beta^2 + \alpha^2\beta^2
+\end{split}
+\end{equation}
+Denote $M_1, M_2$ the first and second sample moments:
+\begin{equation}
+  \begin{split}
+    M_1 &= \bar{X} = \frac{1}{n}\sum_{i=1}^n X_i\\
+    M_2 &= \frac{1}{n}\sum_{i=1}^n X_i^2
+  \end{split}
+\end{equation}
+Following the method of moments, we align polulation moments to sample moments:
+\begin{equation}
+  \begin{cases}
+  \alpha \beta = M_1 \\
+   \alpha\beta^2 + \alpha^2\beta^2 = M_2
+  \end{cases}
+\end{equation}
+Rewrite the second equation as $\alpha\beta(\beta + \alpha\beta) = M_1(\beta + M_1)$, we have $M_1(\beta + M_1) = M_2$. Hence
+\begin{equation}
+  \hat{\beta}_{mm} = \frac{M_2}{M_1} - M_1 = \frac{M_2- M_1^2}{M_1}
+\end{equation}
+Note that $\sum_{i=1}^n X_i = n\bar{X} = \sum_{i=1}^n \bar{X}$:
+\begin{equation}
+  \begin{split}
+    M_2 - M_1^2 &= \frac{1}{n}\sum_{i=1}^n X_i^2 - \bar{X}^2 = \frac{1}{n}\left(\sum_{i=1}^n X_i^2 - n\bar{X}^2\right) \\
+    &=\frac{1}{n}\left(\sum_{i=1}^n X_i^2 - 2n\bar{X}^2 + n\bar{X}^2\right) \\
+    &= \frac{1}{n}\left(\sum_{i=1}^n X_i^2 - 2\bar{X}\sum_{i=1}^n X_i + \sum_{i=1}^n\bar{X}^2\right) \\
+    &= \frac{1}{n}\sum_{i=1}^n\left(X_i^2 - 2\bar{X} X_i + \bar{X}^2\right) \\
+    &= \frac{1}{n}\sum_{i=1}^n\left(X_i - \bar{X}\right)^2 = s^2_X~~~\text{(\textit{sample variance})}
+  \end{split}
+\end{equation}
+Therefore, $\hat{\beta}_{mm} = \frac{s_X^2}{M_1}$, and $\hat{\alpha}_{mm} = \frac{M_1}{\hat{\beta}_{mm}} = \frac{M_1^2}{s_X^2}$. In summary:
+\begin{equation}
+  \hat{\alpha}_{mm} = \frac{M_1^2}{s_X^2} = \frac{\bar{X}^2}{\frac{1}{n}\sum_{i=1}^n(X_i - \bar{X})^2} = \frac{n \bar{X}^2}{\sum_{i=1}^n(X_i - \bar{X})^2}
+\end{equation}
+\begin{equation}
+  \hat{\beta}_{mm} = \frac{s_X^2}{M_1} = \frac{\frac{1}{n}\sum_{i=1}^n(X_i - \bar{X})^2}{\bar{X}} =  \frac{\sum_{i=1}^n(X_i - \bar{X})^2}{n\bar{X}} 
+\end{equation}
+
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+~\\
+\textbf{Question. 3}
+\begin{proof}
+\begin{equation}
+  \begin{split}
+    MSE(\hat{\theta}) &= \mathbb{E}\left[(\hat{\theta} - \theta)^2\right] = \mathbb{E}\left[\left((\hat{\theta} - \mathbb{E}[\hat{\theta}]) + (\mathbb{E}[\hat{\theta}]- \theta)\right)^2\right] \\
+    &= \mathbb{E}\left[(\hat{\theta} - \mathbb{E}[\hat{\theta}])^2\right] + \mathbb{E}\left[2(\hat{\theta} - \mathbb{E}[\hat{\theta}])(\mathbb{E}[\hat{\theta}]- \theta)\right] + \mathbb{E}\left[(\mathbb{E}[\hat{\theta}]- \theta)^2\right]~~(\dag)
+  \end{split}
+\end{equation}
+Note that the only random variable in the formula above is $\hat{\theta}$\\
+$\mathbb{E}[\hat{\theta}], \theta$ are deterministic numbers, so is $(\mathbb{E}[\hat{\theta}]- \theta)$, hence it can be taken out of the expectations.
+\begin{equation}
+  \begin{split}
+    (\dag) & = \mathbb{E}\left[(\hat{\theta} - \mathbb{E}[\hat{\theta}])^2\right] + 2(\mathbb{E}[\hat{\theta}]- \theta)\mathbb{E}\left[\hat{\theta} - \mathbb{E}[\hat{\theta}]\right] + (\mathbb{E}[\hat{\theta}]- \theta)^2\\
+     &= \mathbb{E}\left[(\hat{\theta} - \mathbb{E}[\hat{\theta}])^2\right] + 2(\mathbb{E}[\hat{\theta}]- \theta)\cdot 0+ (\mathbb{E}[\hat{\theta}]- \theta)^2\\
+     &=  \mathbb{E}\left[(\hat{\theta} - \mathbb{E}[\hat{\theta}])^2\right]  + (\mathbb{E}[\hat{\theta}]- \theta)^2 \\
+     &= \mathrm{\mathbb{V}ar}[\hat{\theta}] + \text{Bias}^2(\hat{\theta})
+  \end{split}
+\end{equation}
+By defintion of bias and variance.
+\end{proof}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+~\\
+\textbf{Question. 4}
+\begin{proof} \textbf{(a)} Since we have $\mathbb{E}\left[X_i\right] = \mu$ for each of $X_i, i=1,2,...,n$:
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[\hat{\mu}\right] = \mathbb{E}\left[\sum_{i=1}^n w_i X_i\right] = \sum_{i=1}^n w_i \mathbb{E}\left[X_i\right] = \mu \sum_{i=1}^n w_i
+  \end{split}
+\end{equation}
+Hence $\hat{\mu}$ is unbiased $\iff$ $\sum_{i=1}^n w_i=1$. We write this in vector form: $\bm{1}^{\top} \bm{w} = 1$.\\
+~\\
+\textbf{(b)} Let $\bm{w}:=(w_1~~...~~w_n)^{\top}$, $\bm{X}:=(X_1~~...~~X_n)^{\top}$, 
+$$ \bm{\Sigma}_{\bm{X}} := 
+\begin{pmatrix}
+  \sigma^2_1 & 0 & \cdots & 0\\
+  0 & \sigma^2_2 & \cdots & 0\\
+  \vdots & \vdots& \ddots & 0\\
+  0 & 0 & \cdots & \sigma^2_n\\
+\end{pmatrix}
+$$ 
+Since $\hat{\mu}$ is an unbiased estimator,
+\begin{equation}
+\begin{split}
+  MSE(\hat{\mu}) &= \mathrm{\mathbb{V}ar}[\hat{\mu}] = \mathrm{\mathbb{V}ar}[\bm{w}^{\top} \bm{X}] = \bm{w}^{\top} \bm{\Sigma}_{\bm{X}} \bm{w} \\ 
+  &= \sum_{i=1}^n w_i^2 \sigma^2_i
+\end{split}
+\end{equation}
+We impose the constraint $\sum_{i=1}^n w_i = 1$, i.e. we solve the quadratic programming problem with linear constraint:
+\begin{equation}
+  \begin{split}
+      &\text{minimize}~~~~~f(\bm{w}) =\bm{w}^{\top} \bm{\Sigma}_{\bm{X}} \bm{w}\\
+      &\text{over}\quad\qquad~~~x\in\mathbb{R}^n\\
+      &\text{subject to}\quad~ \bm{1}^{\top} \bm{w} = 1
+  \end{split}
+\end{equation}
+The Lagrangian dual of this QP is
+\begin{equation}
+  \mathcal{L}(\bm{w}, \lambda) = \bm{w}^{\top} \bm{\Sigma}_{\bm{X}} \bm{w} - \lambda(\bm{1}^{\top} \bm{w}-1)
+\end{equation}
+Take the first order condition:
+\begin{equation}
+  \frac{\partial \mathcal{L}}{\partial \bm{w}} (\bm{w}, \lambda) = 2\bm{\Sigma}_{\bm{X}} \bm{w} - \lambda \bm{1} = 0
+\end{equation}
+\begin{equation}
+  \Rightarrow~~~~\bm{w} = \frac{\lambda}{2} \bm{\Sigma}_{\bm{X}}^{-1}\bm{1} = \frac{\lambda}{2} \begin{pmatrix}
+    \frac{1}{\sigma_1^2}\\
+    \frac{1}{\sigma_2^2}\\
+    \vdots\\
+    \frac{1}{\sigma_n^2}\\
+  \end{pmatrix}
+\end{equation}
+Then plug into the constraint $\bm{1}^{\top} \bm{w} = 1~\Rightarrow$
+\begin{equation}
+  \frac{\lambda}{2}\sum_{i=1}^n \frac{1}{\sigma_i^2} = 1~~~~\Rightarrow~~~~\frac{\lambda}{2} = \frac{1}{\sum_{i=1}^n \frac{1}{\sigma_i^2}}
+\end{equation}
+Hence:
+\begin{equation}
+  \bm{w} = \frac{1}{\sum_{i=1}^n \frac{1}{\sigma_i^2}} \begin{pmatrix}
+    \frac{1}{\sigma_1^2}\\
+    \frac{1}{\sigma_2^2}\\
+    \vdots\\
+    \frac{1}{\sigma_n^2}\\
+  \end{pmatrix} = \frac{1}{\text{tr}(\bm{\Sigma}_{\bm{X}}^{-1})}\bm{\Sigma}_{\bm{X}}^{-1}\bm{1}
+\end{equation}
+With
+$$
+w_i = \frac{1}{\sum_{k=1}^n \frac{1}{\sigma_k^2}} \frac{1}{\sigma_i^2},~~~i=1,2,...,n
+$$
+\end{proof}
+
+
+
+
+
+
+\end{document}

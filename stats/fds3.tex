@@ -1,0 +1,203 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz, array, eurosym}
+\usepackage{float}
+\renewcommand{\arraystretch}{1.4}
+\newcolumntype{L}{>{\arraybackslash}m{10cm}}
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\argmax}{argmax}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+
+\title{\textbf{Financial Data Science III}}
+\author{Ze Yang (zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+~\\
+\textbf{Question. 1}
+\begin{solution} 
+\textbf{(1)} $n\geq 30$ in this case, by the ``rule of thumb", we can treat this as a large sample, and use the normal approximation by CLT. We have:
+\begin{equation}
+  \frac{\bar{X}-\mu}{s/\sqrt{n}} \text{ is approximately } \mathcal{N}(0,1)
+\end{equation}
+Therefore,
+\begin{equation}
+  \begin{split}
+    &\mathbb{P}\left(-z_{\frac{\alpha}{2}} \leq \frac{\bar{X}-\mu}{s/\sqrt{n}}\leq z_{\frac{\alpha}{2}}\right) = 1- \alpha\\
+    \Rightarrow ~CI(\mu, 95\%) &= \left[\bar{X}-z_{\frac{\alpha}{2}}\frac{s}{\sqrt{n}}, \bar{X}+z_{\frac{\alpha}{2}}\frac{s}{\sqrt{n}}\right] \\
+    & =  \left[14.3 - 1.96 \frac{4.2}{\sqrt{40}} , 14.3 + 1.96 \frac{4.2}{\sqrt{40}}\right] \\
+    & = \left[12.99843, 15.60157\right]
+  \end{split}
+\end{equation}
+\textbf{(2)} We can not construct a proper confidence interval without further information in this case.
+~\\
+\textbf{(3)} This is the Case 3 as we discussed in lecture. Since $\{X_i\}$ are i.i.d. normal, we have
+\begin{equation}
+  \frac{\bar{X}-\mu}{s/\sqrt{n}} \sim t(n-1)
+\end{equation}
+Therefore,
+\begin{equation}
+  \begin{split}
+    &\mathbb{P}\left(-t_{\frac{\alpha}{2}, n-1} \leq \frac{\bar{X}-\mu}{s/\sqrt{n}}\leq t_{\frac{\alpha}{2}, n-1}\right) = 1- \alpha\\
+    \Rightarrow ~CI(\mu, 95\%) &= \left[\bar{X}-t_{\frac{\alpha}{2}, n-1}\frac{s}{\sqrt{n}}, \bar{X}+t_{\frac{\alpha}{2}, n-1}\frac{s}{\sqrt{n}}\right] \\
+    & =  \left[14.3 - 2.262 \frac{4.2}{\sqrt{10}} , 14.3 + 2.262 \frac{4.2}{\sqrt{10}}\right] \\
+    & =  \left[11.2955, 17.3045\right]
+  \end{split}
+\end{equation}
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+~\\
+\textbf{Question. 2}
+\begin{solution} \textbf{(a)} Since $\bm{X}= (X_1~...~X_n)^{\top}$ are i.i.d. Poisson($\lambda$), let $\bm{x}$ be the sample, we have
+\begin{equation}
+  L(\lambda; \bm{x}) = \prod_{i=1}^n p_{X_i}(x_i;\lambda) = \prod_{i=1}^n \frac{\lambda^{x_i}e^{-\lambda}}{x_i!} = e^{-\lambda n} \prod_{i=1}^n \frac{\lambda^{x_i}}{x_i !}
+\end{equation}
+\begin{equation}
+  \log L(\lambda ; \bm{x}) = -\lambda n + \log \lambda \sum_{i=1}^n x_i -\sum_{i=1}^n \log(x_i!)
+\end{equation}
+Take FOC: 
+\begin{equation}
+  \frac{\partial \log L(\lambda; \bm{x})}{\partial \lambda} = -n + \frac{1}{\lambda} \sum_{i=1}^n x_i = 0~~~~\Rightarrow~~~~ \hat{\lambda}_{mle} = \frac{1}{n}\sum_{i=1}^n x_i = \bar{X}
+\end{equation}
+Hence the MLE \textit{estimator} (random variable version of MLE estimate) is 
+$$
+\hat{\lambda}_{mle} = \frac{1}{n}\sum_{i=1}^n X_i = \bar{X}
+$$
+\textbf{(b)}
+\begin{equation}
+  \mathrm{\mathbb{V}ar}\left[\hat{\lambda}_{mle}\right] = \frac{1}{n^2} \sum_{i=1}^n \mathrm{\mathbb{V}ar}\left[X_i\right] = \frac{n\lambda}{n^2} = \frac{\lambda}{n}
+\end{equation}
+Hence $SE(\hat{\lambda}_{mle}) = \sqrt{\lambda / n}$. \\
+\textbf{(c)} We have
+\begin{equation}
+  \hat{\lambda}_{mle} = \bar{X} = 2.6,~~~~~\hat{SE}(\hat{\lambda}_{mle}) = \sqrt{\frac{2.6}{5}} = 0.7211
+\end{equation}
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+~\\
+\textbf{Question. 3}
+\begin{solution} Since $\lambda$ is known, we must have: $X_i>\lambda$ for all $i=1,...,n$. Otherwise the sample is not drawn from the distribution $f_X(x)$.
+\begin{equation}
+  L(\alpha; \bm{x}) = \prod_{i=1}^n f_{X_i}(x_i;\alpha) = \prod_{i=1}^n \frac{\alpha \lambda^{\alpha}}{x_i^{\alpha+1}} 
+\end{equation}
+\begin{equation}
+  \log L(\alpha ; \bm{x}) = n\log \alpha + \alpha n\log \lambda -(\alpha +1)\sum_{i=1}^n \log x_i
+\end{equation}
+Take FOC: 
+\begin{equation}
+  \begin{split}
+    \frac{\partial \log L(\alpha; \bm{x})}{\partial \alpha} &= \frac{n}{\alpha} + n \log \lambda - \sum_{i=1}^n \log x_i = 0 \\
+    \frac{n}{\alpha} &= \sum_{i=1}^n \left(\log x_i - \log \lambda\right)  = \sum_{i=1}^n \log\frac{x_i}{\lambda} \\
+    \hat{\alpha }_{mle} & = \frac{n}{\sum_{i=1}^n \log\frac{x_i}{\lambda}}
+  \end{split}
+\end{equation}
+Hence the MLE estimator (random variable version of MLE estimate) is 
+$$
+\hat{\alpha}_{mle} = \frac{n}{\sum_{i=1}^n \log\frac{X_i}{\lambda}}
+$$
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+~\\
+\textbf{Question. 4}
+\begin{solution} \textbf{(a)} 
+\begin{equation}
+  \mathbb{E}\left[\hat{\theta}_1\right] = \mathbb{E}\left[\frac{4}{3}\bar{X}\right] = \frac{4}{3} \frac{1}{n}\sum_{i=1}^n \mathbb{E}\left[X_i\right] = \frac{4}{3} \mathbb{E}\left[X\right] = \frac{4}{3}\frac{3}{4}\theta = \theta
+\end{equation}
+\textbf{(b)} Since $\hat{\theta}_2 = X_{(n)}$, $f_{X_{(n)}}(x) = \frac{3n x^{3n-1}}{\theta^{3n}}$ for $0\leq x \leq \theta$. We have
+\begin{equation}
+  \begin{split}
+    \mathbb{E}\left[\hat{\theta}_2\right] &= \mathbb{E}\left[X_{(n)}\right] = \int_{0}^{\theta} x f_{X_{(n)}}(x)dx \\
+    &=\int_{0}^{\theta} \frac{3n x^{3n}}{\theta^{3n}}dx = \frac{1}{3n+1}x^{3n+1}\biggr\rvert_0^{\theta} \frac{3n}{\theta^{3n}} \\
+    &= \frac{3n}{3n+1}\theta
+  \end{split}
+\end{equation}
+Clearly $\hat{\theta}_2$ is biased. $Bias(\hat{\theta}_2) = -\frac{1}{3n+1}\theta$. \\
+\textbf{(3)}. Since $\hat{\theta}_1$ is unbiased:
+\begin{equation}
+  \begin{split}
+    MSE(\hat{\theta}_1) &= \mathrm{\mathbb{V}ar}\left[\hat{\theta}_1\right] \\
+    &=\frac{16}{9} \mathrm{\mathbb{V}ar}\left[\bar{X}\right] = \frac{16}{9n}\mathrm{\mathbb{V}ar}\left[X\right]  \\
+    &=\frac{16}{9n} \frac{3}{80}\theta^2 = \frac{2\theta^2}{30n}
+  \end{split}
+\end{equation}
+On the other hand
+\begin{equation}
+  \begin{split}
+    MSE(\hat{\theta}_2) &= Bias^2(\hat{\theta}_2) + \mathrm{\mathbb{V}ar}[\hat{\theta}_2] \\
+    &=\frac{\theta^2}{(3n+1)^2} + \frac{3n}{(3n+2)(3n+1)^2}\theta^2 \\
+    &= \frac{(6n+2)\theta^2}{(3n+2)(3n+1)^2} \\
+    &=\frac{2\theta^2}{(3n+2)(3n+1)} \\
+  \end{split}
+\end{equation}
+$MSE(\hat{\theta}_2) < MSE(\hat{\theta}_1)$ suggests that 
+$$
+(3n+2)(3n+1) > 30n ~~\Rightarrow~~f(n)=9n^2 - 21n + 2>0
+$$
+Since $f'(n) = 18n - 21 > 0$ when $n\geq 3$, and when $n=3$, we have $f(3)=81-21\times 3 + 2= 20 >0$. Hence $f(n)>0$ for all $n\geq 3$, i.e. $n>2, n\in \mathbb{N}$. We conclude that $MSE(\hat{\theta}_2) < MSE(\hat{\theta}_1)$ indeed for $n>2$.
+
+\end{solution}
+
+
+Suppose $\{R_i^{[d]}\}$ are the daily returns of the stock, $\{R_{i}^{[m]}\}$ are the monthly returns. 
+
+We estimate the daily volatility using daily returns, and get $\hat{\sigma}^{[d]}$. Then we also estimate the monthly volatility using monthly returns, and get $\hat{\sigma}^{[m]}$. With the scaling factor $\sqrt{30}$ (assume 30 trading days in a month), we expect to see $\sqrt{30}\hat{\sigma}^{[d]} = \hat{\sigma}^{[m]}$. But in practice, $\sqrt{30}\hat{\sigma}^{[d]} > \hat{\sigma}^{[m]}$.
+
+The interviewer suggests that it has something to do with autocorrelation. But I didn't get it. He also said that this observation implies the sign of autocorrelation (which is positive?). I didn't get it either. Could you shed some light on it?
+
+Thank you so much!
+
+
+
+
+
+
+\end{document}
