@@ -1,0 +1,273 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz, array, eurosym}
+\usepackage{float}
+\renewcommand{\arraystretch}{1.4}
+\newcolumntype{L}{>{\arraybackslash}m{10cm}}
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+\title{\textbf{Stochastic Calculus Assignment V}}
+\author{Ze Yang~~~~(zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+~\\
+\textit{Note:} \textit{I will use the following notations throughout this assignment:}
+\begin{itemize}
+	\item[$\cdot$] $W_t := W(t)$.
+	\item[$\cdot$] $\Delta_{s,t} := W(t) - W(s)$.
+	\item[$\cdot$] $X\in m \mathcal{F}$: $X$ is $\mathcal{F}$-measurable.
+	\item[$\cdot$] $X\perp \mathcal{F}$: Random variable $X$ is independent to sigma algebra $\mathcal{F}$. 
+	\item[$\cdot$] $X\stackrel{d}{=} Y$: Random variable $X,Y$ have identical distribution.
+\end{itemize}
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem}
+\end{problem}
+\begin{proof} \textbf{(a)} First off, since $M_t \in m \mathcal{F}_t$, $M_t^2 \in m \mathcal{F}_t$ too. We have
+\begin{equation}
+	\begin{split}
+		\mathbb{E}\left[(M_t-M_s)^2\middle|\mathcal{F}_s\right] &= \mathbb{E}\left[M_t^2 + M_s^2 - 2M_sM_t\middle|\mathcal{F}_s\right] \\
+		&= \mathbb{E}\left[M_t^2\middle|\mathcal{F}_s\right] +M_s^2- 2M_s \mathbb{E}\left[M_t|\mathcal{F}_s\right]\\
+		&= \mathbb{E}\left[M_t^2\middle|\mathcal{F}_s\right] -M_s^2 = \mathbb{E}\left[M_t^2 - M_s^2\middle|\mathcal{F}_s\right]
+	\end{split}
+\end{equation}
+Since $M_t$ is martingale, so is $M_t^2 - [M,M](t)$. We have
+\begin{equation}
+	\mathbb{E}\left[M_t^2 - [M,M](t)\middle|\mathcal{F}_s\right] = M_s^2 - [M,M](s)
+\end{equation}
+Where we know that $[M,M](t)=\int_0^t W_r^2 dr$. Rearrange terms\footnote{We use the fact that $W_t^2 - t$ is martingale, i.e. $\mathbb{E}\left[W_r^2|\mathcal{F}_s\right] -r = W_s^2-s \Rightarrow \mathbb{E}\left[W_r^2|\mathcal{F}_s\right] = W_s^2 + r-s$}:
+\begin{equation}
+	\begin{split}
+		\mathbb{E}\left[M_t^2-M_s^2|\mathcal{F}_s\right] &= \mathbb{E}\left[[M,M](t)-[M,M](s)]\middle|\mathcal{F}_s\right] \\
+		&= \mathbb{E}\left[\int_s^t W_r^2 dr\middle|\mathcal{F}_s\right]=\int_s^t \mathbb{E}\left[W_r^2\middle|\mathcal{F}_s\right] dr\\
+		&=\int_s^t (W_s^2 + r-s) dr \\
+		&= W_s^2(t-s) + \frac{(t-s)^2}{2}
+	\end{split}
+\end{equation}
+\textbf{(b)} We prove by contradiction. \\
+Assume $M_t-M_s \perp \mathcal{F}_s$, then $(M_t-M_s)^2 \perp W_s^2 \Rightarrow \mathrm{\mathbb{C}ov}\left[W_s^2, (M_t-M_s)^2\right] = 0$. 
+\begin{equation}
+	\mathbb{E}\left[W_s^2\right]\mathbb{E}\left[(M_t-M_s)^2\right] = s \mathbb{E}\left[W_s^2(t-s) + \frac{(t-s)^2}{2}\right] = s^2(t-s)+\frac{s(t-s)^2}{2}~~~~(\dag)
+\end{equation}
+On the other hand,
+\begin{equation}
+	\begin{split}
+		\mathbb{E}\left[W_s^2 (M_t-M_s)^2\right] &= \mathbb{E}\left[\mathbb{E}\left[W_s^2 (M_t-M_s)^2\middle|\mathcal{F}_s\right]\right]\\
+		&=\mathbb{E}\left[W_s^2\mathbb{E}\left[ (M_t-M_s)^2\middle|\mathcal{F}_s\right]\right]\\
+		&=\mathbb{E}\left[W_s^2\left(W_s^2(t-s) + \frac{(t-s)^2}{2}\right)\right]\\
+		&= 3s^2(t-s) + \frac{s(t-s)^2}{2}~~~~(\ddag)
+	\end{split}
+\end{equation}
+Clearly, $(\dag) \ne (\ddag)$. We conclude that $\mathrm{\mathbb{C}ov}\left[W_s^2, (M_t-M_s)^2\right] \ne 0$, which contradicts our assumption that $M_t-M_s \perp \mathcal{F}_s$. Consequently, $M_t-M_s$ is not independent of $\mathcal{F}_s$. \\
+~\\
+\textbf{(c)} $M(t)$ can be regarded as the integral form of Ito's decomposition, we can write it as the SDE form $dM_t = W_t dW_t$. Hence the quadratic variation of $M_t$ is:
+$$
+d[M, M](t) = W_t^2 dt
+$$
+Let $f(t,x)=e^{\lambda x}$, $f$ is a $\mathcal{C}^{1,2}$ deterministic function. $M_t$ is an adapted process with respect to $\mathcal{F}_t$. Therefore, we can apply Ito's lemma to $f(t,M_t)$:
+\begin{equation}
+	\begin{split}
+		df(t,M_t) &= \partial_t f(t,M_t)dt+\partial_x f(t,M_t)dM_t+\frac{1}{2}\partial_{xx} f(t,M_t)d[M,M](t)\\
+		&= 0+ \lambda e^{\lambda M_t} W_t dW_t + \frac{1}{2}\lambda^2 e^{\lambda M_t} W_t^2 dt
+	\end{split}
+\end{equation}
+Write down the integral form from $s$ to $t$, we have:
+\begin{equation}
+	\begin{split}
+		e^{\lambda M_t} &= e^{\lambda M_s} + \int_s^t\lambda e^{\lambda M_r} W_r dW_r + \int_s^t \frac{1}{2}\lambda^2 e^{\lambda M_r} W_r^2 dr\\
+		\Rightarrow e^{\lambda (M_t-M_s)} &= 1 + \int_s^t\lambda e^{\lambda (M_r-M_s)} W_r dW_r + \int_s^t \frac{1}{2}\lambda^2 e^{\lambda (M_r-M_s)} W_r^2 dr\\
+	\end{split}
+\end{equation}
+For the second term, the integrand $e^{\lambda (M_r-M_s)} W_r$ is adapted to $\{\mathcal{F}_r\}_{r=s}^t$, $s\leq r \leq t$; hence the second term is a martingale. \\
+Take conditional expectation both sides:
+\begin{equation}
+	\begin{split}
+		\mathbb{E}\left[e^{\lambda (M_t-M_s)}\middle|\mathcal{F}_s\right] &= 1 + \int_s^s\lambda e^{\lambda (M_r-M_s)} W_r dW_r + \mathbb{E}\left[\int_s^t \frac{1}{2}\lambda^2 e^{\lambda (M_r-M_s)} W_r^2 dr\middle|\mathcal{F}_s\right] \\
+		&=1  + \frac{1}{2}\lambda^2\int_s^t  \mathbb{E}\left[e^{\lambda (M_r-M_s)} W_r^2\middle|\mathcal{F}_s\right] dr 
+	\end{split}
+\end{equation}
+Which is our desired result.
+
+
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} (\textit{Ito and martingale representation theorems})
+\end{problem}
+\begin{proof} \textbf{(a)} WLOG assume $f(x)$ is a nice function to which we can apply Ito's lemma (hence so is $\phi(t,x)$), and the expectation of $|f|$ is finite. By Ito's lemma:
+\begin{equation}
+	f(W_T) = f(W_t) + \int_t^T \partial_x f(W_s) dW_s + \int_t^T \frac{1}{2}\partial_{xx}f(W_s)ds
+\end{equation}
+The second term is a martingale. Take conditional expectation of both sides:
+\begin{equation}
+	\begin{split}
+		\mathbb{E}\left[f(W_T)\middle|\mathcal{F}_t\right] &= f(W_t) + \int_t^T \frac{1}{2}\mathbb{E}\left[\partial_{xx}f(W_s)\middle|\mathcal{F}_t\right]ds\\
+		&= f(W_t) + \int_t^T \frac{1}{2}\frac{\partial }{\partial x^2}\mathbb{E}\left[f(W_s)\middle|\mathcal{F}_t\right]ds\\
+		\Rightarrow~~~ \phi(t,W_t) &= f(W_t) - \int_T^t \frac{1}{2} \partial_{xx} \phi(s, W_s) ds
+	\end{split}
+\end{equation}
+Take partial derivative with respect to $t$, note that $\partial_t f(W_t) = 0$:
+\begin{equation}
+	\partial_t \phi(t,W_t) = 0 -  \frac{1}{2} \partial_{xx} \phi(t, W_t)~~~\Rightarrow~~~\partial_t \phi+\frac{1}{2}\partial_{xx} \phi = 0
+\end{equation}
+\textbf{(b)} Apply Ito's lemma on $\phi(t,x)$: (note that $d[W,W](s)=ds$)
+\begin{equation}
+	\begin{split}
+		\phi(T,W_T) &= \phi(0,W_0) + \int_0^T \partial_x\phi(s,W_s)dW_s + \int_0^T (\partial_t\phi(s, W_s) + \frac{1}{2}\partial_{xx}\phi(s, W_s))ds \\
+		&= \phi(0,W_0) + \int_0^T \partial_x\phi(s,W_s)dW_s\\
+		\Rightarrow~~\mathbb{E}\left[f(W_T)\middle|\mathcal{F}_T\right]& =\mathbb{E}\left[f(W_T)\middle|\mathcal{F}_0\right] + \int_0^T \partial_x\phi(s,W_s)dW_s
+	\end{split}
+\end{equation}
+The Riemann integral vanishes since $\partial_t \phi+\frac{1}{2}\partial_{xx} \phi = 0$ by (a). \\
+Moreover, $\phi(T,W_T) = \mathbb{E}\left[f(W_T)\middle|\mathcal{F}_T\right] = f(W_T)$, since $f(W_T)\in m \mathcal{F}_T$. \\
+Besides, $\phi(0,W_0) = \mathbb{E}\left[f(W_T)\middle|\mathcal{F}_0\right] = \mathbb{E}\left[f(W_T)\right]$. Because by definition, $\mathcal{F}_0 = \{\emptyset, \Omega\}$ is the trivial sigma-algebra, and any random variable adapted to $\{\mathcal{F}_t\}$ is independent to $\mathcal{F}_0$.  
+\begin{equation}
+	f(W_T) = \mathbb{E}\left[f(W_T)\right]+ \int_0^T \partial_x\phi(s,W_s)dW_s
+\end{equation}
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} (\textit{Leibniz' Rule})
+\end{problem}
+\begin{proof} \textbf{(a)} Suppose $I(t,x(t)) = \int_0^t(x(t)-s)dW_s$. Adopt the Leibniz' Rule for Ito integral:
+\begin{equation}
+	dI(t,x(t)) = (x(t)-t) dW_t + \left(\int_0^t 1dW_s\right) x'(t)dt
+\end{equation}
+Now given $x(t)=t$, we have
+\begin{equation}
+	dI(t,t) = \left(\int_0^t dW_s\right) dt
+\end{equation}
+We apply Ito's formula to $f(t,W_t) = W_t$: $df(t,W_t) = 0dt + 1dW_t + 0d[W,W](t)$. Hence $\int_0^t dW_s = W_t$. We conclude that 
+$$
+dI(t,t) = W_t dt
+$$
+\textbf{(b)} Let $a(t,W_t)=tW_t$, $b(t, x(t))=\int_0^t s dW_s$. By linearity, It suffices to check $da(t,W_t) - db(t, x(t))$. \\
+We can apply Ito's lemma to $a(t,W_t)$:
+\begin{equation}
+	da(t,W_t) = W_t dt + t dW_t + \frac{1}{2} \frac{\partial }{\partial x}(t) d[W,W](t) = W_t dt + tdW_t
+\end{equation}
+And we apply Leibniz' Rule for $b(t,x(t))$:
+\begin{equation}
+	db(t,x(t)) = tdW_t + \left(\int_0^t \frac{\partial }{\partial x}(s) dW_s\right) x'(t)dt = tdW_t
+\end{equation}
+Therefore $dI(t,t) = da(t,W_t) - db(t, x(t)) = W_t dt + tdW_t- tdW_t = W_tdt$, which agrees to our result in a.\\
+\textbf{(c)} We write the differential of $I(t,t)$ into integral form from $0$ to $t$, note that $I(0,0)=\int_0^0-sdW_s = 0$. 
+$$
+I(t,t) = \int_0^t W_r dr = I(t,x(t))
+$$
+With $x(t) = t$. For any $s$ such that $0<s<t$:
+\begin{equation}
+	\begin{split}
+		\mathbb{E}\left[I(t,x(t))\middle|\mathcal{F}_s\right] &= \int_0^s \mathbb{E}\left[W_r\middle|\mathcal{F}_s\right] dr + \int_s^t \mathbb{E}\left[W_s+\Delta_{s,r}\middle|\mathcal{F}_s\right] dr\\
+		&=\int_0^s W_r dr + W_s(t-s)\\
+		&= I(s,x(s)) + W_s(t-s)
+	\end{split}
+\end{equation}
+Hence $I(t,t)$ is not a martingale. \\
+\textbf{(d)} 
+\begin{equation}
+	\mathbb{E}\left[I(t,t)\right] = \mathbb{E}\left[\int_0^t W_r dr\right] = 0
+\end{equation}
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} (\textit{Black-Scholes PDE})
+\end{problem}
+\begin{proof} \textbf{(a)} With $y=\log x$, i.e. $x=e^y$, we have
+\begin{equation}
+	\begin{split}
+		\partial_x c &= (\partial_y c) \frac{\partial y}{\partial x} = \frac{\partial_y c}{x}  \\
+		\partial_{xx}c &= \frac{\partial }{\partial x}\left(\frac{\partial_y c}{x}\right) = (\partial_{yy}c)\frac{\partial y}{\partial x}\frac{1}{x} - \frac{1}{x^2} (\partial_y c) = \frac{1}{x^2}(\partial_{yy}c - \partial_y c)
+	\end{split}
+\end{equation}
+Plug into the BS PDE:
+\begin{equation}
+	\begin{split}
+		&\partial_t c + rx\partial_x c + \frac{\sigma^2 x^2}{2}\partial_{xx}c = rc \\
+		\Rightarrow~~~&\partial_t c + rx\frac{\partial_y c}{x} + \frac{\sigma^2 x^2}{2} \frac{1}{x^2}(\partial_{yy}c - \partial_y c) = rc\\
+		\Rightarrow~~~&\partial_t c + \left(r-\frac{\sigma^2}{2}\right)\partial_yc + \frac{\sigma^2}{2} \partial_{yy}c = rc~~~(\dag)
+	\end{split}
+\end{equation}
+Therefore, $\beta_1 = r-\frac{\sigma^2}{2}$, $\beta_2 = \frac{\sigma^2}{2}$.\\
+~\\
+\textbf{(b)} Let $\tau = T-t, z(y,\tau) = y+\gamma_2\tau $, $v(\tau,z) = e^{\gamma_1 \tau}c(t,x)$. We have $c(t,x) = e^{-\gamma_1 \tau} v(\tau, z)$, and
+\begin{equation}
+	\begin{split}
+		\partial_{t} \tau &= -1\\
+		\partial_y z &= 1\\
+		\partial_{\tau} z &= \gamma_2\\
+		\partial_y c &= (\partial_z c) (\partial_y z) = \partial_z c \\
+		~\\
+		\partial_t c &= (\partial_{\tau} t) (-\gamma_1) e^{-\gamma_1 \tau} v + e^{-\gamma_1 \tau}[(\partial_\tau v)(\partial_t \tau) + (\partial_z v) (\partial_\tau z)(\partial_t \tau)]\\
+		& = \gamma_1 e^{-\gamma_1 \tau} v - e^{-\gamma_1 \tau}(\partial_{\tau}v + \gamma_2\partial_z v )\\
+		\partial_y c &= \partial_z c = e^{-\gamma_1\tau}\partial_z v\\ 
+		\partial_{yy} c &= \partial_{zz} c = e^{-\gamma_1\tau}\partial_{zz} v\\ 
+	\end{split}
+\end{equation}
+Plug in all the partial derivatives into $(\dag)$:
+\begin{equation}
+	\begin{split}
+		&\gamma_1 e^{-\gamma_1 \tau} v - e^{-\gamma_1 \tau}(\partial_{\tau}v + \gamma_2\partial_z v )+ \left(r-\frac{\sigma^2}{2}\right)e^{-\gamma_1\tau}\partial_z v + \frac{\sigma^2}{2} e^{-\gamma_1\tau}\partial_{zz} v = re^{-\gamma_1 \tau} v \\
+		\Rightarrow~~~~&-\partial_{\tau} v +\left(\left(r-\frac{\sigma^2}{2}\right)- \gamma_2\right)\partial_z v+\frac{\sigma^2}{2}\partial_{zz} v= (r-\gamma_1) v~~~(\ddag)
+	\end{split}
+\end{equation}
+We require $(\ddag)$ to be $\partial_{\tau}v = \kappa \partial_{zz}v$, this is only the case when:
+\begin{equation}
+	\gamma_1 = r,~~~\gamma_2 = r-\frac{\sigma^2}{2};~~~\kappa=\frac{\sigma^2}{2}
+\end{equation}
+Hence
+\begin{equation}
+	v(\tau,z) = \frac{1}{\sigma\sqrt{2\pi \tau}}\int_{\mathbb{R}} v(0,z-s) \exp\left(\frac{-s^2}{2\sigma^2 \tau}\right)ds
+\end{equation}
+\end{proof}
+
+
+
+
+
+
+
+\end{document}

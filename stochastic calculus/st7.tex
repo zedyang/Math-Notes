@@ -1,0 +1,223 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz, array, eurosym}
+\usepackage{float}
+\renewcommand{\arraystretch}{1.4}
+\newcolumntype{L}{>{\arraybackslash}m{10cm}}
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+\title{\textbf{Stochastic Calculus Assignment VII}}
+\author{Ze Yang~~~~(zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+~\\
+\textit{Note:} \textit{I will use the following notations throughout this assignment:}
+\begin{itemize}
+	\item[$\cdot$] $W_t := W(t)$.
+	\item[$\cdot$] $\Delta_{s,t} := W(t) - W(s)$.
+	\item[$\cdot$] $X\in m \mathcal{F}$: $X$ is $\mathcal{F}$-measurable.
+	\item[$\cdot$] $X\perp \mathcal{F}$: Random variable $X$ is independent to sigma algebra $\mathcal{F}$. 
+	\item[$\cdot$] $X\stackrel{d}{=} Y$: Random variable $X,Y$ have identical distribution.
+\end{itemize}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem}
+\end{problem}
+\begin{proof} 
+Since $X_t - \Delta_t S_t$ is the dollar value of money market account at time $t$, the number of shares of the money market account is:
+$$
+\Gamma_t = \frac{X_t - \Delta_t S_t}{M_t}
+$$
+Moreover, since $M_t = e^{rt} \Rightarrow dM_t = M_t rdt$. Therefore the ``no external cash'' formula implies that
+\begin{equation}\label{eq:1}
+	dX_t = \Delta_t dS_t + (X_t - \Delta_t S_t )rdt = \Delta_t dS_t + \Gamma_t dM_t
+\end{equation}
+Since $X_t = \Delta_t S_t + \Gamma_t M_t$, by the product rule:
+\begin{equation}\label{eq:2}
+	dX_t = \Delta_t dS_t + S_t d\Delta_t + d[\Delta, S](t) +\Gamma_t dM_t + M_t d\Gamma_t + d[M, \Gamma](t)
+\end{equation}
+Equate (\ref{eq:1}) to (\ref{eq:2}), we have:
+\begin{equation}
+	S_t d\Delta_t + d[\Delta, S](t) + M_t d\Gamma_t + d[M, \Gamma](t) = 0
+\end{equation}
+
+\end{proof}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem}
+\end{problem}
+\begin{proof} It clear that $W_t, B_t$ are continuous martingales with respect to common filtration $\mathcal{F}_t:=\sigma(\bigcup_{s\leq t}\sigma(W_s) \cup \bigcup_{s\leq t}\sigma(B_s))$, and $\mathbb{E}\left[W_t^2\right] = t = \mathbb{E}\left[B_t^2\right] < \infty$. Therefore by Prop.9.11: $W_t \perp B_t$ $\Rightarrow [W,B](t) = 0$, hence $d[W,B](t) = 0$. \\
+By definition
+\begin{equation}
+	\begin{split}
+		[M,N](t) = \int_0^t W_s B_s d[W,B](s) =0
+	\end{split}
+\end{equation}
+Now we show that 
+$$
+\mathbb{E}\left[M_t^2\right] \mathbb{E}\left[N_t^2\right] \ne \mathbb{E}\left[M_t^2 N_t^2\right]
+$$
+(LHS) is easy. Apply Ito isometry:
+\begin{equation}
+	\mathbb{E}\left[M_t^2\right] = \mathbb{E}\left[\left(\int_0^t W_s dB_s\right)^2\right] = \mathbb{E}\left[\int_0^t W_s^2 ds\right] = \int_0^t sds = \frac{t^2}{2}
+\end{equation}
+So by symmetry, $LHS = \left(\frac{t^2}{2}\right)^2 = \frac{t^4}{4}$.\\
+~\\
+For the (RHS), we apply multidimensional Ito's lemma:
+\begin{equation}
+	\begin{split}
+		d(M_t^2N_t^2) 
+		&=2 M_t^2 N_t dN_t + 2 M_t^2 M_t dM_t + \frac{1}{2}\left(2M_t^2 d[N,N](t) + 2N^2_t d[M,M](t) + 2\times4M_tN_t d[M,N](t)\right) \\
+		&=2 M_t^2 N_t dN_t + 2 M_t^2 M_t dM_t + \frac{1}{2}\left(2M_t^2 B^2_t dt + 2N^2_t W^2_t dt\right)
+	\end{split} 
+\end{equation}
+Therefore
+\begin{equation}
+	\begin{split}
+		\mathbb{E}\left[M_t^2N_t^2 \right] &= \mathbb{E}\left[\int_0^t  M_s^2 B^2_s ds + \int_0^tN^2_s W^2_s ds \right]  \\
+		&= 2 \int_0^t \mathbb{E}\left[ M_s^2 B^2_s\right] ds~~~(\text{By symmetry})
+	\end{split}
+\end{equation}
+Apply Ito's lemma again to $M_t^2 B_t^2$, while using the fact that
+\begin{equation}
+	\begin{split}
+		&d[M,M](t) = W^2_t dt \\
+		&d[M,B](t) = d\left[\int_0^t W_s dB_s, \int_0^t dB_s\right] = W_t d[B,B](t) = W_t dt~~~~\text{(Prop.9.10)}\\
+		&d[M,W](t) = d\left[\int_0^t W_s dB_s, \int_0^t dW_s\right] = W_t d[W,B](t) = 0
+	\end{split}
+\end{equation}
+\begin{equation}
+	\begin{split}
+		d(M_t^2 B_t^2) &= 2 B_t^2 M_tdM_t + 2M_t^2 B_t dB_t + \frac{1}{2}\left(2M_t^2 d[B,B](t) + 2B_t^2 d[M,M](t) + 2\times4B_tM_t d[M,B](t)\right) \\
+		&=2 B_t^2 M_tdM_t + 2M_t^2 B_t dB_t + M_t^2 dt + B_t^2 W^2_t dt + 4B_tM_tW_t dt
+	\end{split}
+\end{equation}
+Therefore
+\begin{equation}
+	\begin{split}
+		\mathbb{E}\left[M_t^2 B_t^2\right] &= \mathbb{E}\left[\int_0^t (M_s^2 + B_s^2 W^2_s + 4B_sM_sW_s)ds\right]\\
+		&= \int_0^t \mathbb{E}\left[M_s^2\right] ds + \int_0^t \mathbb{E}\left[B_s^2 W^2_s\right] ds+ 4\int_0^t \mathbb{E}\left[B_sM_sW_s ds\right] ~~~~~(\dag)
+	\end{split}
+\end{equation}
+And we can deal with the first two terms separately:
+\begin{equation}
+	\begin{split}
+		&\int_0^t \mathbb{E}\left[M_s^2\right] ds  =\int_0^t \frac{s^2}{2} ds = \frac{t^3}{6}\\
+		&\int_0^t \mathbb{E}\left[B_s^2 W^2_s\right] ds  =\int_0^t \mathbb{E}\left[B_s^2 \right] \mathbb{E}\left[W_s^2\right]ds = \int_0^t s^2 ds = \frac{t^3}{3}\\
+	\end{split}
+\end{equation}
+The third term requires another usage of Ito's lemma, let $f(x,y,z) = xyz$, and compute $df(B_t, M_t, W_t)$. 
+\begin{equation}
+	\begin{split}
+		d(B_tM_tW_t) &= B_tM_tdW_t + M_tW_tdB_t + B_tW_tdM_t + \frac{1}{2}\left(2B_t d[M,W](t) + 2M_t d[B,W](t) + 2W_t d[M,B](t)\right)\\
+		&=B_tM_tdW_t + M_tW_tdB_t + B_tW_tdM_t+\frac{1}{2}\left(0+0+2W_t^2dt\right) \\
+		&= B_tM_tdW_t + M_tW_tdB_t + B_tW_tdM_t+W_t^2 dt
+	\end{split}
+\end{equation}
+Hence
+\begin{equation}
+	\int_0^t \mathbb{E}\left[B_sM_sW_s \right]ds= \int_0^t \int_0^s \mathbb{E}\left[W_r^2\right] dr ds  = \int_0^t \int_0^s r dr ds = \frac{t^3}{6}
+\end{equation}
+It follows that 
+$$
+\mathbb{E}\left[M_t^2 B_t^2\right] = \frac{t^3}{6}+\frac{t^3}{3}+4\times\frac{t^3}{6} = \frac{7}{6}t^3
+$$
+Hence
+\begin{equation}
+	\begin{split}
+		\mathbb{E}\left[M_t^2N_t^2 \right] = 2 \int_0^t \mathbb{E}\left[ M_s^2 B^2_s\right] ds = 2\int_0^t \frac{7}{6}s^3 ds = \frac{7}{12}t^4 \ne \frac{1}{4}t^4 = \mathbb{E}\left[M_t^2\right] \mathbb{E}\left[N^2_t\right]
+	\end{split}
+\end{equation}
+If we assume $M_t \perp N_t$, then $M_t^2 \perp N_t^2 \Rightarrow \mathbb{E}\left[M_t^2N_t^2 \right] = \mathbb{E}\left[M_t^2\right] \mathbb{E}\left[N^2_t\right]$, which contradicts to our result above. Therefore, the two processes are not independent.
+\end{proof}
+
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem}
+\end{problem}
+\begin{proof} The risk neutral pricing formula gives
+\begin{equation}
+	c(t,S_t) = \tilde{\mathbb{E}}\left[e^{-r(T-t)}(S_T^2 - K)^+  \middle|\mathcal{F}_t\right] 
+\end{equation}
+where $K$ is the strike price. Under RN measure, we have $S_t = S_0 \exp\left(\left(r-\frac{\sigma^2}{2}\right)t + \sigma \tilde{W}_t \right)$, where $\tilde{W}_t$ is a Brownian motion under $\tilde{\mathbb{P}}$. Let $\tau := T-t$,
+\begin{equation}
+	\begin{split}
+		c(t,S_t) &=e^{-r\tau} \tilde{\mathbb{E}}\left[\left[S_0^2 \exp\left(\left(2r-\sigma^2\right)T + 2\sigma \tilde{W}_T \right) - K\right]^+  \middle|\mathcal{F}_t\right] \\
+		&=e^{-r\tau} \tilde{\mathbb{E}}\left[\left[S_t^2 \exp\left(\left(2r-\sigma^2\right)\tau + 2\sigma (\tilde{W}_T-\tilde{W}_t) \right) - K\right]^+  \middle|\mathcal{F}_t\right] \\
+		&= \frac{e^{-r\tau}}{\sqrt{2\pi}} \int_{\mathbb{R}} \left[S_t^2 \exp\left(\left(2r-\sigma^2\right)\tau + 2\sigma \sqrt{\tau}y \right) - K\right]^+ e^{\frac{y^2}{2}}dy
+	\end{split}
+\end{equation}
+We solve for the break-even value $S_t^2 \exp\left(\left(2r-\sigma^2\right)\tau + 2\sigma \sqrt{\tau}y \right) \geq K \Rightarrow y\geq \frac{1}{2\sigma \sqrt{\tau}}[-\log(\frac{S_t^2}{K})-(2r-\sigma^2)\tau]$. Let $x=S_t$, 
+$$
+d_-^*(\tau, x) = \frac{1}{2\sigma \sqrt{\tau}} \left(\log\left(\frac{x^2}{K}\right)+(2r-\sigma^2)\tau \right)
+$$
+We observe that 
+\begin{equation}
+	\begin{split}
+		c(t,S_t) &= e^{-r\tau+2r\tau}\int_{-d_-^*}^{\infty} x^2 \exp\left( -\sigma^2 \tau + 2\sigma \sqrt{\tau} y -\frac{y^2}{2}\right)dy - e^{-r\tau}K\int_{-d_-^*}^{\infty} \frac{1}{\sqrt{2\pi}}e^{\frac{y^2}{2}} dy \\
+		&= e^{r\tau}\int_{-d_-^*}^{\infty} x^2 \exp\left( \sigma^2 \tau  - \frac{(y-2\sigma \sqrt{\tau})^2}{2}\right)dy - e^{-r\tau}KN(d_-^*) \\
+		&= e^{r\tau+\sigma^2\tau}\int_{-d_-^*-2\sigma\sqrt{\tau}}^{\infty} x^2 \exp\left(- \frac{z^2}{2}\right)dz - e^{-r\tau}KN(d_-^*) \\
+		&= e^{r\tau+\sigma^2\tau}x^2 N(d_-^*+2\sigma\sqrt{\tau})- e^{-r\tau}KN(d_-^*)
+	\end{split}
+\end{equation}
+
+\begin{equation}
+	V(t) = \textcolor{red}{e^{(r-r')\tau}}\mathbb{E}\left[e^{-r'\tau}(S_T^2 - K)^+ \middle|\mathcal{F}_n\right]
+\end{equation}
+
+
+
+
+\end{proof}
+
+
+
+
+
+
+\end{document}

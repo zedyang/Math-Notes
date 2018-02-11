@@ -1,0 +1,275 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz, array, eurosym}
+\usepackage{float}
+\renewcommand{\arraystretch}{1.4}
+\newcolumntype{L}{>{\arraybackslash}m{10cm}}
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+\title{\textbf{Stochastic Calculus Assignment VI}}
+\author{Ze Yang~~~~(zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+~\\
+\textit{Note:} \textit{I will use the following notations throughout this assignment:}
+\begin{itemize}
+	\item[$\cdot$] $W_t := W(t)$.
+	\item[$\cdot$] $\Delta_{s,t} := W(t) - W(s)$.
+	\item[$\cdot$] $X\in m \mathcal{F}$: $X$ is $\mathcal{F}$-measurable.
+	\item[$\cdot$] $X\perp \mathcal{F}$: Random variable $X$ is independent to sigma algebra $\mathcal{F}$. 
+	\item[$\cdot$] $X\stackrel{d}{=} Y$: Random variable $X,Y$ have identical distribution.
+\end{itemize}
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} (\textit{Pricing exotic option})
+\end{problem}
+\begin{proof} Consider the replicating portfolio $X_t$ that contains $\Delta_t$ shares of stock and $(X_t - \Delta_t S_t)$ in bank account. We have:
+\begin{equation}
+	dX_t = \Delta_t dS_t + (X_t - \Delta_t S_t)rdt
+\end{equation}
+Since $X_t$ is the replicating portfolio, $X_t$ equals the non-arbitrage price of the option: $X(t) = c(t,S_t)$. Apply Ito's lemma on option price, and use the fact that $d[S,S](t)=\sigma^2S_t^2dt$
+$$
+dc(t,S_t) = \partial_t c_tdt + \partial_x c_tdS_t + \frac{1}{2}\partial_{xx}c_t \sigma^2S_t^2 dt
+$$
+We choose $\Delta_t = \partial_x c_t$, $X(0) = c(0,S(0))$ $\Rightarrow$
+\begin{equation}
+	\begin{split}
+		&\partial_t c_tdt + \partial_x c_tdS_t + \frac{1}{2}\partial_{xx}c_t \sigma^2S_t^2 dt = \partial_xc_t dS_t + (c_t - \partial_xc_t S_t)rdt \\
+		\Rightarrow ~~~&\partial_t c_t + rS_t\partial_x c_t + \frac{1}{2}\partial_{xx}c_t \sigma^2 S_t^2 - rc_t = 0
+	\end{split}
+\end{equation}
+Consequently, $c(t,x)$ solves the boundary value problem:
+\begin{equation}
+	\begin{cases}
+	\partial_t c + rx\partial_x c + \frac{1}{2}\sigma^2 x^2\partial_{xx}c  - rc = 0 & 0\leq t < T\\
+	c(t,0) = 0 & t\leq T \\
+	c(T,x) = x^{\gamma} &x > 0
+	\end{cases}
+\end{equation}
+As the hint suggests, we (magically) know that the solution takes a separated form: $c(t,x) = f(t)g(x)$. \\
+Plug in the boundary conditions:
+\begin{equation}
+	c(T,x) = f(T) g(x) = x^{\gamma}
+\end{equation}
+Hence we deduce that $g(x) = C_1 x^{\gamma}$, $C_1$ is constant. Look back into the PDE, with $\partial_t c = f'g, \partial_x c = fg', \partial_{xx}c = fg''$:
+\begin{equation}
+	\begin{split}
+		&f'g + rx fg' + \frac{1}{2}\sigma^2 x^2 fg'' - rfg = 0 \\
+		\Rightarrow ~~~~&\frac{f'(t)}{f(t)} = \frac{-rxg'(x) - \frac{1}{2}\sigma^2 x^2 g''(x) + rg(x)}{g(x)}
+	\end{split}
+\end{equation}
+By the separation of variable method, there exists a constant $\lambda$, such that
+\begin{equation}
+	\begin{cases}
+	f'(t) = \lambda f(t) \\
+	-rxg'(x) - \frac{1}{2}\sigma^2 x^2 g''(x) + rg(x) = \lambda g(x)
+	\end{cases}
+\end{equation}
+Plug in $g(x)=C_1x^{\gamma}$ to the second equation:
+\begin{equation}
+	\begin{split}
+		&-r \gamma C_1 x^\gamma - \frac{1}{2}\sigma^2 \gamma(\gamma-1)C_1x^{\gamma} + rC_1 x^{\gamma} = \lambda C_1 x^{\gamma} \\
+		\Rightarrow~~~& \lambda = -\left(r(\gamma-1) + \frac{1}{2}\sigma^2\gamma(\gamma-1)\right)
+	\end{split}
+\end{equation}
+Plug into the first equation:
+\begin{equation}
+	f(t) = f(0) e^{\lambda t} = f(0)e^{-\left(r(\gamma-1) + \frac{1}{2}\sigma^2\gamma(\gamma-1)\right)t}
+\end{equation}
+Hence,
+\begin{equation}
+	\begin{split}
+		&c(T,x) = f(T)g(x) =f(0)e^{-\left(r(\gamma-1) + \frac{1}{2}\sigma^2\gamma(\gamma-1)\right)T}C_1 x^{\gamma} = x^{\gamma} \\
+		\Rightarrow ~~~& f(0)C_1 = e^{\left(r(\gamma-1) + \frac{1}{2}\sigma^2\gamma(\gamma-1)\right)T}
+	\end{split}
+\end{equation}
+Therefore
+\begin{equation}
+	\begin{split}
+		c(t,x) &= f(t)g(x) = f(0)C_1e^{-\left(r(\gamma-1) + \frac{1}{2}\sigma^2\gamma(\gamma-1)\right)t} x^{\gamma} \\
+		&= e^{\left(r(\gamma-1) + \frac{1}{2}\sigma^2\gamma(\gamma-1)\right)(T-t)} x^{\gamma}
+	\end{split}
+\end{equation}
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} (\textit{Volatility arbitrage})
+\end{problem}
+\begin{proof} \textbf{(a)} We first formalize what $\sigma_1$ and $\sigma_2$ really is, because this will affect our final conclusion significantly.
+\begin{itemize}
+	\item[1.] As the problem itself suggests, $d_{\pm} = d_{\pm}(T-t, x; \sigma_1)$ is parametrized by $\sigma_1$, hence $c = c(t,x;\sigma_1)$. Therefore, $\sigma_1$ is the volatility that the market uses to price the option, i.e. the implied volatility.
+	\item[2.] Our stock position is given by $\Delta = N(d_+)$, note that $d_+ = d_{\pm}(T-t, x; \sigma_1)$, so $\Delta = \Delta(t, S_t; \sigma_1)$. We are actually delta hedging with the \emph{implied volatility}. This is an important assumption, if we hedge with some other volatility parameter, the final result can be very different. See Carr et.al[2005]. 
+	\item[3.] Finally, $dS_t = \alpha S_t + \sigma_2 S_t dW_t$, which implies that $\sigma_2$ is the real diffusion parameter underlying the data generating process of stock price.
+\end{itemize}
+As the hint suggests,
+\begin{equation}
+	dX_t = dc_t - \partial_x c_t dS_t + (X_t - c_t + S_t \partial_xc_t)rdt
+\end{equation}
+Therefore
+\begin{equation}
+	\begin{split}
+		d(e^{-rt}X_t) &= -r e^{-rt}X_tdt + e^{-rt}dX_t \\
+		&= -r e^{-rt}X_tdt + e^{-rt}\left(dc_t - \partial_x c_t dS_t + (X_t - c_t + S_t \partial_xc_t)rdt\right) \\
+		&= e^{-rt}\left(dc_t - \partial_x c_t dS_t + (- c_t + S_t \partial_xc_t)rdt\right) ~~~(\dag)
+	\end{split}
+\end{equation}
+The quadratic variation of $S_t$ is $d[S,S](t) = \sigma_2^2 S_t^2 dt$. Apply Ito's lemma for $c_t$:
+\begin{equation}
+	\begin{split}
+		dc_t(t,S_t) = \partial_t c_t dt + \partial_x c_t dS_t + \frac{1}{2}\partial_{xx}c_t \sigma_2^2 S_t^2 dt
+	\end{split}
+\end{equation}
+Plug into $(\dag)$:
+\begin{equation}
+	\begin{split}
+		d(e^{-rt}X_t) &= e^{-rt}\left(\partial_t c_t dt + \textcolor{red}{\partial_x c_t dS_t} + \frac{1}{2}\partial_{xx}c_t \sigma_2^2 S_t^2 dt - \textcolor{red}{\partial_x c_t dS_t} + (- c_t + S_t \partial_xc_t)rdt\right) \\
+		&= e^{-rt}\left[\underbrace{\left(\partial_t c_t dt + rS_t \partial_xc_t -rc_t\right)}_{\text{Use BS PDE parametrized by~}\sigma_1}dt + \frac{1}{2}\partial_{xx}c_t \sigma_2^2 S_t^2 dt\right]\\
+		&= e^{-rt}\left[-\frac{1}{2}\partial_{xx}c_t \textcolor{red}{\sigma_1^2} S_t^2 dt+ \frac{1}{2}\partial_{xx}c_t \textcolor{blue}{\sigma_2^2} S_t^2 dt\right]\\
+		&= \frac{1}{2}e^{-rt}\partial_{xx}c_t (\sigma_2^2-\sigma_1^2) S_t^2 dt
+	\end{split}
+\end{equation}
+Integrate both sides from $0$ to $T$:
+\begin{equation}
+	\begin{split}
+		e^{-rT}X(T) - 0&= \int_0^T\frac{1}{2} e^{-rt}\partial_{xx}c_t (\sigma_2^2-\sigma_1^2) S_t^2 dt \\
+		\Rightarrow~~~X(T) &=\int_0^T \frac{1}{2} e^{r(T-t)}\partial_{xx}c_t (\sigma_2^2-\sigma_1^2) S_t^2 dt
+	\end{split}
+\end{equation}
+Since $\sigma_1$, $\sigma_2$ are constants, everything else inside the integral is positive. Hence we have:
+$$
+\text{sgn}(X(T)) = \text{sgn}(\sigma_2 - \sigma_1)
+$$
+~\\
+\textbf{(b)} In this case
+\begin{equation}
+	X(T) =\int_0^T \frac{1}{2} e^{r(T-t)}\partial_{xx}c_t (\sigma_2^2(t)-\sigma_1^2) S_t^2 dt
+\end{equation}
+The quantity $\sigma_2^2(t)-\sigma_1^2$ is, however, random. Thus we can not say about the sign of $X(T)$ this time.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} (\textit{Asian option})
+\end{problem}
+\begin{proof} \textbf{(a)} By the hint:
+\begin{equation}
+	dX_t = \Delta_t dS_t + (X_t - \Delta_t S_t) rdt
+\end{equation}
+By the multi-dimensional Ito's lemma: (with shorthand notation $f_t:=f(t,S_t,Y_t)$)
+\begin{equation}
+	\begin{split}
+		d(f(t,X_t,Y_t)) &= \partial_t f_t dt + \partial_x f_t dX_t + \partial_y f_t dY_t \\
+		&~~~+\frac{1}{2}\left(\partial_{xx}f_td[X,X](t) + 2\partial_{xy} f_t d[X,Y](t)+\partial_{yy}f_td[Y,Y](t)\right)
+	\end{split}
+\end{equation}
+Here we have $X_t = S_t$, $Y_t = \int_0^t S(s)ds$ is of bounded variation. Hence $d[Y,Y](t)=0$, $d[X,Y](t)=0$. Moreover, $d[S,S](t)=\sigma^2 S^2dt$, $dY_t=S_tdt$ The formula of $df$ reduces to
+\begin{equation}
+	\begin{split}
+		d(f(t,S_t,Y_t)) &= \partial_t f_t dt + \partial_x f_t dS_t + S_t\partial_y f_t dt + \frac{1}{2}\sigma^2 S_t^2 \partial_{xx}f_tdt \\
+		&=\left(\partial_t f_t+S_t\partial_y f_t+\frac{1}{2}\sigma^2 S_t^2 \partial_{xx}f_t\right)dt + \partial_x f_t dS_t
+	\end{split}
+\end{equation}
+Since $f(t,S_t,Y_t)=X_t \Rightarrow$ $d(f(t,S_t,Y_t)) = dX_t$, hence
+\begin{equation}
+	\begin{cases}
+	\partial_x f_t = \Delta_t \\
+	\partial_t f_t+S_t\partial_y f_t+\frac{1}{2}\sigma^2 S_t^2 \partial_{xx}f_t = r(X_t - \Delta_t S_t) = rf_t -rS_t\partial_x f_t
+	\end{cases}
+\end{equation}
+Hence $f(t,x,y)$ satisfies PDE:
+\begin{equation}
+	\partial_t f +rx\partial_x f  + \textcolor{red}{x\partial_y f}+\frac{1}{2}\sigma^2 x^2 \partial_{xx}f -  rf = 0 ~~~~~(\ddag)
+\end{equation}
+~\\
+\textbf{(b)} Since $c(t,x,y)$ is a function such that $c(t,S_t,Y_t)$ is AFP $\Rightarrow$ $c(t,S_t,Y_t)=X_t$. So $c(t,x,y)$ also solves $(\ddag)$.  \\
+We consider the boundary conditions.
+\begin{itemize}
+	\item[1.] When $t=T$, clearly by the option contractual terms: $c(T,x,y) = (y/T-K)^{+}$.
+	\item[2.] When $x=0$ at somewhere \emph{before} the maturity, i.e. $0\leq t<T$: The stock price will remain 0 from that point, otherwise there is an arbitrage. So 
+	$$
+	Y(T) = \int_0^T S(s)ds = \int_0^t S(s)ds + \int_t^T 0 \cdot ds = Y(t) = y
+	$$
+	i.e. we know as early as time $t$ that the path average at expiry will be $y/T$, and the payoff will be $(y/T - K)^+$. This turns our option into a deterministic cashflow that is like a zero coupon bond. So
+	$$
+	c(t,0,y) = e^{-r(T-t)}(y/T - K)^+
+	$$
+	\item[3.] If $y\to -\infty$, the value of option will be simply $0$.
+\end{itemize}
+To wrap up: $c(t,x,y)$ solves the BVP:
+\begin{equation}
+	\begin{cases}
+	\partial_t c +rx\partial_x c  + x\partial_y c+\frac{1}{2}\sigma^2 x^2 \partial_{xx}c -  rc = 0 & t\in[0,T), x\geq 0\\
+	c(T,x,y) = (y/T-K)^{+} & x\geq0\\
+	c(t,0,y) = e^{-r(T-t)}(y/T - K)^+ & t\in[0,T)\\
+	\lim\limits_{y\rightarrow -\infty}c(t,x,y) = 0 & t\in[0,T), x\geq 0
+	\end{cases}
+\end{equation}
+~\\
+\textbf{(c)}. We structure portfolio $X(t)$, with $\Delta_t = \partial_x c$ shares of stock and $X(t)-\Delta_t S_t$ dollar in bank account. Pick the initial value of the bank account such that $X_0=c(0,S_0,Y_0)$, which is a known constant. It suffices to show two things:
+\begin{itemize}
+	\item[1.] $X_t$ is the replicating portfolio $\iff$ $X_T = (Y_T-K)^+$.
+	\item[2.] $X_t = c(t,S_t,Y_t)$. For $0\leq t \leq T$.
+\end{itemize}
+We begin with (2), let $D_t = X_t - c(t,S_t,Y_t)$, then by our results in \textbf{(a)}:
+\begin{equation}
+	\begin{split}
+		dD_t &= dX_t - dc(t,S_t,Y_t) \\
+		&=\left[\Delta_t dS_t + (X_t - \Delta_t S_t) rdt\right] - \left[\left(\partial_t c+S_t\partial_y c+\frac{1}{2}\sigma^2 S_t^2 \partial_{xx}c\right)dt + \partial_x c dS_t\right] \\
+		&=-\underbrace{\left(\partial_t c+ rS_t\partial_x c + S_t\partial_y c+\frac{1}{2}\sigma^2 S_t^2 \partial_{xx}c\right)}_{\text{Use the PDE satisfied by~}c}dt + rX_t dt \\
+		&= r(X_t - c(t,S_t,Y_t)) dt \\
+		&= D_t rdt
+	\end{split}
+\end{equation}
+So $D(t) = D(0) e^{rt}$, since $D(0)=0 \Rightarrow D(t)\equiv 0$ for $t \in [0,T)$. Since $X,c,D\in \mathcal{C}^{1,2,2} \Rightarrow X,c,D$ are all continuous with respect to $t$: $D(T)=0$, i.e. $X(T)=c(T,S_T,Y_T)=(Y_T/T-K)^+$. We proved condition (1).\\
+Besides, $D(t)=0$ for all $t\in[0,T] \Rightarrow $ $X_t = c(t,S_t,Y_t)$ for all $t\in[t,T]$. We have condition (2).\\
+$\Rightarrow c(t,S_t,Y_t)$ is the AFP.
+
+\end{proof}
+
+
+
+
+
+
+\end{document}

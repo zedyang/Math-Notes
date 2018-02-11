@@ -1,0 +1,335 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz, array, eurosym}
+\usepackage{float}
+\renewcommand{\arraystretch}{1.4}
+\newcolumntype{L}{>{\arraybackslash}m{10cm}}
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+
+\title{\textbf{Stochastic Calculus HW I}}
+\author{Ze Yang~~~~(zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{proof} \textbf{(i)} Let $\tau:=T-t$. As the hint suggests, we calculate
+\begin{equation}
+	\begin{split}
+		\frac{N'(d_+)}{N'(d_-)} &= \exp\left(	-\frac{d_+^2 - d_-^2}{2}\right) = \exp\left(\frac{-(d_++d_-)(d_+-d_-)}{2}\right) \\
+		&=\exp\left\{-\frac{1}{2}\frac{1}{\sigma\sqrt{\tau}}\left(2\log \frac{x}{K}+2r\tau\right)\sigma\sqrt{\tau}\right\} \\
+		&= \exp\left(-\log\frac{x}{K}-r\tau\right) = \frac{K}{x}e^{-r\tau}
+	\end{split}
+\end{equation}
+Multiply the both sides by $xN'(d_-)$, we have: $xN'(d_+) = Ke^{-r\tau}N'(d_-)$ as expected. \\
+~\\
+\textbf{(ii)} Denote $\partial_x d_{\pm}:=\frac{\partial }{\partial x} d_{\pm}$, we have $\partial_x d_+ = \partial_x d_- = \frac{1}{\sigma\sqrt{\tau}x}$.
+\begin{equation}
+	\begin{split}
+		c_x &= N(d_+) + xN'(d_+)\partial_x d_+ - Ke^{-r\tau} N'(d_-) \partial_x d_- \\
+		&= N(d_+) + \partial_x d_+\left[xN'(d_+)-Ke^{-r\tau} N'(d_-)\right]\\
+		&= N(d_+)
+	\end{split}
+\end{equation}
+Because the second term is zero due to the result in \textbf{(i)}.\\
+~\\
+\textbf{(iii)}
+\begin{equation}
+	\begin{split}
+		c_{xx} = \partial_x d_+ N'(d_+) = \frac{1}{\sigma x \sqrt{\tau}}N'(d_+)
+	\end{split}
+\end{equation}
+~\\
+\textbf{(iv)} We hope to take advantage of the relation in \textbf{(i)}. Note that
+$$
+\partial_t d_+ = \partial_t (d_-+\sigma\sqrt{T-t}) = \partial_t d_- - \frac{\sigma}{2\sqrt{T-t}}
+$$
+\begin{equation}
+	\begin{split}
+		c_t &= xN'(d_+)\partial_t d_+ - Ke^{-r(T-t)}N'(d_-)\partial_t d_- - rKe^{-r(T-t)}N(d_-)\\
+		&= xN'(d_+)\left(\partial_t d_- - \frac{\sigma}{2\sqrt{T-t}}\right) - Ke^{-r(T-t)}N'(d_-)\partial_t d_- - rKe^{-r(T-t)}N(d_-)\\
+		&= \partial_t d_-\underbrace{\left(xN'(d_+)-Ke^{-r(T-t)}N'(d_-)\right)}_{\text{is 0 due to (i)} } -rKe^{-r(T-t)}N(d_-)- xN'(d_+)\frac{\sigma}{2\sqrt{T-t}} \\
+		&=  -rKe^{-r(T-t)}N(d_-)- \frac{\sigma x}{2\sqrt{T-t}} N'(d_+)
+	\end{split}
+\end{equation}
+~\\
+\textbf{(v)}
+\begin{equation}
+	\begin{split}
+		RHS &= c_t + rxc_x + \frac{1}{2}\sigma^2 x^2 c_{xx} \\
+		&= -rKe^{-r\tau}N(d_-)- \frac{\sigma x}{2\sqrt{\tau}} N'(d_+)+rxN(d_+) + \frac{\sigma x}{2\sqrt{\tau}}N'(d_+) \\
+		&= r(xN(d_+)-Ke^{-r\tau} N(d_-))\\
+		&= rc = LHS
+	\end{split}
+\end{equation}
+~\\
+\textbf{(vi)} If $0<x<K$, $-\infty<\log(x/K)<0$, so $d_{\pm}$ is a negative finite constant divided by $0$ as $T-t\to 0$, therefore $\lim\limits_{t\rightarrow T} d_{\pm} = -\infty,~~~~0<x<K$.\\
+~\\
+The opposite holds when $K<x<\infty$, and $0<\log(x/K)<\infty$, in this case $d_{\pm}$ is a positive finite number divided by $0$ as $T-t\to 0$, hence $\lim\limits_{t\rightarrow T} d_{\pm} = +\infty,~~~~x>K$. \\
+~\\
+When $x=K$, 
+$$
+\lim\limits_{t\rightarrow T}d_{\pm}(T-t, x)\biggr\rvert_{x=K} = \lim\limits_{t\rightarrow T}\frac{r-\frac{1}{2}\sigma^2}{\sigma}\sqrt{T-t} = 0
+$$
+~\\
+Now we consider the boundary condition $t\to T$
+\begin{itemize}
+	\item[$\cdot$] $x>K$, $\lim\limits_{\tau\rightarrow 0}N(d_{\pm}) = 1$, so $\lim\limits_{t\rightarrow T} c(t,x) = \lim\limits_{\tau \rightarrow 0} [xN(d_+)-Ke^{-r\tau}N(d_-)] = x-K$.
+	\item[$\cdot$] $x=K$, $\lim\limits_{\tau\rightarrow 0}N(d_{\pm}) = 0.5$, so $\lim\limits_{t\rightarrow T} c(t,x) = \lim\limits_{\tau \rightarrow 0} [xN(d_+)-Ke^{-r\tau}N(d_-)] = \frac{1}{2}(x-K)=0$.
+	\item[$\cdot$]  $x<K$, $\lim\limits_{\tau\rightarrow 0}N(d_{\pm}) = 0$, so $\lim\limits_{t\rightarrow T} c(t,x) = \lim\limits_{\tau \rightarrow 0} [xN(d_+)-Ke^{-r\tau}N(d_-)] =0$.
+\end{itemize}
+The three cases can be concluded with $\lim\limits_{t \rightarrow T} c(t,x) = (x-K)^+$.\\
+~\\
+\textbf{(vii)} Fix $0\leq t <T$, we have $\lim\limits_{x\rightarrow 0} \log \frac{x}{K}\to -\infty$, while the other parts of $d_{\pm}$ being fixed and not infinity. Hence we have $\lim\limits_{x\rightarrow 0} d_{\pm} = -\infty$; In this case, $\lim\limits_{x\rightarrow 0}N(d_{\pm})=0$. So
+$$
+\lim\limits_{x\rightarrow 0} c(t,x) = 0
+$$
+~\\
+\textbf{(viii)} Fix $0\leq t <T$, we have $\lim\limits_{x\rightarrow \infty} \log \frac{x}{K}\to \infty$, while the other parts of $d_{\pm}$ being fixed and not infinity. Hence we have $\lim\limits_{x\rightarrow \infty} d_{\pm} = \infty$; In this case, $\lim\limits_{x\rightarrow \infty}N(d_{\pm})=1$. The second boundary condition turns out to be
+\begin{equation}
+	\begin{split}
+		\lim\limits_{x\rightarrow\infty} [c(t,x) - (x-e^{-r\tau}K)] &= \lim\limits_{x\rightarrow\infty} x(N(d_+)-1) + \lim\limits_{x\rightarrow\infty} \underbrace{e^{-r\tau}K(1-N(d_-))}_{\text{0 since } N(d_-)\to 0} \\
+		&=\lim\limits_{x\rightarrow\infty} \frac{(N(d_+)-1)}{x^{-1}} =\lim\limits_{x\rightarrow\infty} \frac{\frac{d}{d x} N(d_+)}{ -x^{-2}} \\
+		&= \lim\limits_{x\rightarrow\infty} \frac{N'(d_+)}{ -\sigma \sqrt{\tau} x^{-1}}~~~(\text{follow the hint, rewrite $x$ in }d_+) \\
+		&= \lim\limits_{d_+\rightarrow\infty} \frac{\frac{1}{\sqrt{2\pi}}\exp(-\frac{1}{2}d_+^2)}{ -\sigma \sqrt{\tau}K^{-1}\exp(-\sigma \sqrt{\tau} d_+ + (r+\frac{1}{2}\sigma^2)\tau)} \\
+		&= C \cdot \lim\limits_{d_+\rightarrow\infty} \exp \left(	-\frac{1}{2}d_+^2+\sigma\sqrt{\tau}d_+\right) = 0
+	\end{split}
+\end{equation}
+where $C$ is some constant.
+
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{solution} \textbf{(i)} First off, we calculate the differential of the discounted asset price, namely for $i=1,2$
+\begin{equation}
+	\begin{split}
+		d(e^{-rt} S_i(t)) &= e^{-rt}(dS_i(t) -rS_i(t)  dt) \\
+		&= e^{-rt}S_i(t)\left[(\alpha_i - r)dt + \sigma_i dW(t)\right] \\
+		&= e^{-rt}S_i(t)\sigma_i\left[\frac{\alpha_i - r}{\sigma_i}dt + dW(t)\right] 
+	\end{split}
+\end{equation}
+Since we have $\frac{\alpha_1 - r}{\sigma_1}=\frac{\alpha_2 - r}{\sigma_2}$, we let $\theta:=\frac{\alpha_i - r}{\sigma_i}$; we apply Girsanov theorem to 
+$$
+\widetilde{W}(t) = \int_0^t \theta du + W(t)
+$$
+which is a Brownian motion under $\widetilde{\mathbb{P}}$ defined by
+$$
+\widetilde{\mathbb{P}}(A) = \int_A \exp\left\{-\int_0^t \theta dW(u)-\frac{1}{2}\int_0^t \left\lVert \theta \right\rVert^2 du \right\} d \mathbb{P}(\omega)~~~\forall A \in \mathcal{F}_t
+$$
+Under $\widetilde{\mathbb{P}}$ we have
+$$
+d(e^{-rt} S_i(t)) = e^{-rt}S_i(t)\sigma_i d\widetilde{W}(t)
+$$
+Which are $\widetilde{\mathbb{P}}$ martingales for both $i=1,2$. Note that there is only one dimension in the original Brownian motion $W(t)$, so the only way that $\widetilde{\mathbb{P}}$ make \textit{both} discounted asset prices martingales is when $\theta_1 = \theta_2$, which is exactly the condition we have in this question.\\
+~\\
+\textbf{(ii)} Suppose the portfolio $X(t)$ is composed of
+\begin{equation}
+	X(t) = \underbrace{\Delta_1(t)S_1(t)}_{\text{position in }S_1} + \underbrace{\Delta_2(t)S_2(t)}_{\text{position in }S_2} + \underbrace{(X(t) - \Delta_1(t)S_1(t) - \Delta_2(t)S_2(t))}_{\text{position in money market account}}
+\end{equation}
+The self-financing condition suggests
+\begin{equation}
+	\begin{split}
+		dX(t) &= \Delta_1(t)dS_1(t) + \Delta_2(t)dS_2(t) + r(X(t)-\Delta_1(t)S_1(t)-\Delta_2(t)S_2(t))dt \\
+		\Rightarrow ~~ dX(t) - rX(t)dt &= \Delta_1(t)[dS_1(t)-rS_1(t)dt] + \Delta_2(t)[dS_2(t)-rS_2(t)dt]\\
+		&\downarrow \text{(multiply the discount factor on both sides)}\\
+		\Rightarrow~~ d(e^{-rt}X(t)) &= \Delta_1(t)d(e^{-rt}S_1(t)) + \Delta_2(t)d(e^{-rt}S_2(t)) \\
+		&= \left(e^{-rt}\Delta_1(t)S_1(t)\sigma_1 + e^{-rt}\Delta_2(t)S_2(t)\sigma_2\right) d\widetilde{W}(t)
+	\end{split}
+\end{equation}
+Which is a $\widetilde{\mathbb{P}}$ martingale.\\
+~\\
+\textbf{(iii)} We show by contradiction. Assume $\mathbb{P}\left(X(t)<0\right)=0$. The equivalence of measures suggesets $\widetilde{\mathbb{P}}\left(X(t)<0\right)=0$ too. \\ 
+However we know $X(0)=0$, by the martingale property $\Rightarrow$ $\widetilde{\mathbb{E}}\left[e^{-rt}X(t)\right] = X(0)=0$. Since $\widetilde{\mathbb{P}}\left(X(t)<0\right)=0$, the only way to make the expectation $0$ is $\widetilde{\mathbb{P}}\left(X(t)>0\right)=0$ too, and the equivalence of measures suggesets $\mathbb{P}\left(X(t)>0\right)=0$, which contradicts to the given fact that $\mathbb{P}\left(X(t)>0\right)>0$. \\
+Therefore, $\mathbb{P}\left(X(t)<0\right)>0$.
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{solution} \textbf{(i)}
+\begin{equation}
+	\begin{split}
+		dX(t) &=(X(t)-\Delta_2(t) M(t)) \frac{dS(t)}{S(t)} + \Delta_2 (t)dM(t) \\
+		& =(X(t)-\Delta_2(t) M(t)) (\alpha dt + \sigma dW(t)) + \Delta_2 (t)M(t)rdt\\
+		&= \left[\alpha X(t)-(\alpha - r)\Delta_2(t) M(t)\right] dt + (X(t)-\Delta_2(t) M(t))\sigma dW(t)
+	\end{split}
+\end{equation}
+\textbf{(ii)} Ito's lemma:
+\begin{equation}
+	\begin{split}
+		dc(t,S(t)) &= c_x(t,S(t)) dS_t + c_t(t,S(t)) dt + \frac{1}{2}c_{xx}(t,S(t)) dS_tdS_t \\
+		&= \left[\alpha S(t) c_x(t,S(t)) + c_t(t,S(t)) + \frac{1}{2}c_{xx}(t,S(t))\sigma^2 S^2(t)\right]dt + c_x(t,S(t))\sigma S(t)dW(t)
+	\end{split}
+\end{equation}
+\textbf{(iii)} Equate $dX(t)$ and $dc(t,S(t))$, using the fact that the $dt$ terms and $dW(t)$ terms should both agree, we solve equations
+\begin{equation}
+	\begin{cases}
+	c(t,S(t)) = X(t) \\
+	c_x \sigma S(t) = (X(t) - \Delta_2(t) M(t))\sigma \\
+	\alpha X(t) - (\alpha -r) \Delta_2(t) M(t) = \alpha S(t) c_x + c_t + \frac{1}{2}c_{xx}\sigma^2 S^2(t)
+	\end{cases}
+\end{equation}
+The first equation $\Rightarrow$
+\begin{equation}
+	\Delta_2(t) = \frac{X(t)-c_x(t,S(t))S(t)}{M(t)}
+\end{equation}
+The second equation $\Rightarrow$
+\begin{equation}
+	\begin{split}
+		LHS &= \alpha \left(X(t) - \Delta_2(t) M(t)\right) +r \Delta_2(t) M(t) \\
+		&= \alpha c_x S(t) + r(X(t) - c_xS(t)) \\
+		&=  \alpha c_x S(t) + rc - rc_xS(t) ~~~(*)\\
+	\end{split}
+\end{equation}
+$(*) = RHS$ $\Rightarrow$
+$$
+rc(t,S(t)) = rc_x(t,S(t))S(t) + c_t(t,S(t)) + \frac{1}{2}c_{xx}(t,S(t))\sigma^2 S^2(t)
+$$
+which is the Black-Scholes PDE.\\
+~\\
+\textbf{(iv)} 
+$$
+Z(t):= \exp\left(-\sigma W(t) - \left(\alpha - \frac{1}{2}\sigma^2\right)t\right)
+$$
+\begin{equation}
+	\begin{split}
+		dZ(t) &= \partial_t Z(t) dt + \partial_x Z(t) dW(t) + \frac{1}{2} \partial_{xx}Z(t)  dt  \\
+		&= -\left(\alpha-\sigma^2\right) Z(t)dt -\sigma Z(t)dW(t) 
+	\end{split}
+\end{equation}
+Use Ito product rule:
+\begin{equation}
+	\begin{split}
+		d(Z(t)X(t)) &= X(t)dZ(t) + Z(t)dX(t) + dX(t)dZ(t) \\
+		&=\left(\textcolor{red}{\sigma^2}- \textcolor{green}{\alpha}\right) X(t)Z(t)dt -\textcolor{blue}{\sigma X(t)Z(t)dW(t)} + \left[\textcolor{green}{\alpha X(t)}-(\alpha - r)\Delta_2(t) M(t)\right] Z(t)dt \\
+		&~~~~+ [\textcolor{blue}{X(t)}-\Delta_2(t) M(t)]Z(t)\sigma dW(t) - [\textcolor{red}{X(t)}-\Delta_2(t) M(t)]Z(t)\sigma^2 dt \\
+		&= (r+\sigma^2-\alpha)\Delta_2(t) M(t)Z(t)dt - \sigma\Delta_2(t) M(t)Z(t) dW(t)~~~(\dag)
+	\end{split}
+\end{equation}
+And
+\begin{equation}
+	\begin{split}
+		d(Z(t)c(t,S(t))) &= c(t,S(t))dZ(t) + Z(t)dc(t,S(t)) + dc(t,S(t))dZ(t) \\
+		&= \left(\sigma^2- \alpha \right) cZ(t)dt -\sigma c Z(t)dW(t) + \left[\alpha S(t) c_x + c_t + \frac{1}{2}c_{xx}\sigma^2 S^2(t)\right]Z(t)dt \\
+		&~~~~+c_x\sigma S(t)Z(t)dW(t) - c_x\sigma^2 S(t)Z(t)dt \\
+		&= \left[(\alpha-\sigma^2) S(t) c_x + c_t + \frac{1}{2}c_{xx}\sigma^2 S^2(t) - (\alpha - \sigma^2) c\right]Z(t)dt \\
+		&~~~~+[c_x\sigma S(t)- \sigma c]Z(t)dW(t)~~~(\ddag)
+	\end{split}
+\end{equation}
+Now equate $(\dag)$ to $(\ddag)$, $dt$ and $dW(t)$ terms both agree. For the $dW(t)$ terms, we have
+\begin{equation}
+	c_x\sigma S(t)- \sigma c = -\sigma\Delta_2(t) M(t)~~\Rightarrow~~\Delta_2 = \frac{c(t,S(t)-c_x(t,S(t))S(t)}{M(t)}
+\end{equation}
+As for the $dt$ terms:
+\begin{equation}
+	(\textcolor{red}{\sigma^2- \alpha}) (c-S(t) c_x) + c_t + \frac{1}{2}c_{xx}\sigma^2 S^2(t) = (r+\textcolor{red}{\sigma^2- \alpha})\Delta_2(t)M(t)
+\end{equation}
+Therefore
+\begin{equation}
+	c_t(t,S(t)) + \frac{1}{2}c_{xx}(t,S(t))\sigma^2 S^2(t) = rc(t,S(t)) - rS(t) c_x(t,S(t))
+\end{equation}
+Again, this is the Black-Scholes PDE.
+\end{solution}
+
+\newpage
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{solution} \textbf{(i)} Without loss of generality, assume $\frac{\alpha_1- r}{\sigma_1} > \frac{\alpha_2- r}{\sigma_2} $. Follow our derivation in \textbf{Problem 2},
+\begin{equation}
+	\begin{split}
+		d(e^{-rt}X(t)) &= \Delta_1(t)d(e^{-rt}S_1(t)) + \Delta_2(t)d(e^{-rt}S_2(t))\\ 
+		&=
+		e^{-rt}\Delta_1(t)S_1(t)\sigma_1\left[\frac{\alpha_1 - r}{\sigma_1}dt + dW(t)\right] +e^{-rt}\Delta_2(t)S_2(t)\sigma_2\left[\frac{\alpha_2 - r}{\sigma_2}dt + dW(t)\right]~~(\dag)
+	\end{split}
+\end{equation}
+We formulate the trading strategy by letting
+\begin{equation}
+	\begin{split}
+		&\Delta_1(t) = \frac{1}{\sigma_1S_1(t)};~~~\Delta_2(t) = -\frac{1}{\sigma_2S_2(t)} \\
+		&\Delta_0(t) = e^{-rt}\left(X(t)-\frac{1}{\sigma_1}+\frac{1}{\sigma_2}\right)\\
+		&\text{It's easy to verify: }X(t) = \Delta_1(t)S_1(t) + \Delta_2(t)S_2(t) + \Delta_0(t) e^{rt}
+	\end{split}
+\end{equation}
+and the initial position in money market account is $\Delta_0(0) = X(0)-\Delta_1(0)S_1(0)-\Delta_2(0)S_2(0) = -\frac{1}{\sigma_1}+\frac{1}{\sigma_2}$.
+Then, under this trading strategy, $(\dag)$ becomes:
+\begin{equation}
+	\begin{split}
+		d(e^{-rt}X(t)) &= e^{-rt}\left[\frac{\alpha_1 - r}{\sigma_1}dt +dW(t)\right] - e^{-rt}\left[\frac{\alpha_2 - r}{\sigma_2}dt +dW(t)\right] \\
+		&= e^{-rt}\left(\frac{\alpha_1 - r}{\sigma_1}-\frac{\alpha_2 - r}{\sigma_2}\right)dt > 0,~~~\forall t\in (0,T]
+	\end{split}
+\end{equation}
+Since $d(e^{-rt}X(t))$ is always strictly positive for all $t\in [0,T]$, we have $\mathbb{P}\left(e^{-rt}X(t)>0\right) = 1 \Rightarrow \mathbb{P}\left(X(t)>0\right) = 1$ for all $t\in (0, T]$, i.e. there is an arbitrage.\\
+If otherwise $\frac{\alpha_1- r}{\sigma_1} < \frac{\alpha_2- r}{\sigma_2} $, we can formulate the opposite trading strategy by switching the subscripts $1,2$, namely:
+\begin{equation}
+	\begin{split}
+		&\Delta_2(t) = \frac{1}{\sigma_2S_2(t)};~~~\Delta_1(t) = -\frac{1}{\sigma_1S_1(t)} \\
+		&\Delta_0(t) = e^{-rt}\left(X(t)-\frac{1}{\sigma_2}+\frac{1}{\sigma_1}\right)
+	\end{split}
+\end{equation}
+In the end we'll obtain $d(e^{-rt}X(t))=e^{-rt}\left(\frac{\alpha_2 - r}{\sigma_2}-\frac{\alpha_1 - r}{\sigma_1}\right)dt > 0$, $\forall t\in (0,T]$.\\
+~\\
+\textbf{(ii)} We have discussed this in problem 2. For $i=1,2$, 
+$$
+d(e^{-rt} S_i(t)) = e^{-rt}S_i(t)\sigma_i\left[\frac{\alpha_i - r}{\sigma_i}dt + dW(t)\right] = e^{-rt}S_i(t)\sigma_i  d\widetilde{W}_i(t)
+$$
+$\theta_i:=\frac{\alpha_i - r}{\sigma_i}$, $\textcolor{red}{\theta_1\ne \theta_2}$; If we naively apply Girsanov theorem to $\widetilde{W}_i(t) = \int_0^t \theta_i du + W(t)$, the resulting $\widetilde{\mathbb{P}}_i$ defined by
+$$
+\textcolor{red}{\widetilde{\mathbb{P}}_i}(A) = \int_A \exp\left\{-\int_0^t \textcolor{red}{\theta_i} dW(u)-\frac{1}{2}\int_0^t \left\lVert \textcolor{red}{\theta_i} \right\rVert^2 du \right\} d \mathbb{P}(\omega)~~~\forall A \in \mathcal{F}_t
+$$
+will only make one discounted asset price martingale, but not the other one. Because the two measures do not agree in $\theta_i$. Therefore, there is no single measure that makes both discounted asset price martingale. The only case where there is one is when $\theta_1 = \theta_2$.
+\end{solution}
+
+
+\end{document}
