@@ -1,0 +1,246 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz, array, eurosym}
+\usepackage{float}
+\usepackage{cancel}
+
+\renewcommand{\arraystretch}{1.4}
+\newcolumntype{L}{>{\arraybackslash}m{10cm}}
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+
+\title{\textbf{Stochastic Calculus HW II}}
+\author{Ze Yang~~~~(zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{proof} We want to prove a slightly more general result here for later purposes. \\
+\textit{Claim:} The solution $c(t,x)$ to the PDEs of the form 
+\begin{equation}
+  \textcolor{red}{b} c(t,x) = c_t(t,x)  + \textcolor{red}{a}xc_x(t,x)  +\frac{1}{2}\sigma^2 x^2 c_{xx}(t,x)
+\end{equation}
+for whatever constants $a, b \in \mathbb{R}$, is given by
+\begin{equation}
+  \begin{split}
+  &\begin{split}
+    c(t,x) &= e^{(a-b)\tau} xN(d_+)- Ke^{-b\tau}N(d_-)\\
+    &=e^{(a-b)\tau} [xN(d_+) - Ke^{-a\tau}N(d_-)]=:e^{(a-b)\tau}\cdot \widetilde{c}(t,x) 
+  \end{split}\\
+  &d_{\pm} = \frac{1}{\sigma \sqrt{\tau}} \left[\log \frac{x}{K}+ \left(a\pm \frac{1}{2}\sigma^2\right) \tau \right]\\
+  &\tau = T-t
+\end{split}
+\end{equation}
+\textit{Proof of Claim:} Note that $\widetilde{c}(t,x)=xN(d_+) - Ke^{-a\tau}N(d_-)$ and $d_{\pm}$ in this problem matches the system in Homework 1 Exercise 1 exactly, except that we substitute $r$ with $a$ everywhere. Therefore, follow the same calculation as that exercise, $\widetilde{c}(t,x)$ solves
+\begin{equation}
+	a \widetilde{c}(t,x) = \widetilde{c}_t(t,x) + a x \widetilde{c}_x(t,x) + \frac{1}{2}\sigma^2 x^2 \widetilde{c}_{xx}(t,x)~~~(\dag)
+\end{equation}
+Moreover, we have:
+\begin{equation}
+	\begin{split}
+		&c_x = e^{(a-b)\tau} \widetilde{c}_x \\
+		&c_{xx} = e^{(a-b)\tau} \widetilde{c}_{xx} \\
+		&c_t = (b-a)e^{(a-b)\tau}\widetilde{c} + e^{(a-b)\tau} \widetilde{c}_t
+	\end{split}
+\end{equation}
+Therefore
+\begin{equation}
+	\begin{split}
+		RHS &= c_t(t,x) + a x c_x(t,x) + \frac{1}{2}\sigma^2 x^2 c_{xx}(t,x)\\
+		&=e^{(a-b)\tau}\underbrace{\left[\widetilde{c}_t(t,x) + a x \widetilde{c}_x(t,x) + \frac{1}{2}\sigma^2 x^2 \widetilde{c}_{xx}(t,x)\right]}_{\text{use }(\dag)} + (b-a)e^{(a-b)\tau}\widetilde{c}(t,x) \\
+		&= ae^{(a-b)\tau}\widetilde{c}(t,x) + (b-a)e^{(a-b)\tau}\widetilde{c}(t,x)\\
+		&= b \left[e^{(a-b)\tau}\widetilde{c}(t,x)\right] \\
+		&= bc(t,x) = LHS
+	\end{split}
+\end{equation}
+For this problem, we let $a=r_R$, $b=r$, then the given solution matches (2) exactly, which finishes the proof.
+\end{proof}
+\newpage
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{proof} \textbf{(i)} Follow the same setting we've discussed in class, suppose we are selling the call to a counterparty, now consider the hedging portfolio (which is essentially replicating a long call position) whose value is $X(t)$ at time $t\in [0,T)$:
+\begin{itemize}
+  \item[$\cdot$] We long $\Delta(t)$ shares of stock.
+  \item[$\cdot$] We pay $C(t)=\beta c(t,S(t))$ amount of cash to the counterparty as collateral, receive an interest rate $r_C$. Since we are replicating the call, $C(t)=\beta X(t)$.
+  \item[$\cdot$] We put the shock we own in the repo market as collateral, which allows us to borrow $\Delta(t) S(t)$ amount of cash with it, we pay an interest rate of $r_R$.
+  \item[$\cdot$] We borrow (or lend) whatever remaining cash deficit (or surplus) with interest rate $r_F$.
+\end{itemize}
+Such decomposition split our portfolio into
+\begin{equation}
+  X(t) = \underbrace{\Delta(t)S(t)}_{\text{stock}} + \underbrace{\beta X(t)}_{\text{cash collateral}} - \underbrace{\Delta(t)S(t)}_{\text{repo borrowing}} + \underbrace{(1-\beta)X(t)}_{\text{remainder}}
+\end{equation}
+So the differential of the portfolio value is:
+\begin{equation}
+  dX(t) = \Delta(t) dS(t) + r_C \beta X(t)dt - r_R\Delta(t)S(t)dt + r_F(1-\beta)X(t)dt +  q\Delta(t)S(t)dt
+\end{equation}
+The last term arises from the dividend we receive. Apply the same procedure we did in class:
+\begin{equation}
+  \begin{split}
+    d(e^{-r_F t}X(t)) &= e^{-r_Ft}\left[-r_F X(t) dt + dX(t)\right] \\
+    &=e^{-r_Ft}\left[\Delta(t) dS(t)  - (r_R-q)\Delta(t)S(t)dt + (r_C-r_F)\beta X(t)dt \right]
+  \end{split}
+\end{equation}
+Apply Ito's lemma to $e^{-r_F t}c(t,S(t))$:
+\begin{equation}
+  d(e^{-r_F t}c(S(t),t)) = e^{-r_F t}\left[-r_Fc dt + c_t dt + c_x dS(t) + \frac{1}{2}c_{xx}\sigma^2 S^2(t)dt\right]
+\end{equation}
+Set $\Delta(t):=c_x(t,S(t))$, and equate two formulas above, the $c_x dS(t)$ terms cancel out, we have:
+\begin{equation}
+  - (r_R-q)c_x S(t) + (r_C-r_F)\beta c = -r_Fc + c_t  + \frac{1}{2}c_{xx}\sigma^2 S^2(t)
+\end{equation}
+Therefore, the call price $c(t,x)$ solves the PDE
+\begin{equation}
+  c_t(t,x)  + (r_R-q)xc_x(t,x)  +\frac{1}{2}\sigma^2 x^2 c_{xx}(t,x) = [(1-\beta)r_F + \beta r_C] c(t,x)~~~(*)
+\end{equation}
+~\\
+\textbf{(ii)} We find that this is just a case that belongs to the class of PDEs we have discussed in Exercise 1. We apply the more general claim that we have proved in that exercise, choosing $a=r_R-q$, $b=(1-\beta)r_F + \beta r_C$, both constants. The solution to PDE $(*)$ is given by:
+
+\begin{equation}
+  \begin{split}
+  &c(t,x) = e^{(a-b)\tau} xN(d_+)- Ke^{-b\tau}N(d_-)\\
+  &d_{\pm} = \frac{1}{\sigma \sqrt{\tau}} \left[\log \frac{x}{K}+ \left(a\pm \frac{1}{2}\sigma^2\right) \tau \right]\\
+  &a=r_R-q \\
+  &b=(1-\beta)r_F + \beta r_C\\
+  &\tau = T-t
+\end{split}
+\end{equation}
+
+\end{proof}
+\newpage
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{proof} \textbf{(i)} We choose $Y(u) = \int_0^u \log S(v)dv$, then
+\begin{equation}
+  \begin{split}
+    V(t) &= \exp\left(\frac{1}{T}Y(t) - r(T-t)+\frac{r(T-t)^2}{2T}+\frac{\sigma^2(T-t)^2}{4T}+\frac{\sigma^2(T-t)^3}{6T^2}\right)\left(S(t)\right)^{\frac{T-t}{T}} \\
+    &= f(t, S(t), Y(t))
+  \end{split}
+\end{equation}
+Where
+$$
+f(t,x,y) = \exp\left(\frac{y}{T} - r(T-t)+\frac{r(T-t)^2}{2T}+\frac{\sigma^2(T-t)^2}{4T}+\frac{\sigma^2(T-t)^3}{6T^2}\right)x^{\frac{T-t}{T}}~~~(\ddag)
+$$
+~\\
+\textbf{(ii)} The 2-dimensional SDE for $(S(t),Y(t))$ is
+\begin{equation}
+  \begin{split}
+    &dS(t) =  rS(t)dt + \sigma S(t)d\widetilde{W}(t) \\
+    &dY(t) =  \log (S(t))dt
+  \end{split}
+\end{equation}
+Besides, $e^{-rt}f(t, S(t), Y(t))$ is a $\widetilde{\mathbb{P}}$-martingale. So
+\begin{equation}
+  \begin{split}
+    d(e^{-rt}f(t, S(t), Y(t))) &= e^{-rt} \Big[-rfdt + f_t dt + f_x dS(t) + f_y dY(t) + \frac{1}{2}f_{xx} d[S,S](t) \\
+    &~~~~+\cancelto{0}{\frac{1}{2}f_{yy} d[Y,Y](t)} + \cancelto{0}{f_{xy}d[S,Y](t)}\Big] \\
+    &= e^{-rt} \Big[-rf + f_t + rS(t)f_x + \log S(t) f_y + \frac{1}{2} \sigma^2 S(t)^2f_{xx} \Big]dt + \sigma S(t)f_x d\widetilde{W}(t)
+  \end{split}
+\end{equation}
+The martingale property $\Rightarrow$ $dt$ term is zero. Therefore $f(t, x, y)$ solves PDE:
+\begin{equation}
+  rf = f_t + rxf_x + \log x f_y + \frac{1}{2} \sigma^2 x^2f_{xx}
+\end{equation}
+~\\
+\textbf{(iii)} We now check the solution given by $(\ddag)$:
+\begin{equation}
+  \begin{split}
+    &f_t = \left(r-\textcolor{red}{\frac{r(T-t)}{T}}-\textcolor{blue}{\frac{\sigma^2(T-t)}{2T}-\frac{\sigma^2(T-t)^2}{2T^2}}\right)f - \textcolor{orange}{\frac{\log x}{T}}f \\
+    &f_x = \frac{T-t}{Tx}~~\Rightarrow~~rxf_x= \textcolor{red}{\frac{r(T-t)}{T}}f \\
+    &f_y = \frac{1}{T}~~\Rightarrow~~\log x f_y = \textcolor{orange}{\frac{\log x}{T}}f \\
+    &f_{xx} = \left(\frac{(T-t)^2}{T^2x^2} + \frac{T-t}{Tx^2}\right)f ~~\Rightarrow~~\frac{1}{2}\sigma^2 x^2f_{xx} =  \left(\textcolor{blue}{\frac{\sigma^2(T-t)}{2T} + \frac{\sigma^2(T-t)^2}{2T^2}}\right)f
+  \end{split}
+\end{equation}
+Therefore:
+\begin{equation}
+  RHS = f_t + rxf_x + \log x f_y + \frac{1}{2} \sigma^2 x^2f_{xx} = rf = LHS
+\end{equation}
+The terms cancel out as their color suggests.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{proof} \textit{Step.1}: Due to the risk-neutral pricing theory, the discounted European call price is a $\widetilde{\mathbb{P}}$-martingale. That is:
+\begin{equation}
+  c(t,x,y) = \widetilde{\mathbb{E}}\left[D(t)(S(T)-K)^+\middle|\mathcal{F}_t\right]
+\end{equation}
+Where $D(t)=\exp\{-\int_0^t R(u)du\}$, $dD(t) = -R(t)D(t)dt$. Moreover, we have:
+\begin{equation}
+  \begin{split}
+    dc &= c_t dt + c_x dS(t) + c_y dR(t) + \frac{1}{2}c_{xx}d[S,S](t) + \frac{1}{2}c_{yy}d[R,R](t) + c_{xy}d[S,R](t) \\
+    &=c_t dt + c_x\left[R(t)S(t)dt + \sigma S(t)d\widetilde{W}_1(t)\right] + c_y\left[\beta(t,R(t))dt + \gamma(t,R(t)) d\widetilde{W}_2(t)\right] \\
+    &~~~~+\frac{1}{2}c_{xx}\sigma^2 S^2(t) dt + \frac{1}{2}c_{yy} \gamma^2(t,R(t)) dt + c_{xy} \sigma S(t)\gamma(t,R(t))\rho dt
+  \end{split}
+\end{equation}
+And $d[D,c](t)=0$, since $D(t)$ is of bounded variation.\\
+~\\
+\textit{Step.2}: The differential of $D(t)c(t,S(t),R(t))$ is calculated as
+\begin{equation}
+  \begin{split}
+    d(D(t)c(t,S(t),R(t))) &= D(t) dc(t,S(t),R(t)) + c(t,S(t),R(t)) dD(t) + \cancelto{0}{d[D,c](t)} \\
+    &=D(t)\Big\{c_t + c_xR(t)S(t) + c_y\beta(t,R(t)) -R(t)c  \\
+    &~~~~+\frac{1}{2}c_{xx}\sigma^2 S^2(t) + \frac{1}{2}c_{yy} \gamma^2(t,R(t))  + c_{xy} \sigma S(t)\gamma(t,R(t))\rho \Big\}dt\\
+    &~~~~ + D(t)c_x\sigma S(t)d\widetilde{W}_1(t) + D(t)c_y\gamma(t,R(t)) d\widetilde{W}_2(t)
+    \end{split}
+    \end{equation}
+~\\
+\textit{Step.3}: Since $D(t)c(t,S(t),R(t))$ is $\widetilde{P}$-martingale, the $dt$ term in the formula above should be 0. \\
+~\\
+\textit{Step.4}: Therefore, the call price $c(t,x,y)$ solves the PDE
+\begin{equation}
+  yc = c_t + xy c_x  + \beta(t,y) c_y + \frac{1}{2}\sigma^2 x^2 c_{xx} + \frac{1}{2}\gamma^2(t,y)c_{yy}   + \rho\sigma x \gamma(t,y) c_{xy} 
+\end{equation}
+(The parameter list $(t,x,y)$ of function $c$ is omitted)
+\end{proof}
+
+
+\end{document}

@@ -1,0 +1,358 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz, array, eurosym}
+\usepackage{float}
+\usepackage{cancel}
+
+\renewcommand{\arraystretch}{1.4}
+\newcolumntype{L}{>{\arraybackslash}m{10cm}}
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+
+\title{\textbf{Stochastic Calculus HW III}}
+\author{Ze Yang~~~~(zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{proof} \textbf{(i)} As we have done in class, we know $D(t)=\exp  (-\int_0^t R(u)du)$, $dD(t) =-R(t)D(t)dt$. For every fixed $T\geq t$, the bond price is defined as $B(t,T)=g(t,R(t),T)$. Since the maturity $T$ is fixed, its differential can be written as
+\begin{equation}\label{dg}
+  \begin{split}
+    dg(t,R(t),T) &= g_t(t,R(t),T) dt + g_r(t,R(t),T) dR(t) + \frac{1}{2}g_{rr}(t,R(t),T) d[R,R](t) \\
+    &= g_t(t,R(t),T) dt + g_r(t,R(t),T) \alpha(t,R(t))dt + g_r(t,R(t),T) \gamma(t,R(t)) dW(t) \\
+    &~~~~+ \frac{1}{2}g_{rr}(t,R(t),T)\gamma^2(t,R(t)) dt
+  \end{split}
+\end{equation}
+The portfolio value is
+\begin{equation}
+  X(t) = \underbrace{\Delta_1(t)g(t,R(t), T_1)}_{\text{Bond 1}} + \underbrace{\Delta_2(t)g(t,R(t), T_2)}_{\text{Bond 2}} + \Big[\underbrace{X(t)-\Delta_1(t)g(t,R(t), T_1)-\Delta_1(t)g(t,R(t), T_1)}_{\text{Money Market Account}}\Big]
+\end{equation}
+The self-financing condition implies that the differential of $X(t)$ is fully determined by the differential of all these asset prices, while the other terms cancel out each other:
+\begin{equation}
+  \begin{split}
+    dX(t) &=\Delta_1(t)dg(t,R(t), T_1) + \Delta_2(t)dg(t,R(t), T_2) \\
+    &~~~~+  \Big[X(t)-\Delta_1(t)g(t,R(t), T_1)-\Delta_2(t)g(t,R(t), T_2)\Big]R(t)dt \\
+ \Rightarrow\qquad D(t)[dX(t)-R(t)X(t)dt]&=D(t)\Big[\Delta_1(t)dg(t,R(t), T_1) + \Delta_2(t)dg(t,R(t), T_2)\Big] \\
+ &~~~~-\Big[\Delta_1(t)g(t,R(t), T_1)+\Delta_2(t)g(t,R(t), T_2)\Big]R(t)D(t)dt
+  \end{split}
+\end{equation}
+Note that $d[D,X](t)=0$ since $dD(t)$ is of bounded variation. Therefore, in the formula above, 
+$$LHS = d(D(t)X(t))$$
+And it suffices to show RHS equals to the formula given by the problem. We have: 
+\begin{equation}\label{dDX}
+  \begin{split}
+    RHS &= D(t)\Big[\Delta_1(t)\textcolor{blue}{dg(t,R(t), T_1)} + \Delta_2(t)dg(t,R(t), T_2)\Big] \\
+    &~~~~-\Big[\Delta_1(t)\textcolor{red}{g(t,R(t), T_1)}+\Delta_2(t)g(t,R(t), T_2)\Big]R(t)D(t)dt\\
+    &= \Delta_1(t)D(t) \Big[-R(t)\textcolor{red}{g(t,R(t), T_1)}+\textcolor{blue}{g_t(t,R(t),T_1)}  \\
+    &\qquad\qquad\qquad~+ \textcolor{blue}{g_r(t,R(t),T_1) \alpha(t,R(t)) + \frac{1}{2}g_{rr}(t,R(t),T_1)\gamma^2(t,R(t))} \Big]dt\\
+    &~~~~+ \Delta_2(t)D(t) \Big[-R(t)g(t,R(t), T_2)+g_t(t,R(t),T_1)  \\
+    &\qquad\qquad\qquad\quad~~+ g_r(t,R(t),T_2) \alpha(t,R(t)) + \frac{1}{2}g_{rr}(t,R(t),T_2)\gamma^2(t,R(t)) \Big]dt\\
+    &~~~~+ D(t)\gamma(t,R(t))\big[\Delta_1(t) \textcolor{blue}{g_r(t,R(t),T_1)}+\Delta_2(t) g_r(t,R(t),T_2)\big] dW(t)\\
+    &= \Delta_1(t)D(t)\big[\alpha(t,R(t))-\beta(t,R(t),T_1)\big]g_r(t,R(t),T_1)dt \\
+    &~~~~+ \Delta_2(t)D(t)\big[\alpha(t,R(t))-\beta(t,R(t),T_2)\big]g_r(t,R(t),T_2)dt\\
+    &~~~~+ D(t)\gamma(t,R(t))\big[\Delta_1 g_r(t,R(t),T_1)+\Delta_2 g_r(t,R(t),T_2)\big] dW(t)
+  \end{split}
+\end{equation}
+Where the decomposition of the blue terms is by using (\ref{dg}). And the last equal sign follows from the defintion of $\beta(t,r,T)$ given in the problem.\\
+~\\
+\textbf{(ii)} Plug in $\Delta_1(t) =S(t)g_r(t,R(t),T_2)$ and $\Delta_2(t)=-S(t)g_r(t,R(t),T_1)$ into (\ref{dDX}):
+\begin{equation}
+  \begin{split}
+    d(D(t)X(t)) &=S(t)D(t)\big[\alpha(t,R(t))-\beta(t,R(t),T_1)\big]g_r(t,R(t),T_1)g_r(t,R(t),T_2)dt \\
+    &~~~~- S(t)D(t)\big[\alpha(t,R(t))-\beta(t,R(t),T_2)\big]g_r(t,R(t),T_1)g_r(t,R(t),T_2)dt\\
+    &~~~~+ D(t)\gamma(t,R(t))\big[\cancelto{0}{S(t)-S(t)}\big] g_r(t,R(t),T_1)g_r(t,R(t),T_2)dW(t) \\
+    &= S(t)[\beta(t,R(t),T_2)-\beta(t,R(t),T_1)]g_r(t,R(t),T_1)g_r(t,R(t),T_2)dt \\
+    &= \Big|[\beta(t,R(t),T_2)-\beta(t,R(t),T_1)]g_r(t,R(t),T_1)g_r(t,R(t),T_2)\Big|dt > 0
+  \end{split}
+\end{equation}
+If $\beta(t,R(t),T_2)\ne\beta(t,R(t),T_1)$, then we will have $\mathbb{P}\left(D(t)X(t)>0\right)=1 \Rightarrow \mathbb{P}\left(X(t)>0\right)=1$; and thus we constructed a trading strategy that grows in a strictly positive rate for arbitrary $T_1, T_2$ and $\forall t\in (0,T_1]$. Since we can choose the initial capital $X(0)=0$ by letting the the money market account position be
+$$
+0-\Delta_1(0)g(0,R(0), T_1)-\Delta_1(0)g(t,R(0), T_1)
+$$
+This will result in an arbitrage. Therefore, if there is no arbitrage in the model, the only way is to have $\beta(t,R(t),T_2)=\beta(t,R(t),T_1)$ for arbitrary $T_1, T_2$, i.e. $\beta(t,r,T)=\beta(t,r)$ is not depend on $T$.\\
+~\\
+\textbf{(iii)} Following same argument as (ii), except that this time there is only one bond, 
+$$
+X(t)=\underbrace{\Delta(t)g(t,R(t),T)}_{\text{Bond}} + [\underbrace{X(t) - \Delta(t)g(t,R(t),T)}_{\text{Money Market Account}}]
+$$
+Likewise
+$$
+dX(t) = \Delta(t)dg(t,R(t), T) + \Big[X(t)-\Delta(t)g(t,R(t), T)\Big]R(t)dt
+$$ 
+Same calculation as \textbf{(ii)} yields
+\begin{equation}
+  \begin{split}
+    d(D(t)X(t)) &= D(t)\Delta(t) dg(t,R(t), T) -\Delta(t)g(t,R(t), T) D(t)R(t)dt \\
+    &= \Delta(t)D(t) \Big[-R(t)g(t,R(t), T)+g_t(t,R(t),T)  \\
+    &\qquad\qquad\qquad~+ g_r(t,R(t),T) \alpha(t,R(t)) + \frac{1}{2}g_{rr}(t,R(t),T)\gamma^2(t,R(t)) \Big]dt\\
+    &~~~~+ D(t)\gamma(t,R(t))\Delta(t) g_r(t,R(t),T)\big] dW(t)\\
+  \end{split}
+\end{equation}
+If $g_r(t,r,T)=0$ for all $r$ (which is the case when we have constant $r$), then we have the formula above reduced to:
+\begin{equation}
+  d(D(t)X(t)) = \Delta(t)D(t) \Big[\underbrace{-R(t)g(t,R(t), T)+g_t(t,R(t),T) + \frac{1}{2}g_{rr}(t,R(t),T)\gamma^2(t,R(t))}_{(\dag)} \Big]dt
+\end{equation}
+If $(\dag)\ne 0$, then we can choose $\Delta(t)=\text{sign}\{-R(t)g(t,R(t), T)+g_t(t,R(t),T) + \frac{1}{2}g_{rr}(t,R(t),T)\gamma^2(t,R(t))\}$. Then we will end up with
+$$
+d(D(t)X(t)) = D(t) \Big|-R(t)g(t,R(t), T)+g_t(t,R(t),T) + \frac{1}{2}g_{rr}(t,R(t),T)\gamma^2(t,R(t)) \Big|dt
+$$
+grows in a strictly positive rate, which suggests $\mathbb{P}\left(D(t)X(t)>0\right)=1$. And there is an arbitrage. Therefore, if $g_r(t,r,T)=0$, there must be 
+$$
+-rg(t,r, T)+g_t(t,r,T) + \frac{1}{2}g_{rr}(t,r,T)\gamma^2(t,r) = 0
+$$
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{proof} \textbf{(i)} We stare at $\widehat{Z}(t)$, and find it can be reformulated as
+\begin{equation}
+  \widehat{Z}(t) = \exp \left\{-\int_0^t -\sigma d\widetilde{W}(t) - \frac{1}{2}\int_0^t (-\sigma)^2 dt\right\}
+\end{equation}
+Which has the same form as the Radon-Nikodym derivative process that arises in Girsanov theorem, with $\Theta(t) \equiv -\sigma$. Therefore, by the theorem
+\begin{equation}
+  \widehat{W}(t) = \widetilde{W}(t) - \sigma t
+\end{equation}
+is a Brownian motion under $\widehat{\mathbb{P}}$, which is defined as
+\begin{equation}
+  \widehat{\mathbb{P}}(A) = \int_A \widehat{Z}(T) d \widetilde{\mathbb{P}},~~~~\forall A \in \mathcal{F}
+\end{equation}
+Therefore
+\begin{equation}\label{shat}
+  \begin{split}
+    S(T) &= S(0) \exp\left\{\sigma \widetilde{W}(T) + \left(r-\frac{1}{2}\sigma^2\right)T\right\} \\
+    &=S(0) \exp\left\{\sigma \widehat{W}(T) + \left(r\textcolor{red}{+}\frac{1}{2}\sigma^2\right)T\right\}
+  \end{split}
+\end{equation}
+~\\
+\textbf{(ii)} 
+\begin{equation}
+  \begin{split}
+    \widetilde{\mathbb{E}}\left[e^{-rT}(S(T)-K)^+\right] &= \widetilde{\mathbb{E}}\left[e^{-rT}\mathbbm{1}_{\{S(T)\geq K\}}(S(T)-K)\right] \\
+    &= \widetilde{\mathbb{E}}\left[e^{-rT}\mathbbm{1}_{\{S(T)\geq K\}}S(0)e^{\sigma \widetilde{W}(T) + \left(r-\frac{1}{2}\sigma^2\right)T}\right] - e^{-rT}K\widetilde{\mathbb{E}}\left[\mathbbm{1}_{\{S(T)\geq K\}}\right]\\
+    &= S(0)\widetilde{\mathbb{E}}\left[\mathbbm{1}_{\{S(T)\geq K\}}e^{\sigma \widetilde{W}(T) - \frac{1}{2}\sigma^2T}\right] - e^{-rT}K \widetilde{\mathbb{P}}\left(S(T)\geq K\right) \\
+    &= S(0)\widetilde{\mathbb{E}}\left[\mathbbm{1}_{\{S(T)\geq K\}}\widehat{Z}(T)\right] - e^{-rT}K \widetilde{\mathbb{P}}\left(S(T)\geq K\right) \\
+    &= S(0)\widehat{\mathbb{E}}\left[\mathbbm{1}_{\{S(T)\geq K\}}\right] - e^{-rT}K \widetilde{\mathbb{P}}\left(S(T)\geq K\right) \\
+    &= S(0)\widehat{\mathbb{P}}(S_T\geq K) - e^{-rT}K \widetilde{\mathbb{P}}\left(S(T)\geq K\right) \\
+  \end{split}
+\end{equation}
+~\\
+\textbf{(iii)} We have done this before. Since $-\widetilde{W}(T)/\sqrt{T} \sim \mathcal{N}(0,1)$:
+\begin{equation}
+  \begin{split}
+    \widetilde{\mathbb{P}}\left(S(T)\geq K\right)&=\widetilde{\mathbb{P}}\left(S(0) \exp\left\{\sigma \widetilde{W}(T) + \left(r-\frac{1}{2}\sigma^2\right)T\right\}\geq K\right)\\
+    &=\widetilde{\mathbb{P}}\left(\frac{\widetilde{W}(T)}{\sqrt{T}} \geq \frac{\log \frac{K}{S(0)}-\left(r-\frac{1}{2}\sigma^2\right)T}{\sigma \sqrt{T}}\right)\\
+    &=\widetilde{\mathbb{P}}\left(\frac{-\widetilde{W}(T)}{\sqrt{T}} \geq \frac{\log \frac{S(0)}{K}+\left(r-\frac{1}{2}\sigma^2\right)T}{\sigma \sqrt{T}}\right)\\
+    &= N(d_-)
+  \end{split}
+\end{equation}
+~\\
+\textbf{(iv)} Use \ref{shat}, same derivation will apply except for we now have plus sign ahead of $\frac{1}{2}\sigma^2$: 
+\begin{equation}
+  \begin{split}
+    \widehat{\mathbb{P}}\left(S(T)\geq K\right)&=\widehat{\mathbb{P}}\left(S(0) \exp\left\{\sigma \widehat{W}(T) + \left(r+\frac{1}{2}\sigma^2\right)T\right\}\geq K\right)\\
+    &=\widehat{\mathbb{P}}\left(\frac{\widehat{W}(T)}{\sqrt{T}} \geq \frac{\log \frac{K}{S(0)}-\left(r+\frac{1}{2}\sigma^2\right)T}{\sigma \sqrt{T}}\right)\\
+    &=\widehat{\mathbb{P}}\left(\frac{-\widehat{W}(T)}{\sqrt{T}} \geq \frac{\log \frac{S(0)}{K}+\left(r+\frac{1}{2}\sigma^2\right)T}{\sigma \sqrt{T}}\right)\\
+    &= N(d_+)
+  \end{split}
+\end{equation}
+~\\
+\textbf{(v)} Neither is true. $N(d_-)$ is the $\widetilde{\mathbb{P}}$-probability the call expires in the money; while $N(d_+)$ is the $\widehat{\mathbb{P}}$-probability the call expires in the money. Neither of the ``probability'' is the real-would physical measure $\mathbb{P}$, which seems to be what these people mean in such conversations. 
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{proof} \textbf{(i)} Let $D(t)= e^{-\int_0^t R(u)du}$, $D(t)$ is measurable with respect to $\mathcal{F}_t$. Therefore
+\begin{equation}
+  D(t)c(t,R(t)) = D(t)\widetilde{\mathbb{E}}\left[\frac{D(T)}{D(t)} (R(T)-K)^+ \Big| \mathcal{F}_t\right] = \widetilde{\mathbb{E}}\left[D(T) (R(T)-K)^+ \Big| \mathcal{F}_t\right]
+\end{equation}
+Let $0\leq u \leq t \leq T$, by tower property, we have
+\begin{equation}
+  \begin{split}
+    \widetilde{\mathbb{E}}\left[D(t)c(t,R(t))\middle|\mathcal{F}_u\right] &= \widetilde{\mathbb{E}}\left[\widetilde{\mathbb{E}}\left[D(T) (R(T)-K)^+ \Big| \mathcal{F}_t\right]\middle|\mathcal{F}_u\right]\\ 
+    &= \widetilde{\mathbb{E}}\left[D(T) (R(T)-K)^+ \Big| \mathcal{F}_u\right] = D(u)c(u,R(u))
+  \end{split}
+\end{equation}
+Now calculate its differential:
+\begin{equation}
+  \begin{split}
+    d(D(t)c(t,R(t))) &= dD(t)c(t,R(t)) + D(t)d c(t,R(t)) \\
+    &=D(t) \left[  -R(t)cdt + c_tdt + c_r dR_t + \frac{1}{2}c_{rr}d[R,R](t)\right]\\
+    &=D(t) \left[  -R(t)c + c_t + \alpha c_r + \frac{1}{2}\sigma^2 c_{rr}\right]dt + D(t)\sigma c_r d\widetilde{W}(t)
+  \end{split}
+\end{equation}
+The $dt$ terms sum to $0$ due to the martingale property. Therefore, $c(t,r)$ solves PDE:
+\begin{equation}
+  -rc(t,r) + c_t(t,r) + \alpha c_r(t,r) + \frac{1}{2}\sigma^2 c_{rr}(t,r) = 0
+\end{equation}
+~\\
+\textbf{(ii)} 
+\begin{equation}
+  X(t) = \underbrace{\Delta(t)S(t)}_{S \text{ position}} + \underbrace{(X(t) - \Delta(t)S(t))}_{\text{money market account}}
+\end{equation}
+The self-financing condition $\Rightarrow$
+\begin{equation}
+  \begin{split}
+    dX(t) &= \Delta(t)dS(t) + (X(t) - \Delta(t)S(t))R(t)dt \\
+    D(t)[dX(t) - X(t)R(t)dt]& = \Delta(t)D(t)[dS(t) - S(t)R(t)dt] \\
+    d(D(t)X(t)) &= \Delta(t)D(t)[dS(t) - S(t)R(t)dt]
+  \end{split}
+\end{equation}
+Since $X(t)$ is replicating portfolio, $X(t)=c(t,R(t))$. Therefore
+\begin{equation}
+  d(D(t)c(t,R(t))) = \Delta(t)D(t)[dS(t) - S(t)R(t)dt]
+\end{equation}
+Since LHS is martingale, the $dt$ term of the RHS should also sum to zero, and $\Delta(t)$ is chosen to equate the $d\widetilde{W}(t)$ terms of the both sides. Hence, plug in the formula of $dS(t)$, we have
+\begin{equation}
+  \begin{split}
+    RHS &= \Delta(t)D(t) \left[\textcolor{red}{R(t)S(t)dt} + \sigma B(t,T)\left(1-(T-t)R(t) -\alpha (T-t)^2 + \frac{1}{2}\sigma^2(T-t)^3\right)d\widetilde{W}(t)\right]\\
+    &~~~~-\Delta(t)D(t)\textcolor{red}{R(t)S(t)dt}\\
+    &=\Delta(t)D(t)\sigma B(t,T)\left(1-(T-t)R(t) -\alpha (T-t)^2 + \frac{1}{2}\sigma^2(T-t)^3\right)d\widetilde{W}(t) \\
+    &=LHS = D(t)\sigma c_r(t,R(t)) d\widetilde{W}(t)
+  \end{split}
+\end{equation}
+Therefore in this case we have
+\begin{equation}
+  \Rightarrow~~\Delta_t = \frac{c_r(t,R(t))}{B(t,T)\left(1-(T-t)R(t) -\alpha (T-t)^2 + \frac{1}{2}\sigma^2(T-t)^3\right)}
+\end{equation}
+where $B(t,T)=\exp\{-(T-t)R(t)-\frac{1}{2}\alpha(T-t)^2+\frac{1}{6}\sigma^2(T-t)^3\}$.\\
+~\\
+\textbf{(iii)} In this case we have $\text{Fut}(t,T) = R(t)+\alpha(T-t)$, so $d\text{Fut}(t,T) = dR(t)-\alpha dt = \sigma d\widetilde{W}(t)$
+\begin{equation}
+  \begin{split}
+    dX(t) &= \Delta(t)d\text{Fut}(t,T) + X(t)R(t)dt\\
+     d(D(t)X(t)) &= \Delta(t)D(t)d\text{Fut}(t,T)\\
+     d(D(t)c(t,R(t))) &= \Delta(t)D(t)d\text{Fut}(t,T)
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    RHS &= \Delta(t)D(t)(dR(t)-\alpha dt) =\Delta(t)D(t)\sigma d\widetilde{W}(t) = LHS = D(t)\sigma c_r(t,R(t)) d\widetilde{W}(t)
+  \end{split}
+\end{equation}
+Therefore, in this case
+\begin{equation}
+  \Delta(t) = c_r(t,R(t))
+\end{equation}
+~\\
+\textbf{(iv)} In this case we have
+\begin{equation}
+  \begin{split}
+    &X(t) = \Gamma(t) B(t,T)~~~(\dag) \\
+    &dX(t) = \Delta(t)d\text{Fut}(t,T) + \Gamma(t) dB(t,T)~~~(\ddag)
+  \end{split}
+\end{equation}
+$(\dag) \Rightarrow $ $\Gamma(t) = \frac{c(t,R(t))}{B(t,T)}$. $(\ddag) \Rightarrow $
+\begin{equation}
+  \begin{split}
+    d(D(t)X(t)) &= D(t)\left[dX(t)- X(t)R(t)dt\right]\\
+    &= D(t)\left[\Delta(t)d\text{Fut}(t,T) + \Gamma(t) dB(t,T) - X(t)R(t)dt\right]\\
+    &= D(t)\Bigg\{\Delta(t)\sigma d\widetilde{W}(t) + \frac{c(t,R(t))}{B(t,T)}\left[\textcolor{red}{R(t)B(t,T)dt} - (T-t)\sigma B(t,T)d\widetilde{W}(t)\right] \\
+    &\qquad\quad~~- \textcolor{red}{c(t,R(t))R(t)dt}\Bigg\} \\
+    &=D(t)\sigma \left[\Delta(t) -(T-t)c(t,R(t)) \right]d\widetilde{W}(t)\\
+    &=LHS = D(t)\sigma c_r(t,R(t)) d\widetilde{W}(t)
+  \end{split}
+\end{equation}
+Hence
+\begin{equation}
+  \Rightarrow~~~\Delta(t) = c_r(t,R(t)) + (T-t)c(t,R(t))
+\end{equation}
+We conclude that
+\begin{equation}
+  \begin{split}
+    &\Delta(t) = c_r(t,R(t)) + (T-t)c(t,R(t))\\
+    &\Gamma(t) = \frac{c(t,R(t))}{B(t,T)}
+  \end{split}
+\end{equation}
+where $B(t,T)=\exp\{-(T-t)R(t)-\frac{1}{2}\alpha(T-t)^2+\frac{1}{6}\sigma^2(T-t)^3\}$.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{proof} If $a=0$, it's trivial: $(ce^b - K)^+$.\\
+~\\
+$a > 0$. Note that $-X\sim N(0,1)$ by symmetry.
+\begin{equation}
+  \begin{split}
+    \widetilde{\mathbb{E}}\left[(ce^{aX+b}-K)^+\right] &= \widetilde{\mathbb{E}}\left[(ce^{aX+b}-K) \mathbbm{1}_{\{ce^{aX+b}>K\}}\right] \\
+    &= c\widetilde{\mathbb{E}}\left[e^{aX+b} \mathbbm{1}_{\{ce^{aX+b}>K\}}\right] - K \mathbb{P}\left(ce^{aX+b}>K\right)\\
+    &= c\widetilde{\mathbb{E}}\left[e^{aX+b} \mathbbm{1}_{\{ce^{aX+b}>K\}}\right] - K \mathbb{P}\left(-X<\frac{\log\frac{c}{K} + b}{a}\right)\\
+    &= ce^{b+\frac{a^2}{2}}\int_{-\frac{\log\frac{c}{K} + b}{a}}^{\infty} \frac{1}{\sqrt{2\pi}}e^{-\frac{x^2-2ax+a^2}{2}}dx - KN\left(\frac{\log\frac{c}{K} + b}{a}\right)\\
+    &= ce^{b+\frac{a^2}{2}}\int_{-\frac{\log\frac{c}{K} + b}{a}-a}^{\infty} \frac{1}{\sqrt{2\pi}}e^{-\frac{y^2}{2}}dy - KN\left(\frac{\log\frac{c}{K} + b}{a}\right)\\
+    &= ce^{b+\frac{a^2}{2}}N\left(\frac{\log\frac{c}{K} + b}{a} + a\right)- KN\left(\frac{\log\frac{c}{K} + b}{a}\right)
+  \end{split}
+\end{equation}
+~\\
+$a < 0$:
+\begin{equation}
+  \begin{split}
+    \widetilde{\mathbb{E}}\left[(ce^{aX+b}-K)^+\right] &= \widetilde{\mathbb{E}}\left[(ce^{aX+b}-K) \mathbbm{1}_{\{ce^{aX+b}>K\}}\right] \\
+    &= c\widetilde{\mathbb{E}}\left[e^{aX+b} \mathbbm{1}_{\{ce^{aX+b}>K\}}\right] - K \mathbb{P}\left(ce^{aX+b}>K\right)\\
+    &= c\widetilde{\mathbb{E}}\left[e^{aX+b} \mathbbm{1}_{\{ce^{aX+b}>K\}}\right] - K \mathbb{P}\left(X<\frac{\log\frac{K}{c} - b}{a}\right)\\
+    &= ce^{b+\frac{a^2}{2}}\int_{-\infty}^{\frac{\log\frac{K}{c} - b}{a}} \frac{1}{\sqrt{2\pi}}e^{-\frac{x^2-2ax+a^2}{2}}dx - KN\left(\frac{\log\frac{K}{c} - b}{a}\right)\\
+    &= ce^{b+\frac{a^2}{2}}\int_{-\infty}^{\frac{\log\frac{K}{c} - b}{a}-a} \frac{1}{\sqrt{2\pi}}e^{-\frac{y^2}{2}}dy - KN\left(\frac{\log\frac{K}{c} - b}{a}\right)\\
+    &= ce^{b+\frac{a^2}{2}}N\left(\frac{\log\frac{K}{c} - b}{a} - a\right)- KN\left(\frac{\log\frac{K}{c} - b}{a}\right)
+  \end{split}
+\end{equation}
+We conclude that
+\begin{equation}
+  \widetilde{\mathbb{E}}\left[(ce^{aX+b}-K)^+\right] = \begin{cases}
+  ce^{b+\frac{a^2}{2}}N\left(\frac{\log\frac{c}{K} + b}{a} + a\right)- KN\left(\frac{\log\frac{c}{K} + b}{a}\right) & a > 0\\
+  ce^{b+\frac{a^2}{2}}N\left(\frac{\log\frac{K}{c} - b}{a} - a\right)- KN\left(\frac{\log\frac{K}{c} - b}{a}\right) & a <0 \\
+  (ce^b - K)^+ & a =0
+  \end{cases}
+\end{equation}
+\end{proof}
+
+
+
+\end{document}
