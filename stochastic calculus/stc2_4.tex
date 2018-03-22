@@ -1,0 +1,268 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz, array, eurosym}
+\usepackage{float}
+\usepackage{cancel}
+
+\renewcommand{\arraystretch}{1.4}
+\newcolumntype{L}{>{\arraybackslash}m{10cm}}
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+
+\title{\textbf{Stochastic Calculus HW IV}}
+\author{Ze Yang~~~~(zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{proof} We have known that the solution of geometric brownian motion SDE is
+\begin{equation}
+  S(T) = S(t)\exp\left\{\sigma(\widetilde{W}(T)-\widetilde{W}(t) ) + \left(r-\frac{1}{2}\sigma^2\right)(T-t)\right\}
+\end{equation}
+Let $\tau:=T-t$,
+\begin{equation}
+  \begin{split}
+    \mathbb{P}\left(S(T)\leq y \mid S(t)=x\right) &= \mathbb{P}\left(x\exp\left\{\sigma(\widetilde{W}(T)-\widetilde{W}(t) ) + \left(r-\frac{1}{2}\sigma^2\right)\tau\right\} \leq y\right)\\
+    &= \mathbb{P}\left(\frac{\widetilde{W}(T)-\widetilde{W}(t)}{\sqrt{\tau}} \leq \frac{\log \frac{y}{x} -(r-\frac{1}{2}\sigma^2)\tau}{\sigma \sqrt{\tau}}\right)\\
+    &=N(d(y))
+  \end{split}
+\end{equation}
+Where $N(\cdot)$ is normal cdf, $d(y):=\frac{\log \frac{y}{x} -(r-\frac{1}{2}\sigma^2)\tau}{\sigma \sqrt{\tau}}$. Therefore, the transition density is
+\begin{equation}
+  \begin{split}
+    p(t,x,T,y) &= \frac{\partial N(d(y))}{\partial y} =N'(d(y)) \frac{\partial d(y)}{\partial y} = \frac{1}{y\sigma \sqrt{\tau}} N'(d(y)) \\
+    &=\frac{1}{y\sigma \sqrt{\tau}} \frac{1}{\sqrt{2\pi}} \exp\left\{-\frac{1}{2}\left(\frac{\log \frac{y}{x} -(r-\frac{1}{2}\sigma^2)\tau}{\sigma \sqrt{\tau}}\right)^2\right\}
+  \end{split}
+\end{equation}
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{proof} \textbf{(i)} We can write the integral form:
+\begin{equation}
+  \begin{split}
+    X(T) = X(t) + \int_t^T \alpha du + \int_t^T \sigma dW(u) = X(t) + \alpha(T-t) + \sigma \sqrt{T-t} \frac{\int_t^T dW(u)}{\sqrt{T-t}}
+  \end{split}
+\end{equation}
+And we know that $Z:=\frac{\int_t^T dW(u)}{\sqrt{T-t}} \sim \mathcal{N}(0,1)$. Therefore
+\begin{equation}
+  \begin{split}
+    \mathbb{P}\left(X(T)\leq y\mid X(t)=x\right) &= \mathbb{P}\left(x+\alpha(T-t)+\sigma \sqrt{T-t}Z \leq y\right) \\
+    &= \mathbb{P}\left(Z \leq \frac{y-x- \alpha(T-t)}{\sigma\sqrt{T-t}}\right)\\
+    &=:N\left(d(y)\right)
+  \end{split}
+\end{equation}
+Therefore, the transition density is
+\begin{equation}
+  \begin{split}
+    p(t,x,T,y) &= \frac{\partial N(d(y))}{\partial y} =N'(d(y)) \frac{\partial d(y)}{\partial y} = \frac{1}{\sigma \sqrt{T-t}} N'(d(y)) \\
+    &=\frac{1}{\sigma \sqrt{T-t}} \frac{1}{\sqrt{2\pi}} \exp\left\{-\frac{1}{2}\left(\frac{y-x- \alpha(T-t)}{\sigma\sqrt{T-t}}\right)^2\right\}
+  \end{split}
+\end{equation}
+~\\
+\textbf{(ii)} With our notations in class: $\beta(t,X(t)) \equiv \alpha$; $\gamma(t,X(t)) = \sigma$. Therefore, the Kolmogorov forward equation satisfied by $X(t)$ is:
+\begin{equation}
+  \begin{split}
+    &\frac{\partial }{\partial T}p(t,x,T,y) + \frac{\partial }{\partial y} \left(\alpha p(t,x,T,y)\right) - \frac{1}{2} \frac{\partial^2}{\partial y^2}\left(\sigma^2 p(t,x,T,y)\right) = 0\\
+    \Rightarrow~~~~&p_T(t,x,T,y) + \alpha p_y(t,x,T,y)  = \frac{1}{2}\sigma^2 p_{yy}(t,x,T,y)~~~~(\dag)
+  \end{split}
+ \end{equation} 
+ Now we check our answer in \textbf{(i)}. We use the fact that $N''(d) = -dN'(d)$
+ \begin{equation}
+   \begin{split}
+     p_T(t,x,T,y) &= -\frac{1}{2\sigma (T-t)^{3/2}} N'(d) + \frac{1}{\sigma (T-t)^{1/2}}(-d)N'(d) \frac{\partial d}{\partial T} \\
+     &= N'(d) \left[ -\frac{1}{2\sigma (T-t)^{3/2}} + \frac{d}{\sigma (T-t)^{1/2}}\left(\frac{y-x}{2\sigma (T-t)^{3/2}}+\frac{\alpha}{2\sigma(T-t)^{1/2}}\right)\right]\\
+     &= N'(d) \left[ -\frac{1}{2\sigma (T-t)^{3/2}} + \frac{d}{2\sigma (T-t)^{3/2}}\left(\frac{y-x\textcolor{red}{+\alpha(T-t)}}{\sigma (T-t)^{1/2}}\right)\right]\\
+     &\\
+     \alpha p_y(t,x,T,y) &= N'(d)\left[-\frac{d}{\sigma(T-t)^{1/2}} \frac{\alpha}{\sigma(T-t)^{1/2}}\right]\\
+     &= N'(d)\left[\frac{d}{2\sigma(T-t)^{3/2}} \frac{\textcolor{red}{-2\alpha(T-t)}}{\sigma(T-t)^{1/2}}\right]\\
+     &\\
+     \text{Add these two terms: }(\dag)~LHS &= N'(d) \left[ -\frac{1}{2\sigma (T-t)^{3/2}} + \frac{d}{2\sigma (T-t)^{3/2}}\left(\frac{y-x-\textcolor{red}{\alpha(T-t)}}{\sigma (T-t)^{1/2}}\right)\right]\\
+     &=N'(d) \left[ -\frac{1}{2\sigma (T-t)^{3/2}} + \frac{d^2}{2\sigma (T-t)^{3/2}}\right]\\
+     &\\
+     (\dag)~RHS = \frac{1}{2}\sigma^2 p_{yy}(t,x,T,y) &= \frac{1}{2}\sigma^2\left[-\frac{1}{\sigma^3(T-t)^{3/2}}N'(d)+\frac{d^2}{\sigma^3 (T-t)^{3/2}}N'(d)\right] \\
+     &=N'(d) \left[ -\frac{1}{2\sigma (T-t)^{3/2}} + \frac{d^2}{2\sigma (T-t)^{3/2}}\right] = (\dag)~LHS\\ 
+   \end{split}
+ \end{equation}
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{proof} \textbf{(i)} We should get $\sigma(T,K) = \sigma$ in this constant volatility case.\\
+~\\
+\textbf{(ii)} First notice that
+$$
+\partial_T d_+ = \partial_T (d_-+\sigma\sqrt{T}) = \partial_t d_- + \frac{\sigma}{2\sqrt{T}}
+$$
+Then we have:
+\begin{equation}
+  \begin{split}
+    c_T(0,T,x,K) &= xN'(d_+)\partial_T d_+ - Ke^{-rT}N'(d_-)\partial_T d_- - (-r)Ke^{-rT}N(d_-)\\
+    &= xN'(d_+)\left(\partial_T d_- + \frac{\sigma}{2\sqrt{T}}\right) - Ke^{-rT}N'(d_-)\partial_T d_- + rKe^{-rT}N(d_-)\\
+    &= \partial_t d_-\cancelto{0}{(xN'(d_+)-Ke^{-r(T-t)}N'(d_-))} +rKe^{-rT}N(d_-)+ xN'(d_+)\frac{\sigma}{2\sqrt{T}} \\
+    &=  rKe^{-rT}N(d_-)+ \frac{\sigma x}{2\sqrt{T}} N'(d_+)
+  \end{split}
+\end{equation}
+~\\
+\textbf{(iii)} We have $\partial_K d_+ = \partial_K d_- = -\frac{1}{K\sigma\sqrt{T}}$,
+\begin{equation}
+  \begin{split}
+    c_K(0,T,x,K) &=xN'(d_+)\partial_Kd_+ - e^{-rT}N(d_-) - e^{-rT}KN'(d_-) \partial_Kd_- \\
+    &=- e^{-rT}N(d_-) + \partial_Kd_+(xN(d_+)-e^{-rT}KN'(d_-)) \\
+    &=- e^{-rT}N(d_-)
+  \end{split}
+\end{equation}
+~\\
+\textbf{(iv)}
+\begin{equation}
+  \begin{split}
+    c_{KK}(0,T,x,K) = - e^{-rT}N'(d_-)\partial_K d_- =  \frac{e^{-rT}}{K\sigma\sqrt{T}}N'(d_-)
+  \end{split}
+\end{equation}
+~\\
+\textbf{(v)} 
+\begin{equation}
+  \begin{split}
+    2(c_T(0,T,x,K) + rKc_K(0,T,x,K)) &= 2\left(rKe^{-rT}N(d_-)+ \frac{\sigma x}{2\sqrt{T}} N'(d_+)- rKe^{-rT}N(d_-)\right) \\
+    &=\frac{\sigma x}{\sqrt{T}} N'(d_+) = \frac{\sigma e^{-rT}K}{\sqrt{T}} N'(d_-)
+  \end{split}
+\end{equation}
+Therefore
+\begin{equation}
+  \begin{split}
+    \sigma(T,K) &= \frac{1}{K}\sqrt{\frac{2(c_T(0,T,x,K) + rKc_K(0,T,x,K))}{c_{KK}(0,T,x,K)}} \\
+    &= \frac{1}{K}\sqrt{K^2\sigma^2} = \sigma
+  \end{split}
+\end{equation}
+As we expected.\\
+~\\
+\textbf{(vi)} In exercise 1 we obtained:
+\begin{equation}
+  \begin{split}
+    p(t,x,T,y) =\frac{1}{y\sigma \sqrt{T-t}} \frac{1}{\sqrt{2\pi}} \exp\left\{-\frac{1}{2}\left(\frac{\log \frac{y}{x} -(r-\frac{1}{2}\sigma^2)(T-t)}{\sigma \sqrt{T-t}}\right)^2\right\}
+  \end{split}
+\end{equation}
+So
+\begin{equation}
+  \begin{split}
+    e^{-rT}p(0,x,T,K) &= \frac{e^{-rT}}{K\sigma \sqrt{T}} \frac{1}{\sqrt{2\pi}} \exp\left\{-\frac{1}{2}\left(\frac{\log \frac{K}{x} -(r-\frac{1}{2}\sigma^2)T}{\sigma \sqrt{T}}\right)^2\right\}\\
+    &= \frac{e^{-rT}}{K\sigma \sqrt{T}} N'(d) = c_{KK}(0,T,x,K)
+  \end{split}
+\end{equation}
+Indeed.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{proof} \textbf{(i)} The solution of the Ho-Lee SDE is, for $t\leq T$
+\begin{equation}
+  R(T) = R(t) + \int_t^T \alpha(u) du + \sigma (\widetilde{W}(T)-\widetilde{W}(t))
+\end{equation}
+Use the risk-neutral pricing formula, the bond price is given by:
+\begin{equation}
+  \begin{split}
+    B(t,T) &= \widetilde{\mathbb{E}}\left[\exp\left(-\int_t^T R(u)du\right) \middle| \mathcal{F}_t\right]= g(t,R(t)) \\
+    g(t,r) &= \widetilde{\mathbb{E}}\left[\exp\left(-\int_t^T R(u)du\right) \middle| R(t)=r\right]\\
+    &= \widetilde{\mathbb{E}}\left[\exp\left\{-\int_t^T \left(r + \int_t^u \alpha(s) ds + \sigma (\widetilde{W}(u)-\widetilde{W}(t))\right)du\right\} \right]\\
+    &= e^{-r(T-t)}\cdot\exp\left( -\int_t^T\int_t^u   \alpha(s)ds du\right)\cdot \widetilde{\mathbb{E}}\left[\exp\left(-\sigma\int_t^T(\widetilde{W}(u)-\widetilde{W}(t))du\right)\right]
+  \end{split} 
+\end{equation}
+For the second factor, we exchange the order of integral:
+$$
+\int_t^T\left(\int_t^u \alpha(s)ds\right) du = \int_t^T\left(\int_s^T \alpha(s)du\right) ds =  \int_t^T \alpha(s)(T-s) ds
+$$
+We have done the calculation for the third factor in class. In lecture 4, we have shown that $\int_t^T(\widetilde{W}(u)-\widetilde{W}(t))du \sim \mathcal{N}(0,\frac{1}{3}(T-t)^3)$. Hence by the moment generating function of normal variables:
+$$
+\widetilde{\mathbb{E}}\left[\exp\left(-\sigma\int_t^T(\widetilde{W}(u)-\widetilde{W}(t))du\right)\right] = \exp\left(\frac{1}{2}\sigma^2\cdot \frac{1}{3}(T-t)^3\right)
+$$
+Consequently,
+\begin{equation}
+  g(t,r) = \exp\left(  -r(T-t) - \int_t^T \alpha(s)(T-s)ds + \frac{1}{6}\sigma^2(T-t)^3\right)
+\end{equation}
+That is,
+\begin{equation}
+  \begin{split}
+    &C(t,T) = T-t \\
+    &A(t,T) = \int_t^T \alpha(s)(T-s)ds - \frac{1}{6}\sigma^2(T-t)^3
+  \end{split}
+\end{equation}
+~\\
+\textbf{(ii)} In the Ho-Lee setting, the yield curve has the following form
+\begin{equation}
+  \begin{split}
+    &Y(0,T) = -\frac{1}{T}\log B(0,T) = \frac{1}{T}(C(0,T)R(0) + A(0,T))\\
+    \Rightarrow ~~~~&TY(0,T)-TR(0) =  A(0,T) = \int_0^T \alpha(s)(T-s)ds - \frac{1}{6}\sigma^2T^3\\
+    \Rightarrow ~~~~&\int_0^T \alpha(s)(T-s)ds = TY(0,T)-TR(0) + \frac{1}{6}\sigma^2T^3
+  \end{split}
+\end{equation}
+Since we have
+\begin{equation}
+  \begin{split}
+    \frac{\partial }{\partial T}\int_0^T \alpha(s)(T-s)ds &= a(T)(T-T)  + \int_0^T \frac{\partial }{\partial T}\left(a(s)(T-s)\right)ds  =  \int_0^T a(s)ds \\
+    &\\
+    \frac{\partial^2 }{\partial T^2 }\int_0^T \alpha(s)(T-s)ds &= a(T)
+  \end{split}
+\end{equation}
+It suffices to differentiate the RHS twice with respect to $T$, i.e.
+\begin{equation}
+  \begin{split}
+    a(T) &= \frac{\partial^2}{\partial T^2}\left(TY(0,T)-TR(0) + \frac{1}{6}\sigma^2T^3\right) \\
+    &=\frac{\partial}{\partial T}\left(Y(0,T) + T \frac{\partial Y(0,T) }{\partial T}   -R(0) + \frac{1}{2}\sigma^2T^2\right)\\
+    &= 2\frac{\partial Y(0,T) }{\partial T} + T\frac{\partial^2 Y(0,T) }{\partial T^2} + \sigma^2T
+  \end{split}
+\end{equation}
+\end{proof}
+
+
+
+\end{document}

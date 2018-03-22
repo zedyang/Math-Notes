@@ -1,0 +1,362 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz, array, eurosym}
+\usepackage{float}
+\usepackage{cancel}
+
+\renewcommand{\arraystretch}{1.4}
+\newcolumntype{L}{>{\arraybackslash}m{10cm}}
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+
+\title{\textbf{Stochastic Calculus HW V}}
+\author{Ze Yang~~~~(zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{proof} \textbf{(i)} Under the Ho-Lee model, we have
+\begin{equation}
+  \begin{split}
+    &dB(t,T) = R(t)B(t,T)dt - \sigma (T-t)B(t,T)d\widetilde{W}(t)\\
+    \Rightarrow ~~~& d(D(t)B(t,T)) = - \sigma (T-t)B(t,T)d\widetilde{W}(t)
+  \end{split}
+\end{equation}
+We have shown in class that the solution to the above is
+\begin{equation}
+  D(t)B(t,T) = B(0,T) \exp \left\{ -\int_0^t \sigma (T-u)d\widetilde{W}(u) - \frac{1}{2}\int_0^t \sigma^2 (T-u)^2 du \right\}
+\end{equation}
+Therefore, the Radon-Nikodym process for the change of measure is
+\begin{equation}
+  Z(t) = \frac{D(t)B(t,T)}{B(0,T)} = \exp \left\{ -\int_0^t \underbrace{\sigma (T-u)}_{\Theta(u)}d\widetilde{W}(u) - \frac{1}{2}\int_0^t \underbrace{\sigma^2 (T-u)^2}_{\left\lVert\Theta(u)\right\rVert^2} du \right\}
+\end{equation}
+The Girsanov theorem suggests that we define
+\begin{equation}
+  \begin{split}
+    W^T(t) &= \widetilde{W}(t) + \int_0^t \Theta(u) du = \widetilde{W}(t) + \int_0^t \sigma(T-u) du \\
+    &=  \widetilde{W}(t) + \frac{1}{2}\sigma T^2 - \frac{1}{2}\sigma (T-t)^2
+  \end{split}
+\end{equation}
+Then $W^T(t)$ is a martingale under $\mathbb{P}^T$.\\
+~\\
+\textbf{(ii)} By lemma in Stocal I, since $(R(T)-K)^+$ is $\mathcal{F}_T$ measurable, we have
+\begin{equation}
+  \begin{split}
+    \mathbb{E}^T\left[(R(T)-K)^+\middle|\mathcal{F}_t\right] &= \frac{1}{Z(t)}  \widetilde{\mathbb{E}}\left[Z(T)(R(T)-K)^+\middle|\mathcal{F}_t\right]  \\ 
+    &=  \frac{B(0,T)}{D(t)B(t,T)} \widetilde{\mathbb{E}}\left[ \frac{D(T)B(T,T)}{B(0,T)} (R(T)-K)^+\middle|\mathcal{F}_t\right]
+  \end{split}
+\end{equation}
+Here we have:
+\begin{equation}
+  \begin{split}
+    c(t,R(t)) &= \widetilde{\mathbb{E}}\left[e^{-\int_t^T R(u)du}(R(T)-K)^+\middle|\mathcal{F}_t\right]\\
+    &= \widetilde{\mathbb{E}}\left[\frac{D(T)}{D(t)}(R(T)-K)^+\middle|\mathcal{F}_t\right] \\
+    &= \widetilde{\mathbb{E}}\left[\frac{B(0,T)}{D(t)}\cdot\frac{D(T)\cdot 1}{B(0,T)}(R(T)-K)^+\middle|\mathcal{F}_t\right] \\
+    &= B(t,T)\frac{B(0,T)}{D(t)B(t,T)} \widetilde{\mathbb{E}}\left[\frac{D(T)B(T,T)}{B(0,T)}(R(T)-K)^+\middle|\mathcal{F}_t\right] \\
+    &= B(t,T)\mathbb{E}^T\left[(R(T)-K)^+\middle|\mathcal{F}_t\right]
+  \end{split}
+\end{equation}
+\\
+\textbf{(iii)} The solution to the Ho-Lee interest rate SDE is:
+\begin{equation}
+  \begin{split}
+    R(T) &= R(t) + \alpha (T-t) +\sigma (\widetilde{W}(T)-\widetilde{W}(t)) \\
+    &= R(t) + \alpha (T-t) +\sigma \left[\left(W^T(T)- \frac{1}{2}\sigma T^2 \right)  -\left(W^T(t)- \frac{1}{2}\sigma T^2 + \frac{1}{2}\sigma (T-t)^2\right)\right] \\
+    &=R(t) + \alpha (T-t) +\sigma (W^T(T)-W^T(t))- \frac{1}{2}\sigma^2(T-t)^2\\
+    &= r + \alpha (T-t) - \frac{1}{2}\sigma^2(T-t)^2 +\sigma (W^T(T)-W^T(t))
+  \end{split}
+\end{equation}
+~\\
+\textbf{(iv)} Fill the $R(T)$ above in the formula for $c(t,R(t))$ we derived in \textbf{(ii)}:
+\begin{equation}
+  \begin{split}
+    c(t,r) &= B(t,T)\mathbb{E}^T\left[(R(T)-K)^+\middle|R(t)=r\right] \\
+    & = B(t,T)\mathbb{E}^T\left[\left(r + \alpha (T-t) - \frac{1}{2}\sigma^2(T-t)^2 +\sigma (W^T(T)-W^T(t))-K\right)^+\right] \\
+    &= B(t,T)\sigma \sqrt{T-t}\cdot \mathbb{E}^T\left[\left(\frac{r - K+ \alpha (T-t) - \frac{1}{2}\sigma^2(T-t)^2}{\sigma \sqrt{T-t}} -  \frac{W^T(t)-W^T(T)}{\sqrt{T-t}}\right)^+\right]\\
+    &= B(t,T)\sigma \sqrt{T-t}\mathbb{E}^T\left[(d-X)^+\right]~~~(X\text{ is Normal(0,1)}) \\
+    &= B(t,T)\sigma \sqrt{T-t} \int_{-\infty}^d \frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}}(d-x)dx \\
+    &= B(t,T)\sigma \sqrt{T-t} \left[d\int_{-\infty}^d \frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}}dx + \int_{-\infty}^d \frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}} d\left(-\frac{x^2}{2}\right) \right]\\
+    &= B(t,T)\sigma \sqrt{T-t} \left[dN(d) + N'(d) \right]\\
+    &= g(t,r)f(t,r)
+  \end{split}
+\end{equation}
+Where
+\begin{equation}
+  \begin{split}
+    &g(t,r) = B(t,T) = \exp\left\{-(T-t)r - \frac{1}{2}\alpha(T-t)^2+\frac{1}{6}\sigma^2(T-t)^3\right\} \\
+    &f(t,r) = \sigma \sqrt{T-t} \left[dN(d) + N'(d) \right]\\
+    &d = \frac{r - K+ \alpha (T-t) - \frac{1}{2}\sigma^2(T-t)^2}{\sigma \sqrt{T-t}}
+  \end{split}
+\end{equation}
+\end{proof}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{proof} \textbf{(i)} 
+\begin{equation}
+  \begin{split}
+    &g_t(t,r) = g(t,r)\textcolor{red}{\left(r+\alpha(T-t)-\frac{1}{2}\sigma^2(T-t)^2\right)}\\
+    &g_r(t,r) = -g(t,r)\textcolor{blue}{\left(T-t\right)}\\
+    &g_{rr}(t,r) = g(t,r)\textcolor{orange}{(T-t)^2}
+  \end{split}
+\end{equation}
+~\\
+\textbf{(ii)} Plug in the terms we derived above:
+\begin{equation}
+  (5.10) = g(t,r)\left[-r + \textcolor{red}{\left(r+\alpha(T-t)-\frac{1}{2}\sigma^2(T-t)^2\right)} - \alpha\textcolor{blue}{(T-t)} + \frac{1}{2}\sigma^2\textcolor{orange}{(T-t)^2}\right] = 0
+\end{equation}
+~\\
+\textbf{(iii)} Consider $0\leq u\leq t\leq T$:
+\begin{equation}
+  \begin{split}
+    \mathbb{E}^T\left[f(t,R(t))\middle|\mathcal{F}(u)\right] &=  \mathbb{E}^T\left[\mathbb{E}^T\left[(R(T)-K)^+\middle|\mathcal{F}(t)\right]\middle|\mathcal{F}(u)\right] \\
+  &=\mathbb{E}^T\left[(R(T)-K)^+\middle|\mathcal{F}(u)\right] \\
+  &= f(u, R(u))
+  \end{split}
+\end{equation}
+Therefore, $f(t,R(t))$ is a $\mathbb{P}^T$ martingale. Under $\mathbb{P}^T$, we have 
+$$
+dR(t) = \alpha dt + \sigma d\tilde{W}(t) = \alpha dt  - \sigma^2(T-t)dt + \sigma dW^T(t)
+$$
+Therefore,
+\begin{equation}
+  \begin{split}
+    d(f(t,R(t))) &= f_t dt + f_r dR(t) + \frac{1}{2}f_{rr} d[R,R](t) \\
+    &=f_t dt + f_r(\alpha dt  - \sigma^2(T-t)dt + \sigma dW^T(t)) + \frac{1}{2}f_{rr} \sigma^2 dt\\
+    &= \left[f_t + f_r(\alpha  - \sigma^2(T-t)) + \frac{1}{2}f_{rr} \sigma^2\right] dt + f_r\sigma dW^T(t)
+  \end{split}
+\end{equation}
+The $dt$ terms sum to zero. Hence $f(t,r)$ solves the PDE
+\begin{equation}\label{feq}
+  f_t + f_r(\alpha  - \sigma^2(T-t)) + \frac{1}{2}f_{rr} \sigma^2 = 0
+\end{equation}
+~\\
+\textbf{(iv)}
+\begin{equation}
+  \begin{split}
+    &\partial_r d = \frac{1}{\sigma \sqrt{T-t}};~~~\partial_{rr}d = 0\\
+    &\partial_t d = \frac{r-K}{2\sigma}(T-t)^{-3/2} - \frac{\alpha}{2\sigma}(T-t)^{-1/2} + \frac{3}{4}\sigma (T-t)^{1/2}
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    f_r &= \sigma \sqrt{T-t} (\partial_rd N(d) + dN'(d)\partial_rd  + N'(d)(-d)\partial_r d )\\
+      &= \sigma \sqrt{T-t} \partial_rd N(d) = N(d) \\
+    f_{rr} &= N'(d)\partial_r d =  \sigma^{-1} (T-t)^{-1/2}N'(d)\\
+    f_t &= -\frac{1}{2}\sigma(T-t)^{-1/2}(dN(d)+N'(d)) + \sigma(T-t)^{1/2}(\partial_td N(d) + dN'(d)\partial_td  + N'(d)(-d)\partial_t d ) \\
+    &=-\frac{1}{2}\sigma(T-t)^{-1/2}\left(\left(\frac{r-K}{\sigma}(T-t)^{-1/2}+\frac{\alpha}{\sigma}(T-t)^{1/2}-\frac{1}{2}\sigma(T-t)^{3/2}\right)N(d)+N'(d)\right) \\
+    &\qquad + \sigma(T-t)^{1/2} N(d) \left(\frac{r-K}{2\sigma}(T-t)^{-3/2} - \frac{\alpha}{\sigma}(T-t)^{-1/2} + \frac{3}{4}\sigma (T-t)^{1/2}\right) \\
+    &=-\frac{1}{2}\sigma(T-t)^{-1/2}\left(\left(\textcolor{red}{\frac{r-K}{\sigma}(T-t)^{-1/2}}+\textcolor{blue}{\frac{\alpha}{\sigma}(T-t)^{1/2}}-\textcolor{orange}{\frac{1}{2}\sigma(T-t)^{3/2}}\right)N(d)+N'(d)\right) \\
+    &\qquad - \frac{1}{2}\sigma(T-t)^{-1/2} \left(-\textcolor{red}{\frac{r-K}{\sigma}(T-t)^{-1/2}} + \textcolor{blue}{\frac{\alpha}{\sigma}(T-t)^{1/2}} - \textcolor{orange}{\frac{3}{2}\sigma (T-t)^{3/2}}\right)N(d)  \\
+    &= - \frac{1}{2}\sigma(T-t)^{-1/2} N'(d) - (\alpha - \sigma^2(T-t))N(d) \\
+    &= -\frac{1}{2}\sigma^2 f_{rr} - (\alpha - \sigma^2(T-t))f_{r}
+  \end{split}
+\end{equation}
+$\Rightarrow$ $f_t + \frac{1}{2}\sigma^2 f_{rr} + (\alpha - \sigma(T-t))f_{r} = 0$. $f(t,r)$ satisfied the PDE in \textbf{(iii)} indeed.\\
+~\\
+\textbf{(v)} 
+\begin{equation}
+  \begin{split}
+    (5.9) &= -rgf + (g_tf + gf_t) + \alpha(g_r f + gf_r) + \frac{1}{2}\sigma^2(g_{rr}f + 2g_r f_r + gf_{rr})\\
+    &= -rgf + (g_tf + gf_t) + \alpha(g_r f + gf_r) + \frac{1}{2}\sigma^2(g_{rr}f- 2(T-t)g f_r + gf_{rr})\\
+  &= f \underbrace{\left( -rg + g_t + \alpha g_r + \frac{1}{2}\sigma^2 g_{rr}\right)}_{(5.10)\text{ in the question}} + g\underbrace{\left(f_t + \alpha f_r - \sigma^2(T-t)f_r + \frac{1}{2}\sigma^2 f_{rr}\right)}_{\text{My }(\ref{feq})}\\
+  &=0
+  \end{split}
+\end{equation}
+Therefore, $c(t,r)=g(t,r)f(t,r)$ satisfies PDE (5.9).\\
+~\\
+\textbf{(vi)} We first notice that
+\begin{equation}
+  \lim\limits_{t\rightarrow T} d = \lim\limits_{h\rightarrow 0^+} \frac{r-K+\alpha h - \frac{1}{2}\sigma^2h^2}{\sigma \sqrt{h}} = \begin{cases}
+  +\infty & r > K\\
+  0 & r = K \\
+  -\infty & r < K
+  \end{cases}
+\end{equation}
+And
+\begin{equation}
+  \lim\limits_{t\rightarrow T} (\sigma \sqrt{T-t})d = r-K
+\end{equation}
+Therefore
+\begin{equation}
+  \begin{split}
+  \lim\limits_{t \rightarrow T}c(t,r) &= \lim\limits_{t\rightarrow T}\sigma \sqrt{T-t} \left(dN(d) + N'(d)\right) \\
+  &= 
+  \begin{cases}
+  (r-K)N(+\infty) + 0 & r > K\\
+  0N(0) + 0N'(0) & r = K \\
+  (r-K)N(-\infty) + 0 & r < K
+  \end{cases}\\
+  &=\begin{cases}
+  (r-K) & r > K\\
+  0 & r \leq K \\
+  \end{cases}\\
+  &=(r-K)^+
+    \end{split}
+\end{equation}
+
+
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{proof} For the Ho-Lee bond price, we have
+\begin{equation}
+  \begin{split}
+    f(t,T) &= -\frac{\partial }{\partial T}\log B(t,T) \\
+    &= -\frac{\partial }{\partial T} \left(-(T-t)R(t)-\frac{1}{2}\alpha (T-t)^2 + \frac{1}{6}\sigma^2(T-t)^3\right) \\
+    &= R(t) + \alpha(T-t) - \frac{1}{2}\sigma^2(T-t)^2
+  \end{split}
+\end{equation}
+Hence
+\begin{equation}
+  \begin{split}
+    df(t,T) &= dR(t) - \alpha dt + \sigma^2(T-t) dt  \\
+  &= \sigma^2(T-t) dt + \sigma d \widetilde{W}(t) \\ 
+  &= \sigma \left(\int_t^T\sigma du\right) dt + \sigma d \widetilde{W}(t)\\
+  &= \sigma(t,T)\sigma^*(t,T) dt + \sigma(t,T) d \widetilde{W}(t)
+  \end{split}
+\end{equation}
+The forward interest rate has the HJM differential form, where $\sigma(t,T)\equiv\sigma$, $\sigma^*(t,T) = \int_t^T\sigma du = \int_t^T\sigma(t,u) du$, are both adapted processes.
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{proof} \textbf{(i)} We multiply (5.13) by $B(t,T)$:
+\begin{equation}
+   \begin{split}
+     0 &= S(t)d\Delta(t) +  B(t,T)d\left(\frac{S(t)}{B(t,T)}\right) d\Delta(t) + B(t,T)d\Gamma(t) \\
+     &= S(t)d\Delta(t) +  B(t,T)\Big(\frac{1}{B(t,T)}dS(t) - \frac{S(t)}{B^2(t,T)}dB(t,T) \\
+     &\qquad + \frac{1}{2}\cdot0 \cdot d[S,S](t) +  \frac{1}{2} \frac{2S(t)}{B^3(t,T)} \cdot d[B,B](t,T)- \frac{1}{B^2(t,T)}d[S,B](t,T) \Big) d\Delta(t) + B(t,T)d\Gamma(t) \\
+     &=  S(t)d\Delta(t)  + dS(t)d\Delta(t) - \frac{S(t)}{B(t,T)}d\Delta(t)dB(t,T) + B(t,T)d\Gamma(t)~~~(\dag)
+   \end{split}
+ \end{equation} 
+ The terms with a product of three differentials are all zero. Use (5.13) again, we find that the third term is:
+ \begin{equation}
+  \begin{split}
+    - \frac{S(t)}{B(t,T)}d\Delta(t)dB(t,T) &= -\text{For(t,T)}d\Delta(t)dB(t,T)  \\
+    &= -\left(-d\text{For(t,T)}d\Delta(t) - d\Gamma(t)\right)dB(t,T) \\
+    &= d\Gamma(t)dB(t,T)
+  \end{split}
+ \end{equation}
+ Therefore
+ \begin{equation}
+   (\dag) = S(t)d\Delta(t)  + dS(t)d\Delta(t) +d\Gamma(t)dB(t,T) + B(t,T)d\Gamma(t) = (5.12)
+ \end{equation}
+ i.e. (5.13) $\Rightarrow$ (5.12), which implies that if $\Delta(t), \Gamma(t)$ satisfy (5.13), they must also satisfy (5.12).\\
+ ~\\
+\textbf{(ii)} Under the Black model: $\Delta(t)=N(\rho_+(t))$, $\Gamma(t)=-KN(\rho_-(t))$. We have a similar relation as in the Black-Scholes formula:
+\begin{equation}
+  \begin{split}
+    \frac{N'(\rho_+)}{N'(\rho_-)} &= \exp\left(\frac{-(\rho_++\rho_-)(\rho_+-\rho_-)}{2}\right) \\
+    &=\exp\left(-\frac{1}{2}\frac{2}{\sigma\sqrt{T-t}}\log\frac{\text{For}(t,T)}{K}\sigma\sqrt{T-t}\right)\\
+    &=\frac{K}{\text{For}(t,T)}
+  \end{split}
+\end{equation}
+$\Rightarrow$ $\text{For}(t,T)N'(\rho_+) = KN'(\rho_-)$. Moreover, by linearity
+\begin{equation}\label{rhopm}
+  d\rho_+ - d\rho_- = d(\rho_+-\rho_-) = -\frac{1}{2}\sigma (T-t)^{-1/2}dt
+\end{equation}
+And we can apply Ito's lemma to $\rho_+$, and using the fact that $d\text{For}(t,T)=\sigma \text{For}(t,T)dW^T(t)$:
+\begin{equation}
+  \begin{split}
+    d\rho_+ &= \partial_t \rho_+ dt + \partial_x \rho_+ d\text{For}(t,T) + \frac{1}{2}\partial_{xx} \rho_+ d[\text{For}, \text{For}](t,T) \\
+    &= \left(\frac{1}{2\sigma}(T-t)^{-3/2}\log\frac{\text{For}(t,T)}{K} - \frac{1}{4}\sigma(T-t)^{-1/2}\right)dt + \frac{1}{\sigma}(T-t)^{-1/2}\frac{1}{\text{For}(t,T)}d\text{For}(t,T)\\
+    &\qquad - \frac{1}{2\sigma}(T-t)^{-1/2}\frac{1}{\text{For}^2(t,T)}d[\text{For},\text{For}](t,T)\\
+    &=\left(\frac{1}{2\sigma}(T-t)^{-3/2}\log\frac{\text{For}(t,T)}{K} - \frac{3}{4}\sigma(T-t)^{-1/2}\right)dt + (T-t)^{-1/2}dW^T(t)
+  \end{split}
+\end{equation}
+Therefore, according to (\ref{rhopm}):
+\begin{equation}
+  d\rho_- = \left(\frac{1}{2\sigma}(T-t)^{-3/2}\log\frac{\text{For}(t,T)}{K} - \frac{1}{4}\sigma(T-t)^{-1/2}\right)dt + (T-t)^{-1/2}dW^T(t)
+\end{equation}
+Consequently:
+\begin{equation}
+  d[\rho_+, \rho_+](t) = d[\rho_-, \rho_-](t) = \left((T-t)^{-1/2}\right)^2d[W^T,W^T](t) =(T-t)^{-1}dt
+\end{equation}
+Now apply Ito's lemma to $N(\rho_{\pm})$:
+\begin{equation}
+  \begin{split}
+    d(N(\rho_{\pm})) &= N'(\rho_{\pm}(t)) d\rho_{\pm}(t) + \frac{1}{2}N''(\rho_{\pm}(t)) d[\rho_{\pm}, \rho_{\pm}](t) \\
+    &=N'(\rho_{\pm}(t)) d\rho_{\pm}(t) - \frac{1}{2}N'(\rho_{\pm}(t))\rho_{\pm} (T-t)^{-1}dt\\
+    &=N'(\rho_{\pm}(t)) \left(d\rho_{\pm}(t) - \frac{1}{2}\rho_{\pm} (T-t)^{-1}dt\right)
+  \end{split}
+\end{equation}
+Moreover,
+\begin{equation}
+  \begin{split}
+    d[N(\rho_+), \text{For}](t,T) &=  \left(N'(\rho_{+}(t))(T-t)^{-1/2}\right) \left(\sigma\text{For}(t,T)\right)d[W^T(t), W^T(t)] \\
+    &= \text{For}(t,T) N'(\rho_{+}(t)) \sigma (T-t)^{-1/2}dt
+  \end{split}
+\end{equation}
+Now we can look at the self-financing condition. We have chosen $\Gamma(t)=-KN(\rho_-)$ and $\Delta(t)=N(\rho_+)$.
+\begin{equation}
+  \begin{split}
+    (5.13) &= \text{For}(t,T)d\Delta(t) + d\text{For}(t,T)d\Delta(t) + d\Gamma(t) \\
+    &=\text{For}(t,T)d(N(\rho_+)) + d[N(\rho_+), \text{For}](t,T) - Kd(N(\rho_-)) \\
+    &= \text{For}(t,T)N'(\rho_{+}(t))\left[ d\rho_{+}(t) - \frac{1}{2}\rho_{+} (T-t)^{-1}dt\right] +  \text{For}(t,T) N'(\rho_{+}(t)) \sigma (T-t)^{-1/2}dt \\
+    &\qquad - KN'(\rho_{-}(t))\left[ d\rho_{-}(t) - \frac{1}{2}\rho_{-} (T-t)^{-1}dt\right]\\
+    &= \text{For}(t,T)N'(\rho_{+}(t))\left[ d(\rho_{+}-\rho_{-}) - \frac{1}{2} (T-t)^{-1}(\rho_{+}-\rho_{-})dt\right]\\
+    &\qquad + \text{For}(t,T) N'(\rho_{+}(t)) \sigma (T-t)^{-1/2}dt\\
+    &= \text{For}(t,T)N'(\rho_{+}(t))\left[ -\frac{1}{2}\sigma (T-t)^{-1/2}dt - \frac{1}{2} (T-t)^{-1}\sigma(T-t)^{1/2}dt\right]\\
+    &\qquad + \text{For}(t,T) N'(\rho_{+}(t)) \sigma (T-t)^{-1/2}dt\\
+    &= - \text{For}(t,T)N'(\rho_{+}(t))\sigma (T-t)^{-1/2}dt + \text{For}(t,T) N'(\rho_{+}(t)) \sigma (T-t)^{-1/2}dt\\
+    & = 0
+  \end{split}
+\end{equation}
+Which finishes the proof. The self-financing condition is satisfied.
+\end{proof}
+
+
+\end{document}

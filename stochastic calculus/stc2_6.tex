@@ -1,0 +1,309 @@
+\documentclass[a4paper, 10pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz, array, eurosym}
+\usepackage{float}
+\usepackage{cancel}
+
+\renewcommand{\arraystretch}{1.4}
+\newcolumntype{L}{>{\arraybackslash}m{10cm}}
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+
+\title{\textbf{Stochastic Calculus HW VI}}
+\author{Ze Yang~~~~(zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{proof} We have
+\begin{equation}
+  \begin{split}\label{forTT}
+    d(\log \text{For}(t,T)) &= \frac{d\text{For}(t,T)}{\text{For}(t,T)} - \frac{1}{2}\frac{1}{\text{For}^2(t,T)}d[\text{For}, \text{For}](t,T) \\
+    &=\sigma(t)dW^T(t) - \frac{1}{2}\sigma^2(t)dt\\
+    \Rightarrow\quad \log \frac{\text{For}(T,T)}{\text{For}(t,T)} &= \int_t^T \sigma(u)d^TW(u) - \int_t^T \frac{1}{2}\sigma^2(u)du \\
+    \text{For}(T,T) &= \text{For}(t,T)\exp\left(\int_t^T \sigma(u)d^TW(u) - \int_t^T \frac{1}{2}\sigma^2(u)du\right)
+  \end{split}
+\end{equation}
+Following what we have done in class, the call price simplifies to
+\begin{equation}
+  \begin{split}
+    C(t) &= \frac{1}{D(t)} \widetilde{\mathbb{E}}\left[D(T)(S(T)-K)^+\middle|\mathcal{F}(t)\right] \\
+    &= \frac{1}{D(t)} \widetilde{\mathbb{E}}\left[D(T)(S(T)-K) \mathbbm{1}_{\{S(T)\geq K\}}\middle|\mathcal{F}(t)\right]\\
+    &= \underbrace{\frac{1}{D(t)} \widetilde{\mathbb{E}}\left[D(T)S(T) \mathbbm{1}_{\{S(T)\geq K\}}\middle|\mathcal{F}(t)\right]}_{(\dag)}-\underbrace{\frac{K}{D(t)} \widetilde{\mathbb{E}}\left[D(T) \mathbbm{1}_{\{S(T)\geq K\}}\middle|\mathcal{F}(t)\right]}_{(\ddag)}
+  \end{split}
+\end{equation}
+The second term simplifies to
+\begin{equation}
+  \begin{split}
+    (\ddag) &= \frac{K}{D(t)} \widetilde{\mathbb{E}}\left[D(T) \mathbbm{1}_{\{S(T)\geq K\}}\middle|\mathcal{F}(t)\right] \\
+    &= KB(t,T)\frac{1}{D(t)B(t,T)} \widetilde{\mathbb{E}}\left[B(0,T)\frac{D(T)\cdot 1}{B(0,T)} \mathbbm{1}_{\{S(T)\geq K\}}\middle|\mathcal{F}(t)\right]\\
+    &= KB(t,T)\frac{B(0,T)}{D(t)B(t,T)} \widetilde{\mathbb{E}}\left[\frac{D(T)B(T,T)}{B(0,T)} \mathbbm{1}_{\{S(T)\geq K\}}\middle|\mathcal{F}(t)\right] \\
+    &= KB(t,T)\mathbb{E}^T\left[ \mathbbm{1}_{\{S(T)\geq K\}}\middle|\mathcal{F}(t)\right]\\
+    &= KB(t,T)\mathbb{P}^T\left( \text{For}(T,T)\geq K \middle|\mathcal{F}(t)\right)\\
+    &= KB(t,T)\mathbb{P}^T\left(\text{For}(t,T)\exp\left(\int_t^T \sigma(u)d^TW(u) - \int_t^T \frac{1}{2}\sigma^2(u)du\right)\geq K \middle|\mathcal{F}(t)\right)\\
+    &= KB(t,T)\mathbb{P}^T\left(\log \frac{\text{For}(t,T)}{K} - \int_t^T \frac{1}{2}\sigma^2(u)du\geq -\int_t^T \sigma(u)d^TW(u) \right)\\
+  \end{split}
+\end{equation}
+Since $\sigma(t)$ is a non-random process, $-\int_t^T \sigma(u)d^TW(u)$ is normally distributed, with mean $0$ and variance (by Ito Isometry) $\int_t^T\sigma^2(u)du$. Hence $-\int_t^T \sigma(u)d^TW(u)/\sqrt{\int_t^T\sigma^2(u)du}$ is a standard normal random variable. We can further write the second term as
+\begin{equation}
+  \begin{split}
+    (\ddag) &= KB(t,T)\mathbb{P}^T\left(\log \frac{\text{For}(t,T)}{K} - \int_t^T \frac{1}{2}\sigma^2(u)du\geq -\int_t^T \sigma(u)d^TW(u) \right)\\
+    &=KB(t,T)\mathbb{P}^T\left(Z \leq \frac{\log \frac{\text{For}(t,T)}{K} - \int_t^T \frac{1}{2}\sigma^2(u)du}{\sqrt{\int_t^T\sigma^2(u)du}}\right)\\
+    &=KB(t,T)N(\xi_-)
+  \end{split}
+\end{equation}
+Where we define
+$$
+\xi_- := \frac{\log \frac{\text{For}(t,T)}{K} - \int_t^T \frac{1}{2}\sigma^2(u)du}{\sqrt{\int_t^T\sigma^2(u)du}}
+$$
+Now we deal with the first term. Following what we have done in class, we define another change of measure $\widetilde{\mathbb{P}} \to \widehat{\mathbb{P}}$, with the Radon-Nikodym process $\widehat{Z}(t) = \frac{D(t)S(t)}{S(0)}$. 
+\begin{equation}
+  \begin{split}
+    (\dag) &= \frac{1}{D(t)} \widetilde{\mathbb{E}}\left[D(T)S(T) \mathbbm{1}_{\{S(T)\geq K\}}\middle|\mathcal{F}(t)\right]\\
+    &=S(t)\frac{1}{D(t)S(t)} \widetilde{\mathbb{E}}\left[S(0)\frac{D(T)S(T)}{S(0)} \mathbbm{1}_{\{S(T)\geq K\}}\middle|\mathcal{F}(t)\right]\\
+    &=S(t)\frac{S(0)}{D(t)S(t)} \widetilde{\mathbb{E}}\left[\frac{D(T)S(T)}{S(0)} \mathbbm{1}_{\{S(T)\geq K\}}\middle|\mathcal{F}(t)\right]\\
+    &=S(t) \widehat{\mathbb{E}}\left[ \mathbbm{1}_{\{S(T)\geq K\}}\middle|\mathcal{F}(t)\right]\\
+    &=S(t) \widehat{\mathbb{P}}\left(\frac{1}{\text{For}(T,T)}\leq \frac{1}{K}\middle|\mathcal{F}(t)\right)\\
+  \end{split}
+\end{equation}
+Moreover, we have shown in class that $\frac{1}{\text{For}(t,T)}, 0\leq t\leq T$ is a $\widehat{\mathbb{P}}$-martingale. In this setting we have
+\begin{equation}
+  \begin{split}
+    d\left(\frac{1}{\text{For}(t,T)}\right) &= -\frac{1}{\text{For}^2(t,T)} d\text{For}(t,T)+ \frac{1}{2}\frac{2}{\text{For}^3(t,T)}d[\text{For},\text{For}](t,T)\\
+    &=-\sigma(t)\frac{1}{\text{For}(t,T)} dW^T(t) + \sigma^2(t)\frac{1}{\text{For}(t,T)} dt\\
+    &=-\sigma(t)\frac{1}{\text{For}(t,T)} \left(dW^T(t) - \sigma(t)dt\right)
+  \end{split}
+\end{equation}
+That is $dW^T(t) - \sigma(t)dt =  d\widehat{W}(t)$. (\ref{forTT}) implies that
+\begin{equation}
+  \begin{split}
+    d(-\log \text{For}(t,T)) 
+    &=-\sigma(t)dW^T(t) + \frac{1}{2}\sigma^2(t)dt=-\sigma(t)d\widehat{W}(t) - \frac{1}{2}\sigma^2(t)dt\\
+  \end{split}
+\end{equation}
+Therefore
+\begin{equation}
+  \frac{1}{\text{For}(T,T)} = \frac{1}{\text{For}(t,T)}\exp\left(-\int_t^T \sigma(u)d\widehat{W}(u) - \int_t^T \frac{1}{2}\sigma^2(u)du\right)
+\end{equation}
+Hence
+\begin{equation}
+  \begin{split}
+    (\dag) &=S(t) \widehat{\mathbb{P}}\left(\frac{1}{\text{For}(T,T)}\leq \frac{1}{K}\middle|\mathcal{F}(t)\right) \\
+    &= S(t) \widehat{\mathbb{P}}\left(\frac{1}{\text{For}(t,T)}\exp\left(-\int_t^T \sigma(u)d\widehat{W}(u) - \int_t^T \frac{1}{2}\sigma^2(u)du\right)\leq \frac{1}{K}\middle|\mathcal{F}(t)\right) \\
+    &= S(t) \widehat{\mathbb{P}}\left(-\int_t^T \sigma(u)d\widehat{W}(u)\leq \log\frac{\text{For}(t,T)}{K}+\int_t^T \frac{1}{2}\sigma^2(u)du\right) \\
+    &=S(t)\widehat{\mathbb{P}}\left(Z \leq \frac{\log \frac{\text{For}(t,T)}{K} + \int_t^T \frac{1}{2}\sigma^2(u)du}{\sqrt{\int_t^T\sigma^2(u)du}}\right)\\
+    &=:S(t)N(\xi_+)
+  \end{split}
+\end{equation}
+In conclusion, we have
+\begin{equation}
+  \begin{split}
+    &C(t) = S(t)N(\xi_+) - KB(t,T)N(\xi_-) \\
+    &\xi_{\pm} = \frac{\log \frac{\text{For}(t,T)}{K} \pm \int_t^T \frac{1}{2}\sigma^2(u)du}{\sqrt{\int_t^T\sigma^2(u)du}}
+  \end{split}
+\end{equation}
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{proof} \textbf{(i)} In order to get the forward measure $\mathbb{P}^{T_{k+1}}$, we use the $T_{k+1}$-matured zero coupon bond as numeraire. By the HJM notation for the differential of discounted ZCB price:
+\begin{equation}
+  \begin{split}
+    d(D(t)B(t,T_{k+1})) &= -\sigma^*(t,T_{k+1})D(t)B(t,T_{k+1})d\widetilde{W}(t) \\
+    \Rightarrow \quad d(\log(D(t)B(t,T_{k+1}))) &= -\sigma^*(t,T_{k+1})d\widetilde{W}(t)-\frac{1}{2}\sigma^{*2}(t,T_{k+1})dt\\
+    \Rightarrow \quad \frac{D(t)B(t,T_{k+1})}{B(0,T_{k+1})} &= \exp\left\{-\int_0^t\sigma^*(u,T_{k+1})d\widetilde{W}(u)-\int_0^t\frac{1}{2}\sigma^{*2}(u,T_{k+1})du\right\}
+  \end{split}
+\end{equation}
+Apply the Girsanov Theorem, let $Z(t):= \frac{D(t)B(t,T_{k+1})}{B(0,T_{k+1})}$ be the Radon-Nikodym derivative process, then the change of measure is given by:
+\begin{equation}
+  \mathbb{P}^{T_{k+1}}(A) = \int_A Z(T_{k+1})(\omega)d \widetilde{\mathbb{P}} = \int_A \frac{D(T_{k+1})}{B(0,T_{k+1})}d \widetilde{\mathbb{P}}
+\end{equation}
+And we can observe $\Theta(t) = \sigma^*(t,T_{k+1})$, hence
+\begin{equation}
+  dW^{T_{k+1}}(t) =  d\widetilde{W}(t) + \sigma^*(t,T_{k+1}) dt
+\end{equation}
+is the increment of $W^{T_{k+1}}(t)$, which is a Brownian motion under $\mathbb{P}^{T_{k+1}}$. \\
+~\\
+\textbf{(ii)} By the rule of the quotient of martingales, $\frac{D(t)B(t,T_k)}{D(t)B(t,T_{k+1})} = \frac{B(t,T_k)}{B(t,T_{k+1})}$ is a martingale under $\mathbb{P}^{T_{k+1}}$, because both the numerator and the denominator are martingales under $\widetilde{\mathbb{P}}$, and the Radon-Nikodym derivative process is $Z(t)=\frac{D(t)B(t,T_{k+1})}{B(0,T_{k+1})}$. Moreover, the volatility of $\frac{B(t,T_k)}{B(t,T_{k+1})}$ is the volatility of $B(t,T_k)$ minus the volatility of $B(t,T_{k+1})$. Therefore
+\begin{equation}
+  \begin{split}
+    d\left(\frac{B(t,T_k)}{B(t,T_{k+1})}\right) &= \frac{B(t,T_k)}{B(t,T_{k+1})}\left[-\sigma^*(t,T_{k})-(-\sigma^*(t,T_{k+1}))\right] dW^{T_{k+1}}(t)\\
+     &= \frac{B(t,T_k)}{B(t,T_{k+1})}\left[\sigma^*(t,T_{k+1})-\sigma^*(t,T_{k})\right] dW^{T_{k+1}}(t)\\
+  \end{split}
+\end{equation}
+Therefore
+\begin{equation}
+  \begin{split}
+    dL_k(t) &= \frac{1}{\tau_{k+1}} d\left(\frac{B(t,T_k)}{B(t,T_{k+1})}\right) \\
+    &=\frac{1}{\tau_{k+1}}\frac{B(t,T_k)}{B(t,T_{k+1})}\left[\sigma^*(t,T_{k+1})-\sigma^*(t,T_{k})\right] dW^{T_{k+1}}(t) \\
+    &=\frac{1}{\tau_{k+1}}\left(1+\tau_{k+1}L_k(t)\right)\left[\sigma^*(t,T_{k+1})-\sigma^*(t,T_{k})\right] dW^{T_{k+1}}(t)
+  \end{split}
+\end{equation}
+~\\
+\textbf{(iii)} Now we change back to $\widetilde{W}(t)$, using the fact that $dW^{T_{k+1}}(t) =  d\widetilde{W}(t) + \sigma^*(t,T_{k+1}) dt$.
+\begin{equation}
+  \begin{split}
+    dL_k(t) &=\frac{1}{\tau_{k+1}}\left(1+\tau_{k+1}L_k(t)\right)\left[\sigma^*(t,T_{k+1})-\sigma^*(t,T_{k})\right] (d\widetilde{W}(t) + \sigma^*(t,T_{k+1}) dt) \\
+    &=: \mu_k(t) dt + \sigma_k(t) d\widetilde{W}(t)
+  \end{split}
+\end{equation}
+It follows that
+\begin{equation}
+  \begin{split}
+    &\mu_k(t) = \frac{\sigma^*(t,T_{k+1})}{\tau_{k+1}}\left(1+\tau_{k+1}L_k(t)\right)\left[\sigma^*(t,T_{k+1})-\sigma^*(t,T_{k})\right]\\
+    &\sigma_k(t) = \frac{1}{\tau_{k+1}}\left(1+\tau_{k+1}L_k(t)\right)\left[\sigma^*(t,T_{k+1})-\sigma^*(t,T_{k})\right]
+  \end{split}
+\end{equation}
+~\\
+\textbf{(iv)} Take $k=n-1$ in our initial change of measure, we find
+\begin{equation}
+  dW^{T_{n}}(t) =  d\widetilde{W}(t) + \sigma^*(t,T_{n}) dt
+\end{equation}
+Hence
+\begin{equation}
+  dL_k(t) =\frac{1}{\tau_{k+1}}\left(1+\tau_{k+1}L_k(t)\right)\left[\sigma^*(t,T_{k+1})-\sigma^*(t,T_{k})\right] \Big[dW^{T_{n}}(t) +  \left(\sigma^*(t,T_{k+1})-\sigma^*(t,T_{n})\right) dt\Big] \\
+\end{equation}
+It follows that the drift of $L_k(t)$ under $\mathbb{P}^{T_n}$ is:
+\begin{equation}
+  \begin{split}
+    \mu_k^{[T_n]}(t) &= \frac{1}{\tau_{k+1}}\left(1+\tau_{k+1}L_k(t)\right)\left[\sigma^*(t,T_{k+1})-\sigma^*(t,T_{k})\right]\left[\sigma^*(t,T_{k+1})-\sigma^*(t,T_{n})\right]\\
+    &=\sigma_k(t)\left[\sigma^*(t,T_{k+1})-\sigma^*(t,T_{n})\right]
+  \end{split}
+\end{equation}
+~\\
+\textbf{(v)} We know from \textbf{(iii)}:
+\begin{equation}
+  \sigma^*(t,T_{k+1})-\sigma^*(t,T_{k}) = \frac{\tau_{k+1}\sigma_k(t)}{1+\tau_{k+1}L_k(t)}\quad k = 1, 2, ..., n-1
+\end{equation}
+So we can take telescope summation:
+\begin{equation}
+  \sigma^*(t,T_{n})-\sigma^*(t,T_{k+1}) = \sum_{j=k+1}^{n-1} \frac{\tau_{j+1}\sigma_j(t)}{1+\tau_{j+1}L_j(t)}
+\end{equation}
+So the drift of $L_k(t)$ under $\mathbb{P}^{T_n}$ is:
+\begin{equation}
+  \begin{split}
+    \mu_k^{[T_n]}(t) &=\sigma_k(t)\left[\sigma^*(t,T_{k+1})-\sigma^*(t,T_{n})\right] \\
+    &= -\sigma_k(t)\sum_{j=k+1}^{n-1} \frac{\tau_{j+1}\sigma_j(t)}{1+\tau_{j+1}L_j(t)}
+  \end{split}
+\end{equation}
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{proof} \textbf{(i)} Follwing what we've done in class, the prices of U.S. money market account, stock, and U.K. money market account under $\mathbb{P}^{\$}$ with numeraire $M^{\$}$ are $1, D^{\$}S, D^{\$} XM^{\pounds}$. They become $\frac{1}{D^{\$} XM^{\pounds}}$, $\frac{D^{\$}S}{D^{\$} XM^{\pounds}}$, $\frac{D^{\$} XM^{\pounds}}{D^{\$} XM^{\pounds}}$ when changing numeraire to $M^{\pounds}$. So by the rule of the quotient of martingales, these are martingales under $\mathbb{P}^{\pounds}$ if the Radon-Nikodym process of $\mathbb{P}^{\pounds}$ with respect to $\mathbb{P}^{\$}$ is the denominator, i.e.
+\begin{equation}
+  Z(t) = \frac{D^{\$}(t) X(t)M^{\pounds}(t)}{X(0)} = \frac{X(t)}{X(0)}e^{(r^{\pounds} - r^{\$})t}
+\end{equation}
+~\\
+\textbf{(ii)} Apply the change of measure to the expectation, we have:
+\begin{equation}
+  \begin{split}
+    C^{\pounds}(t) &= \mathbb{E}^{\pounds}\left[e^{-r^{\pounds}(T-t)}(S(T)-K)^+\middle|\mathcal{F}(t)\right] \\
+    &= \frac{1}{Z(t)}\mathbb{E}^{\$}\left[Z(T)e^{-r^{\pounds}(T-t)}(S(T)-K)^+\middle|\mathcal{F}(t)\right]\\
+    &= \frac{X(0)}{X(t)e^{(r^{\pounds} - r^{\$})t}}\mathbb{E}^{\$}\left[\frac{X(T)}{X(0)}e^{(r^{\pounds} - r^{\$})T}e^{-r^{\pounds}(T-t)}(S(T)-K)^+\middle|\mathcal{F}(t)\right]\\
+    &= \frac{1}{X(t)}\mathbb{E}^{\$}\left[X(T)e^{ - r^{\$}(T-t)}e^{-r^{\pounds}(T-t) + r^{\pounds}(T-t)}(S(T)-K)^+\middle|\mathcal{F}(t)\right]\\
+     &= \frac{1}{X(t)}\mathbb{E}^{\$}\left[e^{ - r^{\$}(T-t)}X(T)(S(T)-K)^+\middle|\mathcal{F}(t)\right]\\
+     &= \frac{C^{\$}(t)}{X(t)}
+  \end{split}
+\end{equation}
+\end{proof}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{proof} \textbf{(i)} The payoff of the domestic forward contract is $X(T)-\text{For}(0,T)$ at time $T$, which has price $0$ at time $0$:
+\begin{equation}
+  \begin{split}
+    0 &= \widetilde{\mathbb{E}}\left[\frac{D(T)}{D(0)}\left(X(T) - \text{For}(0,T)\right)\right] \\
+    &=\widetilde{\mathbb{E}}\left[D(T)X(T)\right] - \text{For}(0,T)\widetilde{\mathbb{E}}\left[D(T)\right] \\
+    \Rightarrow \quad \text{For}(0,T) & = \frac{\widetilde{\mathbb{E}}\left[D(T)X(T)\right]}{\widetilde{\mathbb{E}}\left[D(T)\right]}= \frac{\widetilde{\mathbb{E}}\left[D(T)X(T)\right]}{B(0,T)}
+  \end{split}
+\end{equation}
+Likewise
+\begin{equation}
+  \begin{split}
+    0 &= \mathbb{E}^f\left[\frac{D^f(T)}{D^f(0)}\left(\frac{1}{X(T)} - \text{For}^f(0,T)\right)\right] \\
+    \Rightarrow \quad \text{For}^f(0,T) & = \frac{\mathbb{E}^f\left[D^f(T)\frac{1}{X(T)}\right]}{\mathbb{E}^f\left[D^f(T)\right]}= \frac{\mathbb{E}^f\left[D^f(T)\frac{1}{X(T)}\right]}{B^f(0,T)}
+  \end{split}
+\end{equation}
+~\\
+\textbf{(ii)} (6.4) is the correct formula. We have
+\begin{equation}
+  \begin{split}
+    \text{For}^f(0,T) & = \frac{\mathbb{E}^f\left[D^f(T)\frac{1}{X(T)}\right]}{\mathbb{E}^f\left[D^f(T)\right]} \\
+    &=  \frac{\widetilde{\mathbb{E}}\left[\frac{D(T)X(T)M^f(T)}{X(0)}D^f(T)\frac{1}{X(T)}\right]}{\widetilde{\mathbb{E}}\left[\frac{D(T)X(T)M^f(T)}{X(0)}D^f(T)\right]}\\
+    &=  \frac{\frac{1}{X(0)}\widetilde{\mathbb{E}}\left[D(T)\right]}{\frac{1}{X(0)}\widetilde{\mathbb{E}}\left[D(T)X(T)\right]}\\
+    &=\frac{\widetilde{\mathbb{E}}\left[D(T)\right]}{\widetilde{\mathbb{E}}\left[D(T)X(T)\right]} \\
+    &= \frac{1}{\text{For}(0,T)}
+  \end{split}
+\end{equation}
+~\\
+\textbf{(iii)} For the futures price, we have
+\begin{equation}
+  \begin{split}
+    &\text{Fut}(0,T) = \widetilde{\mathbb{E}}\left[X(T)\right] = \widetilde{\mathbb{E}}\left[\frac{D(T)X(T)M^f(T)}{D(T)M^f(T)}\right] \\
+    &\text{Fut}^f(0,T) = \mathbb{E}^f\left[\frac{1}{X(T)}\right] = \widetilde{\mathbb{E}}\left[\frac{D(T)X(T)M^f(T)}{X(0)}\frac{1}{X(T)}\right] = \frac{\widetilde{\mathbb{E}}\left[D(T)M^f(T)\right]}{X(0)}
+  \end{split}
+\end{equation}
+Here $D(T)X(T)M^f(T)$ is a $\widetilde{\mathbb{P}}$-martingale. So (6.5) will hold if the product $D(T)M^f(T)$ is $\mathcal{F}_0$-measurable under $\widetilde{\mathbb{P}}$. Or maybe a stronger assumption: we have non-random domestic and foreign interest rate $R(t), R^f(t)$. If that was the case, we have:
+\begin{equation}
+  \begin{split}
+    \text{Fut}(0,T) &= \widetilde{\mathbb{E}}\left[\frac{D(T)X(T)M^f(T)}{D(T)M^f(T)}\right] \\
+    &= \frac{1}{D(T)M^f(T)}\widetilde{\mathbb{E}}\left[D(T)X(T)M^f(T)\right] \\
+    &= \frac{1}{D(T)M^f(T)}D(0)X(0)M^f(0) \\
+    &= \frac{X(0)}{D(T)M^f(T)} = \frac{1}{\text{Fut}^f(0,T)}
+  \end{split}
+\end{equation}
+\end{proof}
+
+
+\end{document}
