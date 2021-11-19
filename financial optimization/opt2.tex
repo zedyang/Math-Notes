@@ -1,0 +1,221 @@
+\documentclass[a4paper, 8pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz, array, eurosym}
+\usepackage{float}
+\renewcommand{\arraystretch}{1.4}
+\newcolumntype{L}{>{\arraybackslash}m{10cm}}
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+\title{\textbf{Optimization Assignment II}}
+\author{Ze Yang~~~~(zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+
+\begin{problem} \textbf{(a)}
+The KKT optimality conditions are:
+\begin{equation}
+	\begin{cases}
+		2 \bm{Vx} - \lambda \bm{a} = 0 \\
+		\bm{a}^{\top} \bm{x} = 1
+	\end{cases}
+\end{equation}
+Where $\lambda$ is dual variable. The first equation $\Rightarrow \bm{x} = \frac{\lambda}{2} \bm{V}^{-1}\bm{a}$. Premultiply both sides by $\bm{a}^{\top}$:
+$$
+\bm{a}^{\top} \bm{x} = 1 = \frac{\lambda}{2} \bm{a}^{\top}\bm{V}^{-1} \bm{a}
+$$
+Therefore
+\begin{equation}
+	\lambda = \frac{2}{\bm{a}^{\top}\bm{V}^{-1} \bm{a}};~~\bm{x} = \frac{1}{\bm{a}^{\top}\bm{V}^{-1} \bm{a}} \bm{V}^{-1}\bm{a}
+\end{equation}
+~\\
+\textbf{(b)} The KKT optimality conditions are:
+\begin{equation}
+	\begin{cases}
+		\bm{\mu} - \gamma \bm{V} \bm{x}+ y \bm{1} = 0 \\
+		\bm{1}^{\top} \bm{x} = 1
+	\end{cases}
+\end{equation}
+The first equation $\Rightarrow \bm{x} = \gamma^{-1}\bm{V}^{-1}(\bm{\mu}+ y\bm{1})$. Re-write $\bm{x}$ in the following way:
+\begin{equation}
+ 	\bm{x} = \frac{ \bm{1}^{\top}\bm{V}^{-1}\bm{\mu}}{\gamma} \frac{1}{\bm{1}^{\top}\bm{V}^{-1}\bm{\mu}}\bm{V}^{-1}\bm{\mu}+ \frac{y\bm{1}^{\top}\bm{V}^{-1}\bm{1}}{\gamma}\frac{1}{\bm{1}^{\top}\bm{V}^{-1}\bm{1}} \bm{V}^{-1}\bm{1}
+\end{equation} 
+Besides, premultiply both sides of the first equation by $\bm{1}^{\top}$ yields:
+\begin{equation}
+	\begin{split}
+		& \bm{1}^{\top} \bm{x} = 1 = \bm{1}^{\top}\gamma^{-1}\bm{V}^{-1}(\bm{\mu}+ y \bm{1})\\
+		\Rightarrow \quad & y =  \frac{\gamma - \bm{1}^{\top}\bm{V}^{-1}\bm{\mu}}{\bm{1}^{\top}\bm{V}^{-1} \bm{1}}
+	\end{split}
+\end{equation}
+Therefore
+\begin{equation}
+	\begin{split}
+		\bm{x} &= \frac{ \bm{1}^{\top}\bm{V}^{-1}\bm{\mu}}{\gamma} \frac{1}{\bm{1}^{\top}\bm{V}^{-1}\bm{\mu}}\bm{V}^{-1}\bm{\mu}+ \frac{\gamma - \bm{1}^{\top}\bm{V}^{-1}\bm{\mu}}{\gamma}\frac{1}{\bm{1}^{\top}\bm{V}^{-1}\bm{1}} \bm{V}^{-1}\bm{1} \\
+		&= \lambda \frac{1}{\bm{1}^{\top}\bm{V}^{-1}\bm{\mu}}\bm{V}^{-1}\bm{\mu}+ (1- \lambda)\frac{1}{\bm{1}^{\top}\bm{V}^{-1}\bm{1}} \bm{V}^{-1}\bm{1}
+	\end{split}
+\end{equation}
+Where $\lambda=\frac{ \bm{1}^{\top}\bm{V}^{-1}\bm{\mu}}{\gamma}$.\\
+~\\
+\textbf{(c)} Denote the two problems (1) and (2).\\
+We've already obtained the optimal solution to (2) in question (b):
+\begin{equation}
+	x^*_2 = \lambda \frac{1}{\bm{1}^{\top}\bm{V}^{-1}\bm{\mu}}\bm{V}^{-1}\bm{\mu}+ (1- \lambda)\frac{1}{\bm{1}^{\top}\bm{V}^{-1}\bm{1}} \bm{V}^{-1}\bm{1}
+\end{equation}
+where $\lambda=\frac{ \bm{1}^{\top}\bm{V}^{-1}\bm{\mu}}{\gamma}$. Now we are going to solve problem (1). The KKT optimality conditions for (1) are:
+\begin{equation}
+	\begin{cases}
+		\bm{Vx} - \xi \bm{\mu} + \theta \bm{1} = 0 \\
+		\bm{1}^{\top} \bm{x} = 1\\
+		\bar{\mu} - \bm{\mu}^{\top} \bm{x} \leq 0\\
+		\xi \geq 0\\
+		\xi (\bar{\mu} - \bm{\mu}^{\top} \bm{x}) = 0~~~(\text{Complementary slackness})
+	\end{cases}
+\end{equation}
+The first equation $\Rightarrow$ $x = \xi \bm{V}^{-1}\mu - \theta \bm{V}^{-1}\bm{1}$. This premultiplied by $\bm{1}^{\top}$ and $\bm{\mu}^{\top}$, respectively:
+\begin{equation}
+	\begin{split}
+		&\begin{cases}
+		\bm{1}^{\top}x = \xi \bm{1}^{\top}\bm{V}^{-1}\mu - \theta \bm{1}^{\top}\bm{V}^{-1}\bm{1}  = 1\\
+		\bm{\mu}^{\top}x = \xi \bm{\mu}^{\top}\bm{V}^{-1}\mu - \theta \bm{\mu}^{\top}\bm{V}^{-1}\bm{1}  \geq \bar{\mu}
+	\end{cases}
+	\end{split}
+\end{equation}
+Multiply the first equality by $\frac{\bm{\mu}^{\top}\bm{V}^{-1}\bm{1}}{\bm{1}^{\top}\bm{V}^{-1}\bm{1}}$:
+\begin{equation}
+	\Rightarrow \quad  \begin{cases}
+	\left(\xi \bm{1}^{\top}\bm{V}^{-1}\bm{\mu} - \theta \bm{1}^{\top}\bm{V}^{-1}\bm{1}\right)\frac{\bm{\mu}^{\top}\bm{V}^{-1}\bm{1}}{\bm{1}^{\top}\bm{V}^{-1}\bm{1}}  = \frac{\bm{\mu}^{\top}\bm{V}^{-1}\bm{1}}{\bm{1}^{\top}\bm{V}^{-1}\bm{1}}\\
+	\xi \bm{\mu}^{\top}\bm{V}^{-1}\bm{\mu} - \theta \bm{\mu}^{\top}\bm{V}^{-1}\bm{1}  \geq \bar{\mu}
+	\end{cases}
+\end{equation}
+The second inequality minus the first \emph{equality} (the sign of the inequality does not change), the terms with $\theta$ cancel out:
+\begin{equation}\label{eq:1}
+	\xi\left(\bm{\mu}^{\top}\bm{V}^{-1}\bm{\mu} - \bm{1}^{\top}\bm{V}^{-1}\bm{\mu}\frac{\bm{\mu}^{\top}\bm{V}^{-1}\bm{1}}{\bm{1}^{\top}\bm{V}^{-1}\bm{1}}\right) \geq \bar{\mu}  - \frac{\bm{\mu}^{\top}\bm{V}^{-1}\bm{1}}{\bm{1}^{\top}\bm{V}^{-1}\bm{1}} >0
+\end{equation}
+Where the last strictly greater sign is obtained from the know condition about $\bar{\mu}$. By the dual feasibility: $\xi \geq 0$. Therefore, the only way to make RHS $>0$ is $\xi > 0$, and $\left(\bm{\mu}^{\top}\bm{V}^{-1}\bm{\mu} - \bm{1}^{\top}\bm{V}^{-1}\bm{\mu}\frac{\bm{\mu}^{\top}\bm{V}^{-1}\bm{1}}{\bm{1}^{\top}\bm{V}^{-1}\bm{1}}\right)>0$. \\
+Therefore, the complementary slackness equality evaluates to:
+\begin{equation}
+	\bar{\mu} - \bm{\mu}^{\top} \bm{x} = 0
+\end{equation}
+Which suggests that the inequality constraint is binding. As a result, (\ref{eq:1}) takes the equal sign. We have:
+\begin{equation}
+	\begin{split}
+		&\xi\left(\bm{\mu}^{\top}\bm{V}^{-1}\bm{\mu} - \bm{1}^{\top}\bm{V}^{-1}\bm{\mu}\frac{\bm{\mu}^{\top}\bm{V}^{-1}\bm{1}}{\bm{1}^{\top}\bm{V}^{-1}\bm{1}}\right)~\textcolor{red}{=}~ \bar{\mu}  - \frac{\bm{\mu}^{\top}\bm{V}^{-1}\bm{1}}{\bm{1}^{\top}\bm{V}^{-1}\bm{1}} \\
+		\Rightarrow\quad \xi &= \frac{\bar{\mu}(\bm{1}^{\top}\bm{V}^{-1}\bm{1} - \bm{\mu}^{\top}\bm{V}^{-1}\bm{1})}{(\bm{\mu}^{\top}\bm{V}^{-1}\bm{\mu})(\bm{1}^{\top}\bm{V}^{-1}\bm{1}) - (\bm{\mu}^{\top}\bm{V}^{-1}\bm{1})^2}
+	\end{split}
+\end{equation}
+And the optimal solution for problem (1) is therefore:
+\begin{equation}
+	\begin{split}
+		x^*_1 &= \xi \bm{V}^{-1}\mu - \theta \bm{V}^{-1}\bm{1} \\
+		&=(\xi\bm{1}^{\top}\bm{V}^{-1}\bm{\mu}) \frac{1}{\bm{1}^{\top}\bm{V}^{-1}\bm{\mu}}\bm{V}^{-1}\mu - (\theta\bm{1}^{\top}\bm{V}^{-1}\bm{1}) \frac{1}{\bm{1}^{\top}\bm{V}^{-1}\bm{1}} \bm{V}^{-1}\bm{1} \\
+		& = (\xi\bm{1}^{\top}\bm{V}^{-1}\bm{\mu}) \frac{1}{\bm{1}^{\top}\bm{V}^{-1}\bm{\mu}}\bm{V}^{-1}\mu - (1-\xi\bm{1}^{\top}\bm{V}^{-1}\bm{\mu}) \frac{1}{\bm{1}^{\top}\bm{V}^{-1}\bm{1}} \bm{V}^{-1}\bm{1} \\
+		& = \alpha \frac{1}{\bm{1}^{\top}\bm{V}^{-1}\bm{\mu}}\bm{V}^{-1}\mu - (1- \alpha) \frac{1}{\bm{1}^{\top}\bm{V}^{-1}\bm{1}} \bm{V}^{-1}\bm{1}
+	\end{split}
+\end{equation}
+where $\alpha = \xi\bm{1}^{\top}\bm{V}^{-1}\bm{\mu}$. Clearly, $x^*_1 = x^*_2$ exactly $\iff$ $\alpha = \lambda$ $\iff$
+\begin{equation}
+	\begin{split}
+		&\xi\bm{1}^{\top}\bm{V}^{-1}\bm{\mu} = \frac{ \bm{1}^{\top}\bm{V}^{-1}\bm{\mu}}{\gamma} \\
+		\Rightarrow \quad & \gamma = \frac{1}{\xi} = \frac{(\bm{\mu}^{\top}\bm{V}^{-1}\bm{\mu})(\bm{1}^{\top}\bm{V}^{-1}\bm{1}) - (\bm{\mu}^{\top}\bm{V}^{-1}\bm{1})^2}{\bar{\mu}(\bm{1}^{\top}\bm{V}^{-1}\bm{1} - \bm{\mu}^{\top}\bm{V}^{-1}\bm{1})}
+	\end{split}
+\end{equation}
+\end{problem}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} \begin{itemize}
+	\item[(a)] The minimum-variance long-only portfolio is solved by:
+	\begin{equation}
+		\begin{split}
+			\underset{\bm{x}}{\min}\quad& \bm{x}^{\top} \bm{\Sigma} \bm{x}\\
+			s.t. \quad & \bm{1}^{\top} \bm{x} = 1\\
+			& \bm{x} \succeq \bm{0}
+		\end{split}
+	\end{equation}
+	It has variance
+	\begin{equation}
+		\sigma_p^2 = 179.735026~~\text{BPs}^2
+	\end{equation}
+	\item[(b)] The betas of each stock are given by: $\bm{\beta} = \frac{1}{\bm{x}^{*\top} \bm{\Sigma}\bm{x}^*}\bm{\Sigma}\bm{x}^*$, where $\bm{x}^* = \bm{1}/20$ is the market portfolio weights vector. See the table below for numerical values.
+	 \begin{table}[H]
+\centering
+\begin{tabular}{rrrrrrrrrrr}
+\toprule
+Ticker & BOL & NE & AZO & FISV & DGX & SYK & STZ & TIF & SVU & MIL\\
+Beta & 0.6887 & 1.3330 & 0.6634 & 0.7017 & 1.3295 & 0.7484 & 1.3100 & 1.1785 & 0.7815 & 0.7301 \\
+\midrule
+Ticker & LEN & PAYX & RHI & NTAP & LH & R& FDO & MKC & XTO & ABC\\
+Beta & 1.0256 & 0.8383 & 0.8161 & 2.0953 & 1.5769 & 0.6097 & 0.8977 & 0.3364 & 1.7062 & 0.6332\\
+\bottomrule
+\end{tabular}
+\caption{Beta of Stocks}
+\end{table}
+  \item[(c)] The required portfolio is solved by:
+	\begin{equation}
+		\begin{split}
+			\underset{\bm{x}}{\max}\quad&  \bm{\mu}^{\top} \bm{x}\\
+			s.t. \quad & \bm{1}^{\top} \bm{x} = 1\\
+			& \bm{\beta}^{\top} \bm{x} = 1\\
+			& \frac{\bm{1}}{10} \succeq \bm{x} \succeq \bm{0}
+		\end{split}
+	\end{equation}
+	The expected return of the required portfolio is $29.33$ BPs.\\
+  \item[(d)] The required portfolio is solved by:
+	\begin{equation}
+		\begin{split}
+			\underset{\bm{z}, k}{\min}\quad&  \bm{z}^{\top} \bm{\Sigma} \bm{z}\\
+			s.t. \quad & \bm{\mu}^{\top} \bm{z} = 1\\
+			& \bm{1}^{\top} \bm{z} - k =0\\
+			& \bm{\beta}^{\top} \bm{z} - k =0\\
+			& \frac{k}{10}\bm{1} \succeq \bm{z} \succeq \bm{0}
+		\end{split}
+	\end{equation}
+  The maximum Sharpe ratio is 1.53746
+\end{itemize}
+\end{problem}
+
+
+
+
+
+
+\end{document}

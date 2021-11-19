@@ -1,0 +1,85 @@
+---
+title: "Time Series HW2"
+author: "Ze YANG"
+date: "September 15, 2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Problem 1
+
+## (a)
+```{r}
+# Load data
+library(forecast)
+library(Ecdat)
+data(CRSPday)
+crsp = CRSPday[,7]
+```
+
+```{r}
+# Model fitting
+ar1 = arima(crsp, order=c(1,0,0))
+ar2 = arima(crsp, order=c(2,0,0))
+```
+
+## The normal probability plot of residuals
+```{r}
+# model assessments
+qqnorm(residuals(ar1), col='blue')
+secondpts = qqnorm(residuals(ar2), plot.it=FALSE)
+qqline(residuals(ar1))
+points(secondpts, col="red")
+```
+
+
+## ACF of residuals, fitted values, and original sample
+```{r fig.width=7, fig.asp=0.4}
+par(mfrow=c(1,3))
+acf(residuals(ar1))
+acf(fitted(ar1))
+acf(crsp)
+```
+
+```{r fig.width=7, fig.asp=0.4}
+par(mfrow=c(1,3))
+acf(residuals(ar2))
+acf(fitted(ar2))
+acf(crsp)
+```
+
+## Ljung-Box test on residuals
+```{r}
+Box.test(ar1$residuals, fitdf=1, lag=10, type="Ljung-Box")
+```
+
+```{r}
+Box.test(ar2$residuals, fitdf=2, lag=10, type="Ljung-Box")
+```
+## AICs
+```{r}
+c(ar1$aic, ar2$aic)
+```
+## Conclusions
+
+- The normal probability plots of residuals of both models overlay closely. For both of them, the residuals have heavier tails than normal on two sides.
+- The ACF of residuals displays no strong evidence of autocorrelation at any lag for both $AR(1)$ and $AR(2)$. 
+- The sample ACF display strong correlation only at lag = 1, no strong evidence of correlation beyond. The ACF of fitted values of $AR(1)$ displays a similar pattern. However, the ACF of fitted values of $AR(2)$ has a correlation of opposite (negative) direction at Lag=1.
+- The p-value of Ljung-Box tests for the residuals of both models are above 0.05, indicating that we fail to reject $\{\rho_{\epsilon}(h) = 0\text{ for some }h\geq 1\}$ at a confidence level of 0.05: There is no strong evidence of serial correlation in residuals up to lag 10. But if we increase the number of lags to 20, the null hypothesis can be rejected. Therefore, there might still be long lagged correlations in the residuals.
+- The AIC of AR(1) model is -17406.37, and the AIC of AR(2) model is -17404.87. The level of validity of model assumptions is acceptable, so we choose the AR(1) model based on the minimum AIC.
+
+# Problem 2
+```{r}
+auto.arima(crsp, max.p=20, max.q=0, ic='aic', approximation=T)
+```
+
+```{r}
+auto.arima(crsp, max.p=20, max.q=0, ic='aic', approximation=F)
+```
+
+## Comments
+
+- With `approximation = F`, the procedure chooses AR(1), while with `approximation = T` the procedure will choose AR(2): the results are different.

@@ -1,0 +1,365 @@
+---
+title: "Homework 5"
+author: "Ze Yang (zey@andrew.cmu.edu)"
+date: "Due Thursday, December 7 at 3:00 PM"
+header-includes:
+   - \usepackage{bbm, bm}
+output: pdf_document
+---
+
+\large
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(quantmod)
+library(fGarch)
+library(ggplot2)
+```
+
+You can submit separate pdf files, one generated from the
+R Markdown, and the other from the "derivations" required
+in Questions 2 and 3. The relevant .Rmd file should also be
+submitted.
+
+__Please do not submit photos of your homework.__ Scanners
+are available for your use.
+
+\vspace{.2in}
+
+__Question 1__ 
+
+Redo the analysis on the Kellogg's data that we did during lecture, but this
+time look at the __weekly__ log returns instead of the daily
+log returns. Show all of the R code needed to perform the analysis.
+
+1. Reconstruct the plot comparing the five fitted models that we
+considered during lecture: normal, GED, nonstandard T, skewed T, and skewed T with shift.
+
+2. Which of the five models is preferred by AIC?
+
+\vspace{.2in}
+
+```{r}
+Kellogg =getSymbols("K", from="2010-1-1",to="2016-12-31", auto.assign=F)
+ldr =data.frame(dailyReturn(Ad(Kellogg), type="log"))
+lwr =data.frame(weeklyReturn(Ad(Kellogg), type="log"))
+```
+
+```{r}
+# generate MLE estimates for different distributional models
+source("http://www.stat.cmu.edu/~cschafer/MSCF/ModelSelectionExample.txt")
+
+# GED
+gedout = FitGED(lwr$weekly.returns)
+names(gedout$mle) = c("mean", "sd", "nu")
+print(gedout$mle)
+
+# non-standard student.t
+nonstdTout = FitNonStdT(lwr$weekly.returns)
+names(nonstdTout$mle) = c("mean", "sd", "nu")
+print(nonstdTout$mle)
+
+# skewed t
+skewtout = FitSkewT(lwr$weekly.returns)
+print(skewtout$mle)
+
+# shifted skewed t
+skewtshiftout = FitSkewT(
+  lwr$weekly.returns,allowshift = T, control=list(maxit=1000))
+names(skewtshiftout$mle) = c("k", "n", "lambda","sigma2","shift")
+print(round(skewtshiftout$mle,6))
+
+# normal
+n = length(lwr$weekly.returns)
+normalout = c(mean(lwr$weekly.returns),
+              sqrt(var(lwr$weekly.returns)*(n-1)/n))
+names(normalout) = c("mean","sd")
+print(normalout)
+
+```
+
+__(1)__
+
+```{r}
+# reproduce the fitted distribution plot
+ggplot(lwr,aes(x=weekly.returns)) + 
+	geom_density(bw="SJ",aes(color="kde")) + 
+	stat_function(fun=dnorm, aes(color="normal"),
+		args=list(
+		  mean=normalout[1], 
+		  sd=normalout[2]
+		)) +
+  stat_function(fun=dged, aes(color="ged"),
+		args=list(
+		  mean=gedout$mle[1], 
+		  sd=gedout$mle[2],
+		  nu=gedout$mle[3]
+		)) +
+  stat_function(fun=dstd, aes(color="nonstdT"),
+		args=list(
+		  mean=nonstdTout$mle[1], 
+		  sd=nonstdTout$mle[2],
+		  nu=nonstdTout$mle[3]
+		)) + 
+  stat_function(fun=dSkewT, aes(color="skewT"),
+		args=list(
+		  k=skewtout$mle[1], 
+		  n=skewtout$mle[2],
+		  lambda=skewtout$mle[3],
+		  sigma2=skewtout$mle[4]
+		)) +
+  stat_function(fun=dSkewT, aes(color="skewTshift"),
+		args=list(
+		  k=skewtshiftout$mle[1], 
+		  n=skewtshiftout$mle[2],
+		  lambda=skewtshiftout$mle[3],
+		  sigma2=skewtshiftout$mle[4],
+		  shift=skewtshiftout$mle[5]
+		)) + 
+  scale_color_manual(name="", 
+  		values=c("kde"="red",
+  		         "normal"="blue", 
+  		         "ged"="yellow",
+  		         "nonstdT"="green",
+  		         "skewT"="cyan",
+  		         "skewTshift"="black")) +
+	labs(x="Log Weekly Return",
+	     title="Data for Kellogg (K)", 
+	     subtitle="January 2010 through December 2016") +
+	scale_y_log10()
+```
+
+__(2)__
+
+```{r}
+aic = function(pdf, sample, params) {
+  #' The Akaike information criterion.
+  #' @param pdf: a density function for which 
+  #'   the likelihood is evaluated.
+  #' @param sample: the observed x sample.
+  #' @param params: the model parameters
+  #' @return The AIC quantity.
+  args = as.list(params)
+  args$x = sample
+  args$log = T
+  log.likelihood = sum(do.call(pdf, args=args))
+  return(-2*log.likelihood + 2*length(params))
+}
+```
+
+
+```{r}
+aic.eval = list(
+  ged=aic(dged, lwr$weekly.returns, gedout$mle),
+  nonstd.t=aic(dstd, lwr$weekly.returns, nonstdTout$mle),
+  skew.t=aic(dSkewT, lwr$weekly.returns, skewtout$mle),
+  skew.t.shift=aic(dSkewT, lwr$weekly.returns, skewtshiftout$mle),
+  normal=aic(dnorm, lwr$weekly.returns, normalout)
+)
+```
+
+```{r}
+aic.eval
+```
+
+Based on the smallest AIC, the best choice of model is the skewed t distribution with shift. The AIC value of that is $-1851.83$.
+
+\vspace{.2in}
+
+---
+
+
+__Question 2__
+
+Consider the example in
+lecture where we estimated the pair $(\alpha, \sigma^2)$ from the geometric
+Brownian motion.
+Suppose that instead I wanted to estimate $(\alpha, \sigma)$, i.e., I want
+to determine the asymptotic distribution of the MLE for this parameter
+vector.
+
+What is the asymptotic distribution of the MLE $(\widehat \alpha, \widehat \sigma)$?
+(Don't just say it's normal. Derive the covariance matrix.)
+
+__Hint:__ This is a simple exercise, don't make this more work than it needs to be.
+Take the result we derived in lecture, and use it
+as a starting point.
+
+Let $Y_i = \log\left(\frac{S(t_{i-1}+\delta t)}{S(t_{i-1})}\right)$ be our observed log return over $[0,T]$, $\delta t = T/n$, $i=1,2...,n$. By the property of GBM:
+$$
+Y_i \sim \text{i.i.d. Normal}(\mu \delta t, \sigma^2 \delta t)
+$$
+Let $\bar{Y} = \sum_{i=1}^n Y_i$ be the sample mean, $s_Y^2 = \frac{1}{n-1}\sum_{i=1}^n (Y_i-\bar{Y})^2$ the sample variance. \\
+By the results we've derived in lecture the MLE for $(\alpha, \sigma^2) = (\mu+\sigma^2/2, \sigma^2)$ is given by:
+\begin{equation}
+  \begin{pmatrix}
+    \hat{\alpha} \\
+    \hat{\sigma}^2
+  \end{pmatrix} = \begin{pmatrix}
+    \frac{\bar{Y}}{\delta t} + \frac{\frac{n-1}{n}s^2_Y}{2\delta t} \\\\[2pt]
+    \frac{\frac{n-1}{n}s^2_Y}{\delta t} 
+  \end{pmatrix} =
+  \begin{pmatrix}
+    \frac{n\bar{Y}}{T} + \frac{(n-1)s_Y^2}{2T} \\\\[2pt]
+    \frac{(n-1)s_Y^2}{T}
+  \end{pmatrix}
+\end{equation}
+And the asymptotic covariance matrix is 
+\begin{equation}
+\frac{\bm{\Sigma}}{n} = \begin{pmatrix}
+  \frac{\sigma^2}{T} + \frac{\sigma^4}{2n} & \frac{\sigma^4}{n} \\\\[2pt]
+  \frac{\sigma^4}{n} & \frac{2\sigma^4}{n}
+\end{pmatrix}  
+\end{equation}
+Now we are intersted in estimating $(\alpha, \sigma)$. We have 
+\begin{equation}
+  (\alpha, (\sigma^2)^{\frac{1}{2}}) = \bm{g}(\alpha, \sigma^2)
+\end{equation}
+\begin{equation}
+  \nabla \bm{g} = \begin{pmatrix}
+    1 & 0  \\\\[2pt]
+    0 & \frac{1}{2}(\sigma^2)^{-\frac{1}{2}}
+  \end{pmatrix}
+\end{equation}
+By the Delta method, the covariance matrix for $(\hat{\alpha}, \hat{\sigma})$ is therefore
+\begin{equation}
+  \nabla \bm{g}\left(\frac{1}{n}\bm{\Sigma}\right)\nabla \bm{g}^{\top} = \begin{pmatrix}
+     \frac{\sigma^2}{T} + \frac{\sigma^4}{2n} & \frac{\sigma^3}{2n} \\\\[2pt]
+      \frac{\sigma^3}{2n} & \frac{\sigma^2}{2n}
+  \end{pmatrix}
+\end{equation}
+And the estimator is
+\begin{equation}
+    \begin{pmatrix}
+    \hat{\alpha} \\
+    \hat{\sigma}
+  \end{pmatrix} =
+  \begin{pmatrix}
+    \frac{n\bar{Y}}{T} + \frac{(n-1)s_Y^2}{2T} \\\\[2pt]
+    \sqrt{\frac{(n-1)s_Y^2}{T}} 
+  \end{pmatrix}\xrightarrow{d} \mathcal{N}\left(\begin{pmatrix}
+    \mu+\frac{1}{2}\sigma^2 \\\\[2pt]
+    \sigma
+  \end{pmatrix},~~\begin{pmatrix}
+     \frac{\sigma^2}{T} + \frac{\sigma^4}{2n} & \frac{\sigma^3}{2n} \\\\[2pt]
+      \frac{\sigma^3}{2n} & \frac{\sigma^2}{2n}
+  \end{pmatrix}\right)
+\end{equation}
+
+
+\vspace{.2in}
+
+
+---
+__Question 3__
+
+Suppose that $X_1, X_2, \ldots,X_n$ are iid random variables. Each $X_i$
+takes three possible values (call these 1, 2, and 3, but the names are
+unimportant). The random variables are such that $$P(X_i = 1) = p_1$$ and
+$$P(X_i = 2) = p_2,$$ and, of course, $$P(X_i = 3) = 1-p_1-p_2.$$
+The restrictions
+\[
+p_1 +  p_2 < 1, \:\:\: p_1 > 0, \:\:\: p_2 > 0
+\]
+are placed on the parameters. (This is a special case of the _multinomial distribution_,
+which is a generalization of the binomial distribution.)
+
+1. Derive the MLE for $\theta = (p_1, p_2)$. (Use calculus. You do not need to verify
+that the Hessian is positive definite.)
+
+2. What is the asymptotic distribution of the MLE $(\widehat p_1, \widehat p_2)$?
+(Don't just say it's normal. Derive the covariance matrix.)
+
+\vspace{.1in}
+__Hint:__ Start by defining $n_j$ to be the number of the $X_i$ which
+are equal to $j$ for $j=1,2,3$. Of course, $n=n_1+n_2+n_3$. The likelihood function
+is then
+\[
+   L(\theta) = p_1^{n_1} p_2^{n_2} (1-p_1-p_2)^{n_3}.
+\]
+
+__Extra Practice:__ Derive a $100(1-\alpha)\%$ confidence interval for $p_1/p_2$.
+
+
+
+\textbf{(a)} The log likelihood function is
+\begin{equation}
+  \log \mathcal{L}(p_1, p_2|X) = n_1 \log p_1 + n_2 \log p_2 + n_3 \log(1-p_1-p_2)
+\end{equation}
+First order condition:
+\begin{equation}
+  \nabla \log \mathcal{L}(p_1, p_2|X) = 
+  \begin{pmatrix}
+    \frac{n_1}{p_1} - \frac{n_3}{1-p_1-p_2} \\\\[2pt]
+    \frac{n_2}{p_2} - \frac{n_3}{1-p_1-p_2}
+  \end{pmatrix} = \bm{0}
+\end{equation}
+solve the system we get:
+\begin{equation}
+  \begin{pmatrix}
+    \hat{p}_1 \\
+    \hat{p}_2
+  \end{pmatrix} = \begin{pmatrix}
+    \frac{n_1}{n}\\
+    \frac{n_2}{n}
+  \end{pmatrix} = \begin{pmatrix}
+    \frac{1}{n}\sum_{i=1}^n \mathbbm{1}_{\{X_i = 1\}}\\\\[2pt]
+    \frac{1}{n}\sum_{i=1}^n \mathbbm{1}_{\{X_i = 2\}}
+  \end{pmatrix}
+\end{equation}
+where $n=n_1+n_2+n_3$. \\
+\textbf{(b)} The Hessian of $\log \mathcal{L}(\bm{p}|X)$:
+\begin{equation}
+  \nabla^2 \log \mathcal{L}(\bm{p}|X) = \begin{pmatrix}
+    \frac{\partial^2 \log \mathcal{L}(\bm{p}|X)}{\partial p_1^2} & \frac{\partial^2 \log \mathcal{L}(\bm{p}|X)}{\partial p_1 \partial p_2}\\[3.5pt]
+    \frac{\partial^2 \log \mathcal{L}(\bm{p}|X)}{\partial p_1 \partial p_2} & \frac{\partial^2 \log \mathcal{L}(\bm{p}|X)}{\partial p_2^2}
+  \end{pmatrix} = 
+  \begin{pmatrix}
+    -\frac{n_1}{p_1^2}-\frac{n_3}{(1-p_1-p_2)^2} & -\frac{n_3}{(1-p_1-p_2)^2}\\\\[3pt]
+    -\frac{n_3}{(1-p_1-p_2)^2}& -\frac{n_2}{p_2^2}-\frac{n_3}{(1-p_1-p_2)^2}
+  \end{pmatrix}
+\end{equation}
+Therefore
+\begin{equation}
+  n\bm{I}(\bm{p}) = \mathbb{E}\left[-\nabla^2 \log \mathcal{L}(\bm{p}|X)\right] = n\begin{pmatrix}
+    \frac{1}{p_1}+\frac{1}{1-p_1-p_2} & \frac{1}{1-p_1-p_2} \\\\[3pt]
+    \frac{1}{1-p_1-p_2} & \frac{1}{p_2}+\frac{1}{1-p_1-p_2} \\
+  \end{pmatrix}
+\end{equation}
+\begin{equation}
+  \frac{1}{n}\bm{I}^{-1}(\bm{p}) = \frac{1}{n}\begin{pmatrix}
+    p_1(1-p_1) & -p_1p_2 \\\\[2pt]
+    -p_1p_2 & p_2(1-p_2)
+  \end{pmatrix}
+\end{equation}
+So by the property of MLE, the asymptotic distribution of $\hat{\bm{p}}$ is
+\begin{equation}
+  \hat{\bm{p}} \xrightarrow{d} \mathcal{N}\left(\begin{pmatrix}
+    p_1 \\
+    p_2
+  \end{pmatrix},~~~\frac{1}{n}\begin{pmatrix}
+    p_1(1-p_1) & -p_1p_2 \\\\[2pt]
+    -p_1p_2 & p_2(1-p_2)
+  \end{pmatrix}\right)
+\end{equation}
+\textbf{(c)} Let $f(p_1, p_2) = p_1/p_2$. Then
+\begin{equation}
+  \nabla f(\bm{p}) = \begin{pmatrix}
+    \frac{1}{p_2} & -\frac{p_1}{p_2^2}
+  \end{pmatrix}
+\end{equation}
+By the Delta method, the asymptotic variance of $f$ is
+\begin{equation}
+  V = \nabla f(\bm{p})\left(\frac{1}{n}\bm{I}^{-1}(\bm{p})\right)\nabla f(\bm{p})^{\top} = \frac{p_1(p_1+p_2)}{np_2^3}
+\end{equation}
+Hence
+\begin{equation}
+  f(\hat{\bm{p}}) = \frac{\hat{p}_1}{\hat{p}_2} \xrightarrow{d} \mathcal{N}\left(\frac{p_1}{p_2}, \frac{p_1(p_1+p_2)}{np_2^3}\right)
+\end{equation}
+And of course one can replace $\bm{p}$ with $\hat{\bm{p}}$ to get an approximation of the asymptotic covariance matrix using the data, where $\hat{p}_k = n_k/n = \frac{1}{n}\sum_{i=1}^n 1_{\{X_i=k\}}$, $k=1,2,3$.
+
+The $100(1- \alpha)\%$ confidence interval is therefore (approximately, by replacing $\bm{p}$ with $\hat{\bm{p}}$)
+\begin{equation}
+  CI(f(\bm{p}); \alpha) = \left[ \frac{\hat{p}_1}{\hat{p}_2} - z_{\frac{\alpha}{2}}\sqrt{\frac{\hat{p}_1(\hat{p}_1+\hat{p}_2)}{n\hat{p}_2^3}},~~~\frac{\hat{p}_1}{\hat{p}_2} + z_{\frac{\alpha}{2}}\sqrt{\frac{\hat{p}_1(\hat{p}_1+\hat{p}_2)}{n\hat{p}_2^3}}\right]
+\end{equation}
+Where $\hat{p}_k = n_k/n = \frac{1}{n}\sum_{i=1}^n 1_{\{X_i=k\}}$, $k=1,2,3$.

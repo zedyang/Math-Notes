@@ -1,0 +1,303 @@
+---
+title: "Homework 1"
+author: "Ze Yang (zey@andrew.cmu.edu)"
+date: "Due Tuesday, September 5 at 5:30 PM"
+output: pdf_document
+---
+
+\large
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE}
+require(RUnit)
+```
+
+
+You should submit the Rmd file with your answers in the
+appropriate spaces. Rename the file as `YOURANDREWID_HW1.Rmd`
+and submit it via Canvas. You should also "Knit" the `.Rmd`
+file and submit the resulting file `YOURANDREWID_HW1.pdf` as well.
+
+Of course, any code that is written should be tested. In each
+case you are requested to include some examples showing that
+your code works. Think about how your example(s) can illustrate 
+the range of possibilities that the code could face.
+
+\vspace{.2in}
+
+---
+
+1. Suppose that `frameex` is a data frame. Write a single line of
+R code that returns a logical vector of length equal to the number of
+rows in `frameex`. The value should be `TRUE` if the corresponding
+row is __complete__, i.e., it has no `NA` values. If there is at least
+one `NA` value in the row, then the value should be `FALSE`.
+
+- **Solution**:
+```{r}
+is.complete.row = function(frame) {
+  #' Create indicator vactor indicating whether each
+  #' row of data frame contains no NA.
+  #' @param frame: data.frame object.
+  #' @return a logical vector of length equal to \code{nrow(frame)}
+  #' \code{TRUE} at i-th position meaning i-th row of frame has no NA.
+  
+  # is.na(frame) returns a data.frame of the same shape, with
+  # TRUE entry indicating corresponding entry is NA in frame.
+  # A row is complete if the corresponding row in is.na(frame) has
+  # no TRUE. So the row should sums to zero.
+  return(rowSums(is.na(frame)) == 0)
+}
+
+# Create some test cases.
+test.frame.1 = data.frame()
+test.frame.2 = data.frame(
+  letter.grades = c(NA, "A", NA, "B", "B", "A"),
+  id = c(1, 2, 3, 4, 5, NA)
+)
+test.frame.3 = data.frame(
+  letter.grades = c(NA, "A", NA, "B", "B", "A"),
+  grades = c(0, 90, NA, 85, 87, Inf)
+)
+```
+
+```{r}
+is.complete.row(test.frame.1)
+
+is.complete.row(test.frame.2)
+
+# Inf is not treated as NA.
+is.complete.row(test.frame.3)
+```
+
+
+---
+
+2. Suppose that `x` and `y` are both
+vectors, and I want to find the first instance of
+__any__ entry in `x` appearing in `y`. Write R code
+to do this. Be careful about `NA` values. If no element
+of `x` is in `y`, the value should be `NA`.
+For example, if `x=c(1,2,3)` and `y=c(4,2,1)`, then the
+code should return `2` because the second position in `y` is
+the first to contain an element that is in `x`.
+__Hint:__ One approach is to use `match()` and `sort()`.
+
+
+
+- **Solution**:
+```{r}
+first.match = function(x, y) {
+  #' @param x,y: two vectors.
+  #' @return The position of the entry in y which is the first
+  #' to match some entry in x. Return NA if no entry in y matches
+  #' any entry of x.
+  return(sort(match(x,y,incomparables=NA),na.last=TRUE)[1])
+}
+
+# create some test cases
+x.1 = c(1, 2, 4, 8)
+y.1 = c(0, 4, 8)
+x.2 = c()
+y.2 = c(1, 2)
+x.3 = c(1, 2)
+y.3 = c()
+x.4 = c()
+y.4 = c()
+x.5 = c(NA, 1, 2)
+y.5 = c(7, 8, 9, 10, 1)
+x.6 = c(NA, 1, NA)
+y.6 = c(NA, NA, 8, 9, 10, 1)
+```
+
+```{r}
+first.match(x.1, y.1) # expected 2
+first.match(x.2, y.2) # expected NA
+first.match(x.3, y.4) # expected NA
+first.match(x.4, y.4) # expected NA
+first.match(x.5, y.5) # expected 5
+first.match(x.6, y.6) # expected 6
+```
+
+---
+
+3. What does R do in a case when a reference is made to a 
+position that is beyond the range of a vector? For example,
+if `x=c(1,2,3)`, and reference is made to `x[4]`?
+
+- **Answer**: The reference to a position beyond the range of the vector gets an `NA`.
+- **Example**:
+```{r}
+# illustrate R's behavior for indices out of bound.
+x = c(1,2,3)
+x[c(1:10)]
+```
+
+
+---
+
+4. Suppose that `n` and `m` are both positive integers. Write
+a single line of R code that creates a `n` by `m` matrix
+whose $j^{th}$ column is filled with $j$.
+
+- **Solution**:
+```{r}
+fill.column.matrix = function(n, m) {
+  #' Create a n by m matirx
+  #' row of data frame contains no NA.
+  #' @param n: number of rows.
+  #' @param m: number of columns.
+  #' @return the required matrix.
+  
+  # Slightly modify the "fill.row" we discussed in class
+  # by replacing rep(..., times) with rep(..., each).
+  # 
+  # This approach has a flaw: when m=0, n=1, it returns
+  # [[1, 0]] in stead of empty matrix. Since 1:0 is interpreted
+  # as a decreasing sequence from 1 to 0.
+  # 
+  # We have to wrap it in a if-else condition to rule out this anomaly.
+  return(if(m!=0) matrix(rep(1:m, each=n), nrow=n) 
+         else matrix(integer(0),nrow=0))
+}
+
+fill.column.matrix(0,0)
+fill.column.matrix(0,1)
+# Anomalous case! Expect <0 * 0 matrix> here.
+matrix(rep(1:0, each=1), nrow=1)
+# Modified version
+fill.column.matrix(1,0)
+fill.column.matrix(1,8)
+fill.column.matrix(8,1)
+fill.column.matrix(6,5)
+
+
+```
+
+---
+
+5. What does R do in a case where `cbind()` is used in an 
+attempt to join two matrices that have different numbers of
+rows?
+- **Answer**: The code won't compile, `cbind()` throws an exception saying the dimensions are incompatible.
+- **Example**:
+```{r}
+# illustrate cbind's behavior for incompatible dimensions.
+A = matrix(1:10, nrow=2)
+B = matrix(1:12, nrow=3)
+print(A)
+print(B)
+tryCatch(cbind(A,B), error=function(e){print(e)})
+```
+
+---
+
+6. Suppose that `factex` is a vector, and a __factor__. The
+levels of this factor are `a`, `b`, and `c`. Does it make
+sense to write `factex >= "b"`? __Be careful!__ Explain your
+response clearly.
+
+- **Answer**: The comparison is meaningful if and only if `factex` is specified as `ordered = T`. If the vector of factors is specified as *unordered*, then the comparison is meaningless. The code will still compile but throw a warning, and comparison results will be `NA`.
+- **Example**:
+```{r}
+factex = factor(c('a', 'b', 'c', 'a', 'b'), 
+                levels=c('a','b','c'), ordered = T)
+factex >= 'b'
+
+factex.unordered = factor(c('a', 'b', 'c', 'a', 'b'), 
+                          levels=c('a','b','c'), ordered = F)
+factex.unordered >= 'b'
+```
+
+---
+
+7. If you construct a data frame from a matrix, but do not
+supply names for the variables, what does R do?
+
+- **Answer**: The `data.frame` will generate default names, called `X1, X2, ..., Xm`, through the m-th column of the matrix. These names can be used in the usual way.
+- **Example**:
+```{r}
+test.matrix = matrix(c(1:16), ncol=4)
+test.frame.4 = data.frame(test.matrix)
+test.frame.4
+```
+
+```{r}
+str(test.frame.4)
+```
+
+```{r}
+test.frame.4$X2
+```
+
+
+
+
+---
+
+8. Give at least three ways a data frame differs from a matrix.
+
+- `matrix` is more *homogeneous*, all entries must be of the same type. When consturcted with different data types, it tries to coerce them to the same type. Columns of `data.frame` can be of different types.
+- Given same data, `matrix` is more memory efficient than `data.frame`.
+- `matrix` supports a variety of arithmetic operators that are involved in linear algebra, `data.frame` does not.
+- `data.frame` has an embedded list-of-vectors structure, while `matrix` does not. So they have different selecting/subsetting methods.
+
+```{r}
+M = cbind(c(1,2,3), c('s','m','b'))
+colnames(M) = c('col1', 'col2')
+```
+
+
+---
+
+9. Explore the function `unique()`. How could you use this
+function to remove redundant __columns__ in a matrix or
+data frame?
+
+- **Solution**:
+```{r}
+remove.duplicate.cols = function(data) {
+  #' Remove the duplicate columns of a 2 dimensional data set.
+  #' @param data: matrix or data.frame
+  #' @return data with its duplicate columns removed.
+  
+  if(class(data) == "matrix") {
+    return(unique(data, MARGIN=2))
+  } else if(class(data) == "data.frame") {
+    t(unique(t(data), MARGIN=1))
+  } else {
+    return(data)
+  }
+}
+
+# create some test cases
+test.matrix.2 = cbind(c(1,2,3,4), c(1,2,3,4), c(2,3,4,5), 
+                      c(3,5,6,6), c(3,5,6,6))
+test.frame.5 = data.frame(
+  col1 = c(1,1,3,4),
+  col2 = c(2,2,4,5),
+  col3 = c(1,1,3,4),
+  col4 = c(3,5,6,6),
+  col5 = c(2,2,4,5),
+  col6 = c(3,5,6,6)
+)
+
+test.matrix.2
+remove.duplicate.cols(test.matrix.2)
+
+test.frame.5
+remove.duplicate.cols(test.frame.5)
+```
+
+
+
+
+
+
+
+
+
+

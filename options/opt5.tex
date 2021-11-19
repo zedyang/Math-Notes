@@ -1,0 +1,328 @@
+\documentclass[10 pt]{hwtemplate} % Use the custom resume.cls style
+
+%-------------------------------------------------------------------------------
+% Document begins
+%-------------------------------------------------------------------------------
+
+\title{\textbf{Options Assignment 5}}
+\author{Sidi (Sindy) Liu (\textit{sidil1@andrew.cmu.edu}); \\ Ze Yang (\textit{zey@andrew.cmu.edu})}
+
+\begin{document}
+\maketitle
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\textbf{Problem. 17} 
+\begin{solution} We establish the following SDE system to simulate interest rate dynamics:
+\begin{equation}
+\begin{split}
+	&r_t = r_t^* \mathbbm{1}_{\{f_t \leq r^*_{t}\leq m_t\}} + f_t \mathbbm{1}_{\{r^*_t < f_t\}} + m_t \mathbbm{1}_{\{r^*_t > m_t\}}\\
+	&dr^*_t = \mathbbm{1}_{\{r^*_t < f_t\}} \alpha(f_t - r^*_t)dt + \mathbbm{1}_{\{r^*_t > m_t\}} \alpha(m_t - r^*_t)dt + \sigma dW_t\\
+	&f_t = \begin{cases}
+	f_0\qquad\qquad\qquad\qquad\quad~~~ t\leq \frac{1}{12}\\
+	f_{t-\frac{1}{12}} + \gamma \mathbbm{1}_{A_t} - \gamma \mathbbm{1}_{B_t} \qquad t > \frac{1}{12}
+	\end{cases}\\
+	&m_t = f_t + b\\
+	&A_t:= \bigcap_{s \in [t-\frac{1}{12}, t)} \{r^*_s > m_s\};~~~~B_t:= \bigcap_{s \in [t-\frac{1}{12}, t)} \{r^*_s < f_s\}
+\end{split}	
+\end{equation}
+Where $r_t$ is the interest rate under FED's control, $r_t \in [f_t, m_t]$, $m_t$ and $f_t$ are the rate ceiling and floor. $r^*_t$ is the shadow spot rate. $W_t$ is a wiener process, the unit of time is year.\\
+We choose parameters as suggested in the problem:
+\begin{itemize}
+	\item[$\cdot$] $b = 1\%$ is the band width.
+	\item[$\cdot$] $\sigma = 0.005$ is the annualized local volatility.
+	\item[$\cdot$] $\alpha = 12$ is the mean-reversion speed.
+	\item[$\cdot$] $\gamma = 0.25\%$ is the one-time band adjustment by FED.
+	\item[$\cdot$] $f_0 = 4.75$ and $m_0 = 5.75$ are arbitrarily chosen. 
+\end{itemize}
+
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{Interest Rate Simulation}
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=0.45]{figures/fig1.png}
+\end{figure}
+\end{solution}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\textbf{Problem. 24} 
+\begin{solution} \textbf{(a)}
+We first calcuate $u,d$, with CRR calibration:
+\begin{equation}
+  u = e^{\sigma \sqrt{t}}=1.2214;~~~~d = e^{-\sigma \sqrt{t}}=0.8187
+\end{equation}
+The state prices are
+\begin{equation}
+  \pi_u = \frac{R-d}{R(u-d)} = 0.5377;~~~~  \pi_d = \frac{u-R}{R(u-d)} = 0.4192
+\end{equation}
+Denote value of company, bond (prior to coupon payment), and equity as $V, B, E$ respectively. Let the face value and coupon rate of bond be $F$ and $c$. We have:
+$$
+B_t = \begin{cases}\min(V_T, F(1+c)) & t=T\\
+\pi_u B_{t+1, u}+\pi_d B_{t+1, d} & 0\leq t< T
+\end{cases}
+$$
+Hence
+$$
+E_t =\begin{cases}\max(0, V_T - F(1+c)) & t=T \\
+V_t -B_t & 0\leq t< T
+\end{cases}
+$$
+We assume that $\{V_t\}$ evolves by the binomial tree model. Denote $V_t^{[cum]}$ as cum dividend cum interest value, $V^{[ex]}$ as ex dividend ex interest value, we have:
+\begin{equation}
+  \begin{split}
+     &V_t^{[ex]} = V_t^{[cum]}(1-q) - Fc\\
+     &V_{t,u}^{[cum]} = uV_{t}^{[ex]}\\
+     &V_{t,d}^{[cum]} = dV_{t}^{[ex]}
+  \end{split}
+\end{equation}
+The company value at time $0$ is the sum of market values of bonds and equities
+$$
+V_0 = E_0 + B_0 = 752~~\text{million}
+$$
+We then calculate the fair price of bonds and equity via binomial pricing. See the following table.
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{Binomial Pricing for Capital Structure Arbitrage}
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=0.78]{figures/fig2.png}
+\end{figure}
+We saw the AFP for bonds and equities are:
+\begin{equation}
+	\begin{split}
+		E_{AFP} = 278.8804 < E_{market} = 297 \\
+		B_{AFP} = 473.1120 > B_{market} = 455
+	\end{split}
+\end{equation}
+So we believe the \textbf{Equities} are overpriced, and \textbf{Bonds} are underpriced, both by the amount of 18.11196 million.\\
+~\\
+\textbf{(b)} Since We believe the \textbf{Equities} are over-priced relative to bonds, we will short stock and long bond. Our portfolio is structured as
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{Capital Structure Arbitrage Portfolio}
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=0.7]{figures/fig3.png}
+\end{figure}
+At time 0, we long 1 million face of Corporate bond, which is financed by shorting 849.88 shares and shorting 1.040586 million dollars in T-Bills. This portfolio has a net 40948.47 dollars cash inflow at $t=0$. And at $t=1$, the total value will be sure to become 0, hence we close all positions without cost, and take a 
+$$
+\Pi = 40948.47 ~~\$
+$$
+riskless profit.\\
+~\\
+\textbf{(c)} The accuracy of our volatility estimate will definitely affect the outcome of this trade, in that the amount in which the stock is over-priced relative to bonds is a function of real volatility. 
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{Outcomes for different real volatility}
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=0.6]{figures/fig4.png}
+\end{figure}
+\begin{itemize}
+	\item[$\cdot$] If $\sigma = 0.2$, then the stocks are overpriced by exactly the amount as we predicted. So our portfolio will make exactly a PnL of $\Pi = 40948.47$ dollars.
+	\item[$\cdot$] If $\sigma < 0.2$, say $\sigma=0.1$, this will be a ``good'' situation for us, as the stocks are overpriced by more than the predicted amount. So our PnL will be greater. In the $\sigma=0.1$ case, our PnL will be state-dependent:
+	$$
+	\Pi_u = 44325.08~\$,~~~~~~\Pi_d = 50144.88~\$
+	$$
+	\item[$\cdot$] If $\sigma > 0.2$, say $\sigma=0.3$, this will be a ``bad'' situation for us, as the stocks are overpriced by more than the predicted amount. So our PnL will be smaller, and it's possible to have a negative PnL, i.e. we'll lose money if we close all the positions at $t=1$. In the $\sigma=0.3$ case, our PnL will be state-dependent:
+	$$
+	\Pi_u = 37216.76~\$,~~~~~~\Pi_d = -53573.02~\$
+	$$
+\end{itemize}
+If the relative mispricing instead worsens over the next year, then closing out all the positions will incur a negative PnL. Indeed, if I choose to hold on to my potitions until the relative mispricing is finally corrected, then I will recover from this drawdown at year 1. However, since I was forced to close out all positions due to a margin call, the loss is inevitable.
+\end{solution}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\textbf{Problem. 27} 
+\begin{solution} Let $n, d$ be our two states (no-default, default), let $B(t,s)$ be the bond value at time $t$, state $s$, par $F$, let $CDS(t,s)$ be the value of CDS at time $t$, state $s$, premium $X$ and default payment $P$. Using binomial model, we have
+$$
+B(t,s) = \begin{cases}
+\pi_n B(t+1,n) + \pi_d B(t+1,d)+ 0.07F & s=n, 0<t<T\\
+\pi_n B(t+1,n) + \pi_d B(t+1,d) & t=0\\
+ 0.7F & s=d\\
+ 1.07F & s=n, t=T
+\end{cases}
+$$
+and
+$$
+CDS(t,s) = \begin{cases}
+\pi_n CDS(t+1,n) + \pi_d CDS(t+1,d) - X & s = n, 0<t\leq T \\
+\pi_n CDS(t+1,n) + \pi_d CDS(t+1,d)  & t=0 \\
+P & s=d
+\end{cases}
+$$
+We first calibrate state prices such that the model bond price is equal to the market value, i.e. finding $\pi_n, \pi_d$ such that $B(0) = 465$. We get
+$$
+\pi_n=0.7461;~~~~~ ~~~~\pi_d = 0.2224
+$$
+Then we solve for premium $X$ such that the CDS worth 0 at time $0$, we find
+$$
+X = 2.9806
+$$
+Therefore, the quoted premium after markup is
+$$
+X^* = X(1+0.0025) = 2.9880
+$$
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{Credit Default Swap Valuation}
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=0.65]{figures/fig5.png}
+\end{figure}
+
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\textbf{Problem. 34} 
+\begin{solution} 
+\textbf{(1)} ~\\
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{B-S call price surface}
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=0.68]{figures/fig8.png}
+\end{figure}
+~\\
+\textbf{Intuition:}
+\begin{itemize}
+  \item Fix $T-t$, the call price $\nearrow$ with $S_t \nearrow$, simply because the payoff of the call, $(S_T-K)^+$ is positively related with $S_T$, and higher $S_t$ is likely to evolve into higher $S_T$ given fixed time to maturity.
+  \item Fix $S_t$, the call price $\nearrow$ with $T-t \nearrow$. Longer time to maturity means that there is more untertain variation in the final stock price at $S_T$, due to the ``symmetry'' of brownian motion, the probability of going up is same as the probability of going down. The upside extreme variation will cause high option payoff, while the downside extreme variation will \textbf{NOT} cause negative payoff, since $(S_T- K)^+$ has a limited downside risk. Therefore, longer time to maturity $\Rightarrow$ more variation in stock $\Rightarrow$ higher value of call.
+\end{itemize}
+\textbf{(2)} 
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{B-S call Delta surface}
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=0.68]{figures/fig9.png}
+\end{figure}
+~\\
+\textbf{Intuition:}
+\begin{itemize}
+  \item Fix $T-t$, $\Delta$ $\nearrow$ with $S_t \nearrow$. In Black-Scholes framework with no dividend, the value of $\Delta$ is exactly
+  $$
+  \mathbb{P}\left(\text{The option is in the money at maturity}\right)
+  $$ 
+  For sure, higher $S_t$ $\Rightarrow$ higher in-the-moneyness of the option $\Rightarrow$ more likely to expire in the money $\Rightarrow$ higher $\Delta$.
+  \item Fix $S_t$, $\Delta$ \textbf{steepens} around the center $K$, with $T-t \nearrow$. In particular when $T-t=0$, $\Delta$ converges to the \textit{Heaviside Step Function}, i.e.
+  $$
+  \Delta(S; T-t=0) = \mathbbm{1}_{\{S>K\}}
+  $$
+  This is still due to the meaning of Delta as the probability of the option expires in the money. If $T-t=0$, whether or not the option expires in the money is deterministic: it's just $\mathbbm{1}_{\{S_T>K\}}$. On the otherhand if time to maturity is long, there will be much variation in the stock price, and one is not sure about whether or not the option will expire in-the-money. Therefore the curve of $\Delta$ flattens around $K$.
+\end{itemize}
+\textbf{(3)} 
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{B-S call Gamma surface}
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=0.62]{figures/fig10.png}
+\end{figure}
+~\\
+\textbf{Intuition:}
+\begin{itemize}
+  \item Fix $T-t$, $\Gamma$ first goes up, then goes down with $S_t \nearrow$. In particular, it peaks up around $K$. The plot of $\Gamma$ can be figured out by its definition: the derivative of $\Delta$ with respect to $S$. Since $\Delta \nearrow$ with $S$ $\Rightarrow$ $\Gamma$ is always positive. Since $\Delta$ is the steepest around $K$ $\Rightarrow$ $\Gamma$ peaks up around $K$.
+  \item Fix $S_t$, $\Gamma$ \textbf{peaks higher} around the center $K$, with $T-t \nearrow$. In particular when $T-t=0$, $\Delta$ converges to the \textit{Dirac $\delta$} function, i.e.
+  This is still due to the meaning of Delta as the probability of the option expires in the money. Once again, such behavior is clear when we regard $\Gamma$ as the derivative of $\Delta$. Since $\Delta$ flattens with longer time to maturity $\Rightarrow$ $\Gamma$ also flattens. Since $\Delta$ steepens around $K$ with shorter time to maturity, and converges to \textit{Heaviside Step Function} when $T-t\to0$ $\Rightarrow$ $\Gamma$ peaks up higher around $K$ with shorter time to maturity, and converges to the derivative of Heaviside function, which is the Dirac's Delta function when $T-t\to 0$.
+\end{itemize}
+
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\textbf{Problem. 36} 
+\begin{solution} \textbf{(a)} In the Black-Scholes world, the price of any derivatives is a function of only 2 \textit{variables}: the underlying price $S_t$ and time $t$. While there are many other factors that affect the option valuation, like $\sigma$, $r$, and contractual terms, these are characterized as \textit{constants}. Therefore, there is no risk associated with other factors other than $S_t$ and $t$. \\
+To this end we can use Ito's lemma, the value of any option $c = c(t,S_t| \sigma, r, K ,T,...) = c(t,S_t)$
+$$
+dc(t,S_t) = \frac{\partial c}{\partial t} dt + \frac{\partial c}{\partial S} dS_t + \frac{1}{2} \frac{\partial^2 c}{\partial S^2} dS_t^2
+$$
+Therefore, the change of option price only depends on $\frac{\partial c}{\partial t}, \frac{\partial c}{\partial S}, \frac{\partial^2 c}{\partial S^2}$. In other words, only these greeks are priced.\\
+~\\
+\textbf{(b)}
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{Portfolio Greeks}
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=0.68]{figures/fig6.png}
+\end{figure}
+\begin{itemize}
+	\item[$\cdot$] To add 1 $\Delta$ to portfolio without changing any other priced greek of the portfolio, we can buy 1 stock. So the price of 1 Delta is $S= 41$.
+	\item[$\cdot$] To add 1 $\Theta$ to portfolio without changing any other priced greek of the portfolio, we can buy $1/r$ dollars of bond.  So the price of 1 Theta is $1/r = 33.333$.
+	\item[$\cdot$] To add 1 $\Gamma$ to the portfolio without changing any other priced greek of the portfolio, we can buy a Delta and Theta hedged options that has Gamma of 1. See the table above. The cost of this trade is the price of 1 Gamma, which is $3432.04$ dollars. 
+\end{itemize}
+\end{solution}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\textbf{Problem. 38} 
+\begin{solution} We looked at the option chain of SPDR S\&P500 ETF that expires at Feb.16 2018, approximately 3 months from now.\\
+~\\
+The SPY price is around 265.73 as of Dec.9 2017. And the call option prices that corresponds to different strikes are listed in the table. We solve the Black-Scholes implied volatility, and display them in a plot. We can observe that there we have volatility skew in this option chain. The option price with higher strike implies a lower volatility around $5.55\%$, while the option price with lower strike implies a higher volatility around $6.40\%$
+
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{SPDR S\&P500 ETF Options}
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=0.68]{figures/fig7.png}
+\end{figure}
+
+% Table generated by Excel2LaTeX from sheet 'Sheet2'
+\begin{table}[htbp]
+  \centering
+  \caption{BS Implied Volatility Skew}
+    \begin{tabular}{lrrr}
+    \toprule
+    Option Chain &       &       &  \\
+    Name  & \multicolumn{1}{l}{Strike} & \multicolumn{1}{l}{Mkt Price (Mid)} & \multicolumn{1}{l}{BS Implied Vol} \\
+    \midrule
+    SPY Feb 16'18 262-Call & 262   & 6.25  & 0.0640 \\
+    SPY Feb 16'18 263-Call & 263   & 5.65  & 0.0654 \\
+    SPY Feb 16'18 264-Call & 264   & 4.85  & 0.0621 \\
+    SPY Feb 16'18 265-Call & 265   & 4.16  & 0.0603 \\
+    SPY Feb 16'18 266-Call & 266   & 3.58  & 0.0597 \\
+    SPY Feb 16'18 267-Call & 267   & 3.03  & 0.0587 \\
+    SPY Feb 16'18 268-Call & 268   & 2.48  & 0.0569 \\
+    SPY Feb 16'18 269-Call & 269   & 2.01  & 0.0555 \\
+    \bottomrule
+    \end{tabular}%
+  \label{tab:addlabel}%
+\end{table}%
+
+Then we calibrate a local volatility model that matches Monte-Carlo price to market prices. We choose the model in the functional form of
+$$
+v(t, S_t) = a + bS_t + ct
+$$
+And obtain parameter estimates: 
+\begin{equation}
+	\begin{split}
+	&\hat{a} = 1.5244 \\
+	&\hat{b} = -0.0055 \\
+	&\hat{c} = 0.4565
+\end{split}
+\end{equation}
+I.e. the volatility tends to increase with time, and increase when the underlying price drops.
+\end{solution}
+
+\end{document}

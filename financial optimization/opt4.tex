@@ -1,0 +1,154 @@
+\documentclass[a4paper, 8pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz, array, eurosym}
+\usepackage{float}
+\renewcommand{\arraystretch}{1.4}
+\newcolumntype{L}{>{\arraybackslash}m{10cm}}
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+\title{\textbf{Optimization Assignment 4}}
+\author{Ze Yang~~~~(zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} \textbf{(a)} Selecting stocks with highest volatilities yield a selection of 
+\begin{itemize}
+	\item[$\cdot$] Non-Zero Indices: (4, 6, 13, 14, 18)
+	\item[$\cdot$] Tickers: (DGX, STZ, NTAP, LH, XTO)
+	\item[$\cdot$] Weights: (0.2219, 0.2182, 0.2443, 0.1283, 0.1873)
+	\item[$\cdot$] Minimum tracking error: 698.193
+\end{itemize}
+~\\
+\textbf{(b)} Forward selection yields:
+\begin{itemize}
+	\item[$\cdot$] Non-Zero Indices: (1, 4, 7, 8, 17)
+	\item[$\cdot$] Tickers: (NE, DGX, TIF, SVU, MKC)
+	\item[$\cdot$] Weights: (0.1999, 0.1747, 0.1401, 0.2638, 0.2215)
+	\item[$\cdot$] Minimum tracking error: 77.237
+\end{itemize}
+~\\
+\textbf{(c)} Tree searching with forward selection pruning yields:
+\begin{itemize}
+	\item[$\cdot$] Non-Zero Indices: (1, 4, 7, 8, 16)
+	\item[$\cdot$] Tickers: (NE, DGX, TIF, SVU, FDO)
+	\item[$\cdot$] Weights: (0.1968, 0.1896, 0.1368, 0.2854, 0.1914)
+	\item[$\cdot$] Minimum tracking error: 72.792
+\end{itemize}
+\end{problem}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} \textbf{(a)} It suffices to show $x_i(\bm{Vx})_i$ is a constant (not a function of $i$). Let $\bm{\theta}=(1/\sigma_1~~1/\sigma_2~~...~~1/\sigma_n)^{\top}$; then $\bm{x}$ can be rewritten as $\bm{x}=c\bm{\theta}$, where $c=1/\sum_1^n(1/\sigma_k)$ is also a scalar constant. Hence
+\begin{equation}
+	\bm{Vx} = c\left(\rho \bm{\sigma}\bm{\sigma}^{\top} + (1-\rho)\text{Diag}\{ \bm{\sigma} \}^2\right) \bm{\theta}=\left(1-\rho+n\rho \right)c\bm{\sigma}
+\end{equation}
+\begin{equation}
+	x_i(\bm{Vx})_i = \frac{c}{\sigma_i}\cdot \left(1-\rho+n\rho\right)c\sigma_i = \left(1-\rho+n\rho\right)c^2~~~\forall~i=1,...,n
+\end{equation}
+Therefore, $RC_i(\bm{x}) = RC_j(\bm{x}) = \left(1-\rho+n\rho\right)c^2 / \sqrt{\bm{x}^{\top} \bm{V} \bm{x}}$. \\
+~\\
+\textbf{(b)} Recall from homework 3, by Woodbury formula:
+\begin{equation}
+	\bm{V}^{-1} = \frac{1}{1-\rho}\text{Diag}(\bm{\theta})^2 - \frac{\rho}{(1-\rho)(1-\rho+n\rho)} \bm{\theta}\bm{\theta}^{\top}
+\end{equation}
+It's easy to verify:
+\begin{equation}
+	\bm{V}^{-1} \bm{\sigma} = \left(\frac{1}{1-\rho}- \frac{n\rho}{(1-\rho)(1-\rho+n\rho)}\right) \bm{\theta} =\frac{1}{1-\rho+n\rho} \bm{\theta}
+\end{equation}
+Also note that the maximum diversification problem has exactly the same mathematical form as the maximum Sharpe ration problem, with $\bm{\sigma}$ in place of $\bm{\mu}$. By the solution of homework 3, the solution to it is:
+\begin{equation}
+	\bm{x}^* = \frac{1}{\bm{1}^{\top} \bm{V}^{-1} \bm{\sigma}} \bm{V}^{-1} \bm{\sigma} = \frac{\bm{\theta}}{\bm{1}^{\top} \bm{\theta}} = \frac{1}{\sum_{k=1}^n \frac{1}{\sigma_k}} \bm{\theta}
+\end{equation}
+Which is exactly: $\bm{x}_i^* = \frac{1}{\sum_{k=1}^n \frac{1}{\sigma_k}} \frac{1}{\sigma_i}$
+\end{problem}
+~\\
+~\\
+\textbf{(3)} By definition of risk parity:
+\begin{equation}
+	RC_i(\bm{x}) =  \frac{x_i (\bm{Vx})_i}{ \sqrt{\bm{x}^{\top} \bm{V}\bm{x}}} = \frac{\sqrt{\bm{x}^{\top} \bm{V}\bm{x}}}{n}
+\end{equation}
+Therefore, $x_i$ satisfies:
+\begin{equation}
+	x_i = \frac{\bm{x}^{\top} \bm{V} \bm{x}}{n(\bm{Vx})_i} =  \frac{1}{n\beta_i}
+\end{equation}
+Since $\bm{x}$ is fully invested: $\bm{1}^{\top} \bm{x} = \sum_{k=1}^n \frac{1}{n\beta_k} = 1 \Rightarrow \sum_{k=1}^n \frac{1}{\beta_k} = n$. Therefore:
+\begin{equation}
+	x_i =  \frac{1}{n\beta_i} = \frac{1}{\sum_{k=1}^n \frac{1}{\beta_k}}\frac{1}{\beta_i}
+\end{equation}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} \textbf{(a)} Denote the Lagrangian relaxation problem (LR); let the feasible region for (SC) and (LR) be $D_{\text{SC}}, D_{\text{LR}}$ respectively. We have $D_{\text{SC}}\subseteq D_{\text{LR}}$. \\
+Define $f_{\bm{x,y}}(\bm{u}):=\sum_{i=1}^n \sum_{j=1}^n \rho_{ij}x_{ij}+\sum_{i=1}^n u_i\left(1-\sum_{j=1}^n x_{ij}\right)$; clearly, $f_{\bm{x,y}}(\bm{u})$ is affine in $\bm{u}$ for any $(\bm{x}, \bm{y}) \in D_{\text{LR}}$. The Lagrange (partial) dual function can be written as, in terms of $f$:
+\begin{equation}
+	L(\bm{u}) = \underset{\bm{x,y} \in D_{\text{LR}}}{\text{max}} ~f_{\bm{x,y}}(\bm{u})
+\end{equation}
+Consider for $\lambda\in [0,1]$, and arbitrary $(\bm{x}, \bm{y}) \in D_{\text{LR}}$:
+\begin{equation}
+	\begin{split}
+		f_{\bm{x}, \bm{y}}(\lambda\bm{u}_1 + (1- \lambda) \bm{u}_2) & \leq  \lambda f_{\bm{x}, \bm{y}}(\bm{u}_1) + (1- \lambda)f_{\bm{x}, \bm{y}}(\bm{u}_2)\qquad(\text{convexity of } f_{\bm{x,y}})\\
+		&\leq \underset{\bm{x}', \bm{y}' \in D_{\text{LR}}}{\text{max}} \big[\lambda f_{\bm{x}', \bm{y}'}(\bm{u}_1) + (1- \lambda)f_{\bm{x}', \bm{y}'}(\bm{u}_2)\big] \\
+		&\leq \underset{\bm{x}', \bm{y}' \in D_{\text{LR}}}{\text{max}} \lambda f_{\bm{x}', \bm{y}'}(\bm{u}_1) + \underset{\bm{x}', \bm{y}' \in D_{\text{LR}}}{\text{max}}(1- \lambda)f_{\bm{x}', \bm{y}'}(\bm{u}_2)\\
+		&= \lambda L(\bm{u}_1) + (1- \lambda)\lambda L(\bm{u}_2)
+	\end{split}
+\end{equation}
+This holds for arbitrary $\bm{x}, \bm{y} \in D_{\text{LR}}$, so we are free to take the maximum of left hand side over $D_{\text{LR}}$:
+\begin{equation}
+	L(\lambda\bm{u}_1 + (1- \lambda) \bm{u}_2)\leq \lambda L(\bm{u}_1) + (1- \lambda)\lambda L(\bm{u}_2)
+\end{equation}
+Which is the desired result. \\
+~\\
+\textbf{(b)} Let $g(\bm{x}, \bm{y})$ be the objective function for (SC). Suppose $(\widetilde{\bm{x}}, \widetilde{\bm{y}}) \in D_{\text{SC}} \subseteq D_{\text{LR}}$ is an arbitrary feasible point for (SC). We have: $f_{\widetilde{\bm{x}}, \widetilde{\bm{y}}}(\bm{u}) - g(\widetilde{\bm{x}}, \widetilde{\bm{y}}) = \sum_{i=1}^n u_i\left(1-\sum_{j=1}^n \widetilde{x}_{ij}\right) = 0$ for any $\bm{u}$. Therefore:
+\begin{equation}
+	L(\bm{u}) = \underset{\bm{x,y} \in D_{\text{LR}}}{\text{max}} ~f_{\bm{x,y}}(\bm{u})\geq f_{\widetilde{\bm{x}}, \widetilde{\bm{y}}}(\bm{u}) = g(\widetilde{\bm{x}}, \widetilde{\bm{y}})
+\end{equation}
+Since this holds for arbitrary feasible point $(\widetilde{\bm{x}}, \widetilde{\bm{y}}) \in D_{\text{SC}}$, we are free to take the maximum of the right hand side:
+\begin{equation}
+	L(\bm{u}) \geq \underset{\widetilde{\bm{x}}, \widetilde{\bm{y}} \in D_{\text{SC}}}{\text{max}} g(\widetilde{\bm{x}}, \widetilde{\bm{y}}) = Z
+\end{equation}
+~\\
+\textbf{(c)} The only difference between $D_{\text{SC}}$ and $D_{\text{LR}}$ is the constraint $\sum_{j=1}^n x_{ij}=1$. So clearly $\bar{\bm{y}}$ satisfies $D_{\text{SC}}$'s contraints. It suffices to check $\bar{\bm{x}}$. By definition, for each $i=1,...,n$, $\bar{x}_{ij}=1$ for only the $j$ with the highest $\rho_{ij}$ (we can add some infinitesimal perturbation to $\rho$ if there are ties). Thus $\sum_{j=1}^n \bar{x}_{ij}=1$ for $i=1,...,n$. So $(\bar{\bm{x}},\bar{\bm{y}})\in D_{\text{SC}}$. The final conclusion is obvious: If $L(\bm{u}) = g(\bar{\bm{x}},\bar{\bm{y}}) \geq Z \geq g(\bar{\bm{x}},\bar{\bm{y}})$, it's clear that the optimal value $Z=g(\bar{\bm{x}},\bar{\bm{y}})$. Thus $(\bar{\bm{x}},\bar{\bm{y}})$ is optimal.
+\end{problem}
+
+\end{document}

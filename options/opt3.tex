@@ -1,0 +1,311 @@
+\documentclass[10 pt]{hwtemplate} % Use the custom resume.cls style
+
+%-------------------------------------------------------------------------------
+% Document begins
+%-------------------------------------------------------------------------------
+
+\title{\textbf{Options Assignment 3}}
+\author{Ze Yang (zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\textbf{Problem. 2} (\textit{Futures and forward cash flows})\\
+\begin{solution}
+\textbf{(a)} The variation margin cash flow of future contract is given by
+$$
+C_t = F_{t,T} - F_{t-\Delta t, T}
+$$
+Since future contracts are linear in there cash flows, the cash flow for 20 longs is just $20C_t$, and that for 2 shorts is $-2C_t$. 
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{\label{fig:q21}Variation Margin Cashflow of Future Contracts}
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=0.75]{figures/fig1.png}
+\end{figure}
+
+\textbf{(b)} The variation margin cash flow of forward contract is:
+$$
+C_t = \begin{cases}S_T - F_0 & t=T\\
+0 & \text{otherwise}
+\end{cases}
+$$
+
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{\label{fig:q22}Variation Margin Cashflow of Forward Contracts}
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=0.75]{figures/fig2.png}
+\end{figure}
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\textbf{Problem. 18} (\textit{Binomial})\\
+\begin{solution} \textbf{(a)} We have:
+\begin{equation}
+  \pi_u = \frac{R-d}{R(u-d)} = 0.3127;~~~~  \pi_d = \frac{u-R}{R(u-d)} = 0.6774
+\end{equation}
+Let $c_t(S_t)$ be the value of american call at time $t$, we have:
+\begin{equation}
+  c_t(S_t, D_t) = \max\left\{\max(0, S_t^{[cum]}-K), \pi_u c_{t+1}(uS_t^{[ex]})+\pi_d c_{t+1}(dS_t^{[ex]})\right\}
+\end{equation}
+Where $S_t^{[cum]}$ is the cum dividend stock price, $S_t^{[ex]}$ is the ex dividend stock price. $S_t^{[ex]} = S_t^{[cum]} - D_t$. The binomial tree calulation is presented in the table below.\\
+We obtain:
+$$c_0 = 1.2569$$
+I.e. the 1-year American call option worth 1.2569 dollars today.\\
+~\\
+\textbf{(b)} Denote the value of asian call option along path $w$ as $Ac_n(w)$, the number of periods is $N$. We have:
+\begin{equation}
+  Ac_n = \begin{cases}
+  \max(0, \frac{1}{N}\sum_{i=0}^N S_i^{[cum]}(w)) & n=N\\
+  \pi_u Ac_{n+1}((w, u)) + \pi_d Ac_{n+1}((w, d)) & 0\leq n<N
+  \end{cases}
+\end{equation}
+The binomial tree calulation is presented in the table below.\\
+We obtain:
+$$Ac_0 = 0.2830$$
+I.e. the 1-year Asian call option worth 0.2830 dollars today.\\
+
+
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{\label{fig:q18pa}American Option}
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=0.7]{figures/fig3.png}
+\end{figure}
+
+
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{\label{fig:q18pb}Asian option}
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=0.75]{figures/fig4.png}
+\end{figure}
+
+\end{solution}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\textbf{Problem. 19} (\textit{Binomial(2)})\\
+\begin{solution} \textbf{(a)} For the dynamic replication strategy, the stock and bond positions are given by:
+\begin{equation}
+  \Delta_t = \frac{p_{t+1,u} - p_{t+1, d}}{S_t(u-d)}
+\end{equation}
+\begin{equation}
+  B_t = \frac{up_{t+1,d} - dp_{t+1, u}}{R(u-d)}
+\end{equation}
+where the value of American put option price at time $t$ is:
+\begin{equation}
+  p_t = \max\left\{\max(K-S_t, 0), S_t\Delta_t + B_t\right\}
+\end{equation}
+i.e. the maximum between replicating portfolio and the early exercise payoff. The trees of option price and dynamic replication portfolio are presented below. \\
+The dynamic strategy is described by the right blue tree, with
+\begin{equation}
+  \begin{split}
+    &\Delta_0 = -0.47502,~~~~B_0 = 25.4844\\
+    &\Delta_{1,u} = 0,~~~~B_{1,u} = 0,~~~~\Delta_{1,d} = -1,~~~~B_{1,d} = 45.5437
+  \end{split}
+\end{equation}
+And the price at time 0 is $c_0 = 1.7334$.\\
+
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{\label{fig:q18pa}American option (Dynamic Replication)}
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=0.8]{figures/fig5.png}
+\end{figure}
+~\\
+\textbf{(b)} We first calculate the state prices:
+\begin{equation}
+  \pi_u = \frac{R-d}{R(u-d)} = 0.6066;~~~~  \pi_d = \frac{u-R}{R(u-d)} = 0.3643
+\end{equation}
+And the value of American put option price at time $t$ is:
+\begin{equation}
+  p_t = \max\left\{\max(K-S_t, 0), ~~p_{t+1, u}\pi_u + p_{t+1, d}\pi_d\right\}
+\end{equation}
+Plug the equations into the binomal tree, we obtain: $p_0 = 1.7334$.\\
+~\\
+\textbf{(c)} We first calculate the risk-neutral probabilities:
+\begin{equation}
+  q_u^{RN} = \frac{R-d}{u-d} = 0.6248;~~~~  q^{RN}_d = \frac{u-R}{u-d} = 0.3752
+\end{equation}
+And the value of American put option price at time $t$ is:
+\begin{equation}
+  p_t = \max\left\{\max(K-S_t, 0), ~~\tfrac{1}{R}\left(p_{t+1, u}q^{RN}_u + p_{t+1, d}q^{RN}_d\right)\right\}
+\end{equation}
+Plug the equations into the binomal tree, we obtain: $p_0 = 1.7334$.\\
+~\\
+\textbf{(d)} Now with the dividends, the value of American put option price at time $t$ is:
+\begin{equation}
+  p_t = \max\left\{\max(K-S_t^{[ex]}, 0), ~~p_{t+1, u}\pi_u + p_{t+1, d}\pi_d\right\}
+\end{equation}
+For the call:
+\begin{equation}
+  c_t = \max\left\{\max(S_t^{[cum]}-K, 0), ~~c_{t+1, u}\pi_u + c_{t+1, d}\pi_d\right\}
+\end{equation}
+See the trees below.
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{\label{fig:q19pb}American option (Dividend)}
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=0.8]{figures/fig6.png}
+\end{figure}
+We got $c_0 = 3.2598$, $p_0=2.6797$. The put call parity for European option is
+$$
+c_t-p_t = S_t-D_t-Ke^{-r(T-t)}
+$$
+Where $D_t$ is the cash dividend paid at time $t$. Clearly this equality does not hold for American option. Because with early exericise, this relation becomes an inequality:
+$$
+S_t - D_t - K \leq c_t - p_t \leq S_t - Ke^{-r(T-t)}
+$$
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\textbf{Problem. 21} (\textit{Binomial/Capital Structure})\\
+\begin{solution}
+We first calcuate $u,d$, with CRR calibration:
+\begin{equation}
+  u = e^{\sigma \sqrt{t}}=1.2969;~~~~d = e^{-\sigma \sqrt{t}}=0.7711
+\end{equation}
+The state prices are
+\begin{equation}
+  \pi_u = \frac{R-d}{R(u-d)} = 0.4822;~~~~  \pi_d = \frac{u-R}{R(u-d)} = 0.4859
+\end{equation}
+Denote value of company, bond (prior to coupon payment), and equity as $V, B, E$ respectively. Let the face value and coupon rate of bond be $F$ and $c$. We have:
+$$
+B_t = \begin{cases}\min(V_T, F(1+c)) & t=T\\
+\pi_u B_{t+1, u}+\pi_d B_{t+1, d} & 0\leq t< T
+\end{cases}
+$$
+Hence
+$$
+E_t =\begin{cases}\max(0, V_T - F(1+c)) & t=T \\
+V_t -B_t & 0\leq t< T
+\end{cases}
+$$
+We assume that $\{V_t\}$ evolves by the binomial tree model. Denote $V_t^{[cum]}$ as cum dividend cum interest value, $V^{[ex]}$ as ex dividend ex interest value, we have:
+\begin{equation}
+  \begin{split}
+     &V_t^{[ex]} = V_t^{[cum]} - D_t - Fc\\
+     &V_{t,u}^{[cum]} = uV_{t}^{[ex]}\\
+     &V_{t,d}^{[cum]} = dV_{t}^{[ex]}
+  \end{split}
+\end{equation}
+See the binomial tree below for calculation details. We set $E_0=250$ as target and solve for desired coupon rate $c^*$. And we obtain:
+$$
+c^* = 6.435\%
+$$
+
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{\label{fig:q21pa}Capital Structure Problem}
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=0.8]{figures/fig7.png}
+\end{figure}
+
+I.e. the company should sell the par-500 bond for annual coupon rate 6.435\%.\\
+~\\
+~\\
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{\label{fig:q21pb}Capital Structure Problem(b)}
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=0.8]{figures/fig8.png}
+\end{figure}
+~\\
+\textbf{(b)} With same analysis, we now set $E_0 = 275$, $F=475$ and solve for $c$. For this one,
+$$
+c^* = 5.7158\%
+$$
+I.e. the company should sell the par-475 bond for annual coupon rate 5.7158\%.\\
+~\\
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{\label{fig:q21pc}Capital Structure Problem(Putable Bond)}
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=0.8]{figures/fig9.png}
+\end{figure}
+~\\
+\textbf{(c)} With same analysis, we now set $E_0 = 250$, $F=500$ and solve for $c$. For this one,
+$$
+B_t = \begin{cases}\min(V_T, F(1+c)) & t=T\\
+\max\{K, ~~\pi_u B_{t+1, u}+\pi_d B_{t+1, d}\} & 0\leq t< T
+\end{cases}
+$$
+where $K$ is the put price, $K=485$.\\
+We obtain
+$$
+c^* = 4.3158\%
+$$
+I.e. the company should sell the par-500 putable bond for annual coupon rate 4.3158\%.\\
+\end{solution}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\textbf{Problem. 31} (\textit{Black Scholes Hedging})\\
+\begin{solution} Denote $\Delta_t, B_t$ the stock, bond position in replicating portfolio. $c_t$ the Black-Scholes option price, $\Pi_t$ the value of replicating portfolio, $\epsilon_t$ the tracing error, and $\delta t$ the hedging interval width. At time $t$, the incoming portfolio value:
+$$
+\Pi_t = \Delta_{t-\delta t} S_t + B_{t-\delta t} e^{r \delta t}
+$$
+$$
+h_t := h(t, S_t) = \frac{\log(S_t/K)+(r+\tfrac{1}{2}\sigma^2)(T-t)}{\sigma \sqrt{T-t}}
+$$
+$$
+\Delta_t = N(h_t);~~~~B_t = \Pi_t - S_t \Delta_t
+$$
+$$
+c_t = S_tN(h_t) - Ke^{-t(T-t)}N(h_t-\sigma(T-t))
+$$
+where $N(z)$ is the standard normal cdf.
+$$
+\epsilon_t = \Pi_t - c_t
+$$
+The dynamic hedging process is presented in the table below. 
+
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{\label{fig:q31pa}Dynamic Delta Hedge}
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=0.68]{figures/fig10.png}
+\end{figure}
+
+In the final date $T$, we have
+\begin{equation}
+  \begin{split}
+    &\Pi_T = 5.5963\\
+    &c_T = 5.5010\\
+    &\epsilon_T = 0.0953
+  \end{split}
+\end{equation}
+\end{solution}
+
+
+
+
+\end{document}

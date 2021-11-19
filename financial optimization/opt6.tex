@@ -1,0 +1,136 @@
+\documentclass[a4paper, 8pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz, array, eurosym}
+\usepackage{float}
+\renewcommand{\arraystretch}{1.4}
+\newcolumntype{L}{>{\arraybackslash}m{10cm}}
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+\title{\textbf{Optimization Assignment 6}}
+\author{Ze Yang~~~~(zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} \textbf{(a), (b):} The optimal solution, amount of money (in dollar amount, not weights) invested in risky asset at each stage, are shown below.
+\end{problem}
+\begin{figure}[H]
+  \centering
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=0.42]{xs.png}
+  \vspace{25pt}
+\end{figure}
+It turns out that the optimal solutions are the same for question \textbf{(a)} and \textbf{(b)}. In both cases, the expected utility (value of objective function) is $5.475$.
+
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} \textbf{(a)} Take first order condition:
+\begin{equation}
+	\bm{Vx} + \bm{R}(\bm{x}-\bm{x}_0) = 0 ~~\Rightarrow~~\bm{x}^* = (\bm{V}+\bm{R})^{-1}\bm{Rx}_0
+\end{equation}
+\textbf{(b-i)} The value to go function at last stage $T$ is
+\begin{equation}
+	J_T(\bm{x}_{T-1}) = \underset{\bm{x}_T}{\text{min}} ~~\frac{1}{2}\bm{x}_T^{\top} \bm{V} \bm{x}_T + \frac{1}{2}(\bm{x}_T- \bm{x}_{T-1} )^{\top}\bm{R}(\bm{x}_T- \bm{x}_{T-1})
+\end{equation}
+Which has exactly the same form as the one-stage problem in (a). So the solution is
+\begin{equation}
+	\begin{split}
+		\bm{x}_T^* &= (\bm{V}+\bm{R})^{-1}\bm{Rx}_{T-1} \\
+		J_T(\bm{x}_{T-1})&= \frac{1}{2} \bm{x}_{T-1}^{\top}\Big[\bm{R}(\bm{V}+\bm{R})^{-1}\bm{V}(\bm{V}+\bm{R})^{-1}\bm{R} + \bm{R}(\bm{V}+\bm{R})^{-1}\bm{R}(\bm{V}+\bm{R})^{-1}\bm{R} \\
+		&\quad+\bm{R} - 2\bm{R}(\bm{V}+\bm{R})^{-1}\bm{R}\Big] \bm{x}_{T-1}\\
+		&=\frac{1}{2} \bm{x}_{T-1}^{\top}\Big[\bm{R}(\bm{V}+\bm{R})^{-1}\bm{R} + \bm{R} - 2\bm{R}(\bm{V}+\bm{R})^{-1}\bm{R}\Big] \bm{x}_{T-1}\\
+		&=\frac{1}{2} \bm{x}_{T-1}^{\top}\Big[ \bm{R} - \bm{R}(\bm{V}+\bm{R})^{-1}\bm{R}\Big] \bm{x}_{T-1}
+	\end{split}
+\end{equation}
+\textbf{(b-ii)} Ansatz: $\bm{x}^*_{t+1} = \bm{L}_{t+1}\bm{x}_{t}$, $J_{t+1}(\bm{x}_{t}) = \frac{1}{2}\bm{x}_{t}^{\top}\bm{K}_{t+1} \bm{x}_{t}$ for $t=1,...,T-1$. Then the Bellman equation at $t$ is:
+\begin{equation}
+		J_t(\bm{x}_{t-1}) = \underset{\bm{x}_t}{\text{min}} ~~\frac{1}{2}\bm{x}_t^{\top} \bm{V} \bm{x}_t + \frac{1}{2}(\bm{x}_t- \bm{x}_{t-1} )^{\top}\bm{R}(\bm{x}_t- \bm{x}_{t-1}) + \frac{1}{2}\bm{x}_{t}^{\top}\bm{K}_{t+1} \bm{x}_{t}
+\end{equation}
+First order condition yields
+\begin{equation}
+	\bm{V}\bm{x}_t + \bm{R}(\bm{x}_t - \bm{x}_{t-1}) + \bm{K}_{t+1} \bm{x}_{t} = 0
+\end{equation}
+We have:
+\begin{equation}
+	\begin{split}
+		\bm{x}_t^* &= (\bm{V}+\bm{R}+\bm{K}_{t+1})^{-1}\bm{Rx}_{t-1} \\
+		J_t(\bm{x}_{t-1})&= \frac{1}{2} \bm{x}_{t-1}^{\top}\Big[\bm{R}(\bm{V}+\bm{R}+ \bm{K}_{t+1})^{-1}\bm{V}(\bm{V}+\bm{R}+ \bm{K}_{t+1})^{-1}\bm{R} \\
+		&\quad+ \bm{R}(\bm{V}+\bm{R}+ \bm{K}_{t+1})^{-1}\bm{R}(\bm{V}+\bm{R}+ \bm{K}_{t+1})^{-1}\bm{R} \\
+		&\quad+ \bm{R}(\bm{V}+\bm{R}+ \bm{K}_{t+1})^{-1}\bm{K}_{t+1}(\bm{V}+\bm{R}+ \bm{K}_{t+1})^{-1}\bm{R} \\
+		&\quad+\bm{R} - 2\bm{R}(\bm{V}+\bm{R}+ \bm{K}_{t+1})^{-1}\bm{R}\Big] \bm{x}_{t-1}\\
+		&=\frac{1}{2} \bm{x}_{t-1}^{\top}\Big[\bm{R}(\bm{V}+\bm{R}+ \bm{K}_{t+1})^{-1}\bm{R} + \bm{R} - 2\bm{R}(\bm{V}+\bm{R}+ \bm{K}_{t+1})^{-1}\bm{R}\Big] \bm{x}_{t-1}\\
+		&=\frac{1}{2} \bm{x}_{t-1}^{\top}\Big[ \bm{R} - \bm{R}(\bm{V}+\bm{R}+ \bm{K}_{t+1})^{-1}\bm{R}\Big] \bm{x}_{t-1}
+	\end{split}
+\end{equation}
+That is:
+\begin{equation}
+	\bm{L}_t = (\bm{V}+\bm{R}+\bm{K}_{t+1})^{-1}\bm{R};\qquad \bm{K}_t = \bm{R} - \bm{R}(\bm{V}+\bm{R}+ \bm{K}_{t+1})^{-1}\bm{R}
+\end{equation}
+\textbf{(c)} Bellman equation at $t$ is:
+\begin{equation}
+		V(\bm{x}_{t-1}) = \underset{\bm{x}_t}{\text{min}} ~~\frac{q}{2}\bm{x}_t^{\top}  \bm{x}_t + \frac{r}{2}(\bm{x}_t- \bm{x}_{t-1} )^{\top}(\bm{x}_t- \bm{x}_{t-1}) + \frac{k}{2}\bm{x}_{t}^{\top} \bm{x}_{t}
+\end{equation}
+First order condition yields
+\begin{equation}
+	q\bm{x}_t + r(\bm{x}_t - \bm{x}_{t-1}) + k \bm{x}_{t} = 0
+\end{equation}
+It suffices to solve the scalar analog to \textbf{(b)}:
+\begin{equation}
+	\begin{split}
+		\bm{x}_t^* &= \frac{r}{q+r+k}\bm{x}_{t-1} \\
+		V(\bm{x}_{t-1}) &=\frac{1}{2} \left(r - \frac{r^2}{q+r+k}\right)\bm{x}_{t-1}^{\top} \bm{x}_{t-1}
+	\end{split}
+\end{equation}
+That is:
+\begin{equation}
+	k = r - \frac{r^2}{q+r+k} \quad \Rightarrow \quad k^2 + kq - rq = 0
+\end{equation}
+\begin{equation}
+	k = \frac{-q \pm \sqrt{q^2 + 4rq}}{2}
+\end{equation}
+\end{problem}
+
+\end{document}

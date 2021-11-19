@@ -1,0 +1,198 @@
+---
+title: "HW4"
+author: "Ze YANG"
+date: "10/1/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# R Lab from Ruppert
+## Problem 1
+```{r fig.width=8, fig.asp=1}
+data(Tbrate, package="Ecdat")
+library(forecast)
+library(tseries)
+library(fGarch)
+# r = the 91-day treasury bill rate
+# y = the log of real GDP
+# pi = the inflation rate
+Tbill = Tbrate[,1]
+Del.Tbill = diff(Tbill)
+
+par(mfrow=c(2,2))
+plot(Tbill)
+acf(Tbill)
+plot(Del.Tbill)
+acf(Del.Tbill)
+```
+```{r}
+adf.test(Tbill)
+adf.test(Del.Tbill)
+```
+
+**Comments**
+- `Tbill`'s plot has a clear trend in it, and the acf plot decays slowly. The ADF test failed to reject null $H_0:$ the series is nonstationary. Hence we believe it's nonstationary.
+
+- `Del.Tbill`'s plot displays mean-reverting behavior; the acf plot decays fast. The ADF test also reject the nonstationarity hypothesis with confidence level $0.01$. So we think it's stationary.
+
+- `Del.Tbill` exhibits two types of heteroscedasticity patterns: First, it has a volatility clustering behavior. Second, the volatility is correlated to the value of `Tbill`: the vol's higher in early 1980s when the local mean of `Tbill` itself is high.
+
+## Problem 2
+```{r}
+garch.model.Tbill = garchFit(formula= ~arma(1,0) + garch(1,0),Del.Tbill)
+summary(garch.model.Tbill)
+garch.model.Tbill@fit$matcoef
+```
+
+(a) The ARMA/GARCH model is fitted for `Del.Tbill`. The model that corresponds to R parameter names is:
+$$
+\begin{split}
+&X_t - \text{mu} = \text{ar1} \cdot (X_{t-1} - \text{mu}) + a_t\\
+&a_t = \sigma_t \epsilon_t \\
+&\sigma_t^2 = \text{omega} + \text{alpha1} \cdot a_{t-1}^2\\
+&\epsilon_t \sim \text{i.i.d white noise, mean 0, unit variance}
+\end{split}
+$$
+
+(b) The parameter estimates are shown in the `summary(garch.model.Tbill)`, where we have: `mu` = 0.08350, `ar1` = 0.24163, `omega` = 0.33816, and `alpha1` = 0.83483. 
+
+## Problem 3
+
+```{r fig.width=8, fig.asp=0.7}
+res = residuals(garch.model.Tbill)
+res_std = res / garch.model.Tbill@sigma.t
+par(mfrow=c(2,3))
+plot(res)
+acf(res)
+acf(res^2)
+plot(res_std)
+acf(res_std)
+acf(res_std^2)
+```
+**Answers**
+(I'd like to answer (d) first, since (c) is actually based upon (d))
+
+- (d): `garch.model.Tbill@sigma.t` contains the estimates of the conditional standard deviation of $a_t$ from the GARCH model. Therefore, `res_std` is the realizations of $\epsilon_t = a_t / \sigma_t$.
+- (a): `acf(res)` shows there is no significant autocorrelation in the residuals, which implies that the model fit of the conditional mean (AR(1)) is adequete.
+- (b): `acf(res^2)` shows significant autocorrelation in the squared residuals $a_t^2$, which implies a conditional heteroscedasticity - the reason why we are fitting the GARCH part.
+- (c): `acf(res_std^2)` shows no significant autocorrelation in the standardized squared residuals $\epsilon_t^2 = (a_t / \sigma_t)^2$, which is consistant to the white noise assumption about $\epsilon_t$, and implies that GARCH(1,0) fit for the conditional standard deviation is again adequate.
+- (e): The time series plot of `res_std` shows the empirical distribution of `res_std` have heavier tail than normal distribution - there are quite a few points with absolute value $>1.96$, i.e. beyond $97.5\%$ two-sided percentile of standard normal distribution.
+
+## Problem 4
+```{r fig.width=8, fig.asp=0.7}
+# fit the model
+garch.model.log.Tbill = garchFit(formula= ~arma(1,0) + garch(1,0), diff(log(Tbill)))
+summary(garch.model.log.Tbill)
+
+# diagnostic plots
+res = residuals(garch.model.log.Tbill)
+res_std = res / garch.model.log.Tbill@sigma.t
+par(mfrow=c(2,3))
+plot(res)
+acf(res)
+acf(res^2)
+plot(res_std)
+acf(res_std)
+acf(res_std^2)
+```
+
+```{r fig.width=8, fig.asp=0.5}
+par(mfrow=c(1,2))
+plot(garch.model.Tbill@sigma.t)
+lines(garch.model.Tbill@sigma.t)
+plot(garch.model.log.Tbill@sigma.t)
+lines(garch.model.log.Tbill@sigma.t)
+```
+
+**Comments**
+
+- The main difference between the two is the conditional standard deviation series. Shown in the time series plot above.
+- The $\sigma_t$ of the log difference model is more "stable", and the spike associated with large `Tbill` value around early 1980s also disappeared in the log transformed model.
+
+# Ford Data
+## (a)
+```{r}
+library(quantmod)
+FORD = getSymbols('F', from='1995-1-1', to='2017-12-31', auto.assign = F)
+volume = FORD$F.Volume
+plot(volume)
+```
+
+The volume has an extremely unstable size of variability. In particular, the variability of the series spikes among 2009 - 2011. Therefore, it would be a good idea to apply Box-Cox transformation to stablize its variability.
+
+## (b)
+```{r fig.width=8, fig.asp=1}
+logvolume = log(volume)
+diff.logvolume = diff(logvolume)
+diff.logvolume = diff.logvolume[!is.na(diff.logvolume)]
+par(mfrow=c(2,2))
+plot(logvolume)
+acf(logvolume)
+plot(diff.logvolume)
+acf(diff.logvolume)
+```
+
+- The `logvolume` series has a clear trend in it, and the ACF decays slowly. It's not stationary.
+- The first difference of `logvolume` exhibits a more stable behavior, and the ACF of it decays very fast. So we believe `diff.logvolume` is stationary.
+
+## (c)
+```{r}
+arima.fit = auto.arima(diff.logvolume, ic='aicc', approximation=F, step=F)
+summary(arima.fit)
+```
+
+Auto arima with AICC criteria finds optimal model ARIMA(1, 0, 4). The parameter estimates are shown in the summary above.
+
+```{r fig.width=8, fig.asp=0.5}
+res = arima.fit$residuals
+par(mfrow=c(1,2))
+acf(res)
+acf(res^2)
+```
+
+- `acf(res)` shows there is no significant autocorrelation in the residuals, which implies that the model fit of the conditional mean ARIMA(1, 0, 4) is adequete.
+- `acf(res^2)` shows some autocorrelation in the squared residuals $a_t^2$ at lag=1, which implies a conditional heteroscedasticity. We can try GARCH fit to this part.
+
+
+```{r echo = T, results = 'hide'}
+garch.model.logvolume = garchFit(
+  formula= ~arma(1,4) + garch(1,1), diff.logvolume)
+```
+```{r}
+garch.model.logvolume@fit$coef
+```
+
+The fitted parameters of ARIMA(1,0,4)/GARCH(1,1) are shown in the list above.
+
+```{r}
+arima.fit$aic
+(garch.model.logvolume@fit$ics) * length(diff.logvolume)
+```
+
+The ARIMA(1,0,4) conditional mean model alone has an AIC of 4364.42, while the ARIMA(1,0,4)/GARCH(1,1) model has a smaller AIC of 4363.129 Thus AIC implies that including the GARCH(1,1) component is useful indeed.
+
+```{r}
+qqnorm(garch.model.logvolume@residuals)
+qqline(garch.model.logvolume@residuals)
+```
+
+The QQ plot suggests that the residuals from the ARIMA/GARCH fit is still heavier than normal. 
+
+```{r echo = T, results = 'hide'}
+aparch.model.logvolume = garchFit(
+  formula= ~arma(1,4) + aparch(1,1), diff.logvolume)
+```
+```{r}
+aparch.model.logvolume@fit$coef
+```
+
+```{r}
+arima.fit$aic
+(garch.model.logvolume@fit$ics) * length(diff.logvolume)
+(aparch.model.logvolume@fit$ics) * length(diff.logvolume)
+```
+
+The APARCH(1,1) model has a larger AIC of 4371.712. Thus the AIC does not justify this additional complexity. The ARIMA/GARCH model is still the perferable one.

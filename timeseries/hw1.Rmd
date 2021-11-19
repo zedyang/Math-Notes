@@ -1,0 +1,126 @@
+---
+title: "Timeseries HW1"
+author: "Ze YANG"
+date: "September 10, 2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+\section{Problem 1}
+
+## 1.a
+
+\begin{equation}
+\begin{split}
+  \mathbb{E}\left[X_t\right] &= \mathbb{E}\left[a+bZ_t+cZ_{t-1}\right] = a \\
+  \mathrm{\mathbb{C}ov}\left[X_t, X_{t+h}\right] &= \mathrm{\mathbb{C}ov}\left[a+bZ_t+cZ_{t-1}, a+bZ_{t+h}+cZ_{t+h-1}\right] \\
+  &= b^2 \mathrm{\mathbb{C}ov}\left[Z_t, Z_{t+h}\right] + c^2 \mathrm{\mathbb{C}ov}\left[Z_{t-1}, Z_{t+h-1}\right]\\
+  &\quad + bc \mathrm{\mathbb{C}ov}\left[Z_{t+h}, Z_{t-1}\right] + bc \mathrm{\mathbb{C}ov}\left[Z_t, Z_{t+h-1}\right] \\
+  &= \begin{cases}
+  (b^2+c^2) \sigma^2 & h=0\\
+  bc\sigma^2 & h=\pm 1\\
+  0 & \text{otherwise}
+  \end{cases}\\
+  \mathbb{E}\left[X_t^2\right] &= \mathrm{\mathbb{V}ar}\left[X_t\right] + \mathbb{E}\left[X_t\right]^2 = a^2 + (b^2+c^2)\sigma^2 < \infty
+\end{split}
+ \end{equation} 
+ Therefore, $X_t$ is stationary.
+
+## 1.b
+
+ \begin{equation}
+   \begin{split}
+     \mathbb{E}\left[X_t\right] &= a + \sigma^2\\
+     \mathrm{\mathbb{C}ov}\left[X_t, X_{t+h}\right] &= \mathrm{\mathbb{C}ov}\left[a+X_t^2, a+X_{t+h}^2\right] \\
+     &= \mathrm{\mathbb{C}ov}\left[X_t^2, X_{t+h}^2\right]\\
+     &=\begin{cases}
+     2\sigma^4 & h=0\\
+     0 & \text{otherwise}
+     \end{cases} \\
+     \mathbb{E}\left[X_t^2\right] < \infty
+   \end{split}
+ \end{equation}
+  Therefore, $X_t$ is stationary.
+
+## 1.c
+
+ \begin{equation}
+   \begin{split}
+     \mathbb{E}\left[X_t\right] &= \mathbb{E}\left[Z_tZ_{t-1}\right] = 0\\
+     \mathrm{\mathbb{C}ov}\left[X_t, X_{t+h}\right] &= \mathrm{\mathbb{C}ov}\left[Z_tZ_{t-1}, Z_{t+h}Z_{t+h-1}\right] \\
+     &= \mathbb{E}\left[Z_tZ_{t-1}Z_{t+h}Z_{t+h-1}\right] - \mathbb{E}\left[Z_tZ_{t-1}\right] \mathbb{E}\left[Z_{t+h}Z_{t+h-1}\right]\\
+     &=\mathbb{E}\left[Z_tZ_{t-1}Z_{t+h}Z_{t+h-1}\right]\\
+     &=\begin{cases}
+     \mathbb{E}\left[Z_t^2\right]\mathbb{E}\left[Z_{t-1}^2\right] & h=0\\
+     0 & \text{otherwise}
+     \end{cases} \\
+          &=\begin{cases}
+     \sigma^4 & h=0\\
+     0 & \text{otherwise}
+     \end{cases} \\
+     \mathbb{E}\left[X_t^2\right] < \infty
+   \end{split}
+ \end{equation}
+ Therefore, $X_t$ is stationary.
+
+\section{Problem 2}
+Since $\{\epsilon_t\}$ is i.i.d. white noise, let $\mathrm{\mathbb{V}ar}\left[\epsilon_t\right] = \sigma^2$.
+\begin{equation}
+  \mathbb{E}\left[X_t\right] = \mathbb{E}\left[\epsilon_t + \epsilon_{t-1} \epsilon_{t-2} \right] = 0
+\end{equation}
+\begin{equation}
+  \begin{split}
+    \mathrm{\mathbb{C}ov}\left[X_t, X_{t+h}\right] &= \mathrm{\mathbb{C}ov}\left[\epsilon_t + \epsilon_{t-1} \epsilon_{t-2}, \epsilon_{t+h}+ \epsilon_{t+h-1} \epsilon_{t+h-2}\right] \\
+  &=\mathbb{E}\left[(\epsilon_t + \epsilon_{t-1} \epsilon_{t-2})(\epsilon_{t+h}+ \epsilon_{t+h-1} \epsilon_{t+h-2})\right] \\
+  &= \mathbb{E}\left[\epsilon_t \epsilon_{t+h}+ \epsilon_{t-1} \epsilon_{t-2} \epsilon_{t+h} + \epsilon_{t+h-1} \epsilon_{t+h-2} \epsilon_t + \epsilon_{t-1} \epsilon_{t-2}\epsilon_{t+h-1} \epsilon_{t+h-2}\right]\\
+  &= \begin{cases}
+  \mathbb{E}\left[\epsilon_t^2 + \epsilon_{t-1}^2 \epsilon_{t-2}^2\right] & h=0\\
+  0 & |h|>0
+  \end{cases}\\
+  &= \begin{cases}\sigma^2 + \sigma^4 & h=0\\
+  0 & |h|>0
+  \end{cases}
+  \end{split}
+\end{equation}
+Therefore by definition, $\{X_t\}$ is weak white noise. But
+\begin{equation}
+  \mathbb{E}\left[X_t | \mathcal{F}_{t-1}\right] = \mathbb{E}\left[\epsilon_t | \mathcal{F}_{t-1}\right] + \epsilon_{t-1} \epsilon_{t-2} = \epsilon_{t-1} \epsilon_{t-2} \ne 0
+\end{equation}
+Therefore, $\{X_t\}$ is not MDS.
+
+\section{Problem 3}
+\begin{equation}
+  \begin{split}
+    \mathrm{\mathbb{C}ov}\left[X_t, X_{t+h}\right] &= \mathrm{\mathbb{C}ov}\left[Y_t - Y_{t-1}, Y_{t+h}-Y_{t+h-1}\right] \\
+    &= \mathrm{\mathbb{C}ov}\left[Y_t, Y_{t+h}\right] - \mathrm{\mathbb{C}ov}\left[Y_{t-1}, Y_{t+h}\right] - \mathrm{\mathbb{C}ov}\left[Y_t, Y_{t+h-1}\right] + \mathrm{\mathbb{C}ov}\left[Y_{t-1}, Y_{t+h-1}\right] \\
+    &= \gamma_Y(h) - \gamma_Y(h+1) - \gamma_Y(h-1) + \gamma_Y(h) \\
+    &= 2\gamma_Y(h)- \gamma_Y(h+1) - \gamma_Y(h-1)\\
+    &=: \gamma_X(h)
+  \end{split}
+\end{equation}
+which is a function of $h$, independent of $t$. Moreover, $\mathbb{E}\left[X_t\right]=0$. Therefore, $X_t$ is also stationary.
+
+
+# Problem 4
+## 4.1
+```{r}
+library(quantmod)
+goog = getSymbols('GOOG',from='2017-1-1',to='2017-12-31',auto.assign=F)
+logret = dailyReturn(Ad(goog), type='log')
+plot(logret, main='Log return of GOOG, Year 2017')
+```
+The log returns exhibit centain level of volatility clustering. However, there is no clear evidence of non-stationarity by just looking at the plot.
+
+## 4.2
+```{r}
+acf(logret, main='ACF')
+```
+
+## 4.3
+```{r}
+Box.test(logret, lag=20, type="Ljung-Box")
+```
+The p-value is large. We fail to reject $H_0: \{\rho_X(h) = 0$ for some $h\}$. That is, there is no evidence of serial correlation up to lag 20.

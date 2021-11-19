@@ -1,0 +1,632 @@
+
+% Default to the notebook output style
+
+    
+
+
+% Inherit from the specified cell style.
+
+
+
+
+    
+\documentclass[10pt]{article}
+
+    
+    
+    \usepackage[T1]{fontenc}
+    % Nicer default font (+ math font) than Computer Modern for most use cases
+    %\usepackage{mathpazo}
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % We will generate all images so they have a width \maxwidth. This means
+    % that they will get their normal width if they fit onto the page, but
+    % are scaled down if they would overflow the margins.
+    \makeatletter
+    \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
+    \else\Gin@nat@width\fi}
+    \makeatother
+    \let\Oldincludegraphics\includegraphics
+    % Set max figure width to be 80% of text width, for now hardcoded.
+    \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=.8\maxwidth]{#1}}
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionLabelFormat{nolabel}{}
+    \captionsetup{labelformat=nolabel}
+
+    \usepackage{adjustbox} % Used to constrain images to a maximum size 
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath,bm,bbm} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range 
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    
+
+    
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatability definitions
+    \def\gt{>}
+    \def\lt{<}
+    % Document parameters
+    \title{Asset Management HW3}
+    \author{Ze Yang \\ Zhengyang Qi}
+    
+    
+    
+
+    % Pygments definitions
+    
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % Exact colors from NB
+    \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
+    \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+
+
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+    \begin{document}
+    
+    
+    \maketitle
+    
+
+    \section{Problem 1}
+\subsection{(a)} 
+The Lagrangian of agent $i$'s problem is
+\begin{equation}
+  \mathcal{L}_i(\bm{x}, \lambda) = (\mathbb{E}\left[\bm{P}^1\right] - \bm{P}^0)^{\top} \bm{x} - \frac{\gamma_i}{2} \bm{x}^{\top} \bm{\Omega}\bm{x} - \lambda(m_i (\bm{P}^0)^{\top} \bm{x} - W_i)
+\end{equation}
+$\bm{x}^i, \lambda_i$ solves the KKT condition:
+\begin{equation}
+  \begin{cases}
+    \nabla_{\bm{x}} \mathcal{L} = (\mathbb{E}\left[\bm{P}^1\right] - \bm{P}^0) - \gamma_i \bm{\Omega x} - \lambda_i m_i \bm{P}^0 = \bm{0} \\
+    m_i (\bm{P}^0)^{\top} \bm{x} - W_i \leq 0 \\
+    \lambda_i \geq 0 \\
+    \lambda_i (m_i (\bm{P}^0)^{\top} \bm{x} - W_i) = 0
+  \end{cases}
+\end{equation}
+The first equality yields $\bm{x}^i = \frac{1}{\gamma_i}\bm{\Omega}^{-1}\left(\mathbb{E}\left[\bm{P}^1\right] - (1+\lambda_i m_i)\bm{P}^0\right)$. Assume the constraint is binding, then
+\begin{equation}
+  \begin{split}
+    &0 = m_i (\bm{P}^0)^{\top} \bm{x}^i - W_i = \frac{1}{\gamma_i}m_i (\bm{P}^0)^{\top}\bm{\Omega}^{-1}\left(\mathbb{E}\left[\bm{P}^1\right] - (1+\lambda_i m_i)\bm{P}^0\right) - W_i \\
+    \Rightarrow \quad &  \frac{\lambda_i}{\gamma_i}m_i^2 (\bm{P}^0)^{\top}\bm{\Omega}^{-1} \bm{P}^0 =  \frac{1}{\gamma_i}m_i (\bm{P}^0)^{\top}\bm{\Omega}^{-1}\left(\mathbb{E}\left[\bm{P}^1\right] - \bm{P}^0\right) - W_i \\
+    \Rightarrow \quad & \lambda_i = \frac{m_i (\bm{P}^0)^{\top}\bm{\Omega}^{-1}\left(\mathbb{E}\left[\bm{P}^1\right] - \bm{P}^0\right) - \gamma_i W_i}{m_i^2 (\bm{P}^0)^{\top}\bm{\Omega}^{-1} \bm{P}^0}
+  \end{split}
+\end{equation}
+Dual feasibility requires $\lambda_i \geq 0 \Rightarrow$ $m_i (\bm{P}^0)^{\top}\bm{\Omega}^{-1}\left(\mathbb{E}\left[\bm{P}^1\right] - \bm{P}^0\right) - \gamma_i W_i \geq 0~~(\dagger)$. If instead we have $(\dagger)<0$, we have $\lambda_i = 0$. Then $\bm{x}^i = \frac{1}{\gamma_i}\bm{\Omega}^{-1}\left(\mathbb{E}\left[\bm{P}^1\right] - \bm{P}^0\right)$, hence $m_i (\bm{P}^0)^{\top} \bm{x}^i - W_i =\frac{1}{\gamma_i} m_i (\bm{P}^0)^{\top}\bm{\Omega}^{-1}\left(\mathbb{E}\left[\bm{P}^1\right] - \bm{P}^0\right) -  W_i < 0$ as the risk aversion coefficient $\gamma_i > 0$. The primal feasibility is satisfied. To conclude:
+\begin{equation}
+  \begin{split}\label{psii}
+  &\bm{x}^i = \frac{1}{\gamma_i}\bm{\Omega}^{-1}\left(\mathbb{E}\left[\bm{P}^1\right] - (1+\psi_i)\bm{P}^0\right) \\
+  &\text{where }\psi_i = 
+  \begin{cases}
+  \frac{m_i (\bm{P}^0)^{\top}\bm{\Omega}^{-1}\left(\mathbb{E}\left[\bm{P}^1\right] - \bm{P}^0\right) - \gamma_i W_i}{m_i (\bm{P}^0)^{\top}\bm{\Omega}^{-1} \bm{P}^0} & \text{if } m_i (\bm{P}^0)^{\top}\bm{\Omega}^{-1}\left(\mathbb{E}\left[\bm{P}^1\right] - \bm{P}^0\right) - \gamma_i W_i \geq 0 \\
+  0 & \text{otherwise}
+  \end{cases}
+  \end{split}
+\end{equation}
+Consequently
+\begin{equation}\label{xstar}
+  \begin{split}
+    \bm{x}^* &= \sum_{i=1}^I \bm{x}_i = \sum_{i=1}^I\frac{1}{\gamma_i}\bm{\Omega}^{-1}\left(\mathbb{E}\left[\bm{P}^1\right] - (1+\psi_i)\bm{P}^0\right) \\
+    &=\frac{1}{\gamma}\bm{\Omega}^{-1}\left(\mathbb{E}\left[\bm{P}^1\right] - (1+\psi)\bm{P}^0\right)\\
+    &\text{where } \gamma = \frac{1}{\sum_{i=1}^I 1/\gamma_i};~~~\psi = \frac{\sum_{i=1}^I \psi_i/\gamma_i}{\sum_{i=1}^I 1/\gamma_i}
+  \end{split}
+\end{equation}
+\subsection{(b)} 
+Premultiply both sides of (\ref{xstar}) by $\gamma \bm{\Omega}$:
+\begin{equation}
+  \begin{split}
+    &\gamma \bm{\Omega}\bm{x}^* = \mathbb{E}\left[\bm{P}^1\right] - (1+\psi)\bm{P}^0 \\
+    \Rightarrow\quad & \mathbb{E}\left[\bm{P}^1\right] = (1+\psi)\bm{P}^0 + \gamma \bm{\Omega}\bm{x}^* \\
+    \Rightarrow \quad &\frac{\mathbb{E}\left[P^1_s\right]-P^0_s}{P^0_s} = \psi + \frac{\gamma}{P_s^0} (\bm{\Omega}\bm{x}^*)_s
+  \end{split}
+\end{equation}
+Since $P_s^0$ is non-random, we conclude that $\mathbb{E}\left[r_s\right] = \frac{\mathbb{E}\left[P^1_s\right]-P^0_s}{P^0_s} = \psi + \frac{\gamma}{P_s^0} (\bm{\Omega}\bm{x}^*)_s$.
+
+\subsection{(c)} 
+
+By definition of $\bm{h}$, we know $\bm{h}^{\top} \bm{1} = 1$. Let $\mu_s := (\bm{\Omega} \bm{x}^*)_s /P_s^0 = \sum_{j=1}^S \Omega_{sj}x^{*}_j / P_s^0$ for $s=1,...,S$.
+\begin{equation}
+  \begin{split}
+    \frac{\mathbb{E}\left[r_M\right] - \psi}{\mathrm{\mathbb{V}ar}\left[r_M\right]} &= \frac{\mathbb{E}\left[\bm{r}^{\top} \bm{h}\right] - \psi}{\mathrm{\mathbb{V}ar}\left[\bm{r}^{\top} \bm{h}\right]} = \frac{\bm{h}^{\top} \mathbb{E}\left[\bm{r}\right] - \psi}{\bm{h}^{\top} \mathrm{\mathbb{C}ov}\left[\bm{r}\right] \bm{h}}\\
+    &= \frac{\bm{h}^{\top} (\psi \bm{1} + \gamma \bm{\mu})- \psi}{\bm{h}^{\top} \mathrm{\mathbb{C}ov}\left[\bm{r}\right] \bm{h}}=\frac{\gamma\bm{h}^{\top} \bm{\mu} + \psi\overbrace{(\bm{h}^{\top} \bm{1} - 1)}^{0}}{\bm{h}^{\top} \bm{V}\bm{h}}\\
+    &=\frac{\gamma\sum_{i=1}^S h_i \mu_i}{\sum_{i=1}^S \sum_{j=1}^S h_i V_{ij} h_j} =\gamma\frac{\sum_{i=1}^S  \left(\frac{P_i^0 x_i^*}{(\bm{P}^0)^{\top} \bm{x}^*}\right) \left(\sum_{j=1}^S \Omega_{ij}x^{*}_j \frac{1}{P_i^0}\right) }{\sum_{i=1}^S \sum_{j=1}^S \frac{P_i^0 x_i^*}{(\bm{P}^0)^{\top} \bm{x}^*} V_{ij} \frac{P_j^0 x_j^*}{(\bm{P}^0)^{\top} \bm{x}^*}}\\
+    &=\gamma(\bm{P}^0)^{\top} \bm{x}^*\frac{\sum_{i=1}^S   \sum_{j=1}^S \textcolor{red}{P_i^0} \textcolor{blue}{x_i^*P_i^0V_{ij}P_j^0x^{*}_j} \textcolor{red}{\frac{1}{P_i^0}} }{\sum_{i=1}^S \sum_{j=1}^S  \textcolor{blue}{x_i^* P_i^0 V_{ij} P_j^0 x_j^*}} \\
+    &=\gamma(\bm{P}^0)^{\top} \bm{x}^*
+  \end{split}
+\end{equation}
+
+\subsection{(d)}
+Use the results of \textbf{(c)}:
+\begin{equation}
+  \begin{split}
+    RHS &= \psi + \beta+s (\mathbb{E}\left[r_M\right] - \psi) =\psi + \mathrm{\mathbb{C}ov}\left[r_s, r_M\right]\frac{\mathbb{E}\left[r_M\right] - \psi}{\mathrm{\mathbb{V}ar}\left[r_M\right]}\\
+    &=\psi + \mathrm{\mathbb{C}ov}[r_s, \Sigma_{j=1}^S h_j r_j] \gamma(\bm{P}^0)^{\top} \bm{x}^* =\psi + \gamma(\bm{P}^0)^{\top} \bm{x}^* \sum_{j=1}^S V_{sj}h_j \\
+    &=\psi + \gamma(\bm{P}^0)^{\top} \bm{x}^* \sum_{j=1}^S \frac{\Omega_{sj}}{P_s^0 P_j^0} \frac{P_j^0 x_j^*}{(\bm{P}^0)^{\top} \bm{x}^*} \\
+    &=\psi + \gamma \sum_{j=1}^S \frac{\Omega_{sj}x_j^*}{P_s^0} = \psi + \gamma \frac{1}{P_s^0}(\bm{\Omega} \bm{x}^*)_s = \mathbb{E}\left[r_s\right]\quad\text{(By the result of \textbf{(b)})}
+  \end{split}
+\end{equation}
+Which completes the proof.
+    
+
+    
+
+
+    \section{Problem 2}\label{problem-2}
+\emph{Unit for returns: percent, the same as what was used in French’s Data Library}
+\subsection{(a)}\label{a}
+
+
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}72}]:}                  BM1       BM2       BM3       BM4       BM5
+         ME1 mean    0.138941  0.721294  0.725931  0.938094  1.013257
+             se      0.322117  0.280844  0.242438  0.229816  0.243004
+             t-stat  0.431337  2.568314  2.994295  4.081942  4.169705
+         ME2 mean    0.451483  0.732897  0.801649  0.875069  0.916870
+             se      0.293281  0.244021  0.220284  0.211684  0.244061
+             t-stat  1.539423  3.003419  3.639155  4.133851  3.756730
+         ME3 mean    0.481265  0.765048  0.701462  0.823439  0.993619
+             se      0.269862  0.221977  0.203838  0.198656  0.229668
+             t-stat  1.783373  3.446511  3.441274  4.145044  4.326334
+         ME4 mean    0.614499  0.622239  0.681545  0.794719  0.791070
+             se      0.242311  0.210575  0.202576  0.193848  0.230790
+             t-stat  2.535990  2.954949  3.364389  4.099694  3.427656
+         ME5 mean    0.501318  0.573863  0.571117  0.473859  0.679433
+             se      0.189887  0.181751  0.175723  0.189212  0.219410
+             t-stat  2.640088  3.157413  3.250092  2.504379  3.096636
+\end{Verbatim}
+        
+    \subsection{(b)}\label{b}
+
+
+    \begin{center}
+    \adjustimage{max size={0.8\linewidth}{0.9\paperheight}}{output_5_0.png}
+    \end{center}
+    
+    \begin{itemize}
+\tightlist
+\item
+  For the same BM quantile group (above BM2), we can observe a size
+  effect across different size groups, in the sense that the excess
+  return increases as size group goes from BIG to SMALL. (Figure 1)
+\item
+  The size effect described above is not evident for LoBM(BM1) group:
+  the excess returns do not increase monotonically.
+\item
+  For the same size quantile group, we can observe a value effect across
+  different BM groups, in the sense that the excess return increases as
+  BM group goes from LowBM to HighBM. (Figure 2)
+\item
+  The value effect is stronger in the SMALL(ME1) size group, as the blue
+  line in figure 2 has the steepest slope.
+\end{itemize}
+
+    \subsection{(c)}\label{c}
+
+
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}69}]:}                   BM1        BM2       BM3        BM4       BM5
+         ME1 alpha   -0.604325  0.0792367  0.151235   0.410014  0.462256
+             t-stat   -3.08398   0.456519     1.079    2.91167   3.03706
+             p<0.05        (*)                             (*)       (*)
+         ME2 alpha    -0.28214   0.117712  0.252293   0.352649  0.336371
+             t-stat    -1.8987   0.975059   2.24046     3.1656   2.40059
+             p<0.05                             (*)        (*)       (*)
+         ME3 alpha   -0.214433   0.180408   0.17511   0.326279  0.443554
+             t-stat   -1.73615    1.94766   1.88901    3.24615   3.41398
+             p<0.05                                        (*)       (*)
+         ME4 alpha   -0.033038  0.0555156  0.153521   0.299895  0.225168
+             t-stat  -0.352906    0.71254   1.73193    3.25954   1.82287
+             p<0.05                                        (*)          
+         ME5 alpha  -0.0130529  0.0802354  0.124674  0.0141237  0.179359
+             t-stat  -0.194115    1.27065   1.47073   0.136355   1.31604
+             p<0.05                                                     
+\end{Verbatim}
+        
+
+    \begin{center}
+    \adjustimage{max size={0.8\linewidth}{0.9\paperheight}}{output_9_0.png}
+    \end{center}
+
+    
+    \subsection{(d)}\label{d}
+
+
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}68}]:}                   BM1         BM2         BM3        BM4        BM5
+         ME1 alpha   -0.547419 -0.00188453  -0.0285962   0.169426   0.121075
+             t-stat   -5.62311  -0.0260974   -0.523543    3.10497    2.11213
+             p<0.05        (*)                                (*)        (*)
+         ME2 alpha   -0.167721   0.0232988   0.0469446  0.0768339 -0.0407018
+             t-stat   -2.46079    0.395727    0.793127    1.48421  -0.733885
+             p<0.05        (*)                                              
+         ME3 alpha  -0.0678117   0.0795249  -0.0269168  0.0524966   0.079584
+             t-stat   -1.09019     1.19467   -0.405653   0.817183      1.015
+             p<0.05                                                         
+         ME4 alpha     0.11902  -0.0376912  -0.0348759  0.0584575  -0.119813
+             t-stat    1.91318   -0.521096   -0.468031   0.859294   -1.39163
+             p<0.05                                                         
+         ME5 alpha    0.162147   0.0504822  0.00859773  -0.248215  -0.157442
+             t-stat    3.50773    0.881661    0.123204   -3.80089   -1.57558
+             p<0.05        (*)                                (*)           
+\end{Verbatim}
+\textbf{Comments:}
+\begin{itemize}
+    \item The alphas that are statistically significant in part (c), i.e. the CAPM single factor model becomes either
+    \begin{itemize}
+        \item Much smaller in scale, in terms of the absolute values. When we inspect the plots of alphas across different groups, we can see a much messy pattern as opposed to the CAPM alphas. OR
+        \item Becomes not statistically significant. The $(*)$ in table marks those alphas with p-value < 0.05. We can observe that many alphas in the top-right corrner (small size, high B/M) that are previously significant now becomes not significant to the confidence level of 0.95.
+    \end{itemize}
+    \item These observations bespeaks the fact that a considerable amount of the CAPM alphas on the size$\times$value quantile portfolios can be explained by the SMB and HML risk factors.
+\end{itemize}
+        
+
+    \begin{center}
+    \adjustimage{max size={0.8\linewidth}{0.9\paperheight}}{output_12_1.png}
+    \end{center}
+    
+    \subsection{(e)}\label{e}
+
+    \begin{center}
+    \adjustimage{max size={0.8\linewidth}{0.9\paperheight}}{output_14_1.png}
+    \end{center}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+# Repeat Part (a)
+                 BM1       BM2       BM3       BM4       BM5
+ME1 mean    0.279520  0.911910  0.851436  1.074964  1.078133
+    se      0.397315  0.346695  0.281501  0.270598  0.282844
+    t-stat  0.703521  2.630298  3.024629  3.972553  3.811763
+ME2 mean    0.673830  0.906238  0.946844  0.917159  0.928510
+    se      0.350828  0.284240  0.255377  0.254190  0.302355
+    t-stat  1.920685  3.188284  3.707637  3.608169  3.070930
+ME3 mean    0.687848  0.906062  0.834394  0.920435  1.059032
+    se      0.323769  0.259975  0.240980  0.243974  0.278055
+    t-stat  2.124506  3.485189  3.462497  3.772677  3.808714
+ME4 mean    0.880749  0.878720  0.767234  0.923185  0.851772
+    se      0.291348  0.238622  0.247059  0.232234  0.283599
+    t-stat  3.023010  3.682481  3.105468  3.975237  3.003433
+ME5 mean    0.772807  0.751408  0.772299  0.505007  0.801949
+    se      0.221474  0.210062  0.208792  0.244736  0.295633
+    t-stat  3.489385  3.577085  3.698892  2.063480  2.712648
+
+
+# Repeat Part (b): see the plots above.
+
+
+# Repeat Part (c)
+                  BM1        BM2        BM3       BM4        BM5
+ME1 alpha   -0.693204  0.0743478   0.127975   0.41341   0.376434
+    t-stat    -2.5771   0.311648   0.719195   2.25265    1.99988
+    p<0.05        (*)                             (*)        (*)
+ME2 alpha    -0.27519    0.12434   0.254925  0.235765   0.140363
+    t-stat   -1.36331   0.789451    1.74087   1.58208   0.751792
+    p<0.05                                                      
+ME3 alpha   -0.214548   0.147307   0.146577  0.256493   0.327003
+    t-stat   -1.23544    1.22032    1.21334    1.8511    1.93806
+    p<0.05                                                      
+ME4 alpha   0.0251955   0.170176  0.0642887  0.267753  0.0885353
+    t-stat   0.190777    1.64981   0.514063   2.22401    0.53679
+    p<0.05                                        (*)           
+ME5 alpha   0.0923624    0.11796   0.190769 -0.144086  0.0422177
+    t-stat    1.17026    1.40275    1.70035  -0.98358   0.225891
+    p<0.05        
+
+
+# Repeat Part (d)                                              
+                 BM1        BM2        BM3        BM4        BM5
+ME1 alpha  -0.634844   0.047471  0.0315884   0.270725   0.175225
+    t-stat  -4.60346   0.448571   0.424996    3.60445    2.33627
+    p<0.05       (*)                              (*)        (*)
+ME2 alpha  -0.203053  0.0659427   0.119476  0.0594593 -0.0984468
+    t-stat  -2.24812   0.837165    1.53178   0.879905    -1.3781
+    p<0.05       (*)                                            
+ME3 alpha  -0.108831  0.0794007  0.0143403   0.078121   0.101301
+    t-stat   -1.3034   0.873981   0.162489   0.856674   0.945184
+    p<0.05                                                      
+ME4 alpha    0.11877  0.0891055 -0.0694418   0.124072  -0.125605
+    t-stat   1.43847   0.965733  -0.680546      1.353   -1.07457
+    p<0.05                                                      
+ME5 alpha   0.189886   0.079747  0.0923893    -0.3241  -0.172125
+    t-stat   3.71963    1.11945     1.1159   -3.70759   -1.28333
+    p<0.05       (*)                              (*)           
+
+    \end{Verbatim}
+We used 1988 - 2018, i.e. recent 30 years for this section.
+\textbf{Differences:}
+\begin{itemize}
+    \item In the recent period, the excess return profile across size$\times$ value double sorts becomes much more messy. As in the plots we can't find the downward/upward sloping average returns.
+    \item Less portfolios from the double sorts have statisticallty significant CAPM alphas and FF3 alphas: the market becomes more efficient.
+\end{itemize}
+\textbf{Similarities:}
+\begin{itemize}
+    \item The (Small size $\times$ high BM) portfolios in the top-right corner still has significant CAPM alphas, and that alpha reduces in a similar fashion as we account for FF3 factors.
+\end{itemize}
+
+    
+    \section{Problem 3}\label{problem-3}
+    \textbf{Note: all the sharpe ratios are annualized, i.e. scaled by multiplying $\sqrt{12}$}
+
+\subsection{(a)}\label{a}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Sharpe ratio (1991/01 - 2018/10): 0.6705
+Sharpe ratio (1991/01 - 2005/12): 0.7862
+Sharpe ratio (2006/01 - 2018/10): 0.5523
+
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.7\linewidth}{0.9\paperheight}}{output_17_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsection{(b)}\label{b}
+    \begin{Verbatim}[commandchars=\\\{\}]
+Sharpe ratio (1991/01 - 2018/10): 0.6916
+Sharpe ratio (1991/01 - 2005/12): 0.9773
+Sharpe ratio (2006/01 - 2018/10): 0.4414
+
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.7\linewidth}{0.9\paperheight}}{output_19_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsection{(c)}\label{c}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Sharpe ratio (1991/01 - 2018/10): 0.7013
+Sharpe ratio (1991/01 - 2005/12): 1.0266
+Sharpe ratio (2006/01 - 2018/10): 0.4248
+
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.7\linewidth}{0.5\paperheight}}{output_21_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsection{(d)}\label{d}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Sharpe ratio (1991/01 - 2018/10): 0.7074
+Sharpe ratio (1991/01 - 2005/12): 1.0659
+Sharpe ratio (2006/01 - 2018/10): 0.4083
+
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.7\linewidth}{0.9\paperheight}}{output_23_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsection{(e)}\label{e}
+    \textbf{Comments:}
+    \begin{itemize}
+        \item In terms of aggressiveness, we have (d) > (c) > (b) > (a). 
+        \item More aggressive strategy has higher return and sharpe ratio in 1991-2018 (``overall''), and 1991-2005 (``good periods''); and outperforms the benchmark in those periods.
+        \item More aggressive strategy has lower return and sharpe ratio in 2006-2018 (``bad/high volatility periods''); and underperforms the benchmark in those periods.
+    \end{itemize}
+    \textbf{Limitations:}
+    \begin{itemize}
+        \item The margin requirements ask for large amount of capital to implement more aggressive strategies.
+        \item Short selling may not be easy for some countries/exchanges.
+        \item The aggressive strategies have higher drawdowns in the ``bad'' periods, which may cause the fund to blow up.
+    \end{itemize}
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+    \end{document}

@@ -1,0 +1,312 @@
+
+    
+\documentclass[9pt, landscape]{article}
+\usepackage[document]{ragged2e}
+\usepackage[landscape]{geometry}       
+\geometry{a4paper}
+\geometry{margin=0.4in} 
+\usepackage{paralist,sectsty,multicol,hyperref,titlesec,caption}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+  \sectionfont{\small}
+  \subsectionfont{\small}
+  \titlespacing*{\section}
+  {0pt}{3pt}{1pt}
+  \titlespacing*{\subsection}
+  {0pt}{1.8pt}{1pt}
+\usepackage[english]{babel}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+\usepackage[utf8]{inputenc}
+\newlength{\mylen}
+\setbox1=\hbox{$\bullet$}\setbox2=\hbox{\tiny$\bullet$}
+\setlength{\mylen}{\dimexpr0.5\ht1-0.5\ht2}
+\renewcommand\labelitemi{\raisebox{\mylen}{\tiny$\bullet$}}
+
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=-0.02in}
+
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs, mathtools,stmaryrd}
+\usepackage{booktabs, tikz, array, eurosym, float}
+\usepackage{algorithm,algorithmicx}
+\usepackage[noend]{algpseudocode}
+\captionsetup[algorithm]{font=footnotesize}
+\newcommand{\commentsymbol}{$\sslash$}
+\algrenewcommand\algorithmiccomment[1]{\hfill \commentsymbol{} #1}
+
+\newcommand{\boxwidth}{246pt}
+\newcommand\disteq{\stackrel{\mathclap{\normalfont\mbox{\tiny d}}}{=}}
+\pagenumbering{gobble}
+    
+
+\begin{document}    
+\footnotesize
+
+
+\begin{multicols*}{3}
+\section{Misc}
+\begin{itemize}
+	\item $\bar{X}\sim \mathcal{N}(\mathbb{E}\left[X\right], \sigma^2_X/n)$; $\widehat{\sigma}_X = \sqrt{\sum(X_i - \bar{X})^2/(n-1)}$; $\widehat{se} = \widehat{\sigma}_X/\sqrt{n}$. 
+\end{itemize}
+\section{Random Number Generation}
+\begin{itemize}
+	\item \textbf{Prob Integral Transform:} The key is that $F_X(X) \sim U(0,1)$; $X=F_X^{-1}(F_X(X))\disteq F_X^{-1}(U)$. $\text{Exp}(\lambda): F^{-1}(u) = -\frac{1}{\lambda} \log(1-u)$.
+	\item \textbf{Aliasing Table:} Generate random states (discrete, finite dist)\\
+	\vspace{2pt}\fbox{\parbox{\boxwidth}{
+	\begin{algorithmic}[1]\scriptsize
+	\Function{MakeTable}{$pmf$}\Comment{$pmf$: a list of $\{\textit{`x'},\textit{`p'}\}$ maps}
+	\State $n\gets\texttt{len}(pmf)$\Comment{$table[i]$: $(state, p, alias)$ row}
+	\State $pmf[:, \textit{`p'}]$ \texttt{*=} $(n-1)$
+	\State $table \gets \texttt{zeroes}((n-1, 3))$
+	\For{$i=0:n-1$}
+	\State $pmf$\texttt{.sort(key = lambda \textit{t}:\textit{t}[\textit{`p'}])}
+	\State $table[i,0]\gets pmf[0][\textit{`x'}]$;\quad$table[i,2]\gets pmf[-1][\textit{`x'}]$
+	\State $table[i,1]\gets p \gets pmf[0][\textit{`p'}]$ 
+	\State $pmf[-1][\textit{`p'}]$ \texttt{-=} $(1-p)$;\quad $pmf$\texttt{.popfront()}
+	\EndFor
+	\State \textbf{return} $table$
+	\EndFunction
+	\Function{Draw}{$table, n$}\Comment{draw sample of size $n$}
+	\State $\bm{U} \gets \texttt{uniform}(\texttt{size=}n)$; \quad $\bm{V}\gets (\texttt{len}(table)-1) \texttt{*} \bm{U}$
+	\State $\bm{I} \gets \left\lceil \bm{V}\right\rceil$; \quad $\bm{W}\gets \bm{I-V}$
+	\State $\bm{Y} \gets (\bm{W}\leq table[\bm{I}, 1])$
+	\State \textbf{return} $table[\bm{I}, 0]\texttt{.*}\bm{Y} + table[\bm{I}, 2]\texttt{.*}(1-\bm{Y})$\Comment{elementwise .*}
+	\EndFunction
+	\end{algorithmic}
+	}}
+	\item \textbf{Rejection Method:} When $F^{-1}$ hard to obtain. Idea is $f_X(x) = c f_Y(x)\frac{f_X(x)}{cf_Y(x)}=cf_Y(x)g(x)$. We must ensure $\text{supp}(f_X)\subseteq \text{supp}(f_Y)$; and choose $c$ such that $g(x)\in [0,1]$ for all $x$. \textbf{Procedures:} (1) $Y=F_Y^{-1}(U)$. (2) An independent $V\sim U(0,1)$, reject $Y$ if $V\leq g(Y)=f_X(Y)/cf_Y(Y)$; otherwise return $Y$. \textbf{Efficiency:} $1/c$ is acceptance rate, we want to minimize it. Choose $\sup f_X(x)/f_Y(x)$.
+\end{itemize}
+\section{Some Distributions}
+\begin{itemize}
+	\item \textbf{Mixture of Normals:} Generate $U\sim U(0,1)$, $Z\sim \mathcal{N}(0,1)$ independently. Return $X=0.6Z$ if $U\leq 0.82$; $X=1.98Z$ otherwise. $X$ has approximately variance 1 and heavy tails. 
+	\item \textbf{Generalized $\Lambda$:} Generate by prob integral transform: $F^{-1}(u)=\lambda_1 + \frac{1}{\lambda_2}(u^{\lambda_3} - (1-u^{\lambda_4}))$; $u\in [0,1]$. $\lambda_1$ is the center, $\lambda_2$ is scale parameter; $\lambda_3, \lambda_4$ fit the 3rd and 4th moment. Symmetric if $\lambda_3=\lambda_4$.
+	\item \textbf{Multivariate Normal:} Simulate multivariate normals $\bm{X}\sim \mathcal{N}(\bm{0}, \bm{\Sigma}^{(d\times d)})$ by iid normals $\bm{Z}$. Positive semi-definite $\bm{\Sigma} =  \bm{VD}\bm{V}^{\top}$ (eigen-decomp), or $\bm{\Sigma}= \bm{A}\bm{A}^{\top}$ (Cholesky). $\bm{X}\disteq \bm{A}\bm{Z} = \bm{VD}^{1/2}\bm{Z}$. $\bm{A}$ lower triangular, $\bm{D}$ diagonal.
+	\item \textbf{Multivariate t:} Univariate case $T_{\nu} \disteq {Z}/{\sqrt{S/\nu}}$, where $Z$ is $\mathcal{N}(0,1)$, $S\sim \chi^2(\nu) \sim \Gamma(\frac{\nu}{2}, \frac{1}{2})$; $Z, S$ independent. Note that $\Gamma(\frac{\nu}{2}, \frac{1}{2})$ is sum of $\frac{\nu}{2}$ iid Exp$(1/2)$'s. ($\Gamma(1,\lambda)=\text{Exp}(\lambda)$; $\Gamma(k,\lambda)$ is sum of $k$ iid $\Gamma(1,\lambda)$'s)\\
+	Multivariate case: $\bm{T}\sim t(\nu; \bm{0}, \bm{\Sigma}^{(d\times d)})$ (df $\nu$, mean $\bm{0}$, covariance $\bm{\Sigma}$, all $d$ components must have same df) \textbf{Procedures:} (1) $\bm{A}\gets\texttt{cholesky}(\bm{\Sigma})$. (2) $\bm{Z}\gets \mathcal{N}(0,\bm{I})$; $\bm{X}\gets\bm{AZ}$. (3) $S\gets \chi^2(\nu)$. (4) $\bm{T}\gets \bm{X}/\sqrt{S/\nu}$. 
+	\item \textbf{Copulas:} The key idea is to separate multivariate distribution $\bm{X}$ into individual marginals $\{F_{X_i}\}$, and the covariance $\bm{\Sigma}$. \\
+	\vspace{2pt}\fbox{\parbox{\boxwidth}{
+	\begin{algorithmic}[1]\scriptsize
+	\Function{GaussianCopula}{$\bm{\Sigma}^{d\times d}, \{F^{-1}_i(\cdot)\}_{i=1}^d$}\Comment{a list of inv cdfs}
+	\State $\bm{A} \gets \texttt{cholesky}(\bm{\Sigma})$; \quad $\bm{Z}\gets \mathcal{N}(\bm{0}, \bm{I})$;\quad $\bm{Y}\gets \bm{AZ}$
+	\State $\bm{U}\gets \texttt{normal.cdf}(\bm{Y}/\sqrt{\texttt{diag}(\bm{\Sigma})})$\Comment{$U_i=\Phi(Y_i/\sigma_i)$}
+	\State \textbf{return} $\{F_i^{-1}(U_i)\}$\Comment{$\bm{X}=(F_1^{-1}(U_1),...,F_d^{-1}(U_d))$}
+	\EndFunction
+	\end{algorithmic}}}
+	\vspace{2pt}\fbox{\parbox{\boxwidth}{
+	\begin{algorithmic}[1]\scriptsize
+	\Function{TCopula}{$\bm{\Sigma}^{d\times d}, \{F^{-1}_i(\cdot)\}_{i=1}^d$}\Comment{same $\bm{A,Z,Y}$}
+	\State ...$\bm{A,Z,Y}$...;\quad $S\gets \xi^2(\nu)$;\quad $\bm{T}\gets \bm{Y}/\sqrt{S/\nu}$ 
+	\State $\bm{U}\gets \texttt{t.cdf}(\bm{T}/\sqrt{\texttt{diag}(\bm{\Sigma})}, \texttt{df}=\nu)$\Comment{$U_i=F_{T_{\nu}}(T_i/\sigma_i)$}
+	\State \textbf{return} $\{F_i^{-1}(U_i)\}$\Comment{$\bm{X}=(F_1^{-1}(U_1),...,F_d^{-1}(U_d))$}
+	\EndFunction
+	\end{algorithmic}}}
+\end{itemize}
+\section{Path Generation}
+Suppose we do $N$ periods, $\Delta=T/N$. $i=1,2,...,N$.
+\begin{itemize}
+	\item \textbf{GBM:} $S_{(i+1)\Delta}|S_{i\Delta}\disteq S_{i\Delta}\exp\{(r-.5\sigma^2)\Delta + \sigma \sqrt{\Delta}Z_{i+1}\}$; or $S_{i\Delta}\disteq S_{0}\exp\{(r-.5\sigma^2)i\Delta + \sigma \sqrt{\Delta}(Z_1 + ... + Z_i)\}$. \textbf{Multidimensional GBM:} $dS_k/S_k = \mu_k dt + \sum_{j=1}^d A_{kj}dW_j(t)$, $\bm{A}\bm{A}^{\top}=\bm{\Sigma}^{d\times d}$. Simulated by driver $\bm{Z}^{N\times d}$. For $k=1,...,d$:\\
+	 $S_{k,(i+1)\Delta}|S_{k,i\Delta} \disteq S_{k,i\Delta}\exp\{(\mu_k-.5\sigma_k^2)\Delta + \sqrt{\Delta}\sum_{j=1}^d A_{kj}Z_{i+1, j}\}$.
+	\item \textbf{Vasicek (O-U):} $dr(t) = \alpha(b-r(t))dt + \sigma dW(t)$ is a mean-reversion model. $b$ is long term mean interest rate, $\alpha$ is mean reversion speed.\\
+	$r(t)|r(s) \disteq e^{-\alpha(t-s)}r(s)+b(1-e^{-\alpha(t-s)})+\sigma\sqrt{(1-e^{-2 \alpha(t-s)})Z/2 \alpha}$\\
+	$r(t)|r(s) \xrightarrow{d} \mathcal{N}(b, \frac{\sigma^2}{2 \alpha})$, as $t\to \infty$, has a stationary distribution.
+	\item \textbf{CIR:} $dr(t)=\alpha(b-r(t)) + \sigma\sqrt{r(t)}dW(t)$, non-central $\chi^2$ trans density. $\chi^2(\nu, \lambda)\disteq \sum_{i=1}^{\nu}\mathcal{N}(m_i, 1)$; $\lambda=\sum m_i^2$ non-centrality parameter.\\
+	$r(t)|r(s)\disteq \frac{\sigma^2(1-e^{-\alpha(t-s)})}{4 \alpha}\chi^2(\nu, \lambda)$; $\nu=\frac{4b \alpha}{\sigma^2}$; $\lambda = \frac{4 \alpha e^{-\alpha(t-s)}}{\sigma^2(1-e^{-\alpha(t-s)})}r(s)$
+	\item \textbf{Hull White:} $dS(t)/S(t)=r(t)dt + \sigma(t)dW(t)$. Option price has black-scholes solution: $\texttt{bs}(S_0, K, R^*, \Sigma^*, T)$. $R^*=\frac{1}{T}\int_0^Tr(t)dt$; $\Sigma^*=\sqrt{\int_0^T\sigma^2(t)dt/T}\gets \sqrt{\sum_1^N\widehat{\sigma}^2(i\Delta)/N}$, can only simulate $\sigma(t)$.
+	\item \textbf{Discretization:} Want to approximate SDE: $dS(t)=a(S(t),t)dt + b(S(t),t)dW(t). $\textbf{Euler:} (first order) $\widehat{S}_{(i+1)\Delta}|\widehat{S}_{i\Delta}\disteq \widehat{S}_{i\Delta} + a(\widehat{S}_{i\Delta}, i\Delta)\Delta + b(\widehat{S}_{i\Delta}, i\Delta)\sqrt{\Delta}Z_{i+1}$; assume constant $a,b$ over $[i\Delta, (i+1)\Delta]$; error$~\sim \mathcal{O}(\Delta)$. \textbf{Milstein:} (quadratic) \\$\widehat{S}_{(i+1)\Delta}|\widehat{S}_{i\Delta}\disteq \widehat{S}_{i\Delta} + a(\widehat{S}_{i\Delta}, i\Delta)\Delta + b(\widehat{S}_{i\Delta}, i\Delta)\sqrt{\Delta}Z_{i+1} + \frac{1}{2}b(\widehat{S}_{i\Delta}, i\Delta)\frac{\partial b(\widehat{S}_{i\Delta}, i\Delta)}{\partial \widehat{S}_{i\Delta}} (Z_{i+1}^2 -1 )\Delta$; error$~\sim \mathcal{O}(\Delta^2)$. \textbf{Disc factor:} $D(T)=e^{-\int_0^Tr(t)dt}\gets e^{-\Delta\sum_1^Nr(i\Delta)}$.
+\end{itemize}
+\section{Variance Reduction}
+\begin{itemize}
+	\item \textbf{Antithetic Variables:} Use negatively correlated paths: simulating the second half of sample using the negative of $\bm{U}, \bm{Z}$'s that drive the first half. $\bm{U}^A=\bm{1}-\bm{U}$, $\bm{Z}^A=-\bm{Z}$. Final sample is $V_i \gets (C_i+C_i^A)/2$.
+	\item \textbf{Control Variables:} We want to estimate $\mathbb{E}\left[Y\right]$ with $\bar{Y}$. We also calculate $\bar{X}$ with the same paths, but $\mathbb{E}\left[X\right]$ is \textbf{known}. Adjust the estimate to $\widehat{Y}=\bar{Y}+\widehat{a}(\bar{X}-\mathbb{E}\left[X\right])$, $\widehat{a}=-\sigma_{XY}/\sigma^2_{X}=-\rho_{XY}\sigma_Y/\sigma_{X}$ is chosen to minimize $\mathrm{\mathbb{V}ar}[\widehat{Y}]$, but can only be estimated itself: $\widehat{\widehat{a}}=-\widehat{\rho}_{XY}\widehat{\sigma}_Y/\widehat{\sigma}_{X}$. $\widehat{se}=\widehat{\sigma}_Y\sqrt{1-\hat{\rho}^2}/\sqrt{n}$. Note that $\mathbb{E}[\widehat{Y}(\widehat{a})]=\mathbb{E}\left[Y\right]\ne \mathbb{E}[\widehat{Y}(\widehat{\widehat{a}})]$, the resulting estimator is biased.
+	\end{itemize}
+	\subsection{Importance Sampling}
+	$\mathbb{E}[e^{-rT}h(\bm{X})] = \int e^{-rT}h(\bm{x})f_{\bm{X}}(\bm{x})d \bm{x} = \int e^{-rT}h(\bm{x})\frac{f_{\bm{X}}(\bm{x})}{f_{\bm{Y}}(\bm{x})}f_{\bm{Y}}(\bm{x})d \bm{x}$, $\text{supp}(hf_{\bm{X}})\subseteq \text{supp}(f_{\bm{Y}})$; absolute continuity. Old payoff is $h$, new payoff is $hf_{\bm{X}}/f_{\bm{Y}}$, new sampling distribution is $f_{\bm{Y}}$.
+	\begin{itemize}
+	\item \textbf{Change Mean:} Sample shifted normals $X\sim \mathcal{N}(m, 1) \disteq Z+m$; RN derivative is $f_{Z}/f_{X}=\exp(-mx+.5m^2)$; only generate final state for non-path-dependent options, $S_T=S_0\exp((r-.5\sigma^2)T+\sigma\sqrt{T}(Z+m))$; new discounted payoff is $e^{-rT}h(S_T)\exp(-m(Z+m)+.5m^2)$.
+	\item \textbf{Enforcing Moneyness:} Call itm: $Z>\frac{\log (K/S_0)-(r-.5\sigma^2)T}{\sigma \sqrt{T}}=:L$\\
+	Generate $X$: $f_X(x) = \frac{\phi(x)}{(1-\Phi(L)}, x\geq L; 0$ otherwise. This is truncated normal, cdf $F_X(x)= \frac{\Phi(x)-\Phi(L)}{1-\Phi(L)}, x\geq L; 0$ otherwise. Simulated by $X\disteq \Phi^{-1}\{U(1-\Phi(L))+\Phi(L)\}$. RN derivative is $f_{Z}/f_{X}=1-\Phi(L)$; hence new discounted payoff is $e^{-rT}h(S_T)(1-\Phi(L))$.
+	\item \textbf{Multiple Change of Measure:} For path-dep derivatives, we can't only sample the final $S_T$, have to do entire path $(S_{\Delta}, ..., S_{N\Delta})$ with driver $(Z_1,...,Z_N)$. If apply change of measure to every single $Z_i$, the RN derivarive is a product $\prod_{i=1}^N f_{Z_i}(x)/f_{X_i}(x)$. E.g. $X_i\sim \mathcal{N}(m_i, 1)$ indep., RN derivative is $\prod_{i=1}^N \phi(x)/\phi(x-m_i)$.
+	\item \textbf{Capriotti's Method:} We want to change sampling distribution from $Z\sim\mathcal{P}_0$ to parametric family $X\sim\mathcal{P}_{\bm{\theta}}$. (e.g., from $\mathcal{N}(0,1)$ to $\mathcal{N}(\mu, s^2)$), and want to find best $\bm{\theta}$ to reduce variance. We want to estimate $\mathbb{E}_0[h(\bm{Z})]=\mathbb{E}_{\bm{\theta}}[h(\bm{X})W_{\bm{\theta}}(\bm{X})]$; RN derivative $W_{\bm{\theta}}=d \mathcal{P}_0/d \mathcal{P}_{\bm{\theta}}$. MC estimator with $M$ samples is $\frac{1}{M}\sum_{i=1}^Mh(\bm{X}_i)W_{\bm{\theta}}(\bm{X}_i)$. Min variance $\iff$ Min second moment $\mathbb{E}_{\bm{\theta}}[h^2(\bm{X})W^2_{\bm{\theta}}(\bm{X})]=\mathbb{E}_{0}[h^2(\bm{Z})W_{\bm{\theta}}(\bm{Z})]\gets \frac{1}{M}\sum_{i=1}^Mh^2(\bm{Z}_i)W_{\bm{\theta}}(\bm{Z}_i)$, can be regarded as RSS of regression $0 = y = h(\bm{Z})\sqrt{W_{\bm{\theta}}(\bm{Z})}+\epsilon$. Find best $\bm{\theta}$ by fitting regression. For $\mathcal{N}(\theta, 1)$, $W_{\theta}(x)=\exp(-\theta x+.5\theta^2)$. For $\mathcal{N}(\mu, s^2)$, $W_\theta(x) = s\cdot\exp\{-.5(x^2 - (\frac{x-\mu}{s})^2)\}$.\\
+		\vspace{2pt}\fbox{\parbox{\boxwidth}{
+	\begin{algorithmic}[1]\scriptsize
+	\Function{CapriottiMC}{$S_0, K, T, \sigma, r, N, M, n$}
+	\State $\Delta \gets T/N$; \quad $\bm{Z}\gets \mathcal{N}(0, 1, \texttt{size}=M)$\Comment{Fit with $M\ll n$ paths}
+	\Function{Residual}{$params$} \Comment{$params = (\mu, s)$}
+	\State $\bm{S}_T\gets S_0\exp((r-.5\sigma^2)T+\sigma\sqrt{T} \bm{Z})$
+	\State $\bm{W} \gets params[1]\cdot\exp\{-.5(\bm{Z}.^2 - (\frac{\bm{Z}-params[0]}{params[1]}).^2)\}$
+	\State \textbf{return} $(\bm{S}_T-K)^+.*\sqrt{\bm{W}}$
+	\EndFunction
+	\State $\mu^*, s^* \gets \texttt{least.squares(Residual}, \bm{\theta}_0\texttt{)}$; \Comment{method=`lm'}
+	\State $\bm{X}\gets \mathcal{N}(\mu^*, s^{*2}, \texttt{size}=n)$\Comment{$n$ samples}
+	\State $\bm{S}_T\gets S_0\exp((r-.5\sigma^2)T+\sigma\sqrt{T} \bm{X})$
+	\State $\bm{W} \gets s^*\cdot\exp\{-.5(\bm{X}.^2 - (\frac{\bm{X}-\mu^*}{s^*}).^2)\}$
+	\State $\bm{C} \gets e^{-rT}(\bm{S}_T-K)^+.*\bm{W}$
+	\State $mean \gets \texttt{sum}(\bm{C})/n$;\quad $se\gets \sqrt{\texttt{sum}((\bm{C} - mean)^2)/(n(n-1))}$
+	\State \textbf{return} $\bm{C}, mean, se$
+	\EndFunction
+	\end{algorithmic}}}
+	\end{itemize}
+	\subsection{Conditional Monte Carlo}
+	$\mathrm{\mathbb{V}ar}[X] = \mathbb{E}[\mathrm{\mathbb{V}ar}[X|Y]]+\mathrm{\mathbb{V}ar}[\mathbb{E}[X|Y]]>\mathrm{\mathbb{V}ar}[\mathbb{E}[X|Y]]$. As we proceed along a path, assign closed-form price as soon as there is one conditional on the current state (e.g. knocked in becomes vanilla).\\
+	\vspace{2pt}\fbox{\parbox{\boxwidth}{
+	\begin{algorithmic}[1]\scriptsize
+	\Function{ConditionalKnockIn}{$S_0, K, H, T, m, \sigma, r, N, n$}
+	\State $\Delta \gets T/N$; \quad $\bm{C}\gets \texttt{zeros}(n)$; \quad $\bm{X}\gets \mathcal{N}(m,1,\texttt{size}=n)$
+	\State $\bm{S}\gets \texttt{gbm.paths}(\bm{X}, S_0, \sigma, r, T, N)$\Comment{with importance sampling}
+	\For{$i, \bm{S}_i~\mathbf{in}~\texttt{enumerate}(\bm{S})$}
+	\State$\tau_i \gets \texttt{find.first(}\bm{S}_i, \texttt{cond=lambda }s: s<H, \texttt{default=}-1)$
+	\State$\bm{C}[i]\gets \texttt{bs}(\bm{S}_i[\tau_i], K, r, \sigma, T-\tau_i\Delta)$ \textbf{if} $\tau_i\geq 0$ \textbf{else} 0
+	\State $\bm{C}[i]$ \texttt{*=} $\Pi_1^{\tau_i} \exp(-m \bm{X}[i] + .5m^2)$\Comment{RN derivative}
+	\EndFor
+	\State \textbf{return} $\bm{C}, \texttt{mean}(\bm{C}), \texttt{se}(\bm{C})$
+	\EndFunction
+	\end{algorithmic}}}
+	\subsection{Stratification}
+	The lowest driver of all randomness is $\bm{U}$, so $C_i=g(U_i)$ with some function $g$. $\mathbb{E}\left[g(U)\right] = \int_{[0,1]} g(u)du$. Break unit interval into $B$ bins, $N_B = n/B$ iid uniform samples from each bin $[\frac{i-1}{B}, \frac{i}{B})$. Variance are reduced, the more bins the better.
+	\begin{itemize}
+	\item \textbf{One Dimension:} simulate $\bm{U}^{B\times N_B}$, each row is a bin. Get prices $C_{ij}=g(U_{ij})$. Bin average $\bar{C}_i = \sum_{j=1}^{N_B}C_{ij}/N_B$. Final estimate $\widehat{C}_{strat} = \frac{1}{n}\sum_{i=1}^B\sum_{j=1}^{N_B}C_{ij}$; $\widehat{se}(\widehat{C}_{strat}) = \frac{1}{\sqrt{n}}\sqrt{\frac{1}{B}\sum_{i=1}^B \widehat{\sigma}_{i}^2}$; $\widehat{\sigma}_{i}^2 = \mathrm{\mathbb{V}ar}[C_{ij}]$ is the sample variance of each bin $\bm{C}_i$.
+	\item \textbf{Multidimensional:} option may rely on $d$ assets. $\mathbb{E}\left[g(U_1,..., U_d)\right] = \int_{[0,1]^d} g(u_1, ..., u_d)du_1...du_d$ ($d$-folds integral). We can stratify to $d$-hypercube. 2-assets example: $B=B_1B_2$, $n=B_1B_2N_B$. $\widehat{C}_{strat} = \frac{1}{n}\sum_{1}^{B_1}\sum_{1}^{B_2}\sum_{j=1}^{N_B}C_{i_1i_2j}$; $\widehat{se}(\widehat{C}_{strat}) = \frac{1}{\sqrt{n}}\sqrt{\frac{1}{B}\sum_{1}^{B_1}\sum_{1}^{B_2} \widehat{\sigma}_{i_1i_2}^2}$. Also for path-dep options, $N$ periods will incur $N$-dimensions. \\
+	\vspace{2pt}\fbox{\parbox{\boxwidth}{
+	\begin{algorithmic}[1]\scriptsize
+	\Function{Stratification2D}{$\bm{S}_0, K, \sigma, r, T, B_1, B_2, N_B, N_{\text{steps}}$}
+	\State$bins_1\gets\texttt{linspace}(0, 1, B_1+1)$;\quad$bins_2\gets\texttt{linspace}(0, 1, B_2+1)$
+	\State$\bm{C}\gets\texttt{zeros}((B_1,B_2))$;\quad$\bm{\Sigma}\gets\texttt{zeros}((B_1,B_2))$;\quad$n\gets B_1B_2N_B$
+	\For{$i_1=1:B_1$}
+	\For{$i_2=1:B_2$}
+	\State$\bm{U}_1\gets\texttt{uniform}(bins_1[i_1], bins_1[i_1+1], \texttt{size=}N_B)$
+	\State$\bm{U}_2\gets\texttt{uniform}(bins_2[i_2], bins_2[i_2+1], \texttt{size=}N_B)$
+	\State$\bm{Z}_1,\bm{Z}_2\gets \Phi^{-1}(\bm{U}_1), \Phi^{-1}(\bm{U}_2)$
+	\State$\bm{S}_1, \bm{S}_2\gets \texttt{gbm.paths}((\bm{Z}_1, \bm{Z_2}), \bm{S}_0, \sigma, r, T, N_{\text{steps}})$
+	\State$sample\gets e^{-rT}H(\bm{S}_1, \bm{S}_2)$
+	\State$\bm{C}[i_1,i_2]\gets\texttt{mean}(sample)$;\quad$\bm{\Sigma}[i_2,i_2]\gets\texttt{var}(sample)$
+	\EndFor
+	\EndFor
+	\State \textbf{return} $\texttt{mean}(\bm{C})$, $\sqrt{\texttt{sum}(\bm{\Sigma})/(nB_1B_2)}$
+	\EndFunction
+	\Function{Projection}{$\bm{S}_0, K, \bm{\nu}^{d\times 1}, \sigma, r, T, B, N_B, N_{\text{steps}}$}
+	\State$bins\gets\texttt{linspace}(0, 1, B+1)$;\quad$n\gets BN_B$
+	\State$\bm{C}\gets\texttt{zeros}(B)$;\quad$\bm{\Sigma}\gets\texttt{zeros}(B)$;
+	\For{$i=1:B$}
+	\State$\bm{U}\gets\texttt{uniform}(bins[i], bins[i+1], \texttt{size=}N_B)$
+	\State$\bm{X} \gets \Phi^{-1}(\bm{U})\texttt{.reshape}(N_B,1)$
+	\State$\bm{Z}\gets \mathcal{N}(\bm{0}, \bm{I}-\bm{\nu}\bm{\nu}^{\top},\texttt{size=}N_B)^{N_B\times d}+\bm{X}\bm{\nu}^{\top}$
+	\State$\bm{S}_1, ..., \bm{S}_d\gets \texttt{gbm.paths}(\bm{Z}, \bm{S}_0, \sigma, r, T, N_{\text{steps}})$
+	\State$sample\gets e^{-rT}H(\bm{S}_1, ..., \bm{S}_d)$
+	\State$\bm{C}[i]\gets\texttt{mean}(sample)$;\quad$\bm{\Sigma}[i]\gets\texttt{var}(sample)$
+	\EndFor
+	\State \textbf{return} $\bm{C}, \texttt{mean}(\bm{C}), \sqrt{\texttt{sum}(\bm{\Sigma})/(nB)}$
+	\EndFunction
+	\end{algorithmic}}}
+	\item \textbf{Unequal Bins:} partition $\mathbb{R}=\cup^B_{i=1} A_i$. Want to estimate $\mathbb{E}[Y]=\mathbb{E}[g(U)]$; let $p_i = \mathbb{P}(Y\in A_i), \sigma_i^2 = \mathrm{\mathbb{V}ar}[Y|Y\in A_i]$. Sample $n_i = nq_i$ from the $i$-th bin, $\widehat{Y}_{strat}=\sum p_i \frac{1}{n_i}\sum_{j=1}^{n_i}Y_{ij} = \frac{1}{n}\sum_{i=1}^{B}\frac{p_i}{q_i}\sum_{j=1}^{n_i}Y_{ij}$. $\mathrm{\mathbb{V}ar}[\widehat{Y}_{strat}] = \frac{1}{n}\sum_{i=1}^B\frac{(p_i\sigma_i)^2}{q_i}$. Find $q_i$ to minimize variance: $q_i^*= p_i\sigma_i/\sum_{j=1}^B p_j \sigma_j$.
+	\item \textbf{Projection:} Suppose the $d$-dimensional driver is $\bm{Z}\sim \mathcal{N}(\bm{0}, \bm{I}_d)$; we stratify linear combination $X= \bm{\nu}^{\top}\bm{Z}, \left\lVert \bm{\nu} \right\rVert=1$ to make $X$ std.normal. Simulate $X=\Phi^{-1}(U)$, then get $\bm{Z}$ from conditional distribution $(\bm{Z}|X=x) \sim \mathcal{N}(x\bm{\nu}, \bm{I}_d - \bm{\nu}\bm{\nu}^{\top})$. The bin of $\bm{Z}$ corresponds to that of $X$. Obtain $\widehat{C}_{strat}$ by the $d$-dim formula with driver $\bm{Z}$. 
+	\end{itemize}
+\section{Simulating Greeks}
+\begin{itemize}
+	\item \textbf{Finite Difference:} $\widehat{\Delta}=(\widehat{C}(S_0+h)-\widehat{C}(S_0))/h$. $\text{Bias}[\widehat{\Delta}]\sim\mathcal{O}(h)$ (taylor expansion), can be reduced by centering $\widehat{\Delta}=(\widehat{C}(S_0+h)-\widehat{C}(S_0-h))/2h$, $\text{Bias}\sim\mathcal{O}(h^2)$. Called \textbf{Resimulation:} use same driver $\bm{Z}$ to produce both $\widehat{C}(S_0+h)$ and $\widehat{C}(S_0)$. $\mathrm{\mathbb{V}ar}[\widehat{\Delta}] = \frac{K}{nh^2}$, cross term will reduce the constant $K$.
+	\item \textbf{Pathwise Differentiation:} $\Delta = \frac{\partial }{\partial S_0}\widetilde{\mathbb{E}}[e^{-rT}h(S_T)]$ can interchange expectation and derivative under some conditions. For Eu call: $\Delta=\widetilde{\mathbb{E}}[e^{-rT}\mathbbm{1}_{\{S_T\geq K\}}\frac{S_T}{S_0}]$. \\$\text{Vega}=\widetilde{\mathbb{E}}[e^{-rT}\mathbbm{1}_{\{S_T\geq K\}}\frac{S_T}{\sigma}(\log\frac{S_T}{S_0}-(r-d+.5\sigma^2)T)]$; $d$: dividend.
+	\item \textbf{Log-likelihood Method:} Still want to interchange expectation and differential, but this time apply diff to the transition density $f_{S_T|S_0}(s)$: $\Delta = \int_0^{\infty}e^{-rT}h(S_T)\frac{\partial }{\partial S_0}f_{S_T|S_0}(s)ds = \int_0^{\infty}e^{-rT}h(S_T)\frac{\partial }{\partial S_0}\log(f_{S_T|S_0}(s))f_{S_T|S_0}(s)ds = $\\$\widetilde{\mathbb{E}}[e^{-rT}h(S_T)\frac{\partial }{\partial S_0}\log(f_{S_T|S_0}(S_T))]$, i.e. multiply payoff by the partial derivative of log likelihood. GBM transition density $f_{S_T|S_0}(x)=N'(d_-(x))/(x\sigma\sqrt{T})$; $d_-(x)=[\log(x/S_0)-(r-.5\sigma^2)T]/(\sigma\sqrt{T})$; $\log f_{S_T|S_0}(x) = -\frac{1}{2}d_-(x)^2 - \log(x\sigma\sqrt{T})$. Under GBM:\\
+	$\Delta=\widetilde{\mathbb{E}}[e^{-rT}h(S_T)\frac{1}{S_0\sigma^2T}(\log(\frac{S_T}{S_0})-(r-.5\sigma^2)T)]$; \\$\text{Vega}=\widetilde{\mathbb{E}}[e^{-rT}h(S_T)[-\sqrt{T}d_-(S_T)(1-\frac{d_-(S_T)}{\sigma\sqrt{T}}) - \frac{1}{\sigma}]]$
+\end{itemize}
+\section{BDZ (Lookback/Barrier Options)}
+The Euler scheme knows only the gird $\{S_{i\Delta}\}$, but knows nothing about intervals in between: $S_t\in (S_{(i+1)\Delta}, S_{i\Delta})$. Max/min on the grid is a biased estimator to the max/min along the whole path.
+\begin{itemize}
+	\item \textbf{Brownian Bridge:} Suppose $dS_t = rS_tdt + \sigma(t,S_t)dW_t$. Model $S_t\in(S_{(i+1)\Delta}, S_{i\Delta})$ as $S_t = S_{i\Delta}+\sigma(i\Delta, S_{i\Delta})B_t$, $t\in[i\Delta, (i+1)\Delta]$. $B_t$ is a brownian bridge process, i.e. BM with fixed endpoints. $B_t \disteq W_t|\{W_{i\Delta}=0, W_{(i+1)\Delta}=(S_{(i+1)\Delta}-S_{i\Delta})/\sigma(i\Delta, S_{i\Delta})=:b\}$
+	\item \textbf{Max/Min Brownian Bridge:} We care about max/min of $S_t$, it suffices to find $\max_{[i\Delta,(i+1)\Delta]} B_t \disteq \max_{[i\Delta,(i+1)\Delta]} W_t|\{W_{i\Delta}=0, W_{(i+1)\Delta}=b\} \disteq \max_{[0,\Delta]} W_t|\{W_{\Delta}=b\}$. Clearly $\mathbb{P}(\max_{[0,\Delta]} W_t>x|W_{\Delta}=b)=1$ if $x\leq \max(0,b)$. Otherwise Bayes formula: $\mathbb{P}(\max_{[0,\Delta]} W_t>x| W_{\Delta}=b) = \frac{\mathbb{P}(\{\max_{[0,\Delta]} W_t>x\} \cap \{W_{\Delta}=b\})}{\mathbb{P}\left(W_{\Delta}=b\right)} = \frac{\mathbb{P}(\{\max_{[0,\Delta]} W_t>x\} \cap \{W_{\Delta}=2x-b\})}{\mathbb{P}\left(W_{\Delta}=b\right)}$ (reflection principle) $=\frac{\mathbb{P}(W_{\Delta}=2x-b)}{\mathbb{P}\left(W_{\Delta}=b\right)}$ (since $x>b$) $=\exp(-2x(x-b)/\Delta)$. $F_{\max B_t }(x)=1-e^{-2x(x-b)/\Delta}$. To simulate $M=\max B_t$ and $m=\min B_t$, use\\
+	$M\disteq (b+\sqrt{b^2-2\Delta\log(1-U)})/2$, $m\disteq (b-\sqrt{b^2-2\Delta\log(1-U)})/2$.\\
+	\vspace{2pt}\fbox{\parbox{\boxwidth}{
+	\begin{algorithmic}[1]\scriptsize
+	\Function{BDZPath}{$S_0, K, T, \sigma, r, N$}\Comment{Generate one path}
+	\State$\bm{S}\gets\texttt{zeros}(N)$;~~$\bm{M}\gets\texttt{zeros}(N)$;~~$\Delta\gets T/N$;~~$last\gets S_0$
+	\For{$j=1:N$}
+	\State$\bm{S}[j] \gets last * (1+r\Delta+\sigma\sqrt{\Delta}*\texttt{normal}(0,1))$
+	\State$b\gets (\bm{S}[j] - last)/(\sigma*last)$
+	\State$\bm{M}[j]\gets last + \sigma*last*\tfrac{1}{2}[b+\sqrt{b^2-2\Delta \log(\texttt{uniform}(0,1))}]$
+	\EndFor
+	\State \textbf{return} $\bm{S}, \bm{M}$
+	\EndFunction
+	\Function{LookbackCall}{$S_0, K, T, \sigma, r, N, n$}\Comment{pay $(\max S-K)^+$}
+	\State$\bm{C}\gets\texttt{zeros}(n)$
+	\For{$i=1:n$}
+	\State$\bm{S}, \bm{M}\gets\texttt{BDZPath}(S_0, K, T, \sigma, r, N)$
+	\State$\bm{C}[i]\gets e^{-rT}(\texttt{max}(\bm{M})-K)^+$
+	\EndFor
+	\State \textbf{return} $\bm{C}, \texttt{mean}(\bm{C}), \texttt{std}(\bm{C})/\sqrt{n}$
+	\EndFunction
+	\end{algorithmic}}}
+\end{itemize}
+\section{Longstaff-Schwartz (American Options)}
+\begin{itemize}
+	\item \textbf{Data Structures:} $cashflow, \bm{X}, \bm{y}, \bm{\tau}, pathin, \bm{C}$.\\
+		\vspace{2pt}\fbox{\parbox{\boxwidth}{
+	\begin{algorithmic}[1]\scriptsize
+	\Function{LaguerrePoly}{$\bm{S}_t, \bm{X}$}\Comment{$\bm{S}_t$: all paths at $t=i\Delta$}
+	\State$\bm{X}[:,1] \gets \exp(-\bm{S}_t./2)$;\quad$\bm{X}[:,2] \gets \bm{X}[:,1].*(1- \bm{S}_t)$
+	\State$\bm{X}[:,3]\gets \bm{X}[:,1].*(1-2 \bm{S}_t + .5\bm{S}_t.^2)$;\quad$\bm{X}[:,0]\gets \bm{1}$
+	\State \textbf{return} $\bm{X}$
+	\EndFunction
+	\Function{LongstaffSchwartz}{$S_0, K, T, \sigma, r, N, n$}
+	\State $\bm{S}\gets \texttt{gbm.paths}(\bm{X}, S_0, \sigma, r, T, N)$\Comment{$n$ paths, $N$ periods}
+	\State$cashflow\gets\texttt{zeros}((N,n))$;\quad$\bm{\tau}\gets(N-1)*\texttt{ones}(n)$
+	\State$\bm{X}, \bm{y}\gets \texttt{zeros}((n,4)), \texttt{zeros}((n,1))$
+	\State$\bm{C}\gets \texttt{zeros}(n)$;\quad$pathin\gets\texttt{ones}(n, \texttt{type=bool})$
+	\For{$i=1:N$}
+	\State$pathin\gets (K-S[i,:] > 0)$\Comment{$\bm{y}[j]=pathin[j]*cf[\bm{\tau}[j],j]$}
+	\State$\bm{y}\gets pathin*cashflow[\bm{\tau}, \texttt{range}(n)]$
+	\State$\bm{X}\gets \texttt{apply.along.column}(\texttt{operator*}, $
+	\State\qquad$\texttt{LaguerrePoly}(\bm{S}[i,:]/K, \bm{X}), pathin)$
+	\State\Comment{If $pathin[j]=0$, the $j$-th row $\bm{X}[j,:]=\bm{0}$}
+	\State$\hat{\bm{y}}\gets \bm{X}(\bm{X}^{\top}\bm{X})^{-1} \bm{X}^{\top} \bm{y}$
+	\State$exec \gets (\hat{\bm{y}} < (K-S[i,:])^+)$ \Comment{Early exercise at $i$}
+	\State$\bm{\tau}[exec]\gets i$
+	\EndFor
+	\State $\bm{C}\gets \texttt{max}(e^{-r \bm{\tau} \Delta}\cdot cashflow[\bm{\tau}, \texttt{range}(n)], (K-S_0)^+)$
+	\State \textbf{return} $\bm{C}, \texttt{mean}(\bm{C}), \texttt{std}(\bm{C})/\sqrt{n}$
+	\EndFunction
+	\end{algorithmic}}}
+\end{itemize}
+\section{Credit Default Swap}
+\begin{itemize}
+	\item \textbf{Defaultable Bond:} face 1\$ maturity $T$ bond with default rate $\pi$; it recovers $R$ when default. Price of bond is $e^{-rT}(\pi R + (1-\pi))$, let $X$ be time to default, $\pi = \mathbb{P}(X\leq T)$, if $X$ modeled as Exp$(\lambda)$, $\pi = 1-e^{\lambda T}$. \textbf{Credit spread} is the defaultable bond risk premium: $e^{-st} = \pi R + (1-\pi)$. So $\lambda = -\frac{1}{T}\log((e^{-sT}-R)/(1-R))\approx s/(1-R)$.
+	\item \textbf{CDS Pricing:} there are $d$ defaultable bonds. $k$-th to default swap (kTD, $k=1,...,d$) pays $1-R$ if $k$ or more than $k$ bonds default. $p_k$: prob of no less than $k$ bonds default, Price of kTD is $e^{-rT}(1-R)p_k$. $\widehat{se}=e^{-rt}(1-R)\sqrt{\widehat{p}_k(1-\widehat{p}_k)/n}$. $\widehat{p}_k$ simulated with default times $\bm{X}\sim$ Copulas$(\{F^{-1}_{X_i}(\cdot)\}, \bm{\Sigma})$ with given marginals and covariance matrix.
+\end{itemize}
+\section{Credit Rating Transition Model}
+\begin{itemize}
+	\item \textbf{Settings:} The rating state process $\{X(t)\}$. $\tau$ is time between transitions. $\bm{P}=\{p_{ij}\}$ instantaneous transition matrix. $p_{ij}=\mathbb{P}(X(\tau+dt)=j|X(\tau)=i)$.  $\bm{\Pi}(T)=\{\pi_{ij}(T)\}$ final state probabilities after time $T$; $\pi_{ij}=\mathbb{P}(X(T)=j|X(0)=i)$. If $\tau\sim \text{Exp}(\lambda)$, $X(t)$ is a Markov chain, we have $\bm{\Pi}(T)=\exp(\bm{Q}T)$, $\bm{Q}(\bm{P}, \lambda)$ is transition rate matrix. If not exponential (semi-Markov case), no closed form solution for $\bm{\Pi}(T)$.\\
+	\vspace{2pt}\fbox{\parbox{\boxwidth}{
+	\begin{algorithmic}[1]\scriptsize
+	\Function{RatingTrans}{$\bm{P}, T, \mathcal{M}_{\tau}, n, d$}\Comment{$\mathcal{M}_{\tau}$ is $\tau$'s sampler}
+	\State$\bm{\Pi} \gets \texttt{zeros}((d,d))$\Comment{$table[i]$ is sampler for $X(\tau+dt)|X(\tau)=i$}
+	\State$tables\gets\texttt{[MakeTable(zip(range(}d),~\bm{P}[i]))$ \textbf{for} $i$ \textbf{in} \texttt{range}(d)]
+	\For{$x_0$ \textbf{in} \texttt{range}($d$)}\Comment{simulate $x_0$-th row of $\bm{\Pi}$}
+	\For{$i = 1:n$}\Comment{draw $n$ samples}
+	\State$t,~x\gets 0,~x_0$
+	\While{$t\leq T$}
+	\State$\tau\gets \mathcal{M}_{\tau}(x)$;\quad$t$\texttt{ += }$\tau$
+	\If{$t>T$} \textbf{break while}\Comment{transition exceeds $T$} 
+	\EndIf
+	\State$x\gets \texttt{Draw}(tables[x])$\Comment{sample next state} 
+	\EndWhile
+	\State$\bm{\Pi}[x_0, x]$ \texttt{+=} $1$\Comment{while ends, $x$ is the final state} 
+	\EndFor
+	\EndFor
+	\State$\bm{\Pi}$ \texttt{./=} $n$;\quad$se\gets\sqrt{\bm{Pi}(1-\bm{Pi})/n}$
+	\State \textbf{return} $\bm{\Pi}, se$
+	\EndFunction
+	\end{algorithmic}}}
+\end{itemize}
+\textbf{Author:} Ze Yang (\href{mailto:zey@andrew.cmu.edu}{zey@andrew.cmu.edu})
+\end{multicols*}
+\end{document}

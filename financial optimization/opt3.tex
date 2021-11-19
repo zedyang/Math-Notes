@@ -1,0 +1,172 @@
+\documentclass[a4paper, 8pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz, array, eurosym}
+\usepackage{float}
+\renewcommand{\arraystretch}{1.4}
+\newcolumntype{L}{>{\arraybackslash}m{10cm}}
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+\title{\textbf{Optimization Assignment 3}}
+\author{Ze Yang~~~~(zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem}
+\end{problem}
+\textbf{(a)} Let $\bm{u} = \sqrt{\rho} \bm{\sigma}$, $\bm{A}=(1-\rho) \text{diag}(\bm{\sigma})^2$. $\bm{u}^{\top}\bm{A}^{-1} = \frac{\sqrt{\rho}}{1-\rho}(1/\sigma_1~...~1/\sigma_n) = \frac{\sqrt{\rho}}{1-\rho}\bm{\theta}^{\top}$ \\
+ Then $\bm{V} = \bm{A} + \bm{u}\bm{u}^{\top}$. We have $1+ \bm{u}^{\top} \bm{A}^{-1}\bm{u} = 1 + n\rho/(1-\rho) \ne 0$ while $\rho \in (0,1)$. Therefore $\bm{V}$ is invertible. By the Woodbury formula:
+ \begin{equation}
+ 	\begin{split}
+ 		\bm{V}^{-1} &= (\bm{A} + \bm{u}\bm{u}^{\top})^{-1} = \bm{A}^{-1} - \frac{\bm{A}^{-1} \bm{u}\bm{u}^{\top}\bm{A}^{-1}}{1+ \bm{u}^{\top} \bm{A}^{-1}\bm{u}} = \frac{1}{1-\rho}\text{diag}(1/\bm{\sigma})^2 - \frac{(\sqrt{\rho}/(1-\rho))^2  \bm{\theta}\bm{\theta}^{\top}}{1 + n\rho/(1-\rho)} \\
+ 		&= \underbrace{\frac{1}{1-\rho}}_{a}\text{diag}(\bm{\theta})^2 - \underbrace{\frac{\rho}{(1-\rho)(1-\rho+n\rho)}}_{b}\bm{\theta}\bm{\theta}^{\top}
+ 	\end{split}
+ \end{equation}
+ \textbf{(b)} The minimum-rike fully invested portfolio is given by the optimal solution $\bm{x}^* = \frac{1}{\bm{1}^{\top} \bm{V}^{-1} \bm{1}}\bm{V}^{-1}\bm{1} = \frac{1}{\bm{1}^{\top}\bm{y}} \bm{y} = \frac{1}{\sum_i y_i} \bm{y}$, if we let $\bm{y}:=\bm{V}^{-1} \bm{1}$. It suffices to calculate $\bm{y}$. Denote $\bm{\theta}\circ \bm{\theta}:=(1/\sigma_1^2~...~1/\sigma_n^2)^{\top}$
+ \begin{equation}
+ 	\begin{split}
+ 		&\bm{y} = (a\cdot\text{diag}(\bm{\theta})^2 - b\cdot\bm{\theta}\bm{\theta}^{\top}) \bm{1} = a\cdot (\bm{\theta}\circ \bm{\theta}) - b\sum_{j=1}^n \frac{1}{\sigma_j} \bm{\theta} \\
+ 		&y_i = \frac{a}{\sigma_i^2} - b\sum_{j=1}^n \frac{1}{\sigma_i\sigma_j} = \frac{a}{\sigma^2_i}\left(1-\frac{b}{a}\sum_{j=1}^n \frac{\sigma_i}{\sigma_j}\right)
+ 	\end{split}
+ \end{equation}
+ Hence $c=a/\sigma_i^2=\frac{1}{(1-\rho)\sigma_i^2}$, $d=b/a = \frac{\rho}{1-\rho+n\rho}$.
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem}
+\end{problem}
+\textbf{(a)} Let $\bm{z}:=k \bm{x}$ such that $\bm{\mu}^{\top} \bm{z} = 1$. The maximum Sharpe problem is equivalent to:
+	\begin{equation}
+		\begin{split}
+			\underset{\bm{z}, k}{\min}\quad&  \bm{z}^{\top} \bm{V} \bm{z}\\
+			s.t. \quad & \bm{\mu}^{\top} \bm{z} = 1\\
+			& \bm{1}^{\top} \bm{z} = k \\
+			&-k\leq 0\\
+		\end{split}
+		\quad\Rightarrow\quad
+		\begin{split}
+			&~\mathcal{L}(\bm{z}, k; \bm{\lambda}) = \bm{z}^{\top} \bm{V} \bm{z} + \lambda_1(\bm{\mu}^{\top} \bm{z}-1) + \lambda_2(\bm{1}^{\top} \bm{z}-k) + \lambda_3(-k)\\
+			&\begin{cases}
+			\nabla_{\bm{z}} \mathcal{L} =\bm{V} \bm{z} + \lambda_1 \bm{\mu} + \lambda_2 \bm{1} = 0 \\
+			\nabla_{k} \mathcal{L} = -\lambda_2 - \lambda_3 = 0 \\
+			\lambda_3 k = 0;\quad \lambda_3, k\geq 0\\
+			\bm{\mu}^{\top} \bm{z} = 1\\
+			\bm{1}^{\top} \bm{z} = k\\
+			\end{cases}
+		\end{split}
+	\end{equation}
+	Since there's at least one entry in $\bm{\mu}$ being strictly positive, $\bm{z}$ can't be all-zeros $\Rightarrow k \ne 0$. Hence the complementary slackness condition $\Rightarrow \lambda_3 = 0$. The gradient of $k$ equation $\Rightarrow \lambda_2 = -\lambda_3 = 0$. The first equation $\Rightarrow \bm{V z} + \lambda_1 \bm{\mu} = 0$ $\Rightarrow \bm{z}^* = \lambda_1 \bm{V^{-1}\mu}$. The last equation $\Rightarrow \lambda_1 = k/\bm{\bm{1}^{\top} V^{-1}\mu}$. Hence $\bm{z}^* = \frac{k}{\bm{1}^{\top}\bm{V^{-1}\mu}}\bm{V^{-1}\mu}$. Consequently $\bm{x}^* = \bm{z}^*/k = \frac{1}{\bm{1}^{\top}\bm{V^{-1}\mu}}\bm{V^{-1}\mu}$. \\
+	~\\
+	\textbf{(b)} Substitute $\bm{\mu}$ for $\delta \bm{V}\bm{x}_B$, $\bm{x}_B$ is also fully invested:
+	\begin{equation}
+		\bm{x}^* = \frac{1}{\bm{1}^{\top}\bm{V^{-1}}\delta \bm{V}\bm{x}_B}\bm{V^{-1}}\delta \bm{V}\bm{x}_B = \frac{\bm{x}_B}{\bm{1}^{\top} \bm{x}_B} = \bm{x}_B
+	\end{equation}
+	~\\
+	\textbf{(c)}
+		\begin{equation}
+		\begin{split}
+			\underset{\bm{\mu}}{\min}\quad&  (\bm{\pi-\mu})^{\top}\bm{Q}^{-1} (\bm{\pi-\mu})\\
+			s.t. \quad & \bm{P\mu} = \bm{q}
+		\end{split}
+		\quad\Rightarrow\quad
+		\begin{split}
+			&~\mathcal{L}(\bm{\mu}; \lambda) = (\bm{\pi-\mu})^{\top}\bm{Q}^{-1} (\bm{\pi-\mu}) + \lambda^{\top}(\bm{P\mu} - \bm{q})\\
+			&\begin{cases}
+			\nabla_{\bm{\mu}} \mathcal{L} = -\bm{Q}^{-1} (\bm{\pi-\mu}) + \bm{P}^{\top} \bm{\lambda} = \bm{0} \\
+			\bm{P\mu} - \bm{q} = \bm{0}\\
+			\end{cases}
+		\end{split}
+	\end{equation}
+	Condition (1) $\Rightarrow \widehat{\bm{\mu}} = \bm{\pi} - \bm{Q}\bm{P}^{\top} \bm{\lambda}^*$. Premultiply by $\bm{P} \Rightarrow$ $\bm{P}\bm{\pi} - \bm{P}\bm{Q}\bm{P}^{\top} \bm{\lambda}^* = \bm{q}$ $\Rightarrow~ \bm{\lambda}^* = (\bm{P}\bm{Q}\bm{P}^{\top})^{-1}(\bm{P\pi}-\bm{q})$. Therefore $\widehat{\bm{\mu}} = \bm{\pi} + \bm{Q}\bm{P}^{\top}(\bm{P}\bm{Q}\bm{P}^{\top})^{-1}(-\bm{P\pi}+\bm{q})$.\\
+	~\\
+	\textbf{(d)} Plug in $\bm{\mu} = \widehat{\bm{\mu}}$, $\bm{Q}=\bm{V}$, $\bm{\pi}=\delta \bm{V}\bm{x}_B$:
+	\begin{equation}
+		\begin{split}
+			\bm{x}^{**}  &=\frac{1}{\bm{1}^{\top}\bm{V^{-1}}[\bm{\pi} + \bm{V}\bm{P}^{\top}(\bm{P}\bm{V}\bm{P}^{\top})^{-1}(\bm{q}-\bm{P\pi})]}\bm{V^{-1}}\left[\bm{\pi} + \bm{V}\bm{P}^{\top}(\bm{P}\bm{V}\bm{P}^{\top})^{-1}(\bm{q}-\bm{P\pi})\right] \\[5pt]
+			&=\frac{\bm{V^{-1}}\left[\delta \bm{V}\bm{x}_B + \bm{V}\bm{P}^{\top}(\bm{P}\bm{V}\bm{P}^{\top})^{-1}(\bm{q}-\delta\bm{P} \bm{V}\bm{x}_B)\right]}{\bm{1}^{\top}\bm{V^{-1}}[\delta \bm{V}\bm{x}_B + \bm{V}\bm{P}^{\top}(\bm{P}\bm{V}\bm{P}^{\top})^{-1}(\bm{q}-\delta\bm{P} \bm{V}\bm{x}_B)]}\\[5pt]
+			&=\frac{ \bm{x}_B + \bm{P}^{\top}(\bm{P}\bm{V}\bm{P}^{\top})^{-1}(\bm{q}/\delta-\bm{P} \bm{V}\bm{x}_B)}{\bm{1}^{\top}\bm{x}_B + \bm{1}^{\top}\bm{P}^{\top}(\bm{P}\bm{V}\bm{P}^{\top})^{-1}(\bm{q}/\delta-\bm{P} \bm{V}\bm{x}_B)} \\
+			&= \lambda \bm{x}_B + \bm{P}^{\top} \bm{v}
+		\end{split}
+	\end{equation}
+	where
+	\begin{equation}
+		\begin{split}
+			&\lambda = \frac{1}{\bm{1}^{\top}\bm{x}_B + \bm{1}^{\top}\bm{P}^{\top}(\bm{P}\bm{V}\bm{P}^{\top})^{-1}(\bm{q}/\delta-\bm{P} \bm{V}\bm{x}_B)} \\
+			&\bm{v} = \lambda (\bm{P}\bm{V}\bm{P}^{\top})^{-1}(\bm{q}/\delta-\bm{P} \bm{V}\bm{x}_B)
+		\end{split}
+	\end{equation}
+	\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem}
+\end{problem}~\\
+\textbf{(a)}
+\begin{itemize}
+	\item[1.] The curve of sorted eigenvalues of $\widehat{\bm{V}}$ is \emph{steeper} than that of $\bm{V}$; that is, $\hat{\lambda}$'s overestimates the greater $\lambda$'s of actual $\bm{V}$, while underestimates the smaller ones. See (Figure \ref{fig:tccase1}) below.
+	\item[2.] Actual variance $>$ true optimal variace $>$ estimated variance.
+	\item[3.] This pattern persists. See (Figure \ref{fig:tccase2}) below.
+\end{itemize}
+\textbf{(b)}
+\begin{itemize}
+	\item[1.] The curve of sorted eigenvalues of the shrinkage estimate $\bar{\bm{V}}$ is still steeper than that of $\bm{V}$, but not as much as that of $\hat{\bm{V}}$. See (Figure \ref{fig:tccase1}) below.
+	\item[2.] Actual variance $>$ true optimal variace $>$ estimated variance. However, the spread between actural variance - estimated variance is now narrower, compared with the naive sample estimate. In general, we have:
+	\begin{equation}
+		\hat{\bm{x}}^{\top} \bm{V}\hat{\bm{x}} - \hat{\bm{x}}^{\top} \widehat{\bm{V}}\hat{\bm{x}} > \bar{\bm{x}}^{\top} \bm{V}\bar{\bm{x}} - \bar{\bm{x}}^{\top} \bar{\bm{V}}\bar{\bm{x}} > 0
+	\end{equation}
+	Or in another word:
+	\begin{equation}
+		\hat{\bm{x}}^{\top} \bm{V}\hat{\bm{x}} > \bar{\bm{x}}^{\top} \bm{V}\bar{\bm{x}} > \bm{x}^{*\top} \bm{V}\bm{x}^* >  \bar{\bm{x}}^{\top} \bar{\bm{V}}\bar{\bm{x}} > \hat{\bm{x}}^{\top} \widehat{\bm{V}}\hat{\bm{x}}
+	\end{equation}
+	\item[3.] This pattern persists. See (Figure \ref{fig:tccase2}) below.
+\end{itemize}
+\begin{figure}[H]
+  \centering
+  \caption{\label{fig:tccase1}Sorted Eigenvalues of True, Sample Estimate, and Shrinkage Estimate of Covariance Matrix}
+  \includegraphics[scale=0.8]{fig3-1.png}
+  \vspace{25pt}
+
+  \centering
+  \caption{\label{fig:tccase2}Estimated and Realized Variance of Minimum-Risk Portfolio}
+  \includegraphics[scale=0.7]{fig3-2.png}
+  \vspace{25pt}
+\end{figure}
+\end{document}

@@ -1,0 +1,807 @@
+
+% Default to the notebook output style
+
+    
+
+
+% Inherit from the specified cell style.
+
+
+
+
+    
+\documentclass[11pt]{article}
+
+    
+    
+    \usepackage[T1]{fontenc}
+    % Nicer default font (+ math font) than Computer Modern for most use cases
+    %\usepackage{mathpazo}
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % We will generate all images so they have a width \maxwidth. This means
+    % that they will get their normal width if they fit onto the page, but
+    % are scaled down if they would overflow the margins.
+    \makeatletter
+    \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
+    \else\Gin@nat@width\fi}
+    \makeatother
+    \let\Oldincludegraphics\includegraphics
+    % Set max figure width to be 80% of text width, for now hardcoded.
+    \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=.8\maxwidth]{#1}}
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionLabelFormat{nolabel}{}
+    \captionsetup{labelformat=nolabel}
+
+    \usepackage{adjustbox} % Used to constrain images to a maximum size 
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range 
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    
+
+    
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatability definitions
+    \def\gt{>}
+    \def\lt{<}
+    % Document parameters
+    \title{Asset Management HW5}
+    \author{Ze Yang (zey)}
+    
+    
+    
+
+    % Pygments definitions
+    
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % Exact colors from NB
+    \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
+    \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+
+
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+    \begin{document}
+    
+    
+    \maketitle
+    
+    
+\section*{Problem 1}
+Prove by contradiction: suppose the covered interest parity does not hold, that is: $F_t/S_t \ne (1+r_f^*)/(1+r_f)$. Consider the following two investment strategies, for simplicity denote \$ as domestic currency and \euro~ as foreign currency.
+\begin{itemize}
+  \item[1.] Starting with 1\$ at time $t$. Enter \euro ~forward contract at time $t$, save 1\$ in domestic bank (which becomes $(1+r_f)$ \$ at $t+1$), and purchase $(1+r_f)F_t$ \euro ~at $t+1$.
+  \item[2.] Starting with 1\$ at time $t$, purchase $S_t$ \euro~ at time $t$, then save $S_t$ \euro~in foreign bank, obtain $(1+r^*_f)S_t$ \euro~at $t+1$.
+\end{itemize}
+WLOG suppose $\frac{F_t}{S_t} > \frac{1+r_f^*}{1+r_f}$, then one can attain an arbitrage by longing strategy 1 and shorting strategy 2. Since both strategy cost 1\$ at time $t$, the composite arbitrage portfolio has cost zero, and has riskless profit:
+$$
+(1+r_f)F_t - (1+r^*_f)S_t > 0
+$$
+If $\frac{F_t}{S_t} < \frac{1+r_f^*}{1+r_f}$ we can do the reverse. Therefore, the assumption must not hold, i.e. $\frac{F_t}{S_t} > \frac{1+r_f^*}{1+r_f}$ must hold to ensure no-arbitrage. $\square$
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}96}]:} \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+         \PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+         \PY{k+kn}{import} \PY{n+nn}{statsmodels}\PY{n+nn}{.}\PY{n+nn}{api} \PY{k}{as} \PY{n+nn}{sm}
+         \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+         \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{linear\PYZus{}model} \PY{k}{import} \PY{n}{LinearRegression}
+         \PY{o}{\PYZpc{}}\PY{k}{matplotlib} inline
+\end{Verbatim}
+
+    \section*{Problem 2}\label{problem-2}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}87}]:} \PY{k}{def} \PY{n+nf}{trunc\PYZus{}3digs}\PY{p}{(}\PY{n}{v}\PY{p}{)}\PY{p}{:}
+             \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{n}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}x:.5f\PYZcb{}}\PY{l+s+s1}{\PYZsq{}} \PY{k}{for} \PY{n}{x} \PY{o+ow}{in} \PY{n}{v}\PY{p}{]}\PY{p}{)} \PY{k}{if} \PY{n+nb}{hasattr}\PY{p}{(}
+                 \PY{n}{v}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZus{}\PYZus{}iter\PYZus{}\PYZus{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{else} \PY{n}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}v:.5f\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}
+             
+         \PY{k}{def} \PY{n+nf}{report\PYZus{}less}\PY{p}{(}\PY{n}{res}\PY{p}{)}\PY{p}{:}
+             \PY{n}{rep} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}
+                 \PY{n}{trunc\PYZus{}3digs}\PY{p}{(}\PY{n}{res}\PY{o}{.}\PY{n}{params}\PY{p}{)}\PY{p}{,} \PY{n}{trunc\PYZus{}3digs}\PY{p}{(}\PY{n}{res}\PY{o}{.}\PY{n}{tvalues}\PY{p}{)}\PY{p}{,}
+                 \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{(*)}\PY{l+s+s1}{\PYZsq{}} \PY{k}{if} \PY{n}{p}\PY{o}{\PYZlt{}}\PY{l+m+mf}{0.05} \PY{k}{else} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}} \PY{k}{for} \PY{n}{p} \PY{o+ow}{in} \PY{n}{res}\PY{o}{.}\PY{n}{pvalues}\PY{p}{]}\PY{p}{)}\PY{p}{]}
+             \PY{p}{)}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{est}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{t\PYZhy{}stat}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{p\PYZlt{}0.05}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{columns}\PY{o}{=}\PY{n}{res}\PY{o}{.}\PY{n}{params}\PY{o}{.}\PY{n}{index}\PY{p}{)}
+             \PY{n}{rep}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Adj.R\PYZca{}2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{p}{]} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}
+             \PY{n}{rep}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Adj.R\PYZca{}2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{trunc\PYZus{}3digs}\PY{p}{(}\PY{n}{res}\PY{o}{.}\PY{n}{rsquared\PYZus{}adj}\PY{p}{)}
+             \PY{k}{return} \PY{n}{rep}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}88}]:} \PY{n}{bonds} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bondprice.xlsx}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}89}]:} \PY{n}{p} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{bonds}\PY{o}{/}\PY{l+m+mi}{100}\PY{p}{)}
+         \PY{n}{p}\PY{o}{.}\PY{n}{columns} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{4}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{]}
+         \PY{n}{y} \PY{o}{=} \PY{n}{p}\PY{o}{.}\PY{n}{multiply}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{o}{/}\PY{l+m+mi}{2}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{o}{/}\PY{l+m+mi}{3}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{o}{/}\PY{l+m+mi}{4}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{o}{/}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+         \PY{n}{p\PYZus{}lag} \PY{o}{=} \PY{n}{p}\PY{o}{.}\PY{n}{shift}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+         \PY{n}{p\PYZus{}lag}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{0}
+         \PY{n}{f} \PY{o}{=} \PY{n}{p\PYZus{}lag} \PY{o}{\PYZhy{}} \PY{n}{p}
+         \PY{n}{r} \PY{o}{=} \PY{p}{(}\PY{n}{p\PYZus{}lag}\PY{o}{.}\PY{n}{shift}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{12}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{p}\PY{p}{)}
+         \PY{n}{rx} \PY{o}{=} \PY{n}{r}\PY{o}{.}\PY{n}{subtract}\PY{p}{(}\PY{n}{y}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+\end{Verbatim}
+
+    \subsection{2-(a)}\label{a}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}91}]:} \PY{c+c1}{\PYZsh{} reality checks}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{y}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{l+m+mi}{19830630}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{f}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{l+m+mi}{19830630}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{rx}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{l+m+mi}{19830630}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+0.0939920489207
+0.106448672987
+-0.0851087093156
+
+    \end{Verbatim}
+
+    \subsection{2-(b)}\label{b}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}97}]:} \PY{c+c1}{\PYZsh{} fama\PYZhy{}bliss}
+         \PY{k}{def} \PY{n+nf}{fama\PYZus{}bliss}\PY{p}{(}\PY{n}{start}\PY{p}{,} \PY{n}{end}\PY{p}{)}\PY{p}{:}
+             \PY{n}{reps} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+             \PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{p}{[}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{4}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{:}
+                 \PY{n}{X} \PY{o}{=} \PY{n}{sm}\PY{o}{.}\PY{n}{add\PYZus{}constant}\PY{p}{(}\PY{p}{(}\PY{n}{f}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{start}\PY{p}{:}\PY{n}{end}\PY{p}{,}\PY{n}{k}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{y}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{start}\PY{p}{:}\PY{n}{end}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{values}\PY{p}{)}
+                 \PY{n}{yy} \PY{o}{=} \PY{n}{rx}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{start}\PY{p}{:}\PY{n}{end}\PY{p}{,}\PY{n}{k}\PY{p}{]}
+                 \PY{n}{res} \PY{o}{=} \PY{n}{sm}\PY{o}{.}\PY{n}{OLS}\PY{p}{(}\PY{n}{yy}\PY{p}{,} \PY{n}{X}\PY{p}{)}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{p}{)}
+                 \PY{n}{reps}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{report\PYZus{}less}\PY{p}{(}\PY{n}{res}\PY{p}{)}\PY{p}{)}
+             \PY{n}{tab} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{concat}\PY{p}{(}\PY{n}{reps}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+             \PY{n}{tab}\PY{o}{.}\PY{n}{columns} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{MultiIndex}\PY{o}{.}\PY{n}{from\PYZus{}product}\PY{p}{(}
+                 \PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{4}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{5}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{alpha}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{p}{)}
+             \PY{k}{return} \PY{n}{tab}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}103}]:} \PY{c+c1}{\PYZsh{} cochrane\PYZhy{}piazzesi}
+          \PY{k}{def} \PY{n+nf}{cochrane\PYZus{}piazzesi}\PY{p}{(}\PY{n}{start}\PY{p}{,} \PY{n}{end}\PY{p}{)}\PY{p}{:}
+              \PY{n}{rx\PYZus{}bar} \PY{o}{=} \PY{n}{rx}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{start}\PY{p}{:}\PY{n}{end}\PY{p}{,}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{4}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{.}\PY{n}{values}
+              \PY{n}{ff} \PY{o}{=} \PY{n}{sm}\PY{o}{.}\PY{n}{add\PYZus{}constant}\PY{p}{(}\PY{n}{f}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{start}\PY{p}{:}\PY{n}{end}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{p}{)}
+              \PY{n}{res} \PY{o}{=} \PY{n}{sm}\PY{o}{.}\PY{n}{OLS}\PY{p}{(}\PY{n}{rx\PYZus{}bar}\PY{p}{,} \PY{n}{ff}\PY{p}{)}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{p}{)}
+              \PY{n}{gamma} \PY{o}{=} \PY{n}{res}\PY{o}{.}\PY{n}{params}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{l+m+mi}{6}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+              \PY{n}{reps} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+              \PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{p}{[}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{4}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{:}
+                  \PY{n}{X} \PY{o}{=} \PY{n}{ff}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{gamma}\PY{p}{)}
+                  \PY{n}{yy} \PY{o}{=} \PY{n}{rx}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{start}\PY{p}{:}\PY{n}{end}\PY{p}{,}\PY{n}{k}\PY{p}{]}
+                  \PY{n}{res} \PY{o}{=} \PY{n}{sm}\PY{o}{.}\PY{n}{OLS}\PY{p}{(}\PY{n}{yy}\PY{p}{,} \PY{n}{X}\PY{p}{)}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{p}{)}
+                  \PY{n}{reps}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{report\PYZus{}less}\PY{p}{(}\PY{n}{res}\PY{p}{)}\PY{p}{)}
+              \PY{n}{tab} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{concat}\PY{p}{(}\PY{n}{reps}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+              \PY{n}{tab}\PY{o}{.}\PY{n}{columns} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{MultiIndex}\PY{o}{.}\PY{n}{from\PYZus{}product}\PY{p}{(}
+                  \PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{4}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{5}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{b\PYZus{}n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{p}{)}
+              \PY{k}{return} \PY{n}{tab}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}104}]:} \PY{n}{start}\PY{p}{,} \PY{n}{end} \PY{o}{=} \PY{l+m+mi}{19520630}\PY{p}{,} \PY{l+m+mi}{20021231}
+          \PY{n}{fama\PYZus{}bliss}\PY{p}{(}\PY{n}{start}\PY{p}{,} \PY{n}{end}\PY{p}{)}
+\end{Verbatim}
+
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}104}]:}                2                  3                  4                   5  \textbackslash{}
+                     alpha     beta     alpha     beta     alpha      beta     alpha   
+          est      0.00056  0.90187  -0.00101  1.17703  -0.00390   1.46262  -0.00157   
+          t-stat   0.72901  9.42964  -0.68416  9.60484  -1.90498  10.37199  -0.60974   
+          p<0.05                (*)                (*)                 (*)             
+          Adj.R\^{}2           0.12670            0.13087             0.14957             
+          
+                            
+                      beta  
+          est      1.14576  
+          t-stat   6.69262  
+          p<0.05       (*)  
+          Adj.R\^{}2  0.06739  
+\end{Verbatim}
+        
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}105}]:} \PY{n}{cochrane\PYZus{}piazzesi}\PY{p}{(}\PY{n}{start}\PY{p}{,} \PY{n}{end}\PY{p}{)}
+\end{Verbatim}
+
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}105}]:}                 2         3         4         5
+                        b\_n       b\_n       b\_n       b\_n
+          est       0.46796   0.86743   1.24696   1.41765
+          t-stat   14.54427  14.98609  15.95188  14.50899
+          p<0.05        (*)       (*)       (*)       (*)
+          Adj.R\^{}2   0.25752   0.26919   0.29457   0.25659
+\end{Verbatim}
+        
+    \subsection{2-(c)}\label{c}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}106}]:} \PY{n}{start}\PY{p}{,} \PY{n}{end} \PY{o}{=} \PY{l+m+mi}{19520630}\PY{p}{,} \PY{l+m+mi}{19830630}
+          \PY{n}{fama\PYZus{}bliss}\PY{p}{(}\PY{n}{start}\PY{p}{,} \PY{n}{end}\PY{p}{)}
+\end{Verbatim}
+
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}106}]:}                 2                  3                  4                  5  \textbackslash{}
+                      alpha     beta     alpha     beta     alpha     beta     alpha   
+          est      -0.00182  0.53024  -0.00484  0.78181  -0.00824  0.86568  -0.00903   
+          t-stat   -2.04622  4.07063  -2.94855  4.91058  -3.70343  4.25058  -3.26157   
+          p<0.05        (*)      (*)       (*)      (*)       (*)      (*)       (*)   
+          Adj.R\^{}2            0.04017            0.05850            0.04387             
+          
+                            
+                      beta  
+          est      0.35212  
+          t-stat   1.59424  
+          p<0.05            
+          Adj.R\^{}2  0.00413  
+\end{Verbatim}
+        
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}107}]:} \PY{n}{cochrane\PYZus{}piazzesi}\PY{p}{(}\PY{n}{start}\PY{p}{,} \PY{n}{end}\PY{p}{)}
+\end{Verbatim}
+
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}107}]:}                2        3        4        5
+                       b\_n      b\_n      b\_n      b\_n
+          est      0.43601  0.89628  1.27310  1.39461
+          t-stat   6.86631  8.11073  8.66349  7.55383
+          p<0.05       (*)      (*)      (*)      (*)
+          Adj.R\^{}2  0.11010  0.14798  0.16565  0.13066
+\end{Verbatim}
+        
+    \subsection{2-(d)}\label{d}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}127}]:} \PY{n}{i0} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{n}{rx}\PY{o}{.}\PY{n}{index} \PY{o}{\PYZgt{}} \PY{l+m+mi}{19830630}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+          \PY{n}{iT} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{n}{rx}\PY{o}{.}\PY{n}{index} \PY{o}{==} \PY{l+m+mi}{20021231}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+          \PY{n}{fama\PYZus{}bliss} \PY{o}{=} \PY{n}{LinearRegression}\PY{p}{(}\PY{n}{fit\PYZus{}intercept}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+          \PY{n}{ssr} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{)}
+          \PY{n}{sst} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{)}
+          \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{i0}\PY{p}{,} \PY{n}{iT}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+              \PY{n}{t} \PY{o}{=} \PY{n}{rx}\PY{o}{.}\PY{n}{index}\PY{p}{[}\PY{n}{i}\PY{p}{]}
+              \PY{n}{t\PYZus{}prev} \PY{o}{=} \PY{n}{rx}\PY{o}{.}\PY{n}{index}\PY{p}{[}\PY{n}{i}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+              \PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{p}{[}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{4}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{:}
+                  \PY{n}{X} \PY{o}{=} \PY{p}{(}\PY{n}{f}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{p}{:}\PY{n}{t\PYZus{}prev}\PY{p}{,}\PY{n}{k}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{y}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{p}{:}\PY{n}{t\PYZus{}prev}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{values}
+                  \PY{n}{Xt} \PY{o}{=} \PY{p}{(}\PY{n}{f}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{t}\PY{p}{,}\PY{n}{k}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{y}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{t}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+                  \PY{n}{yy} \PY{o}{=} \PY{n}{rx}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{p}{:}\PY{n}{t\PYZus{}prev}\PY{p}{,}\PY{n}{k}\PY{p}{]}
+                  \PY{n}{rxt} \PY{o}{=} \PY{n}{rx}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{t}\PY{p}{,}\PY{n}{k}\PY{p}{]}
+                  \PY{k}{if} \PY{p}{(}\PY{p}{(}\PY{n}{i}\PY{o}{\PYZhy{}}\PY{n}{i0}\PY{p}{)}\PY{o}{\PYZpc{}} \PY{l+m+mi}{12}\PY{p}{)} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:}
+                      \PY{n}{fama\PYZus{}bliss}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,} \PY{n}{yy}\PY{p}{)}
+                  \PY{n}{rx\PYZus{}pred} \PY{o}{=} \PY{n}{fama\PYZus{}bliss}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{Xt}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+                  \PY{n}{rx\PYZus{}mean} \PY{o}{=} \PY{n}{yy}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
+                  \PY{n}{ssr}\PY{p}{[}\PY{n}{k}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{]} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{rxt} \PY{o}{\PYZhy{}} \PY{n}{rx\PYZus{}pred}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+                  \PY{n}{sst}\PY{p}{[}\PY{n}{k}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{]} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{rxt} \PY{o}{\PYZhy{}} \PY{n}{rx\PYZus{}mean}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+          \PY{n}{rsq\PYZus{}oob\PYZus{}famabliss} \PY{o}{=} \PY{l+m+mi}{1}\PY{o}{\PYZhy{}} \PY{n}{ssr}\PY{o}{/}\PY{n}{sst}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}130}]:} \PY{n}{i0} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{n}{rx}\PY{o}{.}\PY{n}{index} \PY{o}{\PYZgt{}} \PY{l+m+mi}{19830630}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+          \PY{n}{iT} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{n}{rx}\PY{o}{.}\PY{n}{index} \PY{o}{==} \PY{l+m+mi}{20021231}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+          \PY{n}{cochrane\PYZus{}piazzesi} \PY{o}{=} \PY{n}{LinearRegression}\PY{p}{(}\PY{n}{fit\PYZus{}intercept}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+          \PY{n}{ssr} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{)}
+          \PY{n}{sst} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{)}
+          \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{i0}\PY{p}{,} \PY{n}{iT}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+              \PY{n}{t} \PY{o}{=} \PY{n}{rx}\PY{o}{.}\PY{n}{index}\PY{p}{[}\PY{n}{i}\PY{p}{]}
+              \PY{n}{t\PYZus{}prev} \PY{o}{=} \PY{n}{rx}\PY{o}{.}\PY{n}{index}\PY{p}{[}\PY{n}{i}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+              \PY{n}{rx\PYZus{}bar} \PY{o}{=} \PY{n}{rx}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{p}{:}\PY{n}{t\PYZus{}prev}\PY{p}{,}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{4}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{.}\PY{n}{values}
+              \PY{n}{ff} \PY{o}{=} \PY{n}{sm}\PY{o}{.}\PY{n}{add\PYZus{}constant}\PY{p}{(}\PY{n}{f}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{p}{:}\PY{n}{t\PYZus{}prev}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{p}{)}
+              \PY{n}{ft} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{+}\PY{n+nb}{list}\PY{p}{(}\PY{n}{f}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{t}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{p}{)}\PY{p}{)}
+              \PY{n}{res} \PY{o}{=} \PY{n}{sm}\PY{o}{.}\PY{n}{OLS}\PY{p}{(}\PY{n}{rx\PYZus{}bar}\PY{p}{,} \PY{n}{ff}\PY{p}{)}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{p}{)}
+              \PY{n}{gamma} \PY{o}{=} \PY{n}{res}\PY{o}{.}\PY{n}{params}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{l+m+mi}{6}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+              \PY{n}{reps} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+              \PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{p}{[}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{4}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{:}
+                  \PY{n}{X} \PY{o}{=} \PY{n}{ff}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{gamma}\PY{p}{)}
+                  \PY{n}{yy} \PY{o}{=} \PY{n}{rx}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{p}{:}\PY{n}{t\PYZus{}prev}\PY{p}{,}\PY{n}{k}\PY{p}{]}
+                  \PY{n}{Xt} \PY{o}{=} \PY{n}{ft}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{gamma}\PY{p}{)}
+                  \PY{n}{rxt} \PY{o}{=} \PY{n}{rx}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{t}\PY{p}{,}\PY{n}{k}\PY{p}{]}
+                  \PY{k}{if} \PY{p}{(}\PY{p}{(}\PY{n}{i}\PY{o}{\PYZhy{}}\PY{n}{i0}\PY{p}{)}\PY{o}{\PYZpc{}} \PY{l+m+mi}{12}\PY{p}{)} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:}
+                      \PY{n}{cochrane\PYZus{}piazzesi}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{yy}\PY{p}{)}
+                  \PY{n}{rx\PYZus{}pred} \PY{o}{=} \PY{n}{fama\PYZus{}bliss}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{Xt}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+                  \PY{n}{rx\PYZus{}mean} \PY{o}{=} \PY{n}{yy}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
+                  \PY{n}{ssr}\PY{p}{[}\PY{n}{k}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{]} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{rxt} \PY{o}{\PYZhy{}} \PY{n}{rx\PYZus{}pred}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+                  \PY{n}{sst}\PY{p}{[}\PY{n}{k}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{]} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{rxt} \PY{o}{\PYZhy{}} \PY{n}{rx\PYZus{}mean}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+          \PY{n}{rsq\PYZus{}oob\PYZus{}cochpiz} \PY{o}{=} \PY{l+m+mi}{1}\PY{o}{\PYZhy{}} \PY{n}{ssr}\PY{o}{/}\PY{n}{sst}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}131}]:} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}
+              \PY{n}{data}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{n}{rsq\PYZus{}oob\PYZus{}famabliss}\PY{p}{,}\PY{n}{rsq\PYZus{}oob\PYZus{}cochpiz}\PY{p}{]}\PY{p}{)}\PY{p}{,} 
+              \PY{n}{index}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Fama\PYZhy{}Bliss}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Cochrane\PYZhy{}Piazzesi}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+              \PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{4}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{]}
+          \PY{p}{)}
+\end{Verbatim}
+
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}131}]:}                           2         3         4         5
+          Fama-Bliss        -0.042817  0.064179  0.129706  0.096200
+          Cochrane-Piazzesi  0.229250  0.360628  0.341886  0.313749
+\end{Verbatim}
+        
+    \subsection{2-(e)}\label{e}
+
+\subsubsection{2-(e)-i}\label{e-i}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}168}]:} \PY{n}{h} \PY{o}{=} \PY{k+kc}{None}
+          \PY{n}{wt} \PY{o}{=} \PY{l+m+mi}{100}
+          \PY{n}{ww} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+          \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{i0}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{iT}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{12}\PY{p}{)}\PY{p}{:}
+              \PY{n}{t} \PY{o}{=} \PY{n}{rx}\PY{o}{.}\PY{n}{index}\PY{p}{[}\PY{n}{i}\PY{p}{]}
+              \PY{n}{t\PYZus{}prev} \PY{o}{=} \PY{n}{rx}\PY{o}{.}\PY{n}{index}\PY{p}{[}\PY{n}{i}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+              \PY{n}{pt} \PY{o}{=} \PY{n}{bonds}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{t}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{values}
+              \PY{n}{p\PYZus{}prev} \PY{o}{=} \PY{n}{bonds}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{t\PYZus{}prev}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{values}
+              \PY{n}{p\PYZus{}settle} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{100}\PY{p}{]}\PY{o}{+}\PY{n+nb}{list}\PY{p}{(}\PY{n}{bonds}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{t}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{p}{[}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+              \PY{n}{p\PYZus{}open} \PY{o}{=} \PY{n}{bonds}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{t}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{values}
+              \PY{n}{wt} \PY{o}{=} \PY{n}{h}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{p\PYZus{}settle}\PY{p}{)} \PY{k}{if} \PY{n}{h} \PY{o+ow}{is} \PY{o+ow}{not} \PY{k+kc}{None} \PY{k}{else} \PY{l+m+mi}{100}
+              \PY{n}{h} \PY{o}{=} \PY{n}{wt}\PY{o}{/}\PY{p}{(}\PY{l+m+mi}{5}\PY{o}{*}\PY{n}{p\PYZus{}open}\PY{p}{)}
+              \PY{n}{ww}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{wt}\PY{p}{)}
+          \PY{n}{fig}\PY{p}{,}\PY{n}{ax} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{ww}\PY{p}{)}
+\end{Verbatim}
+
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}168}]:} [<matplotlib.lines.Line2D at 0x11ebd0550>]
+\end{Verbatim}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_20_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \subsubsection{2-(e)-ii}\label{e-ii}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}166}]:} \PY{n}{h} \PY{o}{=} \PY{k+kc}{None}
+          \PY{n}{wt} \PY{o}{=} \PY{l+m+mi}{100}
+          \PY{n}{ww2} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+          \PY{n}{fama\PYZus{}bliss} \PY{o}{=} \PY{n}{LinearRegression}\PY{p}{(}\PY{n}{fit\PYZus{}intercept}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+          \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{i0}\PY{p}{,} \PY{n}{iT}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{12}\PY{p}{)}\PY{p}{:}
+              \PY{n}{t} \PY{o}{=} \PY{n}{rx}\PY{o}{.}\PY{n}{index}\PY{p}{[}\PY{n}{i}\PY{p}{]}
+              \PY{n}{t\PYZus{}prev} \PY{o}{=} \PY{n}{rx}\PY{o}{.}\PY{n}{index}\PY{p}{[}\PY{n}{i}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+              \PY{k}{if} \PY{n}{h} \PY{o+ow}{is} \PY{o+ow}{not} \PY{k+kc}{None}\PY{p}{:}        
+                  \PY{n}{pt} \PY{o}{=} \PY{n}{bonds}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{t}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{values}
+                  \PY{n}{p\PYZus{}prev} \PY{o}{=} \PY{n}{bonds}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{t\PYZus{}prev}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{values}
+                  \PY{n}{p\PYZus{}settle} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{100}\PY{p}{]}\PY{o}{+}\PY{n+nb}{list}\PY{p}{(}\PY{n}{bonds}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{t}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{p}{[}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+                  \PY{n}{wt} \PY{o}{=} \PY{n}{h}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{p\PYZus{}settle}\PY{p}{)} \PY{k}{if} \PY{n}{h} \PY{o+ow}{is} \PY{o+ow}{not} \PY{k+kc}{None} \PY{k}{else} \PY{l+m+mi}{100}
+                  \PY{n}{ww2}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{wt}\PY{p}{)}
+              \PY{k}{else}\PY{p}{:} \PY{n}{ww2}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{l+m+mi}{100}\PY{p}{)}
+              \PY{n}{p\PYZus{}open} \PY{o}{=} \PY{n}{bonds}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{t}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{values}
+                  
+              \PY{n}{rx\PYZus{}preds} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{)}   
+              \PY{c+c1}{\PYZsh{} fb}
+              \PY{n}{h} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{ones}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{)}\PY{o}{/}\PY{l+m+mi}{5}
+              \PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{p}{[}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{4}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{:}
+                  \PY{n}{X} \PY{o}{=} \PY{p}{(}\PY{n}{f}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{p}{:}\PY{n}{t\PYZus{}prev}\PY{p}{,}\PY{n}{k}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{y}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{p}{:}\PY{n}{t\PYZus{}prev}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{values}
+                  \PY{n}{Xt} \PY{o}{=} \PY{p}{(}\PY{n}{f}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{t}\PY{p}{,}\PY{n}{k}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{y}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{t}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+                  \PY{n}{yy} \PY{o}{=} \PY{n}{rx}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{p}{:}\PY{n}{t\PYZus{}prev}\PY{p}{,}\PY{n}{k}\PY{p}{]}
+                  \PY{n}{rxt} \PY{o}{=} \PY{n}{rx}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{t}\PY{p}{,}\PY{n}{k}\PY{p}{]}
+                  \PY{n}{fama\PYZus{}bliss}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,} \PY{n}{yy}\PY{p}{)}
+                  \PY{n}{rx\PYZus{}preds}\PY{p}{[}\PY{n}{k}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{]} \PY{o}{=} \PY{n}{fama\PYZus{}bliss}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{Xt}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+              \PY{n}{rx\PYZus{}pred\PYZus{}bar} \PY{o}{=} \PY{n}{rx\PYZus{}preds}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
+              \PY{n}{h}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{]} \PY{o}{=} \PY{l+m+mf}{0.2}\PY{o}{+}\PY{l+m+mi}{5}\PY{o}{*}\PY{n}{rx\PYZus{}pred\PYZus{}bar}
+              \PY{n}{h}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{h}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+              \PY{n}{h} \PY{o}{*}\PY{o}{=} \PY{n}{wt}\PY{o}{/}\PY{n}{p\PYZus{}open}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}169}]:} \PY{n}{h} \PY{o}{=} \PY{k+kc}{None}
+          \PY{n}{wt} \PY{o}{=} \PY{l+m+mi}{100}
+          \PY{n}{ww3} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+          \PY{n}{fama\PYZus{}bliss} \PY{o}{=} \PY{n}{LinearRegression}\PY{p}{(}\PY{n}{fit\PYZus{}intercept}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+          \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{i0}\PY{p}{,} \PY{n}{iT}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{12}\PY{p}{)}\PY{p}{:}
+              \PY{n}{t} \PY{o}{=} \PY{n}{rx}\PY{o}{.}\PY{n}{index}\PY{p}{[}\PY{n}{i}\PY{p}{]}
+              \PY{n}{t\PYZus{}prev} \PY{o}{=} \PY{n}{rx}\PY{o}{.}\PY{n}{index}\PY{p}{[}\PY{n}{i}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+              
+              \PY{k}{if} \PY{n}{h} \PY{o+ow}{is} \PY{o+ow}{not} \PY{k+kc}{None}\PY{p}{:}
+                  \PY{n}{pt} \PY{o}{=} \PY{n}{bonds}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{t}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{values}
+                  \PY{n}{p\PYZus{}prev} \PY{o}{=} \PY{n}{bonds}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{t\PYZus{}prev}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{values}
+                  \PY{n}{p\PYZus{}prev} \PY{o}{=} \PY{n}{bonds}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{t\PYZus{}prev}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{values}
+                  \PY{n}{p\PYZus{}settle} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{100}\PY{p}{]}\PY{o}{+}\PY{n+nb}{list}\PY{p}{(}\PY{n}{bonds}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{t}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{p}{[}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+                  \PY{n}{wt} \PY{o}{=} \PY{n}{h}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{p\PYZus{}settle}\PY{p}{)} \PY{k}{if} \PY{n}{h} \PY{o+ow}{is} \PY{o+ow}{not} \PY{k+kc}{None} \PY{k}{else} \PY{l+m+mi}{100}
+                  \PY{n}{ww3}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{wt}\PY{p}{)}
+              \PY{k}{else}\PY{p}{:} \PY{n}{ww3}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{l+m+mi}{100}\PY{p}{)}
+              \PY{n}{p\PYZus{}open} \PY{o}{=} \PY{n}{bonds}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{t}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{values}
+                  
+              \PY{n}{rx\PYZus{}preds} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{)}   
+              \PY{c+c1}{\PYZsh{} cp}
+              \PY{n}{h} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{ones}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{)}\PY{o}{/}\PY{l+m+mi}{5}
+          
+              \PY{n}{rx\PYZus{}bar} \PY{o}{=} \PY{n}{rx}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{p}{:}\PY{n}{t\PYZus{}prev}\PY{p}{,}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{4}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{.}\PY{n}{values}
+              \PY{n}{ff} \PY{o}{=} \PY{n}{sm}\PY{o}{.}\PY{n}{add\PYZus{}constant}\PY{p}{(}\PY{n}{f}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{p}{:}\PY{n}{t\PYZus{}prev}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{p}{)}
+              \PY{n}{ft} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{+}\PY{n+nb}{list}\PY{p}{(}\PY{n}{f}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{t}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{p}{)}\PY{p}{)}
+              \PY{n}{res} \PY{o}{=} \PY{n}{sm}\PY{o}{.}\PY{n}{OLS}\PY{p}{(}\PY{n}{rx\PYZus{}bar}\PY{p}{,} \PY{n}{ff}\PY{p}{)}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{p}{)}
+              \PY{n}{gamma} \PY{o}{=} \PY{n}{res}\PY{o}{.}\PY{n}{params}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{l+m+mi}{6}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+              \PY{n}{reps} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+              \PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{p}{[}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{4}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{:}
+                  \PY{n}{X} \PY{o}{=} \PY{n}{ff}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{gamma}\PY{p}{)}
+                  \PY{n}{yy} \PY{o}{=} \PY{n}{rx}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{p}{:}\PY{n}{t\PYZus{}prev}\PY{p}{,}\PY{n}{k}\PY{p}{]}
+                  \PY{n}{Xt} \PY{o}{=} \PY{n}{ft}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{gamma}\PY{p}{)}
+                  \PY{n}{rxt} \PY{o}{=} \PY{n}{rx}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{t}\PY{p}{,}\PY{n}{k}\PY{p}{]}
+                  \PY{n}{cochrane\PYZus{}piazzesi}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{yy}\PY{p}{)}
+                  \PY{n}{rx\PYZus{}preds}\PY{p}{[}\PY{n}{k}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{]} \PY{o}{=} \PY{n}{cochrane\PYZus{}piazzesi}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{Xt}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+                  
+              \PY{n}{rx\PYZus{}pred\PYZus{}bar} \PY{o}{=} \PY{n}{rx\PYZus{}preds}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
+              \PY{n}{h}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{]} \PY{o}{=} \PY{l+m+mf}{0.2}\PY{o}{+}\PY{l+m+mi}{5}\PY{o}{*}\PY{n}{rx\PYZus{}pred\PYZus{}bar}
+              \PY{n}{h}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{h}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+              \PY{n}{h} \PY{o}{*}\PY{o}{=} \PY{n}{wt}\PY{o}{/}\PY{n}{p\PYZus{}open}
+              
+          \PY{n}{fig}\PY{p}{,}\PY{n}{ax} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{ww3}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Cochrane\PYZhy{}Piazzesi}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{ww2}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Fama\PYZhy{}Bliss}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{ww}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Naive}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+          \PY{n}{\PYZus{}} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_23_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \section*{Problem 3}\label{problem-3}
+
+    \subsection{3-(a)}\label{a}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}132}]:} \PY{n}{crc} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CurrencyReturns.xlsx}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}136}]:} \PY{n}{mean} \PY{o}{=} \PY{n}{crc}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}\PY{o}{*}\PY{l+m+mi}{12}
+          \PY{n}{vol} \PY{o}{=} \PY{n}{crc}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{)}
+          \PY{n}{sharpe} \PY{o}{=} \PY{n}{mean}\PY{o}{/}\PY{n}{vol}
+          \PY{n}{tab} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{concat}\PY{p}{(}\PY{p}{[}\PY{n}{mean}\PY{p}{,} \PY{n}{vol}\PY{p}{,} \PY{n}{sharpe}\PY{p}{]}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+          \PY{n}{tab}\PY{o}{.}\PY{n}{columns} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{mean}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{vol}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sharpe}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+          \PY{n}{tab}
+\end{Verbatim}
+
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}136}]:}                 mean       vol    sharpe
+          Portfolio1 -0.017920  0.078471 -0.228364
+          Portfolio2 -0.004030  0.071234 -0.056572
+          Portfolio3  0.012769  0.073995  0.172562
+          Portfolio4  0.029169  0.077439  0.376666
+          Portfolio5  0.036307  0.085203  0.426118
+          Portfolio6  0.058526  0.097547  0.599975
+\end{Verbatim}
+        
+    \textbf{Patterns}:
+
+\begin{itemize}
+\tightlist
+\item
+  As forward discount gets larger, the corresponding portfolio gets
+  higher excess return, higher volatility, and higher sharpe ratio.
+\end{itemize}
+
+    \subsection{3-(b)}\label{b}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}138}]:} \PY{n}{longshorts} \PY{o}{=} \PY{n}{crc}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{subtract}\PY{p}{(}\PY{n}{crc}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}
+          \PY{n}{mean} \PY{o}{=} \PY{n}{longshorts}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}\PY{o}{*}\PY{l+m+mi}{12}
+          \PY{n}{vol} \PY{o}{=} \PY{n}{longshorts}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{)}
+          \PY{n}{sharpe} \PY{o}{=} \PY{n}{mean}\PY{o}{/}\PY{n}{vol}
+          \PY{n}{tab} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{concat}\PY{p}{(}\PY{p}{[}\PY{n}{mean}\PY{p}{,} \PY{n}{vol}\PY{p}{,} \PY{n}{sharpe}\PY{p}{]}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+          \PY{n}{tab}\PY{o}{.}\PY{n}{columns} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{mean}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{vol}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sharpe}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+          \PY{n}{tab}
+\end{Verbatim}
+
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}138}]:}                 mean       vol    sharpe
+          Portfolio2  0.013890  0.052521  0.264464
+          Portfolio3  0.030689  0.051792  0.592530
+          Portfolio4  0.047088  0.061044  0.771384
+          Portfolio5  0.054227  0.064693  0.838216
+          Portfolio6  0.076445  0.087918  0.869505
+\end{Verbatim}
+        
+    \begin{itemize}
+\tightlist
+\item
+  These statistics have lower excess return and volatility than the
+  stock market.
+\item
+  Over the past 10 years, the SPY has roughly 0.96 sharpe ratio (source:
+  Yahoo finance). So the currency portfolios have lower sharpe than
+  stock market.
+\end{itemize}
+
+    \subsection{3-(c)}\label{c}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}24}]:} \PY{n}{RX} \PY{o}{=} \PY{n}{crc}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+         \PY{n}{HML} \PY{o}{=} \PY{n}{crc}\PY{o}{.}\PY{n}{Portfolio6} \PY{o}{\PYZhy{}} \PY{n}{crc}\PY{o}{.}\PY{n}{Portfolio1}
+         \PY{n}{XX} \PY{o}{=} \PY{n}{sm}\PY{o}{.}\PY{n}{add\PYZus{}constant}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{n}{RX}\PY{o}{.}\PY{n}{values}\PY{p}{,} \PY{n}{HML}\PY{o}{.}\PY{n}{values}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{T}\PY{p}{)}
+         \PY{n}{reps} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         \PY{n}{params} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         \PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{6}\PY{p}{)}\PY{p}{:}
+             \PY{n}{yy} \PY{o}{=} \PY{n}{crc}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{n}{k}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{]}
+             \PY{n}{res} \PY{o}{=} \PY{n}{sm}\PY{o}{.}\PY{n}{OLS}\PY{p}{(}\PY{n}{yy}\PY{p}{,} \PY{n}{XX}\PY{p}{)}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{p}{)}
+             \PY{n}{reps}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{report\PYZus{}less}\PY{p}{(}\PY{n}{res}\PY{p}{)}\PY{p}{)}
+             \PY{n}{params}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{res}\PY{o}{.}\PY{n}{params}\PY{p}{)}
+         \PY{n}{tab} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{concat}\PY{p}{(}\PY{n}{reps}\PY{p}{)}
+         \PY{n}{tab}\PY{o}{.}\PY{n}{index} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{MultiIndex}\PY{o}{.}\PY{n}{from\PYZus{}product}\PY{p}{(}
+             \PY{p}{[}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{4}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{,}\PY{l+m+mi}{6}\PY{p}{]}\PY{p}{,}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{est}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{t\PYZhy{}stat}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{p\PYZlt{}0.05}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Adj R\PYZca{}2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{p}{)}
+         \PY{n}{tab}
+\end{Verbatim}
+
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}24}]:}               const        x1         x2
+         1 est      -0.00065   1.02973   -0.38958
+           t-stat   -1.80710  58.07180  -27.93299
+           p<0.05                  (*)        (*)
+           Adj R\^{}2             0.90906           
+         2 est      -0.00098   0.91203   -0.12682
+           t-stat   -1.88383  35.67524   -6.30687
+           p<0.05                  (*)        (*)
+           Adj R\^{}2             0.77063           
+         3 est       0.00036   0.95486   -0.12811
+           t-stat    0.67771  36.92556   -6.29883
+           p<0.05                  (*)        (*)
+           Adj R\^{}2             0.78251           
+         4 est       0.00086   0.98559    0.00041
+           t-stat    1.52026  35.68832    0.01868
+           p<0.05                  (*)           
+           Adj R\^{}2             0.77351           
+         5 est       0.00108   1.08806    0.03369
+           t-stat    1.79403  37.01308    1.45726
+           p<0.05                  (*)           
+           Adj R\^{}2             0.78801           
+         6 est      -0.00065   1.02973    0.61042
+           t-stat   -1.80710  58.07180   43.76653
+           p<0.05                  (*)        (*)
+           Adj R\^{}2             0.94115           
+\end{Verbatim}
+        
+    \textbf{Comments}
+
+\begin{itemize}
+\item
+  \begin{enumerate}
+  \def\labelenumi{(\roman{enumi})}
+  \tightlist
+  \item
+    The betas for RX factor is roughly 1.0 for all of the 6 portfolios.
+    This implies that RX factor serves as a "benchmark" in the same way
+    as the market return in equity factor model. The results suggests
+    that the 6 portfolios all have about unit exposure to benchmark.
+  \end{enumerate}
+\item
+  \begin{enumerate}
+  \def\labelenumi{(\roman{enumi})}
+  \setcounter{enumi}{1}
+  \tightlist
+  \item
+    The beta for HML increases from portfolio 1 to portfolio 2. This
+    suggests that the role of HML factor can be understood as "unit
+    deviation from the benchmark", where the benchmark is the RX factor.
+    So the average return of portfolios \(k\) can be explained as: \[
+    \text{Avg. return of portfolio k} = \text{Avg. return of "benchmark"} + \beta_{HML}^{(k)} \times \text{"Deviation from benchmark"}
+    \]
+  \end{enumerate}
+\item
+  \begin{enumerate}
+  \def\labelenumi{(\roman{enumi})}
+  \setcounter{enumi}{2}
+  \tightlist
+  \item
+    The estimated intercepts has close-to-zero absolute value, and are
+    not statistically significant. So we can say that the two factors
+    did a good job in explaining portfolio returns.
+  \end{enumerate}
+\end{itemize}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} 
+\end{Verbatim}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+    \end{document}

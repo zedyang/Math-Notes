@@ -1,0 +1,301 @@
+\documentclass[10 pt]{hwtemplate} % Use the custom resume.cls style
+
+%-------------------------------------------------------------------------------
+% Document begins
+%-------------------------------------------------------------------------------
+
+\title{\textbf{Options Assignment 4}}
+\author{Sidi (Sindy) Liu (\textit{sidil1@andrew.cmu.edu}); \\ Ze Yang (\textit{zey@andrew.cmu.edu})}
+
+\begin{document}
+\maketitle
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\textbf{Problem. 14} 
+\begin{solution} \textbf{(a)}
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{RN simulation of options}
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=0.9]{figures/fig1.png}
+\end{figure}
+~\\
+\textbf{(b)} The RN price is 
+$$
+c^{RN}_t = \mathbb{E}^{RN}\left[c^*_T\right] e^{-r(T-t)}
+$$
+Hence the Monte-Carlo sample (of size $n$) estimate of RN price is given by
+\begin{equation}
+  \hat{c}^{RN}_t = \frac{e^{-r(T-t)}}{n} \sum_{i=1}^n c^*_T
+\end{equation}
+The standard error is
+\begin{equation}
+  SE(\hat{c}^{RN}_t) = \sqrt{\left(\frac{e^{-r(T-t)}}{n}\right)^2 \sum_{i=1}^n \mathrm{\mathbb{V}ar}\left[c^*_T\right]} =\frac{e^{-r(T-t)}}{n} \sqrt{n\hat{\sigma}^2} = \frac{e^{-r(T-t)}}{\sqrt{n}}\hat{\sigma}
+\end{equation}
+Where $n$ is the size of each Monte-Carlo sample, $\hat{\sigma}$ is the sample standard deviation. The numerical results are shown in the table above. \\
+~\\
+\textbf{(c)} For sure, the option valuations will change, because our sample estimate of $c^{RN}_t$ (from Monte-Carlo), a.k.a. $\hat{c}^{RN}_t$, is itself a random variable. By CLT: the monte-carlo estimator has asymptotic distribution:
+\begin{equation}
+  \hat{c}^{RN}_t \xrightarrow{p} \mathcal{N}\left(c^{RN}_t, \frac{\sigma_c^2}{n}\right)
+\end{equation}
+Where $c^{RN}_t$ is real RN price, $\sigma_c^2$ is a constant.\\
+Our new monte carlo sample is displayed in the table below
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{RN simulation of options: another monte-carlo sample}
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=0.9]{figures/fig2.png}
+\end{figure}
+~\\
+\textbf{(d)} The Black-Scholes price is the ground-truth RN price $c^{BS}_t = c^{RN}_t$, while our estimation from Monte-Carlo sample, $\hat{c}^{RN}_t$, is its estimate. Clearly $c^{MCS}_t= \hat{c}^{RN}_t$ is a random variable, there is no guarantee that it should be equal to $c^{RN}_t$, and the average amount of error is measured by the SE as we calculated in (a) and (b). \\
+However, when the Monte-Carlo sample size $n\to \infty$, we will see the MCS price converge to Black-Scholes price in probability, i.e. for all $\epsilon > 0$:
+\begin{equation}
+  \lim\limits_{n\rightarrow\infty} \mathbb{P}\left(|c^{MCS}_t - c^{RN}_t| \geq \epsilon\right) = 0
+\end{equation}
+
+\end{solution}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\textbf{Problem. 20} 
+\begin{solution} The stock price and option price trees are given by:
+
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{Binomial valuation}
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=0.8]{figures/fig3.png}
+\end{figure}
+~\\
+So the price of European call at $t=0$ is
+$$
+c_{eu}(0) = 3.44300
+$$
+The price of Asian call at $t=0$ is
+$$
+c_{asian}(0) = 1.72865
+$$
+The replication delta (position in European option) is computed as
+$$
+\Delta(t_i) = \frac{c_{asian}(u, t_{i+1})-c_{asian}(d, t_{i+1})}{c_{eu}(u, t_{i+1})-c_{eu}(d, t_{i+1})}
+$$
+Where $u$ means up state and $d$ means down state.
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{Replication of Asian with European Call}
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=1]{figures/fig4.png}
+\end{figure}
+~\\
+Denote cash position as $B_t$. Refer to the table above, we have:
+\begin{equation}
+  \begin{split}
+    &\Delta_0 = 0.706896;~~B_0 = -0.705198 \\
+    &\Delta_1(u) = 0.33333;~~B_1(u) = 1.3068588 \\
+    &\Delta_1(d) = 0.05146;~~B_1(d) = 0
+  \end{split}
+\end{equation}
+\end{solution}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\textbf{Problem. 23} 
+\begin{solution} \textbf{(a)}
+We first calcuate $u,d$, with CRR calibration:
+\begin{equation}
+  u = e^{\sigma \sqrt{t}}=1.2214;~~~~d = e^{-\sigma \sqrt{t}}=0.8187
+\end{equation}
+The state prices are
+\begin{equation}
+  \pi_u = \frac{R-d}{R(u-d)} = 0.5653;~~~~  \pi_d = \frac{u-R}{R(u-d)} = 0.3781
+\end{equation}
+Denote value of company, bond (prior to coupon payment), and equity as $V, B, E$ respectively. Let the face value and coupon rate of bond be $F$ and $c$. We have:
+$$
+B_t = \begin{cases}\min(V_T, F(1+c)) & t=T\\
+\pi_u B_{t+1, u}+\pi_d B_{t+1, d} & 0\leq t< T
+\end{cases}
+$$
+Hence
+$$
+E_t =\begin{cases}\max(0, V_T - F(1+c)) & t=T \\
+V_t -B_t & 0\leq t< T
+\end{cases}
+$$
+We assume that $\{V_t\}$ evolves by the binomial tree model. Denote $V_t^{[cum]}$ as cum dividend cum interest value, $V^{[ex]}$ as ex dividend ex interest value, we have:
+\begin{equation}
+  \begin{split}
+     &V_t^{[ex]} = V_t^{[cum]}(1-q) - Fc\\
+     &V_{t,u}^{[cum]} = uV_{t}^{[ex]}\\
+     &V_{t,d}^{[cum]} = dV_{t}^{[ex]}
+  \end{split}
+\end{equation}
+The bond price at time $0$ is therefore calculated as
+$$
+P_0 = \frac{B_0}{\text{principle}} \times 100\$
+$$
+Where principle = 3 billion. We proceed by calibrate to the observed bond price $P_0 = 99.05$, and solve for the desired company value $V_0$. See the table below for details.
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{Calibrate to company value}
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=0.7]{figures/fig5.png}
+\end{figure}
+~\\
+We obtain
+$$
+E_0 = 4.19505~~\text{billion \$}
+$$
+The yield to maturity at time 0 is therefore $y(0) = 7.5293\%$, the strike of the credit spread option, i.e. the credit spread at time 0 is
+$$
+X = y(0) - r_f = 7.5293\%- 6\% = 1.5293\%
+$$
+Subsequent ex-coupon ytms and credit spreads are:
+\begin{equation}
+  \begin{split}
+    &y(1,u) = 6\%;~~~cs(1,u) = y(1,u) - r_f = 0\\
+    &y(1,d) = 14.3374\%;~~~cs(1,d) = y(1,d) - r_f = 8.3374\%\\
+  \end{split}
+\end{equation}
+We are now ready to price the credit spread option:
+\begin{equation}
+  \begin{split}
+    &v(1,u) = (cs(1,u)-X)^+ = 0\\
+    &v(1,d) = (cs(1,u)-X)^+ = 0.068081\\
+    &v(0) = v(1,u)\pi_u + v(1,u)\pi_d = 0.025744
+  \end{split}
+\end{equation}
+See the table below. As a result, the fair value of the credit spread option at time 0 is:
+\begin{equation}
+  v(0) = 0.025744~\$~~~~~~\text{per 1\$ notional}
+\end{equation}
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{Binomial valuation of credit spread option}
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=0.9]{figures/fig6.png}
+\end{figure}
+~\\
+\textbf{(b)} Since we are writing the option, to delta hedge this short position, essentially we want to replicate a \textbf{long} position. \\
+Denote notional $N = 50$ million. The number of corporate bond at time 0 that one need to replicate credit spread option is given by:
+\begin{equation}
+  \Delta_0 = \frac{N(v(1,u)-v(1,d))}{P^{[cum]}(1,u) - P^{[cum]}(1,d)}
+\end{equation}
+Where $P^{[cum]}(1,s)$ is the cum coupon payoff of the bond at time 1, state $s$, i.e. the total cashflow of the bond at that state. It's calcuated as: 
+$$
+P^{[cum]}(1,s) = \frac{B_1(s)}{\text{principle}} + \text{coupon}
+$$
+See the table below for calculations. We get $\Delta_0 = -0.4624607$, with unit price being the time-0 bond price, a.k.a. $P_0 = 99.05\$$. 
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{Dynamic Hedging}
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=0.9]{figures/fig7.png}
+\end{figure}
+So the total amount of money invested in corporate bond is
+\begin{equation}
+  \Delta_0 P_0 = -45.806735 ~~\text{million \$}
+\end{equation}
+The total amount of money in t-bill is hence the option value minus the bond value, which is
+\begin{equation}
+  Nc_0 - \Delta_0 P_0 = 47.093945 ~~\text{million \$}
+\end{equation}
+Therefore, we short $45.807$ millon dollars of corporate bond, and buy $47.093$ millon dollars of T-bills to cover our position.
+\end{solution}
+
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\textbf{Problem. 32} 
+\begin{solution} \textbf{(a)} The market implied volatility is about 
+$$
+\sigma_i = 27.427\%
+$$
+while assume our estimate of stock volatility $\sigma_a = 25\%$ is an oracle, then by BS formula, the fair option price should be $c(t,S_t;\sigma_a) = 70.296 < c(t,S_t;\sigma_i) = 76.5$. 
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{BSM option price}
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=0.9]{figures/fig8.png}
+\end{figure}
+We therefore conclude that the option is \textbf{overvalued}.\\
+~\\
+\textbf{(b)} Denote implied volatility $\sigma_i$, actual volatility underlying the stock price dynamics $\sigma_a$, i.e. $dS_t = \mu S_t dt + \sigma_a S_t dW_t$. Futher assume that we dynamically hegde with delta $\Delta_h = \Delta(t,S_t,\sigma_h)$, i.e. we calculate the delta with BSM formula and another volatility parameter $\sigma_h$. \\
+By (Carr et.al, 2005) \cite{ccp}, assume we can dynamically hedge continuously, and no transaction cost, the PnL of this volatility aribitrage stategy is given by
+\begin{equation}
+  PnL(0, T) = c(t,S_t; \sigma_i)-c(t,S_t; \sigma_h) + \frac{1}{2}(\sigma^2_a - \sigma_h^2)\int_0^T e^{-rt}S^2_t \Gamma(t,S_t;\sigma_h) dt
+\end{equation}
+The first term is deterministic spread between option prices, the second term is an integral, whose value is positive when $\sigma_a>\sigma_h$, but random. \\
+As we assume our prediction $25\%$ is the true volatility $\sigma_a$, we can obtain a deterministic PnL if we set $\sigma_h = \sigma_a = 25\%$, i.e. hedge with the actual volatility. Then the integral term vanishes, we are left with
+\begin{equation}
+   PnL(0, T)  = c(t,S_t; \sigma_i)-c(t,S_t; \sigma_a) \approx 76.5 - 70.296 = 6.204
+ \end{equation} 
+ for each pair we trade. See the table below.
+\begin{figure}[H]
+  \centering
+  \captionsetup{justification=centering}
+  \caption{BSM option and portfolio greeks}
+  %\setlength{\abovecaptionskip}{-10pt}
+  %\setlength{\belowcaptionskip}{2pt}
+  \includegraphics[scale=0.7]{figures/fig9.png}
+\end{figure}
+We set the cash limit to be 5 million, the portfolio is given by:
+\begin{equation}
+  \begin{split}
+    &-7806.6546 \text{ ~~options} \\
+    &4305.5454 \text{ ~~stocks} \\
+    &-5 \text{~million ~~(borrowed) from bank account} \\
+  \end{split}
+\end{equation}
+The PnL is
+\begin{equation}
+  PnL = 48429.696~~\$
+\end{equation}
+\textbf{(c)} The portfolio greeks are calculated in the table, with
+\begin{equation}
+  \begin{split}
+    & \Delta_p = 0\\
+    & \Gamma_p = -18.8931\\
+    & \Theta_p = 888610.52\\
+    & \text{Vega}_p = -1995588.42
+  \end{split}
+\end{equation}
+Interpretation: Denote portfolio value as $\Pi$, we have, approximately
+\begin{equation}
+  d\Pi_t \approx \Delta_p dS_t + \frac{1}{2}\Gamma_p (dS_t)^2 + \Theta_p dt + \text{Vega}_p d\sigma
+\end{equation}
+\begin{itemize}
+  \item[1.] $\Delta_p=0$: the portfolio is not sensitive to the directional (linear) change in stock price.
+  \item[2.] $\Gamma_p=-18.8931$: the portfolio is sensitive to the curvature (non-linear) change in stock price, with about $-18.8931$/unit change in $S^2$.
+  \item[3.] $\Theta_p = 888610.52$: the portflio grows linearly with time elapsed, with about $888610.52$/unit change in $t$ (years). Note that the telescoping summation of the combined effect of $\Theta_p$ and $\Gamma_p$ is positive, which brings us a cumulated positive PnL.
+  \item[4.] $\text{Vega}_p = -1995588.42$: the portfolio is sensitive to the change of the real volatility in stock prices. Since our belief is $\sigma_a<\sigma_i$, an increase in $\sigma_a$ is NOT in our favor, and the portfolio value will decrease.
+\end{itemize}
+\end{solution}
+
+\begin{thebibliography}{}
+ \bibitem{ccp} 
+Carr, P.
+\textit{FAQ's in Option Pricing Theory}. 2005, 40-43. 
+\end{thebibliography}
+
+
+\end{document}

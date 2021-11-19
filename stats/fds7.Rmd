@@ -1,0 +1,277 @@
+---
+title: "Homework 1"
+author: "Ze Yang (zey@andrew.cmu.edu)"
+date: "Due Wednesday, November 1 at 5:30 PM"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+\large
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(quantmod)
+library(ggplot2)
+library(reshape)
+library(lubridate)
+library(dplyr)
+library(scales)
+library(vegan)
+library(corrplot)
+```
+
+You should submit the Rmd file for your analysis.
+Name the file as `YOURANDREWID_HW1.Rmd`
+and submit it via Canvas. Also submit the `.pdf` file that
+is produced.
+
+\vspace{.2in}
+
+__Part 1:__
+
+Reconsider the data set that was presented in the final exam for Mini 1.
+Create a new data frame that gives the day-to-day changes in all of the
+rates. Run a principal components analysis on these vectors. Is PCA
+effective in reducing the dimensionality of the rate change vectors?
+Try it with and without scaling the variables first
+and describe how the results change.
+
+\vspace{.2in}
+```{r}
+# load data, the code used in mini1 final
+fileheader = read.table("commercial_paper_rates.csv",sep=",",
+                        nrows=6,stringsAsFactors=FALSE)
+cprfullnames = as.character(c("Time.Period",fileheader[1,-1]))
+cprdata = read.table("commercial_paper_rates.csv",sep=",", header=T,
+                     skip=5,stringsAsFactors = FALSE,
+                     na.strings=c("ND","NA"))
+cprdata$Time.Period = as.Date(cprdata$Time.Period, format="%Y-%m-%d")
+df = cprdata
+names = c('time','nf.1d.AA','nf.7d.AA','nf.15d.AA',
+          'nf.30d.AA','nf.60d.AA','nf.90d.AA',
+          'nf.1d.A2P2','nf.7d.A2P2','nf.15d.A2P2',
+          'nf.30d.A2P2','nf.60d.A2P2','nf.90d.A2P2',
+          'f.1d.AA','f.7d.AA','f.15d.AA',
+          'f.30d.AA','f.60d.AA','f.90d.AA',
+          'asb.1d.AA','asb.7d.AA','asb.15d.AA',
+          'asb.30d.AA','asb.60d.AA','asb.90d.AA')
+colnames(df) = names
+df = df[!is.na(df$time),]
+```
+
+```{r}
+# calculate rates shift
+df.shift = diff(as.matrix(df[,2:25]))
+df.shift = as.data.frame(df.shift)
+
+# calculate rates shift with scaling 
+df.shift.scale = scale(df.shift[complete.cases(df.shift),])
+
+# pca
+pca.1 = princomp(df.shift, subset=complete.cases(df.shift))
+pca.2 = princomp(df.shift.scale)
+```
+
+```{r}
+summary(pca.1)
+```
+
+```{r}
+summary(pca.2)
+```
+
+
+```{r fig.width=8, fig.height=8}
+compose.loadings = function(pca, k, identifier) {
+  df = data.frame(loadings=pca$loadings[,k])
+  df$t = rep(c(1,7,15,30,60,90),4)
+  df$type = rep(
+    c('nf.AA','nf.A2P2','f.AA','asb.AA'), each=6)
+  df$order = rep(paste('PC',k), nrow(df))
+  df$id = rep(identifier, nrow(df))
+  return(df)
+}
+
+# PC1,2,3,4,5 loadings
+loadings = rbind(
+  compose.loadings(pca.1, 1, 'not scaled'),
+  compose.loadings(pca.2, 1, 'scaled'),
+  compose.loadings(pca.1, 2, 'not scaled'),
+  compose.loadings(pca.2, 2, 'scaled'),
+  compose.loadings(pca.1, 3, 'not scaled'),
+  compose.loadings(pca.2, 3, 'scaled'),
+  compose.loadings(pca.1, 4, 'not scaled'),
+  compose.loadings(pca.2, 4, 'scaled'), 
+  compose.loadings(pca.1, 5, 'not scaled'),
+  compose.loadings(pca.2, 5, 'scaled')
+)
+
+
+ggplot(loadings, mapping=aes(x=t, y=loadings, colour=id)) + 
+  geom_line() + geom_point() +
+  facet_grid(order ~ type)
+```
+
+
+**Explaination of the Plot:**
+
+- The plot summerizes the loadings of the first five principle components with the scaled (blue) and not-scaled (red) rates.
+- The `y` axis stands for the loadings of each original rates in the principle components; `x` axis represents the orignal rates, which are grouped into 4 categories by the labels `non-financial AA`, `non-financial A2P2`, `financial AA` and `asset-backed AA`. Within each group there are 6 maturities: 1, 7, 15, 30, 60, and 90.
+
+
+**Comments:**
+
+- The pca with or without scaling the variables can reduce the dimensionalities of the rate change vectors to some extend. For both situations, the first 15 principle components explain more than 90% of the variance. 
+- However, they are not as effective as the example we have done in class. I think an important reason is that there are 4 group of rates in this dataset: `non-financial AA`, `non-financial A2P2`, `financial AA` and `asset-backed AA`, as opposed to the in-class example where there is only one rate. The 24 dimensions in this example is actually on a 4-by-6 grid: group, maturity; while in the example we have seen in class, all the 11 dimensions represent different maturites. As a result, it might be harder to compress dimensions for this example.
+- PCA using rates without scaling has higher cumulative variance explained than PCA using scaled rates. 
+- From the loadings plot of first five principle components, we can observe that the 1st and 2nd PCs are approximately the same whether the rates are scaled or not. From the shape of loadings curve we decuce that 1st-PC stands for **parallel shift**, and the 2nd-PC is likely to be **butterfly**. 
+- PCs after the 2nd do not have clear pattern. And the loadings of `scaled` is very different from that of `not-scaled`.
+
+
+__Part 2:__
+
+As described in lecture, one approach to the time series dimension
+reduction situation we were facing would be to first smooth the time
+series, and then use these smoothed time series as the input to a
+dimension reduction algorithm. We will try this here.
+
+In particular, smooth each time series using `loess()`. I will leave the
+choice of the smoothing parameter up to you. After smoothing, you should
+use the `predict()` function to evaluate the fitted model on a regular
+grid of $x$ values. These smoothed time series are what should be utilized
+in the dimension reduction. Use Isomap. Explore the first two-dimensions
+to see if there is meaningful low-dimensional structure in the plot.
+
+__Comment:__ If you watched lecture, this will make a lot more sense. Be
+sure to watch the lecture prior to attempting this.
+
+```{r}
+# load the stock data
+df.stock = read.table("stocksample.txt", header=T, 
+                      sep='\t', comment.char="")
+df.stock.scale = apply(df.stock[,5:34], 1, scale)
+df.stock.scale = as.data.frame(df.stock.scale)
+df.stock.scale$time = c(1:30)
+```
+
+```{r}
+# function used to construct smoothed stock series
+smooth.stock = function(data, degree, span, grid=c(1:30), n=1000) {
+  fitted = data.frame(time=grid)
+  for (i in c(1:n)) {
+    loc.lm = loess(
+      df.stock.scale[,i] ~ df.stock.scale$time, 
+      span=span, degree=degree)
+    fitted[,i+1] = scale(predict(loc.lm, grid))
+  }
+  return(fitted)
+}
+```
+
+```{r}
+# wrap up function
+isomap.wrapper = function(params) {
+  df.sm = smooth.stock(
+    df.stock.scale, 
+    degree=params$degree, span=params$span)
+  stock.dist = dist(t(df.sm[,2:ncol(df.sm)]))
+  fmap = isomap(stock.dist, k=params$k)
+  df.stock.imap = cbind(df.stock, fmap$points[,1:params$k])
+  plot = ggplot(df.stock.imap, 
+                aes(x=df.stock.imap[,35],
+                    y=df.stock.imap[,36],color=sector)) + 
+    geom_point() + labs(color='Sector')
+  return(list(plot=plot, fmap=fmap, sm=df.sm))
+}
+```
+
+```{r}
+params.1 = list(
+  degree=1,
+  span=0.75,
+  k=5
+)
+
+fmap.1 = isomap.wrapper(params.1)
+fmap.1$plot
+```
+
+Now we use the `identify` function to check whether a close distance in the isomap representation results in similar pattern in stock time series. I decided to adopt a different approach from what we did in class.
+
+**Approach:**
+
+- Choose 2 different regions in the isomap plot above. These two regions are far from each other.
+- Treat each region as a "clustering group", within each group, pick several sample observations, here we pick 8 stocks in each group.
+- Investigate the correlation matrix of the stock time series of the selected sample. If the first 2 dimensions of `isomap` gives a useful representation of stock time series, then we would observe **similarities within each group**, and **discrepancies across different groups**.
+
+
+We now do the analysis and investigate the correlation matrix.
+
+
+```{r}
+df.sm = fmap.1$sm
+# plot(fmap.1$fmap$points)
+# identify(fmap.1$fmap$points)
+g1 = c(40, 180, 250, 310, 343, 350, 729, 875)
+g2 = c(221, 255, 376, 394, 555, 829, 896, 943)
+plot(as.data.frame(t(df.stock[g1,5:34])))
+```
+
+
+```{r}
+plot(as.data.frame(t(df.stock[g2,5:34])))
+```
+
+```{r}
+df.tmp = as.data.frame(t(df.stock[c(g1, g2),5:34]))
+corrplot(cor(df.tmp), method = "ellipse")
+```
+The `corrplot` above is a very straightforward visualization of the correlation matrix. We observe the desired result indeed: within each group, the correlation between stock time series are quite high. Across different groups, there is no such correlation.
+
+Hence, we conclude that there is a meaningful low-dimensional structure captured by `isomap` indeed.
+
+Further more, we pick 3 points from the first group and plot the time series of each of them:
+
+```{r}
+plot(df.tmp[,'40'])
+```
+
+```{r}
+plot(df.tmp[,'180'])
+```
+
+```{r}
+plot(df.tmp[,'310'])
+```
+
+They are very similar, which supports our conclusion.
+
+
+Lastly, we try different parameters to see whether the shape of the plot of first dimensions change dramatically under different choice of parameters. The answer is no: we obtain similar shapes.
+
+
+```{r}
+params.2 = list(
+  degree=2,
+  span=0.75,
+  k=5
+)
+
+fmap.2 = isomap.wrapper(params.2)
+fmap.2$plot
+```
+
+```{r}
+params.3 = list(
+  degree=1,
+  span=0.75,
+  k=4
+)
+
+fmap.3 = isomap.wrapper(params.3)
+fmap.3$plot
+```
+
+
+

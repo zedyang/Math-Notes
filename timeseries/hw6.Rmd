@@ -1,0 +1,94 @@
+---
+title: "Timeseries HW6"
+author: "Ze YANG"
+date: "10/15/2018"
+output: pdf_document
+---
+
+# Ruppert Page 397 Problem 9-11
+
+## Problem 9
+
+```{r}
+library(car)
+library(AER)
+library(forecast)
+library(arfima)
+data("USMacroG")
+MacroDiff = as.data.frame(apply(USMacroG, 2, diff))
+attach(MacroDiff)
+fit1 = arima(unemp, order=c(1,0,0), xreg=cbind(invest, government))
+```
+```{r}
+fit.lm = lm(unemp ~ invest + government)
+c(AIC(fit1), AIC(fit.lm))
+par(mfrow=c(1,2))
+acf(residuals(fit.lm))
+acf(residuals(fit1))
+durbinWatsonTest(fit.lm, 5)
+```
+
+**Comments:** 
+
+- The AR(1) model has smaller AIC (86.85233 V.S. 138.88245).
+- The ACF plot shows that the residuals of AR(1) fit has no significant serial correlation. Hence AR(1) model is a better fit.
+- The Durbin-Watson test on the simple linear regression model suggests we reject the null hypothesis for lag = 1 and 2, that is, the residuals exhibits serial correlation for lag = 1,2. 
+
+
+## Problem 11
+```{r}
+fit2 = arima(unemp, order=c(2,0,0), xreg=cbind(invest, government))
+fit11 = arima(unemp, order=c(1,0,1), xreg=cbind(invest, government))
+c(AIC(fit2), AIC(fit11), AIC(fit1), AIC(fit.lm))
+```
+The AR(2) model has a smaller AIC than AR(1) and ARMA(1,1).
+
+
+# Ford Data
+```{r}
+library(quantmod)
+FORD = getSymbols('F', from='1995-1-1', to='2017-12-31', auto.assign = F)
+volume = FORD$F.Volume
+logvolume = log(volume)
+par(mfrow=c(1,2))
+plot(logvolume)
+acf(logvolume, 100)
+```
+
+- Yes, it is probably a good idea to fit ARFIMA model on the log volume data, because it as an ACF plot that decays very slowly, which matches the long-memory characteristic that ARFIMA models.
+
+
+
+```{r, eval=FALSE}
+# Takes very long time to run
+maxp = 5
+maxq = 5
+holdaic = matrix(0, nrow=(maxp+1), ncol=(maxq+1))
+for (p in 0:maxp) {
+  for (q in 0:maxq) {
+    holdaic[(p+1), (q+1)] = summary(
+      arfima(ts(logvolume), order=c(p,0,q), quiet=TRUE))$aic
+    print(paste('Fitted model', p, q))
+  }
+}
+```
+
+```{r}
+# I saved the results in a file
+holdaic = as.data.frame(read.csv('holdaic.csv'))
+holdaic
+```
+
+```{r}
+fit53 = arfima(ts(logvolume), order=c(5,0,3), quiet=TRUE)
+```
+
+```{r}
+coef(fit53)
+```
+
+```{r}
+AIC(fit53)
+```
+
+The best model based on AIC is ARFIMA(5, 0.4966, 3), which has an AIC of -12020.64.

@@ -1,0 +1,1164 @@
+
+% Default to the notebook output style
+
+    
+
+
+% Inherit from the specified cell style.
+
+
+
+
+    
+\documentclass[11pt]{article}
+
+    
+    
+    \usepackage[T1]{fontenc}
+    % Nicer default font (+ math font) than Computer Modern for most use cases
+    %\usepackage{mathpazo}
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % We will generate all images so they have a width \maxwidth. This means
+    % that they will get their normal width if they fit onto the page, but
+    % are scaled down if they would overflow the margins.
+    \makeatletter
+    \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
+    \else\Gin@nat@width\fi}
+    \makeatother
+    \let\Oldincludegraphics\includegraphics
+    % Set max figure width to be 80% of text width, for now hardcoded.
+    \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=.8\maxwidth]{#1}}
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionLabelFormat{nolabel}{}
+    \captionsetup{labelformat=nolabel}
+
+    \usepackage{adjustbox} % Used to constrain images to a maximum size 
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range 
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    
+
+    
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatability definitions
+    \def\gt{>}
+    \def\lt{<}
+    % Document parameters
+    \title{Simulation HW IV}
+    \author{Ze Yang (zey@andrew.cmu.edu)}
+    
+    
+    
+
+    % Pygments definitions
+    
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % Exact colors from NB
+    \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
+    \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+
+
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+    \begin{document}
+    
+    
+    \maketitle
+    
+    
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}1}]:} \PY{k+kn}{from} \PY{n+nn}{abc} \PY{k}{import} \PY{n}{ABCMeta}\PY{p}{,} \PY{n}{abstractmethod}
+        \PY{k+kn}{import} \PY{n+nn}{time}
+        \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+        \PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+        \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+        \PY{k+kn}{import} \PY{n+nn}{seaborn} \PY{k}{as} \PY{n+nn}{sns}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{style}\PY{o}{.}\PY{n}{use}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ggplot}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{rc}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{text}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{usetex}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{rc}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{font}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{family}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{serif}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m+mi}{15}\PY{p}{)}
+        \PY{o}{\PYZpc{}}\PY{k}{matplotlib} inline
+        
+        \PY{k+kn}{import} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{stats} \PY{k}{as} \PY{n+nn}{stats}
+        \PY{k+kn}{from} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{stats} \PY{k}{import} \PY{n}{norm}
+        \PY{k+kn}{from} \PY{n+nn}{progressbar} \PY{k}{import} \PY{n}{ProgressBar}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}2}]:} \PY{k}{def} \PY{n+nf}{bs}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{S}\PY{p}{,} \PY{n}{K}\PY{p}{,} \PY{n}{T}\PY{p}{,} \PY{n}{sigma}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{div}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{:}
+            \PY{n}{tau} \PY{o}{=} \PY{n}{T} \PY{o}{\PYZhy{}} \PY{n}{t}
+            \PY{n}{rexp}\PY{p}{,} \PY{n}{dexp} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{r}\PY{o}{*}\PY{n}{tau}\PY{p}{)}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{div}\PY{o}{*}\PY{n}{tau}\PY{p}{)}
+            \PY{n}{d1} \PY{o}{=} \PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{S}\PY{o}{/}\PY{n}{K}\PY{p}{)} \PY{o}{+} \PY{p}{(}\PY{n}{r}\PY{o}{\PYZhy{}}\PY{n}{div}\PY{o}{+}\PY{l+m+mf}{0.5}\PY{o}{*}\PY{n}{sigma}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{*}\PY{n}{tau}\PY{p}{)} \PY{o}{/} \PY{p}{(}
+                \PY{n}{sigma}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{tau}\PY{p}{)}\PY{p}{)}
+            \PY{n}{d2} \PY{o}{=} \PY{n}{d1} \PY{o}{\PYZhy{}} \PY{n}{sigma}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{tau}\PY{p}{)}
+            \PY{n}{call} \PY{o}{=} \PY{n}{S}\PY{o}{*}\PY{n}{dexp}\PY{o}{*}\PY{n}{norm}\PY{o}{.}\PY{n}{cdf}\PY{p}{(}\PY{n}{d1}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{K}\PY{o}{*}\PY{n}{rexp}\PY{o}{*}\PY{n}{norm}\PY{o}{.}\PY{n}{cdf}\PY{p}{(}\PY{n}{d2}\PY{p}{)}
+            \PY{n}{put} \PY{o}{=} \PY{n}{K}\PY{o}{*}\PY{n}{rexp} \PY{o}{\PYZhy{}} \PY{n}{S}\PY{o}{*}\PY{n}{dexp} \PY{o}{+} \PY{n}{call}
+            \PY{k}{return} \PY{n}{call}\PY{p}{,} \PY{n}{put}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}135}]:} \PY{c+c1}{\PYZsh{} Generators}
+          \PY{k}{def} \PY{n+nf}{gbm\PYZus{}exact}\PY{p}{(}\PY{n}{S0}\PY{p}{,} \PY{n}{sigma}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{div}\PY{p}{,} \PY{n}{T}\PY{p}{,} \PY{n}{n\PYZus{}steps}\PY{p}{)}\PY{p}{:}
+              \PY{n}{dt} \PY{o}{=} \PY{n}{T}\PY{o}{/}\PY{n}{n\PYZus{}steps}
+              \PY{n}{S}\PY{p}{,} \PY{n}{i} \PY{o}{=} \PY{n}{S0}\PY{p}{,} \PY{l+m+mi}{0}
+              \PY{n}{Z} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{normal}\PY{p}{(}\PY{n}{size}\PY{o}{=}\PY{n}{n\PYZus{}steps}\PY{p}{)}
+              \PY{k}{while} \PY{n}{i} \PY{o}{\PYZlt{}} \PY{n}{n\PYZus{}steps}\PY{p}{:}
+                  \PY{n}{S} \PY{o}{*}\PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{p}{(}\PY{n}{r}\PY{o}{\PYZhy{}}\PY{n}{div}\PY{o}{\PYZhy{}}\PY{l+m+mf}{0.5}\PY{o}{*}\PY{n}{sigma}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{*}\PY{n}{dt} \PY{o}{+} \PY{p}{(}
+                      \PY{n}{sigma}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{dt}\PY{p}{)}\PY{o}{*}\PY{n}{Z}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+                  \PY{k}{yield} \PY{n}{S}
+                  \PY{n}{i} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
+                  
+          \PY{k}{def} \PY{n+nf}{hull\PYZus{}white\PYZus{}euler}\PY{p}{(}\PY{n}{S0}\PY{p}{,} \PY{n}{vv0}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{alpha}\PY{p}{,} 
+                               \PY{n}{psi}\PY{p}{,} \PY{n}{T}\PY{p}{,} \PY{n}{n\PYZus{}steps}\PY{p}{)}\PY{p}{:}
+              \PY{n}{dt} \PY{o}{=} \PY{n}{T}\PY{o}{/}\PY{n}{n\PYZus{}steps}
+              \PY{n}{S}\PY{p}{,} \PY{n}{vv}\PY{p}{,} \PY{n}{i} \PY{o}{=} \PY{n}{S0}\PY{p}{,} \PY{n}{vv0}\PY{p}{,} \PY{l+m+mi}{0}
+              \PY{n}{Z} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{normal}\PY{p}{(}\PY{n}{size}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,}\PY{n}{n\PYZus{}steps}\PY{p}{)}\PY{p}{)}
+              \PY{n}{Z1}\PY{p}{,} \PY{n}{Z2} \PY{o}{=} \PY{n}{Z}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{Z}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}
+              \PY{k}{while} \PY{n}{i} \PY{o}{\PYZlt{}} \PY{n}{n\PYZus{}steps}\PY{p}{:}
+                  \PY{n}{S} \PY{o}{+}\PY{o}{=} \PY{n}{r}\PY{o}{*}\PY{n}{S}\PY{o}{*}\PY{n}{dt} \PY{o}{+} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{vv}\PY{p}{)}\PY{o}{*}\PY{n}{S}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{dt}\PY{p}{)}\PY{o}{*}\PY{n}{Z1}\PY{p}{[}\PY{n}{i}\PY{p}{]}
+                  \PY{n}{vv} \PY{o}{+}\PY{o}{=} \PY{n}{alpha}\PY{o}{*}\PY{n}{vv}\PY{o}{*}\PY{n}{dt} \PY{o}{+} \PY{n}{psi}\PY{o}{*}\PY{n}{vv}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{dt}\PY{p}{)}\PY{o}{*}\PY{n}{Z2}\PY{p}{[}\PY{n}{i}\PY{p}{]}
+                  \PY{k}{yield} \PY{p}{(}\PY{n}{S}\PY{p}{,} \PY{n}{vv}\PY{p}{)}
+                  \PY{n}{i} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
+                  
+          \PY{k}{def} \PY{n+nf}{CIR\PYZus{}exact}\PY{p}{(}\PY{n}{r0}\PY{p}{,} \PY{n}{alpha}\PY{p}{,} \PY{n}{sigma}\PY{p}{,} \PY{n}{b}\PY{p}{,} 
+                        \PY{n}{T}\PY{p}{,} \PY{n}{n\PYZus{}steps}\PY{p}{)}\PY{p}{:}
+              \PY{n}{dt} \PY{o}{=} \PY{n}{T}\PY{o}{/}\PY{n}{n\PYZus{}steps}
+              \PY{n}{r}\PY{p}{,} \PY{n}{i} \PY{o}{=} \PY{n}{r0}\PY{p}{,} \PY{l+m+mi}{0}
+              \PY{n}{d} \PY{o}{=} \PY{n+nb}{int}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{round}\PY{p}{(}
+                  \PY{p}{(}\PY{l+m+mi}{4}\PY{o}{*}\PY{n}{b}\PY{o}{*}\PY{n}{alpha}\PY{p}{)}\PY{o}{/}\PY{p}{(}\PY{n}{sigma}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+              \PY{n}{aexp} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{alpha}\PY{o}{*}\PY{n}{dt}\PY{p}{)}
+              \PY{k}{while} \PY{n}{i} \PY{o}{\PYZlt{}} \PY{n}{n\PYZus{}steps}\PY{p}{:}
+                  \PY{n}{lam} \PY{o}{=} \PY{p}{(}\PY{p}{(}\PY{l+m+mi}{4}\PY{o}{*}\PY{n}{alpha}\PY{o}{*}\PY{n}{aexp}\PY{p}{)}\PY{o}{/}\PY{p}{(}
+                      \PY{n}{sigma}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{o}{*}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{aexp}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{o}{*}\PY{n}{r}
+                  \PY{n}{r} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{noncentral\PYZus{}chisquare}\PY{p}{(}
+                      \PY{n}{df}\PY{o}{=}\PY{n}{d}\PY{p}{,} \PY{n}{nonc}\PY{o}{=}\PY{n}{lam}\PY{p}{)}\PY{o}{*}\PY{p}{(}
+                      \PY{n}{sigma}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{o}{*}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{aexp}\PY{p}{)}\PY{p}{)}\PY{o}{/}\PY{p}{(}\PY{l+m+mi}{4}\PY{o}{*}\PY{n}{alpha}\PY{p}{)}
+                  \PY{k}{yield} \PY{n}{r}
+                  \PY{n}{i} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
+              
+\end{Verbatim}
+
+    \section{Hull-White Stochastic
+Volatility}\label{hull-white-stochastic-volatility}
+
+\subsection{Standard MC}\label{standard-mc}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}107}]:} \PY{k}{def} \PY{n+nf}{hull\PYZus{}white\PYZus{}call}\PY{p}{(}\PY{n}{S0}\PY{p}{,} \PY{n}{K}\PY{p}{,} \PY{n}{T}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{vv0}\PY{p}{,} \PY{n}{alpha}\PY{p}{,} \PY{n}{psi}\PY{p}{,}
+                              \PY{n}{n\PYZus{}steps}\PY{p}{,} \PY{n}{n\PYZus{}size}\PY{p}{,} \PY{n}{conditional}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}\PY{p}{:}
+              \PY{n}{sample} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{n\PYZus{}size}\PY{p}{)}
+              \PY{n}{bar} \PY{o}{=} \PY{n}{ProgressBar}\PY{p}{(}\PY{p}{)}
+              \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n}{bar}\PY{p}{(}\PY{n+nb}{range}\PY{p}{(}\PY{n}{n\PYZus{}size}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+                  \PY{n}{S}\PY{p}{,} \PY{n}{vv} \PY{o}{=} \PY{n+nb}{zip}\PY{p}{(}\PY{o}{*}\PY{n}{hull\PYZus{}white\PYZus{}euler}\PY{p}{(}
+                      \PY{n}{S0}\PY{p}{,} \PY{n}{vv0}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{alpha}\PY{p}{,} \PY{n}{psi}\PY{p}{,} \PY{n}{T}\PY{p}{,} \PY{n}{n\PYZus{}steps}\PY{p}{)}\PY{p}{)}
+                  \PY{k}{if} \PY{n}{conditional}\PY{p}{:}
+                      \PY{n}{sigma\PYZus{}hat} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{/}\PY{n}{n\PYZus{}steps}\PY{p}{)}\PY{o}{*}\PY{n+nb}{sum}\PY{p}{(}\PY{n}{vv}\PY{p}{)}\PY{p}{)}
+                      \PY{n}{sample}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{bs}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{S0}\PY{p}{,} \PY{n}{K}\PY{p}{,} \PY{n}{T}\PY{p}{,} \PY{n}{sigma\PYZus{}hat}\PY{p}{,} \PY{n}{r}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+                  \PY{k}{else}\PY{p}{:}
+                      \PY{n}{sample}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{r}\PY{o}{*}\PY{n}{T}\PY{p}{)}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{clip}\PY{p}{(}
+                          \PY{n}{S}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{K}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{k+kc}{None}\PY{p}{)}
+              \PY{n}{sample\PYZus{}mean} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{sample}\PY{p}{)}
+              \PY{n}{se} \PY{o}{=} \PY{n}{stats}\PY{o}{.}\PY{n}{sem}\PY{p}{(}\PY{n}{sample}\PY{p}{,} \PY{n}{ddof}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+              \PY{k}{return} \PY{n}{sample}\PY{p}{,} \PY{n}{sample\PYZus{}mean}\PY{p}{,} \PY{n}{se}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}149}]:} \PY{n}{table} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+          \PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{p}{(}\PY{n}{alpha}\PY{p}{,} \PY{n}{psi}\PY{p}{)} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}
+              \PY{p}{[}\PY{p}{(}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{)}\PY{p}{,}\PY{p}{(}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{1.0}\PY{p}{)}\PY{p}{]}\PY{p}{)}\PY{p}{:}
+              \PY{n}{\PYZus{}}\PY{p}{,} \PY{n}{price}\PY{p}{,} \PY{n}{se} \PY{o}{=} \PY{n}{hull\PYZus{}white\PYZus{}call}\PY{p}{(}
+                  \PY{n}{S0}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{K}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{T}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{r}\PY{o}{=}\PY{l+m+mf}{0.05}\PY{p}{,} \PY{n}{vv0}\PY{o}{=}\PY{l+m+mf}{0.04}\PY{p}{,} 
+                  \PY{n}{alpha}\PY{o}{=}\PY{n}{alpha}\PY{p}{,} \PY{n}{psi}\PY{o}{=}\PY{n}{psi}\PY{p}{,} 
+                  \PY{n}{n\PYZus{}steps}\PY{o}{=}\PY{l+m+mi}{50}\PY{p}{,} \PY{n}{n\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{10000}\PY{p}{)}
+              \PY{n}{table}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{p}{[}\PY{n}{alpha}\PY{p}{,} \PY{n}{psi}\PY{p}{,} \PY{n}{price}\PY{p}{,} \PY{n}{se}\PY{p}{]}\PY{p}{)}
+              \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}
+          \PY{l+s+s1}{    Hull\PYZhy{}White call (alpha, psi)=}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{:}
+          \PY{l+s+s1}{    Price = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{, SE = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}
+                  \PY{p}{(}\PY{n}{alpha}\PY{p}{,} \PY{n}{psi}\PY{p}{)}\PY{p}{,} \PY{n}{price}\PY{p}{,} \PY{n}{se}\PY{p}{)}\PY{p}{)}
+              \PY{n}{time}\PY{o}{.}\PY{n}{sleep}\PY{p}{(}\PY{l+m+mf}{0.5}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+100\% (10000 of 10000) |\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#| Elapsed Time: 0:00:03 Time: 0:00:03
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+    Hull-White call (alpha, psi)=(0.1, 0.1):
+    Price = 10.734247140993515, SE = 0.1514908126407839
+
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+100\% (10000 of 10000) |\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#| Elapsed Time: 0:00:03 Time: 0:00:03
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+    Hull-White call (alpha, psi)=(0.1, 1.0):
+    Price = 10.402796231918252, SE = 0.15512624052900922
+
+
+    \end{Verbatim}
+
+    \subsection{Conditional MC}\label{conditional-mc}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}150}]:} \PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{p}{(}\PY{n}{alpha}\PY{p}{,} \PY{n}{psi}\PY{p}{)} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}
+              \PY{p}{[}\PY{p}{(}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{)}\PY{p}{,}\PY{p}{(}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{1.0}\PY{p}{)}\PY{p}{]}\PY{p}{)}\PY{p}{:}
+              \PY{n}{\PYZus{}}\PY{p}{,} \PY{n}{price}\PY{p}{,} \PY{n}{se} \PY{o}{=} \PY{n}{hull\PYZus{}white\PYZus{}call}\PY{p}{(}
+                  \PY{n}{S0}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{K}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{T}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{r}\PY{o}{=}\PY{l+m+mf}{0.05}\PY{p}{,} \PY{n}{vv0}\PY{o}{=}\PY{l+m+mf}{0.04}\PY{p}{,} 
+                  \PY{n}{alpha}\PY{o}{=}\PY{n}{alpha}\PY{p}{,} \PY{n}{psi}\PY{o}{=}\PY{n}{psi}\PY{p}{,} 
+                  \PY{n}{n\PYZus{}steps}\PY{o}{=}\PY{l+m+mi}{50}\PY{p}{,} \PY{n}{n\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{10000}\PY{p}{,}
+                  \PY{n}{conditional}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+              \PY{n}{table}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{p}{[}\PY{n}{alpha}\PY{p}{,} \PY{n}{psi}\PY{p}{,} \PY{n}{price}\PY{p}{,} \PY{n}{se}\PY{p}{]}\PY{p}{)}
+              \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}
+          \PY{l+s+s1}{    Hull\PYZhy{}White call (alpha, psi)=}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{:}
+          \PY{l+s+s1}{    Price = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{, SE = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}
+                  \PY{p}{(}\PY{n}{alpha}\PY{p}{,} \PY{n}{psi}\PY{p}{)}\PY{p}{,} \PY{n}{price}\PY{p}{,} \PY{n}{se}\PY{p}{)}\PY{p}{)}
+              \PY{n}{time}\PY{o}{.}\PY{n}{sleep}\PY{p}{(}\PY{l+m+mf}{0.5}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+100\% (10000 of 10000) |\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#| Elapsed Time: 0:00:06 Time: 0:00:06
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+    Hull-White call (alpha, psi)=(0.1, 0.1):
+    Price = 10.642658225571418, SE = 0.0022560351639518035
+
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+100\% (10000 of 10000) |\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#| Elapsed Time: 0:00:06 Time: 0:00:06
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+    Hull-White call (alpha, psi)=(0.1, 1.0):
+    Price = 10.34079923768526, SE = 0.022448135433629095
+
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}151}]:} \PY{n}{index} \PY{o}{=} \PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Standard MC}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+                    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Conditional MC}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{]}
+          \PY{n}{index} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{MultiIndex}\PY{o}{.}\PY{n}{from\PYZus{}product}\PY{p}{(}\PY{n}{index}\PY{p}{,} \PY{n}{names}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Method}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Case}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+          \PY{n}{summary} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{table}\PY{p}{,} \PY{n}{columns}\PY{o}{=}\PY{p}{[}
+              \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Alpha}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Psi}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Price}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{n}{index}\PY{p}{)}
+          \PY{n}{summary}
+\end{Verbatim}
+
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}151}]:}                      Alpha  Psi      Price        SE
+          Method         Case                                 
+          Standard MC    1       0.1  0.1  10.734247  0.151491
+                         2       0.1  1.0  10.402796  0.155126
+          Conditional MC 1       0.1  0.1  10.642658  0.002256
+                         2       0.1  1.0  10.340799  0.022448
+\end{Verbatim}
+        
+    Conditonal MC reduced the standard error significantly.
+
+    \section{Cox-Ingersol-Ross Spot Rate}\label{cox-ingersol-ross-spot-rate}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}108}]:} \PY{k}{def} \PY{n+nf}{CIR\PYZus{}zcb}\PY{p}{(}\PY{n}{r0}\PY{p}{,} \PY{n}{alpha}\PY{p}{,} \PY{n}{sigma}\PY{p}{,} \PY{n}{b}\PY{p}{,} \PY{n}{T}\PY{p}{,} \PY{n}{n\PYZus{}steps}\PY{p}{,} \PY{n}{n\PYZus{}size}\PY{p}{)}\PY{p}{:}
+              \PY{n}{dt} \PY{o}{=} \PY{n}{T}\PY{o}{/}\PY{n}{n\PYZus{}steps}
+              \PY{n}{sample} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{n\PYZus{}size}\PY{p}{)}
+              \PY{n}{bar} \PY{o}{=} \PY{n}{ProgressBar}\PY{p}{(}\PY{p}{)}
+              \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n}{bar}\PY{p}{(}\PY{n+nb}{range}\PY{p}{(}\PY{n}{n\PYZus{}size}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+                  \PY{n}{r} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n}{CIR\PYZus{}exact}\PY{p}{(}
+                      \PY{n}{r0}\PY{p}{,} \PY{n}{alpha}\PY{p}{,} \PY{n}{sigma}\PY{p}{,} \PY{n}{b}\PY{p}{,} \PY{n}{T}\PY{p}{,} \PY{n}{n\PYZus{}steps}\PY{p}{)}\PY{p}{)}
+                  \PY{n}{sample}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n+nb}{sum}\PY{p}{(}\PY{n}{r}\PY{p}{)}\PY{o}{*}\PY{n}{dt}\PY{p}{)}
+              \PY{n}{sample\PYZus{}mean} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{sample}\PY{p}{)}
+              \PY{n}{se} \PY{o}{=} \PY{n}{stats}\PY{o}{.}\PY{n}{sem}\PY{p}{(}\PY{n}{sample}\PY{p}{,} \PY{n}{ddof}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+              \PY{k}{return} \PY{n}{sample}\PY{p}{,} \PY{n}{sample\PYZus{}mean}\PY{p}{,} \PY{n}{se}
+          
+          \PY{k}{def} \PY{n+nf}{CIR\PYZus{}caplet}\PY{p}{(}\PY{n}{r0}\PY{p}{,} \PY{n}{alpha}\PY{p}{,} \PY{n}{sigma}\PY{p}{,} \PY{n}{b}\PY{p}{,} \PY{n}{T}\PY{p}{,} 
+                         \PY{n}{R}\PY{p}{,} \PY{n}{L}\PY{p}{,} \PY{n}{t\PYZus{}interval}\PY{p}{,}
+                         \PY{n}{n\PYZus{}steps}\PY{p}{,} \PY{n}{n\PYZus{}size}\PY{p}{)}\PY{p}{:}
+              \PY{n}{dt} \PY{o}{=} \PY{n}{T}\PY{o}{/}\PY{n}{n\PYZus{}steps}
+              \PY{n}{sample} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{n\PYZus{}size}\PY{p}{)}
+              \PY{n}{bar} \PY{o}{=} \PY{n}{ProgressBar}\PY{p}{(}\PY{p}{)}
+              \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n}{bar}\PY{p}{(}\PY{n+nb}{range}\PY{p}{(}\PY{n}{n\PYZus{}size}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+                  \PY{n}{r} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n}{CIR\PYZus{}exact}\PY{p}{(}
+                      \PY{n}{r0}\PY{p}{,} \PY{n}{alpha}\PY{p}{,} \PY{n}{sigma}\PY{p}{,} \PY{n}{b}\PY{p}{,} \PY{n}{T}\PY{p}{,} \PY{n}{n\PYZus{}steps}\PY{p}{)}\PY{p}{)}
+                  \PY{n}{sample}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n+nb}{sum}\PY{p}{(}\PY{n}{r}\PY{p}{)}\PY{o}{*}\PY{n}{dt}\PY{p}{)}\PY{o}{*}\PY{p}{(}
+                      \PY{n}{L}\PY{o}{*}\PY{n}{t\PYZus{}interval}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{clip}\PY{p}{(}\PY{n}{r}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{R}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{k+kc}{None}\PY{p}{)}\PY{p}{)}
+              \PY{n}{sample\PYZus{}mean} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{sample}\PY{p}{)}
+              \PY{n}{se} \PY{o}{=} \PY{n}{stats}\PY{o}{.}\PY{n}{sem}\PY{p}{(}\PY{n}{sample}\PY{p}{,} \PY{n}{ddof}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+              \PY{k}{return} \PY{n}{sample}\PY{p}{,} \PY{n}{sample\PYZus{}mean}\PY{p}{,} \PY{n}{se}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}109}]:} \PY{n}{\PYZus{}}\PY{p}{,} \PY{n}{price}\PY{p}{,} \PY{n}{se} \PY{o}{=} \PY{n}{CIR\PYZus{}zcb}\PY{p}{(}
+              \PY{n}{r0}\PY{o}{=}\PY{l+m+mf}{0.04}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.2}\PY{p}{,} \PY{n}{sigma}\PY{o}{=}\PY{l+m+mf}{0.1}\PY{p}{,} 
+              \PY{n}{b}\PY{o}{=}\PY{l+m+mf}{0.05}\PY{p}{,} \PY{n}{T}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{n\PYZus{}steps}\PY{o}{=}\PY{l+m+mi}{50}\PY{p}{,} \PY{n}{n\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{1000}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}
+          \PY{l+s+s1}{CIR zero coupon bond \PYZdl{}1 face:}
+          \PY{l+s+s1}{Price = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{, SE = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{price}\PY{p}{,} \PY{n}{se}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+100\% (1000 of 1000) |\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#| Elapsed Time: 0:00:00 Time: 0:00:00
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+CIR zero coupon bond \$1 face:
+Price = 0.9597814284625382, SE = 0.0003347686556656842
+
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}110}]:} \PY{n}{\PYZus{}}\PY{p}{,} \PY{n}{price}\PY{p}{,} \PY{n}{se} \PY{o}{=} \PY{n}{CIR\PYZus{}caplet}\PY{p}{(}
+              \PY{n}{r0}\PY{o}{=}\PY{l+m+mf}{0.04}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.2}\PY{p}{,} \PY{n}{sigma}\PY{o}{=}\PY{l+m+mf}{0.1}\PY{p}{,} 
+              \PY{n}{b}\PY{o}{=}\PY{l+m+mf}{0.05}\PY{p}{,} \PY{n}{T}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{R}\PY{o}{=}\PY{l+m+mf}{0.05}\PY{p}{,} \PY{n}{L}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{t\PYZus{}interval}\PY{o}{=}\PY{l+m+mi}{1}\PY{o}{/}\PY{l+m+mi}{12}\PY{p}{,}
+              \PY{n}{n\PYZus{}steps}\PY{o}{=}\PY{l+m+mi}{50}\PY{p}{,} \PY{n}{n\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{1000}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}
+          \PY{l+s+s1}{CIR caplet R=}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{, \PYZdl{}}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ face:}
+          \PY{l+s+s1}{Price = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{, SE = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}
+              \PY{l+m+mf}{0.05}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{price}\PY{p}{,} \PY{n}{se}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+100\% (1000 of 1000) |\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#| Elapsed Time: 0:00:00 Time: 0:00:00
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+CIR caplet R=0.05, \$1 face:
+Price = 0.00034296941553407155, SE = 2.3634114685710555e-05
+
+
+    \end{Verbatim}
+
+    \section{Greeks}\label{greeks}
+
+    \subsection{Resimulation}\label{resimulation}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}133}]:} \PY{k}{def} \PY{n+nf}{gbm\PYZus{}delta\PYZus{}resimulate}\PY{p}{(}\PY{n}{h}\PY{p}{,} \PY{n}{S0}\PY{p}{,} \PY{n}{sigma}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{div}\PY{p}{,} 
+                                   \PY{n}{T}\PY{p}{,} \PY{n}{n\PYZus{}steps}\PY{p}{)}\PY{p}{:}
+              \PY{n}{dt} \PY{o}{=} \PY{n}{T}\PY{o}{/}\PY{n}{n\PYZus{}steps}
+              \PY{n}{S\PYZus{}left}\PY{p}{,} \PY{n}{S\PYZus{}right}\PY{p}{,} \PY{n}{i} \PY{o}{=} \PY{n}{S0}\PY{o}{\PYZhy{}}\PY{n}{h}\PY{p}{,} \PY{n}{S0}\PY{o}{+}\PY{n}{h}\PY{p}{,} \PY{l+m+mi}{0}
+              \PY{n}{Z} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{normal}\PY{p}{(}\PY{n}{size}\PY{o}{=}\PY{n}{n\PYZus{}steps}\PY{p}{)}
+              \PY{k}{while} \PY{n}{i} \PY{o}{\PYZlt{}} \PY{n}{n\PYZus{}steps}\PY{p}{:}
+                  \PY{n}{transition} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{p}{(}\PY{n}{r}\PY{o}{\PYZhy{}}\PY{n}{div}\PY{o}{\PYZhy{}}\PY{l+m+mf}{0.5}\PY{o}{*}\PY{n}{sigma}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{*}\PY{n}{dt} \PY{o}{+} \PY{p}{(}
+                      \PY{n}{sigma}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{dt}\PY{p}{)}\PY{o}{*}\PY{n}{Z}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+                  \PY{n}{S\PYZus{}left} \PY{o}{*}\PY{o}{=} \PY{n}{transition}
+                  \PY{n}{S\PYZus{}right} \PY{o}{*}\PY{o}{=} \PY{n}{transition}
+                  \PY{k}{yield} \PY{n}{S\PYZus{}left}\PY{p}{,} \PY{n}{S\PYZus{}right}
+                  \PY{n}{i} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
+                  
+          \PY{k}{def} \PY{n+nf}{gbm\PYZus{}vega\PYZus{}resimulate}\PY{p}{(}\PY{n}{h}\PY{p}{,} \PY{n}{S0}\PY{p}{,} \PY{n}{sigma}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{div}\PY{p}{,} 
+                                  \PY{n}{T}\PY{p}{,} \PY{n}{n\PYZus{}steps}\PY{p}{)}\PY{p}{:}
+              \PY{n}{dt} \PY{o}{=} \PY{n}{T}\PY{o}{/}\PY{n}{n\PYZus{}steps}
+              \PY{n}{S\PYZus{}left}\PY{p}{,} \PY{n}{S\PYZus{}right}\PY{p}{,} \PY{n}{i} \PY{o}{=} \PY{n}{S0}\PY{p}{,} \PY{n}{S0}\PY{p}{,} \PY{l+m+mi}{0}
+              \PY{n}{Z} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{normal}\PY{p}{(}\PY{n}{size}\PY{o}{=}\PY{n}{n\PYZus{}steps}\PY{p}{)}
+              \PY{k}{while} \PY{n}{i} \PY{o}{\PYZlt{}} \PY{n}{n\PYZus{}steps}\PY{p}{:}
+                  \PY{n}{S\PYZus{}left} \PY{o}{*}\PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{p}{(}\PY{n}{r}\PY{o}{\PYZhy{}}\PY{n}{div}\PY{o}{\PYZhy{}}\PY{l+m+mf}{0.5}\PY{o}{*}\PY{p}{(}\PY{n}{sigma}\PY{o}{\PYZhy{}}\PY{n}{h}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{*}\PY{n}{dt} \PY{o}{+} \PY{p}{(}
+                      \PY{p}{(}\PY{n}{sigma}\PY{o}{\PYZhy{}}\PY{n}{h}\PY{p}{)}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{dt}\PY{p}{)}\PY{o}{*}\PY{n}{Z}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+                  \PY{n}{S\PYZus{}right} \PY{o}{*}\PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{p}{(}\PY{n}{r}\PY{o}{\PYZhy{}}\PY{n}{div}\PY{o}{\PYZhy{}}\PY{l+m+mf}{0.5}\PY{o}{*}\PY{p}{(}\PY{n}{sigma}\PY{o}{+}\PY{n}{h}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{*}\PY{n}{dt} \PY{o}{+} \PY{p}{(}
+                      \PY{p}{(}\PY{n}{sigma}\PY{o}{+}\PY{n}{h}\PY{p}{)}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{dt}\PY{p}{)}\PY{o}{*}\PY{n}{Z}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+                  \PY{k}{yield} \PY{n}{S\PYZus{}left}\PY{p}{,} \PY{n}{S\PYZus{}right}
+                  \PY{n}{i} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
+                  
+          \PY{k}{def} \PY{n+nf}{gbm\PYZus{}greeks}\PY{p}{(}\PY{n}{S0}\PY{p}{,} \PY{n}{K}\PY{p}{,} \PY{n}{sigma}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{div}\PY{p}{,} \PY{n}{T}\PY{p}{,}
+                         \PY{n}{h}\PY{p}{,} \PY{n}{path\PYZus{}sampler}\PY{p}{,}
+                         \PY{n}{n\PYZus{}steps}\PY{p}{,} \PY{n}{n\PYZus{}size}\PY{p}{,} \PY{n}{control\PYZus{}flag}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}\PY{p}{:}
+              \PY{n}{sample\PYZus{}left} \PY{o}{=}  \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{n\PYZus{}size}\PY{p}{)} 
+              \PY{n}{sample\PYZus{}right} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{n\PYZus{}size}\PY{p}{)}
+              \PY{n}{control} \PY{o}{=}  \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{n\PYZus{}size}\PY{p}{)}
+              \PY{n}{bar} \PY{o}{=} \PY{n}{ProgressBar}\PY{p}{(}\PY{p}{)}
+              \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n}{bar}\PY{p}{(}\PY{n+nb}{range}\PY{p}{(}\PY{n}{n\PYZus{}size}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+                  \PY{n}{S\PYZus{}left}\PY{p}{,} \PY{n}{S\PYZus{}right} \PY{o}{=} \PY{n+nb}{zip}\PY{p}{(}\PY{o}{*}\PY{n}{path\PYZus{}sampler}\PY{p}{(}
+                      \PY{n}{h}\PY{p}{,} \PY{n}{S0}\PY{p}{,} \PY{n}{sigma}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{div}\PY{p}{,} \PY{n}{T}\PY{p}{,} \PY{n}{n\PYZus{}steps}\PY{p}{)}\PY{p}{)}
+                  \PY{k}{if} \PY{n}{control\PYZus{}flag}\PY{p}{:}
+                      \PY{n}{control}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{S\PYZus{}left}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+                  \PY{n}{sample\PYZus{}left}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{r}\PY{o}{*}\PY{n}{T}\PY{p}{)}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{clip}\PY{p}{(}
+                      \PY{n}{S\PYZus{}left}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{K}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{k+kc}{None}\PY{p}{)}
+                  \PY{n}{sample\PYZus{}right}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{r}\PY{o}{*}\PY{n}{T}\PY{p}{)}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{clip}\PY{p}{(}
+                      \PY{n}{S\PYZus{}right}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{K}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{k+kc}{None}\PY{p}{)}
+              \PY{n}{sample} \PY{o}{=} \PY{p}{(}\PY{n}{sample\PYZus{}right} \PY{o}{\PYZhy{}} \PY{n}{sample\PYZus{}left}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{h}\PY{p}{)}
+              \PY{n}{sample\PYZus{}mean} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{sample}\PY{p}{)}
+              \PY{n}{se} \PY{o}{=} \PY{n}{stats}\PY{o}{.}\PY{n}{sem}\PY{p}{(}\PY{n}{sample}\PY{p}{,} \PY{n}{ddof}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+              \PY{k}{if} \PY{n}{control\PYZus{}flag}\PY{p}{:}
+                  \PY{n}{gbm\PYZus{}mean} \PY{o}{=} \PY{p}{(}\PY{n}{S0} \PY{o}{\PYZhy{}} \PY{n}{h}\PY{p}{)}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{n}{r}\PY{o}{*}\PY{n}{T}\PY{p}{)}
+                  \PY{n}{adj} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{control}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{gbm\PYZus{}mean}
+                  \PY{n}{cov\PYZus{}xy} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{cov}\PY{p}{(}\PY{n}{control}\PY{p}{,} \PY{n}{sample}\PY{p}{)}
+                  \PY{n}{rho} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{corrcoef}\PY{p}{(}\PY{n}{control}\PY{p}{,} \PY{n}{sample}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}
+                  \PY{n}{a\PYZus{}hat} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{n}{cov\PYZus{}xy}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{/}\PY{n}{cov\PYZus{}xy}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}
+                  \PY{n}{sample\PYZus{}mean} \PY{o}{+}\PY{o}{=} \PY{n}{a\PYZus{}hat} \PY{o}{*} \PY{n}{adj}
+                  \PY{n}{se} \PY{o}{*}\PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{rho}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
+              \PY{k}{return} \PY{n}{sample}\PY{p}{,} \PY{n}{sample\PYZus{}mean}\PY{p}{,} \PY{n}{se}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}152}]:} \PY{n}{table} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+          \PY{n}{\PYZus{}}\PY{p}{,} \PY{n}{delta}\PY{p}{,} \PY{n}{se} \PY{o}{=} \PY{n}{gbm\PYZus{}greeks}\PY{p}{(}
+              \PY{n}{S0}\PY{o}{=}\PY{l+m+mi}{90}\PY{p}{,} \PY{n}{K}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{sigma}\PY{o}{=}\PY{l+m+mf}{0.25}\PY{p}{,} \PY{n}{r}\PY{o}{=}\PY{l+m+mf}{0.1}\PY{p}{,} 
+              \PY{n}{div}\PY{o}{=}\PY{l+m+mf}{0.03}\PY{p}{,} \PY{n}{T}\PY{o}{=}\PY{l+m+mf}{0.2}\PY{p}{,} \PY{n}{h}\PY{o}{=}\PY{l+m+mf}{0.0001}\PY{p}{,} 
+              \PY{n}{path\PYZus{}sampler}\PY{o}{=}\PY{n}{gbm\PYZus{}delta\PYZus{}resimulate}\PY{p}{,}
+              \PY{n}{n\PYZus{}steps}\PY{o}{=}\PY{l+m+mi}{50}\PY{p}{,} \PY{n}{n\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{10000}\PY{p}{,} \PY{n}{control\PYZus{}flag}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}
+          \PY{l+s+s1}{GBM Resimulation:}
+          \PY{l+s+s1}{Delta = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{, SE of Delta = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{delta}\PY{p}{,} \PY{n}{se}\PY{p}{)}\PY{p}{)}
+          
+          \PY{n}{time}\PY{o}{.}\PY{n}{sleep}\PY{p}{(}\PY{l+m+mf}{0.5}\PY{p}{)}
+          \PY{n}{\PYZus{}}\PY{p}{,} \PY{n}{vega}\PY{p}{,} \PY{n}{se2} \PY{o}{=} \PY{n}{gbm\PYZus{}greeks}\PY{p}{(}
+              \PY{n}{S0}\PY{o}{=}\PY{l+m+mi}{90}\PY{p}{,} \PY{n}{K}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{sigma}\PY{o}{=}\PY{l+m+mf}{0.25}\PY{p}{,} \PY{n}{r}\PY{o}{=}\PY{l+m+mf}{0.1}\PY{p}{,} 
+              \PY{n}{div}\PY{o}{=}\PY{l+m+mf}{0.03}\PY{p}{,} \PY{n}{T}\PY{o}{=}\PY{l+m+mf}{0.2}\PY{p}{,} \PY{n}{h}\PY{o}{=}\PY{l+m+mf}{0.0001}\PY{p}{,} 
+              \PY{n}{path\PYZus{}sampler}\PY{o}{=}\PY{n}{gbm\PYZus{}vega\PYZus{}resimulate}\PY{p}{,}
+              \PY{n}{n\PYZus{}steps}\PY{o}{=}\PY{l+m+mi}{50}\PY{p}{,} \PY{n}{n\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{10000}\PY{p}{,} \PY{n}{control\PYZus{}flag}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}
+          \PY{l+s+s1}{GBM Resimulation:}
+          \PY{l+s+s1}{Vega = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{, SE of Vega = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{vega}\PY{p}{,} \PY{n}{se2}\PY{p}{)}\PY{p}{)}
+          \PY{n}{table}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{p}{[}\PY{n}{delta}\PY{p}{,} \PY{n}{se}\PY{p}{,} \PY{n}{vega}\PY{p}{,} \PY{n}{se2}\PY{p}{]}\PY{p}{)}
+          
+          \PY{n}{time}\PY{o}{.}\PY{n}{sleep}\PY{p}{(}\PY{l+m+mf}{0.5}\PY{p}{)}
+          \PY{n}{\PYZus{}}\PY{p}{,} \PY{n}{delta}\PY{p}{,} \PY{n}{se} \PY{o}{=} \PY{n}{gbm\PYZus{}greeks}\PY{p}{(}
+              \PY{n}{S0}\PY{o}{=}\PY{l+m+mi}{90}\PY{p}{,} \PY{n}{K}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{sigma}\PY{o}{=}\PY{l+m+mf}{0.25}\PY{p}{,} \PY{n}{r}\PY{o}{=}\PY{l+m+mf}{0.1}\PY{p}{,} 
+              \PY{n}{div}\PY{o}{=}\PY{l+m+mf}{0.03}\PY{p}{,} \PY{n}{T}\PY{o}{=}\PY{l+m+mf}{0.2}\PY{p}{,} \PY{n}{h}\PY{o}{=}\PY{l+m+mf}{0.0001}\PY{p}{,} 
+              \PY{n}{path\PYZus{}sampler}\PY{o}{=}\PY{n}{gbm\PYZus{}delta\PYZus{}resimulate}\PY{p}{,}
+              \PY{n}{n\PYZus{}steps}\PY{o}{=}\PY{l+m+mi}{50}\PY{p}{,} \PY{n}{n\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{10000}\PY{p}{,} \PY{n}{control\PYZus{}flag}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}
+          \PY{l+s+s1}{GBM Resimulation (ST controled):}
+          \PY{l+s+s1}{Delta = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{, SE of Delta = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{delta}\PY{p}{,} \PY{n}{se}\PY{p}{)}\PY{p}{)}
+          
+          \PY{n}{time}\PY{o}{.}\PY{n}{sleep}\PY{p}{(}\PY{l+m+mf}{0.5}\PY{p}{)}
+          \PY{n}{\PYZus{}}\PY{p}{,} \PY{n}{vega}\PY{p}{,} \PY{n}{se2} \PY{o}{=} \PY{n}{gbm\PYZus{}greeks}\PY{p}{(}
+              \PY{n}{S0}\PY{o}{=}\PY{l+m+mi}{90}\PY{p}{,} \PY{n}{K}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{sigma}\PY{o}{=}\PY{l+m+mf}{0.25}\PY{p}{,} \PY{n}{r}\PY{o}{=}\PY{l+m+mf}{0.1}\PY{p}{,} 
+              \PY{n}{div}\PY{o}{=}\PY{l+m+mf}{0.03}\PY{p}{,} \PY{n}{T}\PY{o}{=}\PY{l+m+mf}{0.2}\PY{p}{,} \PY{n}{h}\PY{o}{=}\PY{l+m+mf}{0.0001}\PY{p}{,} 
+              \PY{n}{path\PYZus{}sampler}\PY{o}{=}\PY{n}{gbm\PYZus{}vega\PYZus{}resimulate}\PY{p}{,}
+              \PY{n}{n\PYZus{}steps}\PY{o}{=}\PY{l+m+mi}{50}\PY{p}{,} \PY{n}{n\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{10000}\PY{p}{,} \PY{n}{control\PYZus{}flag}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}
+          \PY{l+s+s1}{GBM Resimulation (ST controled):}
+          \PY{l+s+s1}{Vega = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{, SE of Vega = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{vega}\PY{p}{,} \PY{n}{se2}\PY{p}{)}\PY{p}{)}
+          \PY{n}{table}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{p}{[}\PY{n}{delta}\PY{p}{,} \PY{n}{se}\PY{p}{,} \PY{n}{vega}\PY{p}{,} \PY{n}{se2}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+100\% (10000 of 10000) |\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#| Elapsed Time: 0:00:02 Time: 0:00:02
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+GBM Resimulation:
+Delta = 0.2153722921014939, SE of Delta = 0.0045162819695291935
+
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+100\% (10000 of 10000) |\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#| Elapsed Time: 0:00:04 Time: 0:00:04
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+GBM Resimulation:
+Vega = 12.314588641577494, SE of Vega = 0.2767002225871702
+
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+100\% (10000 of 10000) |\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#| Elapsed Time: 0:00:02 Time: 0:00:02
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+GBM Resimulation (ST controled):
+Delta = 0.23942766585446856, SE of Delta = 0.0030853030698220294
+
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+100\% (10000 of 10000) |\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#| Elapsed Time: 0:00:04 Time: 0:00:04
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+GBM Resimulation (ST controled):
+Vega = 12.886542090902854, SE of Vega = 0.1775815365533063
+
+
+    \end{Verbatim}
+
+    \subsection{Path Differentiation}\label{path-differentiation}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}142}]:} \PY{k}{def} \PY{n+nf}{gbm\PYZus{}greeks\PYZus{}pathdiff}\PY{p}{(}\PY{n}{S0}\PY{p}{,} \PY{n}{K}\PY{p}{,} \PY{n}{sigma}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{div}\PY{p}{,} \PY{n}{T}\PY{p}{,} 
+                                  \PY{n}{which}\PY{p}{,} \PY{n}{n\PYZus{}steps}\PY{p}{,} \PY{n}{n\PYZus{}size}\PY{p}{,} 
+                                  \PY{n}{control\PYZus{}flag}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}\PY{p}{:}
+              \PY{n}{sample} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{n\PYZus{}size}\PY{p}{)}
+              \PY{n}{control} \PY{o}{=}  \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{n\PYZus{}size}\PY{p}{)}
+              \PY{n}{bar} \PY{o}{=} \PY{n}{ProgressBar}\PY{p}{(}\PY{p}{)}
+              \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n}{bar}\PY{p}{(}\PY{n+nb}{range}\PY{p}{(}\PY{n}{n\PYZus{}size}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+                  \PY{n}{S} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n}{gbm\PYZus{}exact}\PY{p}{(}
+                      \PY{n}{S0}\PY{p}{,} \PY{n}{sigma}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{div}\PY{p}{,} \PY{n}{T}\PY{p}{,} \PY{n}{n\PYZus{}steps}\PY{p}{)}\PY{p}{)}
+                  \PY{k}{if} \PY{n}{control\PYZus{}flag}\PY{p}{:}
+                      \PY{n}{control}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{S}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+                  \PY{k}{if} \PY{n}{which} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{delta}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+                      \PY{n}{sample}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{r}\PY{o}{*}\PY{n}{T}\PY{p}{)}\PY{o}{*}\PY{p}{(}
+                          \PY{n}{S}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZgt{}}\PY{o}{=}\PY{n}{K}\PY{p}{)}\PY{o}{*}\PY{p}{(}\PY{n}{S}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{/}\PY{n}{S0}\PY{p}{)}
+                  \PY{k}{elif} \PY{n}{which} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{vega}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+                      \PY{n}{sample}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{r}\PY{o}{*}\PY{n}{T}\PY{p}{)}\PY{o}{*}\PY{p}{(}
+                          \PY{n}{S}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZgt{}}\PY{o}{=}\PY{n}{K}\PY{p}{)}\PY{o}{*}\PY{n}{S}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{*}\PY{p}{(}
+                          \PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{S}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{/}\PY{n}{S0}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{p}{(}
+                              \PY{n}{r}\PY{o}{\PYZhy{}}\PY{n}{div}\PY{o}{+}\PY{l+m+mf}{0.5}\PY{o}{*}\PY{n}{sigma}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{*}\PY{n}{T}\PY{p}{)}\PY{o}{/}\PY{n}{sigma}\PY{p}{)}
+                  \PY{k}{else}\PY{p}{:}
+                      \PY{k}{raise} \PY{n+ne}{ValueError}
+              \PY{n}{sample\PYZus{}mean} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{sample}\PY{p}{)}
+              \PY{n}{se} \PY{o}{=} \PY{n}{stats}\PY{o}{.}\PY{n}{sem}\PY{p}{(}\PY{n}{sample}\PY{p}{,} \PY{n}{ddof}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+              \PY{k}{if} \PY{n}{control\PYZus{}flag}\PY{p}{:}
+                  \PY{n}{gbm\PYZus{}mean} \PY{o}{=} \PY{n}{S0}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{n}{r}\PY{o}{*}\PY{n}{T}\PY{p}{)}
+                  \PY{n}{adj} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{control}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{gbm\PYZus{}mean}
+                  \PY{n}{cov\PYZus{}xy} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{cov}\PY{p}{(}\PY{n}{control}\PY{p}{,} \PY{n}{sample}\PY{p}{)}
+                  \PY{n}{rho} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{corrcoef}\PY{p}{(}\PY{n}{control}\PY{p}{,} \PY{n}{sample}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}
+                  \PY{n}{a\PYZus{}hat} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{n}{cov\PYZus{}xy}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{/}\PY{n}{cov\PYZus{}xy}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}
+                  \PY{n}{sample\PYZus{}mean} \PY{o}{+}\PY{o}{=} \PY{n}{a\PYZus{}hat} \PY{o}{*} \PY{n}{adj}
+                  \PY{n}{se} \PY{o}{*}\PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{rho}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
+              \PY{k}{return} \PY{n}{sample}\PY{p}{,} \PY{n}{sample\PYZus{}mean}\PY{p}{,} \PY{n}{se}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}153}]:} \PY{n}{\PYZus{}}\PY{p}{,} \PY{n}{delta}\PY{p}{,} \PY{n}{se} \PY{o}{=} \PY{n}{gbm\PYZus{}greeks\PYZus{}pathdiff}\PY{p}{(}
+              \PY{n}{S0}\PY{o}{=}\PY{l+m+mi}{90}\PY{p}{,} \PY{n}{K}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{sigma}\PY{o}{=}\PY{l+m+mf}{0.25}\PY{p}{,} \PY{n}{r}\PY{o}{=}\PY{l+m+mf}{0.1}\PY{p}{,} 
+              \PY{n}{div}\PY{o}{=}\PY{l+m+mf}{0.03}\PY{p}{,} \PY{n}{T}\PY{o}{=}\PY{l+m+mf}{0.2}\PY{p}{,} \PY{n}{which}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{delta}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+              \PY{n}{n\PYZus{}steps}\PY{o}{=}\PY{l+m+mi}{50}\PY{p}{,} \PY{n}{n\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{10000}\PY{p}{,} \PY{n}{control\PYZus{}flag}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}
+          \PY{l+s+s1}{GBM Path differentiation:}
+          \PY{l+s+s1}{Delta = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{, SE of Delta = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{delta}\PY{p}{,} \PY{n}{se}\PY{p}{)}\PY{p}{)}
+          
+          \PY{n}{time}\PY{o}{.}\PY{n}{sleep}\PY{p}{(}\PY{l+m+mf}{0.5}\PY{p}{)}
+          \PY{n}{\PYZus{}}\PY{p}{,} \PY{n}{vega}\PY{p}{,} \PY{n}{se2} \PY{o}{=} \PY{n}{gbm\PYZus{}greeks\PYZus{}pathdiff}\PY{p}{(}
+              \PY{n}{S0}\PY{o}{=}\PY{l+m+mi}{90}\PY{p}{,} \PY{n}{K}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{sigma}\PY{o}{=}\PY{l+m+mf}{0.25}\PY{p}{,} \PY{n}{r}\PY{o}{=}\PY{l+m+mf}{0.1}\PY{p}{,} 
+              \PY{n}{div}\PY{o}{=}\PY{l+m+mf}{0.03}\PY{p}{,} \PY{n}{T}\PY{o}{=}\PY{l+m+mf}{0.2}\PY{p}{,} \PY{n}{which}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{vega}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+              \PY{n}{n\PYZus{}steps}\PY{o}{=}\PY{l+m+mi}{50}\PY{p}{,} \PY{n}{n\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{10000}\PY{p}{,} \PY{n}{control\PYZus{}flag}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}
+          \PY{l+s+s1}{GBM Path differentiation:}
+          \PY{l+s+s1}{Vega = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{, SE of Vega = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{vega}\PY{p}{,} \PY{n}{se2}\PY{p}{)}\PY{p}{)}
+          \PY{n}{table}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{p}{[}\PY{n}{delta}\PY{p}{,} \PY{n}{se}\PY{p}{,} \PY{n}{vega}\PY{p}{,} \PY{n}{se2}\PY{p}{]}\PY{p}{)}
+          
+          \PY{n}{time}\PY{o}{.}\PY{n}{sleep}\PY{p}{(}\PY{l+m+mf}{0.5}\PY{p}{)}
+          \PY{n}{\PYZus{}}\PY{p}{,} \PY{n}{delta}\PY{p}{,} \PY{n}{se} \PY{o}{=} \PY{n}{gbm\PYZus{}greeks\PYZus{}pathdiff}\PY{p}{(}
+              \PY{n}{S0}\PY{o}{=}\PY{l+m+mi}{90}\PY{p}{,} \PY{n}{K}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{sigma}\PY{o}{=}\PY{l+m+mf}{0.25}\PY{p}{,} \PY{n}{r}\PY{o}{=}\PY{l+m+mf}{0.1}\PY{p}{,} 
+              \PY{n}{div}\PY{o}{=}\PY{l+m+mf}{0.03}\PY{p}{,} \PY{n}{T}\PY{o}{=}\PY{l+m+mf}{0.2}\PY{p}{,} \PY{n}{which}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{delta}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+              \PY{n}{n\PYZus{}steps}\PY{o}{=}\PY{l+m+mi}{50}\PY{p}{,} \PY{n}{n\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{10000}\PY{p}{,} \PY{n}{control\PYZus{}flag}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}
+          \PY{l+s+s1}{GBM Path differentiation (ST controled):}
+          \PY{l+s+s1}{Delta = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{, SE of Delta = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{delta}\PY{p}{,} \PY{n}{se}\PY{p}{)}\PY{p}{)}
+          
+          \PY{n}{time}\PY{o}{.}\PY{n}{sleep}\PY{p}{(}\PY{l+m+mf}{0.5}\PY{p}{)}
+          \PY{n}{\PYZus{}}\PY{p}{,} \PY{n}{vega}\PY{p}{,} \PY{n}{se2} \PY{o}{=} \PY{n}{gbm\PYZus{}greeks\PYZus{}pathdiff}\PY{p}{(}
+              \PY{n}{S0}\PY{o}{=}\PY{l+m+mi}{90}\PY{p}{,} \PY{n}{K}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{sigma}\PY{o}{=}\PY{l+m+mf}{0.25}\PY{p}{,} \PY{n}{r}\PY{o}{=}\PY{l+m+mf}{0.1}\PY{p}{,} 
+              \PY{n}{div}\PY{o}{=}\PY{l+m+mf}{0.03}\PY{p}{,} \PY{n}{T}\PY{o}{=}\PY{l+m+mf}{0.2}\PY{p}{,} \PY{n}{which}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{vega}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+              \PY{n}{n\PYZus{}steps}\PY{o}{=}\PY{l+m+mi}{50}\PY{p}{,} \PY{n}{n\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{10000}\PY{p}{,} \PY{n}{control\PYZus{}flag}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}
+          \PY{l+s+s1}{GBM Path differentiation (ST controled):}
+          \PY{l+s+s1}{Vega = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{, SE of Vega = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{vega}\PY{p}{,} \PY{n}{se2}\PY{p}{)}\PY{p}{)}
+          \PY{n}{table}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{p}{[}\PY{n}{delta}\PY{p}{,} \PY{n}{se}\PY{p}{,} \PY{n}{vega}\PY{p}{,} \PY{n}{se2}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+100\% (10000 of 10000) |\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#| Elapsed Time: 0:00:02 Time: 0:00:02
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+GBM Path differentiation:
+Delta = 0.2215238344558542, SE of Delta = 0.00456715730452974
+
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+100\% (10000 of 10000) |\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#| Elapsed Time: 0:00:02 Time: 0:00:02
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+GBM Path differentiation:
+Vega = 12.104970562784805, SE of Vega = 0.2753984598423407
+
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+100\% (10000 of 10000) |\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#| Elapsed Time: 0:00:02 Time: 0:00:02
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+GBM Path differentiation (ST controled):
+Delta = 0.2416324230078789, SE of Delta = 0.0031031353006737007
+
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+100\% (10000 of 10000) |\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#| Elapsed Time: 0:00:02 Time: 0:00:02
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+GBM Path differentiation (ST controled):
+Vega = 13.104778263032978, SE of Vega = 0.17803143209935848
+
+
+    \end{Verbatim}
+
+    \subsection{Likelihood Estimate}\label{likelihood-estimate}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}146}]:} \PY{k}{def} \PY{n+nf}{gbm\PYZus{}greeks\PYZus{}likelihood}\PY{p}{(}\PY{n}{S0}\PY{p}{,} \PY{n}{K}\PY{p}{,} \PY{n}{sigma}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{div}\PY{p}{,} \PY{n}{T}\PY{p}{,} 
+                                    \PY{n}{which}\PY{p}{,} \PY{n}{n\PYZus{}steps}\PY{p}{,} \PY{n}{n\PYZus{}size}\PY{p}{,} 
+                                    \PY{n}{control\PYZus{}flag}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}\PY{p}{:}
+              \PY{n}{sample} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{n\PYZus{}size}\PY{p}{)}
+              \PY{n}{control} \PY{o}{=}  \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{n\PYZus{}size}\PY{p}{)}
+              \PY{n}{bar} \PY{o}{=} \PY{n}{ProgressBar}\PY{p}{(}\PY{p}{)}
+              \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n}{bar}\PY{p}{(}\PY{n+nb}{range}\PY{p}{(}\PY{n}{n\PYZus{}size}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+                  \PY{n}{S} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n}{gbm\PYZus{}exact}\PY{p}{(}
+                      \PY{n}{S0}\PY{p}{,} \PY{n}{sigma}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{div}\PY{p}{,} \PY{n}{T}\PY{p}{,} \PY{n}{n\PYZus{}steps}\PY{p}{)}\PY{p}{)}
+                  \PY{k}{if} \PY{n}{control\PYZus{}flag}\PY{p}{:}
+                      \PY{n}{control}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{S}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+                  \PY{k}{if} \PY{n}{which} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{delta}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+                      \PY{n}{sample}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{r}\PY{o}{*}\PY{n}{T}\PY{p}{)}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{clip}\PY{p}{(}
+                      \PY{n}{S}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{K}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{k+kc}{None}\PY{p}{)}\PY{o}{*}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{/}\PY{p}{(}\PY{n}{S0}\PY{o}{*}\PY{n}{T}\PY{o}{*}\PY{n}{sigma}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}\PY{o}{*}\PY{p}{(}
+                          \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{S}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{/}\PY{n}{S0}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{p}{(}\PY{n}{r}\PY{o}{\PYZhy{}}\PY{n}{div}\PY{o}{\PYZhy{}}\PY{l+m+mf}{0.5}\PY{o}{*}\PY{n}{sigma}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{*}\PY{n}{T}\PY{p}{)}
+                  \PY{k}{elif} \PY{n}{which} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{vega}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+                      \PY{n}{y} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{S}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{/}\PY{n}{S0}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{p}{(}\PY{n}{r}\PY{o}{\PYZhy{}}\PY{n}{div}\PY{o}{\PYZhy{}}\PY{l+m+mf}{0.5}\PY{o}{*}\PY{n}{sigma}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{*}\PY{n}{T}
+                      \PY{n}{z} \PY{o}{=} \PY{n}{sigma}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{T}\PY{p}{)}
+                      \PY{n}{sample}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{r}\PY{o}{*}\PY{n}{T}\PY{p}{)}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{clip}\PY{p}{(}
+                          \PY{n}{S}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{K}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{k+kc}{None}\PY{p}{)}\PY{o}{*}\PY{p}{(}
+                          \PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{y}\PY{o}{/}\PY{n}{z}\PY{p}{)}\PY{o}{*}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{T}\PY{p}{)}\PY{o}{*}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{p}{(}\PY{n}{y}\PY{o}{/}\PY{n}{z}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{/}\PY{n}{sigma}\PY{p}{)}\PY{p}{)}
+                  \PY{k}{else}\PY{p}{:}
+                      \PY{k}{raise} \PY{n+ne}{ValueError}
+              \PY{n}{sample\PYZus{}mean} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{sample}\PY{p}{)}
+              \PY{n}{se} \PY{o}{=} \PY{n}{stats}\PY{o}{.}\PY{n}{sem}\PY{p}{(}\PY{n}{sample}\PY{p}{,} \PY{n}{ddof}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+              \PY{k}{if} \PY{n}{control\PYZus{}flag}\PY{p}{:}
+                  \PY{n}{gbm\PYZus{}mean} \PY{o}{=} \PY{n}{S0}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{n}{r}\PY{o}{*}\PY{n}{T}\PY{p}{)}
+                  \PY{n}{adj} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{control}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{gbm\PYZus{}mean}
+                  \PY{n}{cov\PYZus{}xy} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{cov}\PY{p}{(}\PY{n}{control}\PY{p}{,} \PY{n}{sample}\PY{p}{)}
+                  \PY{n}{rho} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{corrcoef}\PY{p}{(}\PY{n}{control}\PY{p}{,} \PY{n}{sample}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}
+                  \PY{n}{a\PYZus{}hat} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{n}{cov\PYZus{}xy}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{/}\PY{n}{cov\PYZus{}xy}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}
+                  \PY{n}{sample\PYZus{}mean} \PY{o}{+}\PY{o}{=} \PY{n}{a\PYZus{}hat} \PY{o}{*} \PY{n}{adj}
+                  \PY{n}{se} \PY{o}{*}\PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{rho}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
+              \PY{k}{return} \PY{n}{sample}\PY{p}{,} \PY{n}{sample\PYZus{}mean}\PY{p}{,} \PY{n}{se}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}154}]:} \PY{n}{\PYZus{}}\PY{p}{,} \PY{n}{delta}\PY{p}{,} \PY{n}{se} \PY{o}{=} \PY{n}{gbm\PYZus{}greeks\PYZus{}likelihood}\PY{p}{(}
+              \PY{n}{S0}\PY{o}{=}\PY{l+m+mi}{90}\PY{p}{,} \PY{n}{K}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{sigma}\PY{o}{=}\PY{l+m+mf}{0.25}\PY{p}{,} \PY{n}{r}\PY{o}{=}\PY{l+m+mf}{0.1}\PY{p}{,} 
+              \PY{n}{div}\PY{o}{=}\PY{l+m+mf}{0.03}\PY{p}{,} \PY{n}{T}\PY{o}{=}\PY{l+m+mf}{0.2}\PY{p}{,} \PY{n}{which}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{delta}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+              \PY{n}{n\PYZus{}steps}\PY{o}{=}\PY{l+m+mi}{50}\PY{p}{,} \PY{n}{n\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{10000}\PY{p}{,} \PY{n}{control\PYZus{}flag}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}
+          \PY{l+s+s1}{GBM likelihood estimation:}
+          \PY{l+s+s1}{Delta = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{, SE of Delta = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{delta}\PY{p}{,} \PY{n}{se}\PY{p}{)}\PY{p}{)}
+          
+          \PY{n}{time}\PY{o}{.}\PY{n}{sleep}\PY{p}{(}\PY{l+m+mf}{0.5}\PY{p}{)}
+          \PY{n}{\PYZus{}}\PY{p}{,} \PY{n}{vega}\PY{p}{,} \PY{n}{se2} \PY{o}{=} \PY{n}{gbm\PYZus{}greeks\PYZus{}likelihood}\PY{p}{(}
+              \PY{n}{S0}\PY{o}{=}\PY{l+m+mi}{90}\PY{p}{,} \PY{n}{K}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{sigma}\PY{o}{=}\PY{l+m+mf}{0.25}\PY{p}{,} \PY{n}{r}\PY{o}{=}\PY{l+m+mf}{0.1}\PY{p}{,} 
+              \PY{n}{div}\PY{o}{=}\PY{l+m+mf}{0.03}\PY{p}{,} \PY{n}{T}\PY{o}{=}\PY{l+m+mf}{0.2}\PY{p}{,} \PY{n}{which}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{vega}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+              \PY{n}{n\PYZus{}steps}\PY{o}{=}\PY{l+m+mi}{50}\PY{p}{,} \PY{n}{n\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{10000}\PY{p}{,} \PY{n}{control\PYZus{}flag}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}
+          \PY{l+s+s1}{GBM likelihood estimation:}
+          \PY{l+s+s1}{Vega = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{, SE of Vega = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{vega}\PY{p}{,} \PY{n}{se2}\PY{p}{)}\PY{p}{)}
+          \PY{n}{table}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{p}{[}\PY{n}{delta}\PY{p}{,} \PY{n}{se}\PY{p}{,} \PY{n}{vega}\PY{p}{,} \PY{n}{se2}\PY{p}{]}\PY{p}{)}
+          
+          \PY{n}{time}\PY{o}{.}\PY{n}{sleep}\PY{p}{(}\PY{l+m+mf}{0.5}\PY{p}{)}
+          \PY{n}{\PYZus{}}\PY{p}{,} \PY{n}{delta}\PY{p}{,} \PY{n}{se} \PY{o}{=} \PY{n}{gbm\PYZus{}greeks\PYZus{}likelihood}\PY{p}{(}
+              \PY{n}{S0}\PY{o}{=}\PY{l+m+mi}{90}\PY{p}{,} \PY{n}{K}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{sigma}\PY{o}{=}\PY{l+m+mf}{0.25}\PY{p}{,} \PY{n}{r}\PY{o}{=}\PY{l+m+mf}{0.1}\PY{p}{,} 
+              \PY{n}{div}\PY{o}{=}\PY{l+m+mf}{0.03}\PY{p}{,} \PY{n}{T}\PY{o}{=}\PY{l+m+mf}{0.2}\PY{p}{,} \PY{n}{which}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{delta}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+              \PY{n}{n\PYZus{}steps}\PY{o}{=}\PY{l+m+mi}{50}\PY{p}{,} \PY{n}{n\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{10000}\PY{p}{,} \PY{n}{control\PYZus{}flag}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}
+          \PY{l+s+s1}{GBM likelihood estimation (ST controled):}
+          \PY{l+s+s1}{Delta = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{, SE of Delta = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{delta}\PY{p}{,} \PY{n}{se}\PY{p}{)}\PY{p}{)}
+          
+          \PY{n}{time}\PY{o}{.}\PY{n}{sleep}\PY{p}{(}\PY{l+m+mf}{0.5}\PY{p}{)}
+          \PY{n}{\PYZus{}}\PY{p}{,} \PY{n}{vega}\PY{p}{,} \PY{n}{se2} \PY{o}{=} \PY{n}{gbm\PYZus{}greeks\PYZus{}likelihood}\PY{p}{(}
+              \PY{n}{S0}\PY{o}{=}\PY{l+m+mi}{90}\PY{p}{,} \PY{n}{K}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{sigma}\PY{o}{=}\PY{l+m+mf}{0.25}\PY{p}{,} \PY{n}{r}\PY{o}{=}\PY{l+m+mf}{0.1}\PY{p}{,} 
+              \PY{n}{div}\PY{o}{=}\PY{l+m+mf}{0.03}\PY{p}{,} \PY{n}{T}\PY{o}{=}\PY{l+m+mf}{0.2}\PY{p}{,} \PY{n}{which}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{vega}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+              \PY{n}{n\PYZus{}steps}\PY{o}{=}\PY{l+m+mi}{50}\PY{p}{,} \PY{n}{n\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{10000}\PY{p}{,} \PY{n}{control\PYZus{}flag}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}
+          \PY{l+s+s1}{GBM likelihood estimation (ST controled):}
+          \PY{l+s+s1}{Vega = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{, SE of Vega = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{vega}\PY{p}{,} \PY{n}{se2}\PY{p}{)}\PY{p}{)}
+          \PY{n}{table}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{p}{[}\PY{n}{delta}\PY{p}{,} \PY{n}{se}\PY{p}{,} \PY{n}{vega}\PY{p}{,} \PY{n}{se2}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+100\% (10000 of 10000) |\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#| Elapsed Time: 0:00:02 Time: 0:00:02
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+GBM likelihood estimation:
+Delta = 0.2273725394231722, SE of Delta = 0.007677848658382844
+
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+100\% (10000 of 10000) |\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#| Elapsed Time: 0:00:02 Time: 0:00:02
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+GBM likelihood estimation:
+Vega = 11.814197762328172, SE of Vega = 0.6799915646821565
+
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+100\% (10000 of 10000) |\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#| Elapsed Time: 0:00:02 Time: 0:00:02
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+GBM likelihood estimation (ST controled):
+Delta = 0.25839497092116337, SE of Delta = 0.006541064887133898
+
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+100\% (10000 of 10000) |\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#| Elapsed Time: 0:00:02 Time: 0:00:02
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+GBM likelihood estimation (ST controled):
+Vega = 14.328297824478517, SE of Vega = 0.6752024623006516
+
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}155}]:} \PY{n}{index} \PY{o}{=} \PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Resimulation estimate}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+                    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Pathwise estimate}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Likelihood estimate}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{None}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ST}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}
+          \PY{n}{index} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{MultiIndex}\PY{o}{.}\PY{n}{from\PYZus{}product}\PY{p}{(}
+              \PY{n}{index}\PY{p}{,} \PY{n}{names}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Method}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Control}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+          \PY{n}{summary} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{table}\PY{p}{,} \PY{n}{columns}\PY{o}{=}\PY{p}{[}
+              \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Delta Est}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Delta Std Err}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Vega Est}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Vega Std Err}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{n}{index}\PY{p}{)}
+          \PY{n}{summary}
+\end{Verbatim}
+
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}155}]:}                                Delta Est  Delta Std Err   Vega Est  \textbackslash{}
+          Method                Control                                        
+          Resimulation estimate None      0.215372       0.004516  12.314589   
+                                ST        0.239428       0.003085  12.886542   
+          Pathwise estimate     None      0.221524       0.004567  12.104971   
+                                ST        0.241632       0.003103  13.104778   
+          Likelihood estimate   None      0.227373       0.007678  11.814198   
+                                ST        0.258395       0.006541  14.328298   
+          
+                                         Vega Std Err  
+          Method                Control                
+          Resimulation estimate None         0.276700  
+                                ST           0.177582  
+          Pathwise estimate     None         0.275398  
+                                ST           0.178031  
+          Likelihood estimate   None         0.679992  
+                                ST           0.675202  
+\end{Verbatim}
+        
+    \section{Digital Option Delta}\label{digital-option-delta}
+
+\subsection{Closed-form Solution}\label{closed-form-solution}
+
+In last homework, we have shown that the price of a digital call is
+given by \[
+c(t,x) = e^{-r(T-t)}N(d_2)
+\] Where \[
+d_2 = \frac{\log\frac{x}{K}+(r-\frac{1}{2}\sigma^2)(T-t)}{\sigma\sqrt{T-t}};~~~~S_t=x
+\] Therefore \[
+\begin{split}
+\Delta &= e^{-r(T-t)}\frac{\partial}{\partial x}N(d_2)\\
+&=e^{-r(T-t)}\frac{N'(d_2)}{\sigma x \sqrt{T-t}} \\
+\end{split}
+\]
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}159}]:} \PY{c+c1}{\PYZsh{} For this problem we have}
+          \PY{n}{d2} \PY{o}{=} \PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{l+m+mi}{95}\PY{o}{/}\PY{l+m+mi}{100}\PY{p}{)} \PY{o}{+} \PY{p}{(}\PY{o}{.}\PY{l+m+mi}{05}\PY{o}{\PYZhy{}}\PY{o}{.}\PY{l+m+mi}{5}\PY{o}{*}\PY{l+m+mf}{0.2}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{l+m+mf}{0.2}\PY{p}{)}
+          \PY{n}{delta} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mf}{0.05}\PY{p}{)}\PY{o}{*}\PY{n}{norm}\PY{o}{.}\PY{n}{pdf}\PY{p}{(}\PY{n}{d2}\PY{p}{)}\PY{o}{/}\PY{p}{(}\PY{l+m+mf}{0.2}\PY{o}{*}\PY{l+m+mi}{95}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{The Black\PYZhy{}Scholes Delta is:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{delta}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+The Black-Scholes Delta is: 0.019860050706
+
+    \end{Verbatim}
+
+    \subsection{Resimulation Method}\label{resimulation-method}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}170}]:} \PY{k}{def} \PY{n+nf}{gbm\PYZus{}digital\PYZus{}delta}\PY{p}{(}\PY{n}{S0}\PY{p}{,} \PY{n}{K}\PY{p}{,} \PY{n}{sigma}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{div}\PY{p}{,} 
+                                \PY{n}{T}\PY{p}{,} \PY{n}{h}\PY{p}{,} \PY{n}{path\PYZus{}sampler}\PY{p}{,}
+                                \PY{n}{n\PYZus{}steps}\PY{p}{,} \PY{n}{n\PYZus{}size}\PY{p}{)}\PY{p}{:}
+              \PY{n}{sample\PYZus{}left} \PY{o}{=}  \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{n\PYZus{}size}\PY{p}{)} 
+              \PY{n}{sample\PYZus{}right} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{n\PYZus{}size}\PY{p}{)}
+              \PY{n}{control} \PY{o}{=}  \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{n\PYZus{}size}\PY{p}{)}
+              \PY{n}{bar} \PY{o}{=} \PY{n}{ProgressBar}\PY{p}{(}\PY{p}{)}
+              \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n}{bar}\PY{p}{(}\PY{n+nb}{range}\PY{p}{(}\PY{n}{n\PYZus{}size}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+                  \PY{n}{S\PYZus{}left}\PY{p}{,} \PY{n}{S\PYZus{}right} \PY{o}{=} \PY{n+nb}{zip}\PY{p}{(}\PY{o}{*}\PY{n}{path\PYZus{}sampler}\PY{p}{(}
+                      \PY{n}{h}\PY{p}{,} \PY{n}{S0}\PY{p}{,} \PY{n}{sigma}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{div}\PY{p}{,} \PY{n}{T}\PY{p}{,} \PY{n}{n\PYZus{}steps}\PY{p}{)}\PY{p}{)}
+                  \PY{c+c1}{\PYZsh{}if j \PYZpc{} 10 == 0:print(S\PYZus{}left[\PYZhy{}1], S\PYZus{}right[\PYZhy{}1])}
+                  \PY{n}{sample\PYZus{}left}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{r}\PY{o}{*}\PY{n}{T}\PY{p}{)}\PY{o}{*}\PY{p}{(}\PY{n}{S\PYZus{}left}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZgt{}}\PY{o}{=}\PY{n}{K}\PY{p}{)}
+                  \PY{n}{sample\PYZus{}right}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{r}\PY{o}{*}\PY{n}{T}\PY{p}{)}\PY{o}{*}\PY{p}{(}\PY{n}{S\PYZus{}right}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZgt{}}\PY{o}{=}\PY{n}{K}\PY{p}{)}
+              \PY{n}{sample} \PY{o}{=} \PY{p}{(}\PY{n}{sample\PYZus{}right} \PY{o}{\PYZhy{}} \PY{n}{sample\PYZus{}left}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{h}\PY{p}{)}
+              \PY{n}{sample\PYZus{}mean} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{sample}\PY{p}{)}
+              \PY{n}{se} \PY{o}{=} \PY{n}{stats}\PY{o}{.}\PY{n}{sem}\PY{p}{(}\PY{n}{sample}\PY{p}{,} \PY{n}{ddof}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+              \PY{k}{return} \PY{n}{sample}\PY{p}{,} \PY{n}{sample\PYZus{}mean}\PY{p}{,} \PY{n}{se}
+          
+          \PY{n}{sample}\PY{p}{,} \PY{n}{delta}\PY{p}{,} \PY{n}{se} \PY{o}{=} \PY{n}{gbm\PYZus{}digital\PYZus{}delta}\PY{p}{(}
+              \PY{n}{S0}\PY{o}{=}\PY{l+m+mi}{95}\PY{p}{,} \PY{n}{K}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{sigma}\PY{o}{=}\PY{l+m+mf}{0.2}\PY{p}{,} \PY{n}{r}\PY{o}{=}\PY{l+m+mf}{0.05}\PY{p}{,} 
+              \PY{n}{div}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{T}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{h}\PY{o}{=}\PY{l+m+mf}{0.0001}\PY{p}{,} 
+              \PY{n}{path\PYZus{}sampler}\PY{o}{=}\PY{n}{gbm\PYZus{}delta\PYZus{}resimulate}\PY{p}{,}
+              \PY{n}{n\PYZus{}steps}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{n\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{10000}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}
+          \PY{l+s+s1}{GBM Resimulation for Digital Option:}
+          \PY{l+s+s1}{Delta = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{, SE of Delta = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{delta}\PY{p}{,} \PY{n}{se}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+100\% (10000 of 10000) |\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#| Elapsed Time: 0:00:04 Time: 0:00:04
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+GBM Resimulation for Digital Option:
+Delta = 0.0, SE of Delta = 0.0
+
+
+    \end{Verbatim}
+
+    The resimulation method performed very badly, because we are asking for
+a very small \(h=0.0001\), but only allow for a small sample size of
+\(n=10,000\). Consequently, it is highly unlikely that K lies between
+the final stock prices produced by the intial price pair \(S_0-h\) and
+\(S_0 +h\).
+
+We get a reasonable estimate using \(h=0.005\), and sample size
+\(n=300,000\), which took 2.5 minutes to run. So bad!
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}171}]:} \PY{n}{sample}\PY{p}{,} \PY{n}{delta}\PY{p}{,} \PY{n}{se} \PY{o}{=} \PY{n}{gbm\PYZus{}digital\PYZus{}delta}\PY{p}{(}
+              \PY{n}{S0}\PY{o}{=}\PY{l+m+mi}{95}\PY{p}{,} \PY{n}{K}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{sigma}\PY{o}{=}\PY{l+m+mf}{0.2}\PY{p}{,} \PY{n}{r}\PY{o}{=}\PY{l+m+mf}{0.05}\PY{p}{,} 
+              \PY{n}{div}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{T}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{h}\PY{o}{=}\PY{l+m+mf}{0.005}\PY{p}{,} 
+              \PY{n}{path\PYZus{}sampler}\PY{o}{=}\PY{n}{gbm\PYZus{}delta\PYZus{}resimulate}\PY{p}{,}
+              \PY{n}{n\PYZus{}steps}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{n\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{300000}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}
+          \PY{l+s+s1}{GBM Resimulation for Digital Option:}
+          \PY{l+s+s1}{Delta = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{, SE of Delta = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{delta}\PY{p}{,} \PY{n}{se}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+100\% (300000 of 300000) |\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#| Elapsed Time: 0:02:21 Time: 0:02:21
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+GBM Resimulation for Digital Option:
+Delta = 0.020927047339015712, SE of Delta = 0.002575658089607897
+
+
+    \end{Verbatim}
+
+    \subsection{Likelihood Method}\label{likelihood-method}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}173}]:} \PY{k}{def} \PY{n+nf}{gbm\PYZus{}likelihood\PYZus{}digital\PYZus{}delta}\PY{p}{(}\PY{n}{S0}\PY{p}{,} \PY{n}{K}\PY{p}{,} \PY{n}{sigma}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{div}\PY{p}{,} 
+                                           \PY{n}{T}\PY{p}{,} \PY{n}{n\PYZus{}steps}\PY{p}{,} \PY{n}{n\PYZus{}size}\PY{p}{)}\PY{p}{:}
+              \PY{n}{sample} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{n\PYZus{}size}\PY{p}{)}
+              \PY{n}{bar} \PY{o}{=} \PY{n}{ProgressBar}\PY{p}{(}\PY{p}{)}
+              \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n}{bar}\PY{p}{(}\PY{n+nb}{range}\PY{p}{(}\PY{n}{n\PYZus{}size}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+                  \PY{n}{S} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n}{gbm\PYZus{}exact}\PY{p}{(}
+                      \PY{n}{S0}\PY{p}{,} \PY{n}{sigma}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{div}\PY{p}{,} \PY{n}{T}\PY{p}{,} \PY{n}{n\PYZus{}steps}\PY{p}{)}\PY{p}{)}
+                  \PY{n}{sample}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{r}\PY{o}{*}\PY{n}{T}\PY{p}{)}\PY{o}{*}\PY{p}{(}\PY{n}{S}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZgt{}}\PY{o}{=}\PY{n}{K}\PY{p}{)}\PY{o}{*}\PY{p}{(}
+                      \PY{l+m+mi}{1}\PY{o}{/}\PY{p}{(}\PY{n}{S0}\PY{o}{*}\PY{n}{T}\PY{o}{*}\PY{n}{sigma}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}\PY{o}{*}\PY{p}{(}
+                      \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{S}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{/}\PY{n}{S0}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{p}{(}\PY{n}{r}\PY{o}{\PYZhy{}}\PY{n}{div}\PY{o}{\PYZhy{}}\PY{l+m+mf}{0.5}\PY{o}{*}\PY{n}{sigma}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{*}\PY{n}{T}\PY{p}{)}
+              \PY{n}{sample\PYZus{}mean} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{sample}\PY{p}{)}
+              \PY{n}{se} \PY{o}{=} \PY{n}{stats}\PY{o}{.}\PY{n}{sem}\PY{p}{(}\PY{n}{sample}\PY{p}{,} \PY{n}{ddof}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+              \PY{k}{return} \PY{n}{sample}\PY{p}{,} \PY{n}{sample\PYZus{}mean}\PY{p}{,} \PY{n}{se}
+          
+          \PY{n}{sample}\PY{p}{,} \PY{n}{delta}\PY{p}{,} \PY{n}{se} \PY{o}{=} \PY{n}{gbm\PYZus{}likelihood\PYZus{}digital\PYZus{}delta}\PY{p}{(}
+              \PY{n}{S0}\PY{o}{=}\PY{l+m+mi}{95}\PY{p}{,} \PY{n}{K}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{sigma}\PY{o}{=}\PY{l+m+mf}{0.2}\PY{p}{,} \PY{n}{r}\PY{o}{=}\PY{l+m+mf}{0.05}\PY{p}{,} 
+              \PY{n}{div}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{T}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{n\PYZus{}steps}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{n\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{10000}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}
+          \PY{l+s+s1}{GBM Likelihood Estimate for Digital Option:}
+          \PY{l+s+s1}{Delta = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{, SE of Delta = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}\PYZsq{}\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{delta}\PY{p}{,} \PY{n}{se}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+100\% (10000 of 10000) |\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#| Elapsed Time: 0:00:04 Time: 0:00:04
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+GBM Likelihood Estimate for Digital Option:
+Delta = 0.020046603571571883, SE of Delta = 0.0002959985626061557
+
+
+    \end{Verbatim}
+
+    Likelihood method is much better in this case. We simulated only 10000
+samples, and the standard error is about 1/10 of the resimulation method
+estimate.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} 
+\end{Verbatim}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+    \end{document}

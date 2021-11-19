@@ -1,0 +1,100 @@
+\documentclass[a4paper, 8pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz, array, eurosym}
+\usepackage{float}
+\renewcommand{\arraystretch}{1.4}
+\newcolumntype{L}{>{\arraybackslash}m{10cm}}
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+\title{\textbf{Optimization Assignment I}}
+\author{Ze Yang~~~~(zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+
+\begin{problem} (a)
+\begin{itemize}
+	\item[-] Cost of the portfolio is 2612.9048.
+	\item[-] Portfolio composition given by: $\bm{s}=(0,~0,~0,~0,~0,~0)^{\top}$,\\
+	$\bm{x}=(0, ~0,~ 10.1852, ~0, ~6.7151, ~0, ~2.5858,~ 0, ~3.3202, ~0, ~0.2911, ~0, ~3.2911)^{\top}$
+\end{itemize}
+(b) The dual variables of constraints $\bm{Fx}+\bm{Rs}=\bm{l}$ are: $\bm{\mu} = (0.95,~0.8864,~0.8269,~0.7589,~0.7014,~0.6205)^{\top}$. The implied interest rates are calculated by $\widetilde{r}_t = 1/(\mu_t)^{1/t} - 1$. We have:
+\begin{itemize}
+	\item[-] $\widetilde{\bm{r}} = (0.0526, ~0.0622, ~0.0654,~0.0714,~0.0735,~0.0828)^{\top}$
+\end{itemize}
+\end{problem}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} Similar formulation as the in-class problem, except that we separate cash flow table and variables by bond rating:
+\begin{equation}
+	\begin{split}
+		\underset{\bm{x}, \bm{s}}{\text{min}} ~~ & \bm{p}_A^{\top} \bm{x}_A + \bm{p}_B^{\top} \bm{x}_B \\
+		s.t.~~ & \bm{x}_A \succeq 0,~\bm{x}_B \succeq 0,~\bm{s} \succeq 0 \\
+		& \bm{F}_A \bm{x}_A + \bm{F}_B \bm{x}_B + \bm{Rs} = \bm{l} \\
+		& \bm{p}_A^{\top} \bm{x}_A \geq \bm{p}_B^{\top} \bm{x}_B
+	\end{split}
+\end{equation}
+\begin{itemize}
+	\item[-] The cost of the portfolio is 2605.9465.
+	\item[-] The portfolio composition is $\bm{x}_B = ( 0, ~0,~ 10.1852, ~3.2954, ~0, ~0)^{\top}$; and \\ $\bm{x}_A = (6.3614, ~0,~ 3.3976,~ 0, ~0.3614,~ 0, ~3.3614)^{\top}$. The last constraint is binding.
+\end{itemize}
+\end{problem}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} Let $\bm{X}:=(x_{ij})$, $\bm{y}:=(y_k)$, $\bm{A}$ be the exchange rate. The following program solves a \textit{sparse} $\bm{X}$ that admits an arbitrage:
+\begin{equation}
+	\begin{split}
+		\underset{\bm{X,y}}{\text{max}} ~~ &y_1 - \lambda \left\lVert \bm{X}\right\rVert_1 \\
+		s.t.~~ & y_1 \leq 1;~y_k \geq 0,~x_{ij}\geq 0~~\forall k,i,j = 1,...,5 \\
+		& y_k + \sum_{j=1,j\ne k}^5 x_{kj} = \sum_{i=1,i\ne k}^5 a_{ik}x_{ik}~~\forall k = 1,...,5 \\
+	\end{split}
+\end{equation}
+The solution contains a strictly positive $\bm{y}$, which implies that there is an arbitrage. The arbitrage is: $1000\text{ USD}\to 894.6\text{ EUR}\to 754.183584 \text{ GBP} \to 1302.248423 \text{ AUD}\to 1000.93527\text{ USD} > 1000\text{ USD}$, if the FX chain is transaction-cost-free.
+
+\end{problem}
+
+
+
+
+\end{document}

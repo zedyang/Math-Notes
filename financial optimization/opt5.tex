@@ -1,0 +1,148 @@
+\documentclass[a4paper, 8pt]{article}    
+\usepackage{geometry}       
+\geometry{a4paper}
+\geometry{margin=1in} 
+\usepackage{paralist}
+  \let\itemize\compactitem
+  \let\enditemize\endcompactitem
+  \let\enumerate\compactenum
+  \let\endenumerate\endcompactenum
+  \let\description\compactdesc
+  \let\enddescription\endcompactdesc
+  \pltopsep=\medskipamount
+  \plitemsep=1pt
+  \plparsep=1pt
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{bbm, bm}
+\usepackage{amsmath, amssymb, amsthm, mathrsfs}
+\usepackage{booktabs, tikz, array, eurosym}
+\usepackage{float}
+\renewcommand{\arraystretch}{1.4}
+\newcolumntype{L}{>{\arraybackslash}m{10cm}}
+\newcommand\indep{\protect\mathpalette{\protect\indeP}{\perp}}
+\def\indeP#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+\pagestyle{headings}
+\newcommand{\boxwidth}{430pt}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+\newtheoremstyle{hSol}
+  {1.0pt}% Space above
+  {1.0pt}% Space below
+  {}% bodyfont
+  {}% indent
+  {\bfseries}% thm head font
+  {.}% punctuation after thm head
+  { }% Space after thm head
+  {}% thm head spec
+
+\theoremstyle{hSol}
+\newtheorem*{solution}{Solution}
+
+
+\title{\textbf{Optimization Assignment 5}}
+\author{Ze Yang~~~~(zey@andrew.cmu.edu)}
+
+\begin{document}
+\maketitle
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} \textbf{(a)} Note that $Y$ and $\mu + \sigma Z$ are identically distributed, where $Z$ is standard normal.
+\begin{equation}
+	\begin{split}
+		&\text{VaR}_{\alpha}(Y) = \text{inf}\{y: \mathbb{P}\left(Y\geq y\right) = 1- \alpha\} =\text{inf}\{y: \mathbb{P}\left(\frac{Y-\mu}{\sigma}< \frac{y-\mu}{\sigma}\right) = \alpha\}\\
+		&\Rightarrow\quad \frac{\text{VaR}_{\alpha}(Y)-\mu}{\sigma}=\Phi^{-1}(\alpha) \quad \Rightarrow\quad  \text{VaR}_{\alpha}(Y)=\mu + \sigma \Phi^{-1}(\alpha) 
+	\end{split}
+\end{equation}
+~\\
+\begin{equation}
+	\begin{split}
+		\text{CVaR}_{\alpha}(Y) &= \mathbb{E}\left[Y | Y\geq\mu + \sigma \Phi^{-1}(\alpha) \right] =\mathbb{E}\left[\mu + \sigma Z | Z \geq\Phi^{-1}(\alpha) \right] = \frac{\mathbb{E}\left[\mu + \sigma Z ; Z \geq\Phi^{-1}(\alpha) \right]}{\mathbb{P}\left(Z \geq\Phi^{-1}(\alpha)\right)}\\
+		&= \frac{1}{1- \alpha }\left(\mu(1- \alpha) + \sigma\int_{\Phi^{-1}(\alpha)}^{\infty} \frac{z}{\sqrt{2\pi}} e^{-z^2/2}dz\right)= \mu + \sigma\frac{\phi(\Phi^{-1}(\alpha))}{1- \alpha}
+	\end{split}
+\end{equation}
+\textbf{(b)} Note that $Y$ and $e^{\mu + \sigma Z}$ are identically distributed, where $Z$ is standard normal.
+\begin{equation}
+	\begin{split}
+		&\text{VaR}_{\alpha}(Y) = \text{inf}\{y: \mathbb{P}\left(Y\geq y\right) = 1- \alpha\} =\text{inf}\{y: \mathbb{P}\left(\frac{\log Y-\mu}{\sigma}< \frac{\log y-\mu}{\sigma}\right) = \alpha\}\\
+		&\Rightarrow~~~\frac{\log \text{VaR}_{\alpha}(Y)-\mu}{\sigma}=\Phi^{-1}(\alpha) \quad \Rightarrow \quad\text{VaR}_{\alpha}(Y)= \exp\left(\mu + \sigma \Phi^{-1}(\alpha) \right)
+	\end{split}
+\end{equation}
+~\\
+\begin{equation}
+	\begin{split}
+		\text{CVaR}_{\alpha}(Y) &= \mathbb{E}\left[Y | Y\geq e^{\mu + \sigma \Phi^{-1}(\alpha)} \right] =\mathbb{E}\left[e^{\mu+\sigma Z} | Z \geq\Phi^{-1}(\alpha) \right] = \frac{\mathbb{E}\left[e^{\mu+\sigma Z} ; Z \geq\Phi^{-1}(\alpha) \right]}{\mathbb{P}\left(Z \geq\Phi^{-1}(\alpha)\right)}\\
+		&= \frac{1}{1- \alpha }\left(\int_{\Phi^{-1}(\alpha)}^{\infty} e^{\mu + \frac{\sigma^2}{2}}\frac{1}{\sqrt{2\pi}} e^{\frac{-z^2+2\sigma z - \sigma^2}{2}}dz\right)= \frac{1}{1- \alpha}e^{\mu+\frac{\sigma^2}{2}}\Phi(\sigma-\Phi^{-1}(\alpha))
+	\end{split}
+\end{equation}
+\end{problem}
+
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} \textbf{(a)} We setup a linear program to solve VaR and cVaR, the results are:
+\begin{equation}
+	\text{VaR}_{0.9}(Y) = 40\qquad \text{cVaR}_{0.9}(Y) = 44.0693
+\end{equation}
+\textbf{(b)} We achieve the cVaR optimization by adding one more free variable to the program above: the portfolio weights $\bm{x}$. The optimal portfolio is
+\begin{equation}
+	\bm{x}^* = \begin{pmatrix}
+		0.875 & 0.125 & 0
+	\end{pmatrix}^{\top}
+\end{equation}
+And the corresponding portfolio VaR and cVaR are:
+\begin{equation}
+	\text{VaR}_{0.9}(Y) = 8.75\qquad \text{cVaR}_{0.9}(Y) = 24.5853
+\end{equation}
+\end{problem} 
+\newpage
+\noindent\rule{16cm}{0.4pt}
+%///////////////////////////////////////////////////////////////////////
+\begin{problem} 
+\end{problem}
+\begin{equation}
+	\begin{split}
+		W_{t+1} = \begin{cases}
+		W_t(1+f_1+f_2) & \text{If win both gambles at time }t\\
+		W_t(1+f_1 - f_2) & \text{If win the first and lose the second gamble at time }t\\
+		W_t(1-f_1 + f_2) & \text{If win the second and lose the first gamble at time }t\\
+		W_t(1-f_1 - f_2) & \text{If lose both gambles }t\\
+		\end{cases}
+	\end{split}
+\end{equation}
+Therefore
+\begin{equation}
+	W_n = W_0 (1+f_1+f_2)^{\frac{k_{3}}{n}} (1-f_1+f_2)^{\frac{k_{2}}{n}} (1+f_1-f_2)^{\frac{k_{1}}{n}}(1-f_1-f_2)^{\frac{n-k_{1}-k_2-k_3}{n}}
+\end{equation}
+Let $g = \log(W_n/W_0)^{1/n}$, $x=f_1+f_2, y=f_1-f_2$ we have:
+\begin{equation}
+	\begin{split}
+		\mathbb{E}\left[ g\right] &= p_1p_2 \log(1+f_1+f_2) + (1-p_1)p_2 \log(1-f_1+f_2) + p_1(1-p_2) \log(1+f_1-f_2) \\
+		&~~~+ (1-p_1)(1-p_2)\log(1-f_1 - f_2) \\
+		&=p_1p_2 \log(1+x) + (1-p_1)p_2 \log(1-y) + p_1(1-p_2) \log(1+y) \\
+		&~~~+ (1-p_1)(1-p_2)\log(1-x) \\
+	\end{split}
+\end{equation}
+First order conditions:
+\begin{equation}
+	\begin{split}
+		&\nabla_{x} \mathbb{E}\left[g\right] = \frac{p_1p_2}{1+x} - \frac{(1-p_1)(1-p_2)}{1-x}=0\quad \Rightarrow\quad x=\frac{p_1+p_2 - 1}{2p_1p_2 -p_1 - p_2 + 1} \\
+		&\nabla_y \mathbb{E}\left[g\right] = \frac{p_1(1-p_2)}{1+y} - \frac{(1-p_1)p_2}{1-y} =0\quad \Rightarrow\quad y = \frac{p_1 - p_2}{-2p_1p_2 + p_1 + p_2}
+	\end{split}
+\end{equation}
+\begin{equation}
+	\begin{split}
+		f_1 = \frac{x+y}{2} = \frac{1}{2}\left(\frac{p_1+p_2 - 1}{2p_1p_2 -p_1 - p_2 + 1}+\frac{p_1 - p_2}{-2p_1p_2 + p_1 + p_2}\right) \\
+		f_2 = \frac{x-y}{2} = \frac{1}{2}\left(\frac{p_1+p_2 - 1}{2p_1p_2 -p_1 - p_2 + 1}-\frac{p_1 - p_2}{-2p_1p_2 + p_1 + p_2}\right)
+	\end{split}
+\end{equation}
+In this problem, we have $p_1 = p_2 = p$, therefore
+\begin{equation}
+	f_1 = f_2 = \frac{2p - 1}{2(2p^2-2p + 1)} = \frac{p^2 - (1-p)^2}{2(p^2 + (1-p)^2)}
+\end{equation}
+
+\end{document}

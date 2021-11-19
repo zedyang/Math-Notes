@@ -1,0 +1,661 @@
+
+% Default to the notebook output style
+
+    
+
+
+% Inherit from the specified cell style.
+
+
+
+
+    
+\documentclass[11pt]{article}
+
+    
+    
+    \usepackage[T1]{fontenc}
+    % Nicer default font (+ math font) than Computer Modern for most use cases
+    %\usepackage{mathpazo}
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx,bm}
+    % We will generate all images so they have a width \maxwidth. This means
+    % that they will get their normal width if they fit onto the page, but
+    % are scaled down if they would overflow the margins.
+    \makeatletter
+    \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
+    \else\Gin@nat@width\fi}
+    \makeatother
+    \let\Oldincludegraphics\includegraphics
+    % Set max figure width to be 80% of text width, for now hardcoded.
+    \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=.8\maxwidth]{#1}}
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionLabelFormat{nolabel}{}
+    \captionsetup{labelformat=nolabel}
+
+    \usepackage{adjustbox} % Used to constrain images to a maximum size 
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range 
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    
+
+    
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatability definitions
+    \def\gt{>}
+    \def\lt{<}
+    % Document parameters
+    \title{Asset Management HW4}
+    \author{Ze Yang}
+    
+    
+    
+
+    % Pygments definitions
+    
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % Exact colors from NB
+    \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
+    \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+
+
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+    \begin{document}
+    
+    
+    \maketitle
+    
+    \section*{Problem 2}
+\subsection*{2-(a)}
+\begin{equation}
+ \begin{split}
+   &\mathcal{L}(\bm{h}, \bm{\lambda}) = \bm{h}^{\top} \bm{h} + \lambda_1(\bm{a}^{\top} \bm{h} - 1) + \lambda_2 \bm{1}^{\top} \bm{h} \\
+   \Rightarrow \quad &
+   \nabla_{\bm{h}} \mathcal{L} = 2 \bm{h} + \lambda_1 \bm{a} + \lambda_2 \bm{1} = 0 \\
+   \Rightarrow \quad &
+   \begin{cases}
+   \bm{h} = -\frac{1}{2} (\lambda_1 \bm{a} + \lambda_2 \bm{1}) \\
+   \lambda_1 \bm{a}^{\top} \bm{a} +  \lambda_2 \bm{a}^{\top} \bm{1} = -2\\
+   \lambda_1 \bm{1}^{\top} \bm{a} + \lambda_2 n = 0
+   \end{cases} ~~\Rightarrow~~\begin{cases}
+   \lambda_1 = \frac{2}{(\bm{1}^{\top} \bm{a})^2/n - \bm{a}^{\top} \bm{a}}\\
+   \lambda_2 = \frac{2\cdot\bm{1}^{\top} \bm{a}/n}{\bm{a}^{\top} \bm{a} - (\bm{1}^{\top} \bm{a})^2/n}
+   \end{cases}\\
+   \Rightarrow\quad& \bm{h}^* = \frac{1}{\bm{a}^{\top} \bm{a} - (\bm{1}^{\top} \bm{a})^2/n} \bm{a} - \frac{\bm{1}^{\top} \bm{a}/n}{\bm{a}^{\top} \bm{a} - (\bm{1}^{\top} \bm{a})^2/n} \bm{1} \\
+   &~~~=  \frac{1}{n \sigma_{CS}^2(\bm{a})} \left(\bm{a} - \mu_{CS}(\bm{a}) \bm{1}\right) \\
+   &~~~= \frac{1}{n \sigma_{CS}(\bm{a})} \bm{z}
+ \end{split}
+ \end{equation} 
+ Hence $C=\frac{1}{n \sigma_{CS}(\bm{a})}$ for general solution. $C=1/n$ for zero cross-sectional mean and unit cross-sectional variance. In this special case: $\bm{h}^* = \frac{1}{n} \bm{a}$.
+
+ \subsection*{2-(b)}
+Let $\bm{b}_1^\top = (\bm{1}_k^{\top}~~ \bm{0}_{n-k}^{\top})$, $\bm{b}_2^\top = (\bm{0}_{k}^{\top}~~\bm{1}_{n-k}^{\top})$, i.e. $\bm{B} = (\bm{b}_1 ~~\bm{b}_2)$. The neutrality constraints are: $\bm{b}^{\top}_1 \bm{h} = \bm{b}^{\top}_2 \bm{h} = 0$. One of them is redundant since we already have constraint $\bm{1}^{\top} \bm{h}=0$, and $\bm{b}_1 + \bm{b}_2 = \bm{1}$. Let dual variable $\bm{\lambda} = (\lambda_1~~\lambda_2~~\lambda_3)^{\top}$. The KKT condition changes to:
+\begin{equation}
+  \begin{split}
+    &\nabla_{\bm{h}} \mathcal{L} = 2 \bm{h} + \lambda_1 \bm{a} + \lambda_2 \bm{1} + \lambda_3 \bm{b}_1 = 0 \\
+   \Rightarrow \quad &
+   \begin{cases}
+   \bm{h} = -\frac{1}{2} \begin{pmatrix}
+     \bm{a} & \bm{1} & \bm{b}_1 
+   \end{pmatrix} \bm{\lambda}\\
+   \begin{pmatrix}
+     \bm{a}^{\top} \bm{a} & \bm{a}^{\top} \bm{1} &  \bm{a}^{\top}\bm{b}_1  \\[1pt]
+     \bm{1}^{\top} \bm{a} & n & k  \\[1pt]
+     \bm{b}_1^{\top} \bm{a} & k & k  \\[1pt]
+   \end{pmatrix} \bm{\lambda} = \begin{pmatrix}
+     -2 \\
+     0 \\
+    0
+   \end{pmatrix}
+   \end{cases}\\
+   \text{(Gaussian Elimination)}~~\Rightarrow \quad &\begin{pmatrix}
+     \bm{a}^{\top} \bm{a} - \frac{(\bm{a}^{\top} \bm{b}_1)^2}{k}-\frac{(\bm{a}^{\top} \bm{b}_2)^2}{n-k} & 0 &  0  \\[1pt]
+     \bm{b}_2^{\top} \bm{a} & n-k & 0  \\[1pt]
+     \bm{b}_1^{\top} \bm{a} & k & k  \\[1pt]
+   \end{pmatrix} \bm{\lambda} = \begin{pmatrix}
+     -2 \\
+     0 \\
+    0
+   \end{pmatrix}\\
+   \Rightarrow \quad & \begin{pmatrix}
+     \lambda_1 \\
+     \lambda_2 \\
+     \lambda_3
+   \end{pmatrix} = \begin{pmatrix}
+     \frac{-2}{\bm{a}^{\top} \bm{a} - (\bm{a}^{\top} \bm{b}_1)^2/k-(\bm{a}^{\top} \bm{b}_2)^2/(n-k)} \\[3pt]
+     -\frac{\bm{a}^{\top} \bm{b}_2}{n-k} \lambda_1\\[3pt]
+     \left[\frac{\bm{a}^{\top} \bm{b}_2}{n-k} - \frac{\bm{a}^{\top} \bm{b}_1}{k}\right] \lambda_1\\[3pt]
+   \end{pmatrix}
+  \end{split}
+\end{equation}
+Therefore, 
+\begin{equation}
+  \begin{split}
+    \bm{h}^* &= -\frac{1}{2}\lambda_1 \left(\bm{a} -\frac{\bm{a}^{\top} \bm{b}_2}{n-k}\bm{1} + \left(\frac{\bm{a}^{\top} \bm{b}_2}{n-k} - \frac{\bm{a}^{\top} \bm{b}_1}{k}\right) \bm{b}_1\right) \\
+    &=-\frac{1}{2}\lambda_1 \left(\bm{a}  - \frac{\bm{a}^{\top} \bm{b}_1}{k} \bm{b}_1  -\frac{\bm{a}^{\top} \bm{b}_2}{n-k}\bm{b}_2\right) \\
+    &=-\frac{1}{2}\lambda_1 \left(\bm{a}  - \frac{\sum_{j=1}^k a_j}{k} \bm{b}_1  -\frac{\sum_{j=k+1}^n a_j}{n-k}\bm{b}_2\right) \\
+    &= -\frac{1}{2}\lambda_1 \widehat{\bm{a}} = C \widehat{\bm{a}}
+  \end{split}
+\end{equation}
+Where $C = -\frac{1}{2}\lambda_1 = 1\Big/\left[\bm{a}^{\top} \bm{a} - \frac{(\bm{a}^{\top} \bm{b}_1)^2}{k}-\frac{(\bm{a}^{\top} \bm{b}_2)^2}{n-k}\right]=1\Big/\left[\sum_{j=1}^n a_j^2 - \frac{(\sum_{j=1}^k a_j)^2}{k}-\frac{(\sum_{j=k+1}^n a_j)^2}{n-k}\right]$
+
+ \subsection*{2-(c)}
+ %By the higher level assumption we knew that $\bm{1}^{\top} \bm{a} = \bm{1}^{\top} \bm{b} = 0$.
+\begin{equation}
+  \bm{a}^{\top} \bm{h}^{SMB} = \sum_{k=1}^4\frac{1}{2|G_k|}\sum_{i\in G_k}a_i \text{sgn}(a_i)  = \sum_{k=1}^4\frac{1}{2|G_k|}\sum_{i\in G_k}|a_i|  = \sum_{k=1}^4 \frac{1}{2} = 2
+\end{equation}
+\begin{equation}
+  \bm{1}^{\top} \bm{h}^{SMB} = \sum_{k=1}^4\frac{1}{2|G_k|}\sum_{i\in G_k} \text{sgn}(a_i)  = \frac{|S|}{2|S|} - \frac{|B|}{2|B|} = 0
+\end{equation}
+\begin{equation}
+  \bm{b}^{\top} \bm{h}^{SMB} = \sum_{k=1}^4\frac{1}{2|G_k|}\sum_{i\in G_k}b_i \text{sgn}(a_i)= \sum_{k=1}^4\frac{1}{2|G_k|}\sum_{i\in G_k} \text{sgn}(a_ib_i) = \frac{|SH|}{2|SH|} + \frac{|BL|}{2|BL|} - \frac{|SL|}{2|SL|} - \frac{|BH|}{2|BH|} = 0
+\end{equation}
+\subsection*{2-(d)}
+We know from (c) that $\bm{a}^{\top} \bm{a}=\bm{b}^{\top} \bm{b}=n$, $\bm{1}^{\top} \bm{a}=|S|-|B|$, $\bm{1}^{\top} \bm{b} = |H|-|L|$, and $\bm{a}^{\top} \bm{b} = |SH|+|BL|-|SL|-|BH|$. Denote $A:=|SL|,B:=|SH|,C:=|BL|,D:=|BH|$. The KKT condition changes to:
+\begin{equation}
+  \begin{split}
+    &\nabla_{\bm{h}} \mathcal{L} = 2 \bm{h} + \lambda_1 \bm{a} + \lambda_2 \bm{1} + \lambda_3 \bm{b} = 0 \\
+   \Rightarrow \quad &
+   \begin{cases}
+   \bm{h} = -\frac{1}{2} \begin{pmatrix}
+     \bm{a} & \bm{1} & \bm{b} 
+   \end{pmatrix} \bm{\lambda}\\
+   \begin{pmatrix}
+     \bm{a}^{\top} \bm{a} & \bm{a}^{\top} \bm{1} &  \bm{a}^{\top}\bm{b}  \\[1pt]
+     \bm{1}^{\top} \bm{a} & n & \bm{1}^{\top} \bm{b}  \\[1pt]
+     \bm{b}^{\top} \bm{a} & \bm{b}^{\top} \bm{1} & \bm{b}^{\top} \bm{b}  \\[1pt]
+   \end{pmatrix} \bm{\lambda} = \begin{pmatrix}
+     -2 \\
+     0 \\
+    0
+   \end{pmatrix}
+   \end{cases}\\
+   \Rightarrow\quad & \begin{pmatrix}
+     A+B+C+D & A+B-C-D &  B+C-A-D  \\[1pt]
+     A+B-C-D & A+B+C+D &  B+D-A-C  \\[1pt]
+     B+C-A-D & B+D-A-C & A+B+C+D  \\[1pt]
+   \end{pmatrix} \bm{\lambda} = \begin{pmatrix}
+     -2 \\
+     0 \\
+    0
+   \end{pmatrix}\\
+   \Rightarrow \quad & \begin{pmatrix}
+     \lambda_1 \\
+     \lambda_2 \\
+     \lambda_3
+   \end{pmatrix} = \begin{pmatrix}
+     -\frac{AB+BC+AD+CD}{2(ABC+ABD+ACD+BCD)} \\[2pt]
+     -\frac{AB-CD}{2(ABC+ABD+ACD+BCD)}\\[2pt]
+      -\frac{AD-BC}{2(ABC+ABD+ACD+BCD)}
+   \end{pmatrix}
+   \end{split}
+   \end{equation}
+   Therefore
+   \begin{equation}
+     \begin{split}
+       \bm{h}^* &= \frac{(AB+BC+AD+CD)\bm{a} + (AB-CD)\bm{1} + (AD-BC) \bm{b}}{4(ABC+ABD+ACD+BCD)} \\
+       h_i^* &= \begin{cases}
+       \frac{ABC + ACD}{ABC+ABD+ACD+BCD} \cdot \frac{1}{2A} & i\in SL \\
+       \frac{ABD + BCD}{ABC+ABD+ACD+BCD} \cdot \frac{1}{2B} & i\in SH \\
+       \frac{ABC + ACD}{ABC+ABD+ACD+BCD} \cdot -\frac{1}{2C} & i\in BL \\
+       \frac{ABD + BCD}{ABC+ABD+ACD+BCD} \cdot -\frac{1}{2D} & i\in BH \\
+       \end{cases}
+     \end{split}
+   \end{equation}
+   The coefficient before the required quantity is not a constant unless
+   \begin{equation}
+     ABC + ACD = ABD + BCD
+   \end{equation}
+   That is, $\frac{1}{D} + \frac{1}{B} = \frac{1}{C} + \frac{1}{A}$ $\iff$ $\frac{1}{|BH|} + \frac{1}{|SH|} = \frac{1}{|BL|} + \frac{1}{|SL|}$. This is not necessarily the case. Hence, the proposition is disproved.
+
+    
+
+
+    \section*{Problem 3}\label{problem-3}
+
+\subsection*{3-(a)}\label{a}
+
+
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}4}]:}           const Mkt-RF    SMB    RMW     CMA
+        est      -0.042  0.018  0.011  0.129   1.025
+        t-stat   -0.486  0.849  0.381  3.169  22.795
+        p<0.05                           (*)     (*)
+        Adj.R\^{}2   0.500                             
+\end{Verbatim}
+        
+    \subsection*{3-(b)}\label{b}
+
+
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}5}]:}          const  Mkt-RF    SMB    RMW     CMA     MOM
+        est      0.050  -0.000  0.013  0.149   1.008  -0.129
+        t-stat   0.587  -0.009  0.448  3.787  23.191  -6.822
+        p<0.05                           (*)     (*)     (*)
+        Adj.R\^{}2  0.535                                      
+\end{Verbatim}
+        
+    \subsection*{3-(c)}\label{c}
+
+
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}6}]:}           const  Mkt-RF    SMB     RMW     CMA      MOM
+        est      -0.014   0.066  0.014  -0.054   0.972         
+        t-stat   -0.110   2.136  0.324  -0.913  14.783         
+        p<0.05              (*)                    (*)         
+        Adj.R\^{}2   0.279                                        
+        est       0.363  -0.008  0.020   0.028   0.900   -0.528
+        t-stat    4.289  -0.413  0.706   0.712  20.699  -28.009
+        p<0.05      (*)                            (*)      (*)
+        Adj.R\^{}2   0.686                                        
+\end{Verbatim}
+        
+    \subsection*{3-(d)}\label{d}
+
+
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}7}]:}                    const  Mkt-RF    SMB     RMW     CMA      MOM
+        HML      est      -0.042   0.018  0.011   0.129   1.025         
+                 t-stat   -0.486   0.849  0.381   3.169  22.795         
+                 p<0.05                             (*)     (*)         
+                 Adj.R\^{}2   0.500                                        
+        HML      est       0.050  -0.000  0.013   0.149   1.008   -0.129
+                 t-stat    0.587  -0.009  0.448   3.787  23.191   -6.822
+                 p<0.05                             (*)     (*)      (*)
+                 Adj.R\^{}2   0.535                                        
+        HML-DEV  est      -0.014   0.066  0.014  -0.054   0.972         
+                 t-stat   -0.110   2.136  0.324  -0.913  14.783         
+                 p<0.05              (*)                    (*)         
+                 Adj.R\^{}2   0.279                                        
+        HML-DEV  est       0.363  -0.008  0.020   0.028   0.900   -0.528
+                 t-stat    4.289  -0.413  0.706   0.712  20.699  -28.009
+                 p<0.05      (*)                            (*)      (*)
+                 Adj.R\^{}2   0.686                                        
+\end{Verbatim}
+        
+    \textbf{Comments}
+
+\begin{itemize}
+\tightlist
+\item
+  The results here are consistent with those in the article.
+\item
+  For HML, we observe its large and statistically significant exposures
+  on RMW, CMA, and MOM. The negative exposure to MOM indicates that the
+  return of HML and the return of MOM is negatively related.
+\item
+  HML has low, insignificant alpha when regressed on other factors. It
+  bespeaks that the HML factor is kind of "redundant", in the sense that
+  its risk premium can be almost fully expained by the risk premium of
+  some return series living in the space spanned by other factors
+  excluding HML.
+\item
+  HML-DEV can "resurrect" HML, in the sense that it still has large,
+  significant alpha (0.363\%, with t-statistic = 4.289) when regressed
+  to other factors. This indicates that HML-DEV is not "redundent" in
+  the above sense.
+\end{itemize}
+
+    \subsection*{3-(e)}\label{e}
+
+
+    \subsubsection*{1998 - 2018 Results}\label{results}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}9}]:} \PY{n}{prd1} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{p}{(}\PY{n}{df}\PY{o}{.}\PY{n}{Date}\PY{o}{\PYZgt{}}\PY{o}{=}\PY{l+m+mi}{199800}\PY{p}{)} \PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{df}\PY{o}{.}\PY{n}{Date}\PY{o}{\PYZlt{}}\PY{o}{=}\PY{l+m+mi}{201812}\PY{p}{)}\PY{p}{]}
+        \PY{n}{test\PYZus{}hml}\PY{p}{(}\PY{n}{prd1}\PY{p}{)}
+\end{Verbatim}
+
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}9}]:}           const Mkt-RF    SMB    RMW     CMA      MOM
+        est      -0.352  0.185  0.063  0.454   0.863         
+        t-stat   -2.408  4.898  1.209  7.109  12.248         
+        p<0.05      (*)    (*)           (*)     (*)         
+        Adj.R\^{}2   0.515                                      
+        est      -0.271  0.128  0.095  0.456   0.828   -0.128
+        t-stat   -1.917  3.366  1.887  7.445  12.181   -4.759
+        p<0.05             (*)           (*)     (*)      (*)
+        Adj.R\^{}2   0.554                                      
+        est      -0.377  0.359  0.002  0.322   0.863         
+        t-stat   -1.636  6.046  0.022  3.198   7.771         
+        p<0.05             (*)           (*)     (*)         
+        Adj.R\^{}2   0.265                                      
+        est      -0.015  0.108  0.144  0.330   0.706   -0.570
+        t-stat   -0.112  3.023  3.061  5.749  11.090  -22.576
+        p<0.05             (*)    (*)    (*)     (*)      (*)
+        Adj.R\^{}2   0.762                                      
+\end{Verbatim}
+        
+    \subsubsection*{1978 - 2008 Results}\label{results}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}10}]:} \PY{n}{prd1} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{p}{(}\PY{n}{df}\PY{o}{.}\PY{n}{Date}\PY{o}{\PYZgt{}}\PY{o}{=}\PY{l+m+mi}{197800}\PY{p}{)} \PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{df}\PY{o}{.}\PY{n}{Date}\PY{o}{\PYZlt{}}\PY{o}{=}\PY{l+m+mi}{200812}\PY{p}{)}\PY{p}{]}
+         \PY{n}{test\PYZus{}hml}\PY{p}{(}\PY{n}{prd1}\PY{p}{)}
+\end{Verbatim}
+
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}10}]:}           const  Mkt-RF     SMB     RMW     CMA      MOM
+         est       0.023  -0.044  -0.087   0.173   0.911         
+         t-stat    0.208  -1.659  -2.339   3.754  16.527         
+         p<0.05                      (*)     (*)     (*)         
+         Adj.R\^{}2   0.553                                         
+         est       0.118  -0.047  -0.053   0.212   0.904   -0.127
+         t-stat    1.113  -1.847  -1.469   4.717  17.022   -5.450
+         p<0.05                              (*)     (*)      (*)
+         Adj.R\^{}2   0.586                                         
+         est      -0.008  -0.031  -0.192  -0.078   0.820         
+         t-stat   -0.051  -0.809  -3.551  -1.168  10.192         
+         p<0.05                      (*)             (*)         
+         Adj.R\^{}2   0.303                                         
+         est       0.378  -0.044  -0.056   0.080   0.791   -0.516
+         t-stat    3.622  -1.757  -1.582   1.801  15.124  -22.422
+         p<0.05      (*)                             (*)      (*)
+         Adj.R\^{}2   0.705                                         
+\end{Verbatim}
+        
+    \subsubsection*{1968 - 1988 Results}\label{results}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}11}]:} \PY{n}{prd1} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{p}{(}\PY{n}{df}\PY{o}{.}\PY{n}{Date}\PY{o}{\PYZgt{}}\PY{o}{=}\PY{l+m+mi}{196800}\PY{p}{)} \PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{df}\PY{o}{.}\PY{n}{Date}\PY{o}{\PYZlt{}}\PY{o}{=}\PY{l+m+mi}{198812}\PY{p}{)}\PY{p}{]}
+         \PY{n}{test\PYZus{}hml}\PY{p}{(}\PY{n}{prd1}\PY{p}{)}
+\end{Verbatim}
+
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}11}]:}          const  Mkt-RF    SMB     RMW     CMA      MOM
+         est      0.236  -0.082  0.049  -0.319   0.874         
+         t-stat   1.982  -3.127  1.250  -3.850  11.732         
+         p<0.05     (*)     (*)            (*)     (*)         
+         Adj.R\^{}2  0.621                                        
+         est      0.276  -0.079  0.039  -0.293   0.877   -0.060
+         t-stat   2.294  -3.040  0.986  -3.521  11.841   -1.997
+         p<0.05     (*)     (*)            (*)     (*)      (*)
+         Adj.R\^{}2  0.626                                        
+         est      0.403  -0.112  0.124  -0.518   0.761         
+         t-stat   2.470  -3.139  2.324  -4.565   7.464         
+         p<0.05     (*)     (*)    (*)     (*)     (*)         
+         Adj.R\^{}2  0.487                                        
+         est      0.671  -0.094  0.055  -0.344   0.782   -0.412
+         t-stat   5.201  -3.372  1.304  -3.845   9.836  -12.677
+         p<0.05     (*)     (*)            (*)     (*)      (*)
+         Adj.R\^{}2  0.689                                        
+\end{Verbatim}
+        
+    \textbf{Comments}
+
+\begin{itemize}
+\tightlist
+\item
+  The results in (d) is not always the case over different sample
+  period.
+\item
+  Over 1998 - 2018, HML-DEV does not have significant alpha, but HML has
+  significant negative alpha when regressed to the other FF 4 factors.
+\item
+  Over 1978 - 2008, the results in (d) hold in a similar way.
+\item
+  Over 1968 - 1988, Both HML and HML-DEV are not redundent (have
+  significant positive alphas). Most pricing factors turn out to be more
+  effective in early times. Nevertheless, HML-DEV still has better
+  (larger, and more significant) alphas compared with HML. So it's
+  legitimate to say that the paper's main idea still holds in this
+  period.
+\end{itemize}
+
+    \subsubsection*{3-(f)}\label{f}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}13}]:} \PY{n}{rep5}
+\end{Verbatim}
+
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}13}]:}           const Mkt-RF     SMB    RMW    CMA     MOM HML-DEV
+         est      -0.231  0.006  -0.003  0.128  0.312   0.280   0.773
+         t-stat   -4.236  0.488  -0.155  5.096  8.657  15.407  29.913
+         p<0.05      (*)                   (*)    (*)     (*)     (*)
+         Adj.R\^{}2   0.813                                             
+\end{Verbatim}
+        
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}14}]:} \PY{n}{rep6}
+\end{Verbatim}
+
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}14}]:}          const  Mkt-RF    SMB     RMW    CMA      MOM     HML
+         est      0.325  -0.008  0.010  -0.087  0.120   -0.429   0.773
+         t-stat   6.041  -0.639  0.567  -3.450  3.171  -34.512  29.913
+         p<0.05     (*)                    (*)    (*)      (*)     (*)
+         Adj.R\^{}2  0.874                                               
+\end{Verbatim}
+        
+    \textbf{Comments}
+
+\begin{itemize}
+\tightlist
+\item
+  HML-DEV has positive and significant alpha, while HML has negative
+  significant alpha.
+\item
+  Therefore, HML-DEC is more profitable when other factors are being
+  controled.
+\end{itemize}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+    \end{document}

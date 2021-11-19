@@ -1,0 +1,113 @@
+---
+title: "Timeseries HW5"
+author: "Ze YANG"
+date: "10/7/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Macro Vars
+## Question (a)
+
+```{r fig.width=8, fig.asp=1}
+library(vars)
+source("https://people.orie.cornell.edu/davidr/SDAFE2/Rscripts/SDAFE2.R")
+macro.data = read.csv('MacroVars.csv')
+acf(macro.data)
+```
+
+```{r fig.width=8, fig.asp=1}
+par(mfrow = c(3,3))
+ccf(macro.data$GDP251, macro.data$GDP251)
+ccf(macro.data$GDP251, macro.data$FYFF)
+ccf(macro.data$GDP251, macro.data$CPIAUCSL)
+ccf(macro.data$FYFF, macro.data$GDP251)
+ccf(macro.data$FYFF, macro.data$FYFF)
+ccf(macro.data$FYFF, macro.data$CPIAUCSL)
+ccf(macro.data$CPIAUCSL, macro.data$GDP251)
+ccf(macro.data$CPIAUCSL, macro.data$FYFF)
+ccf(macro.data$CPIAUCSL, macro.data$CPIAUCSL)
+```
+**Interesting Observations**
+
+- All the three series have autocorrelation on their own.
+- Some pairs of series also have cross serial correlation. The most significant one is the cross-serial correlation between `GDP251` and `FYFF`. The second ccf plot suggests there is positive correlations on negative lags, and negative correlations on positive lags for this pair. 
+- That is: An above-average change in GDP predicts an above-average change in federal funds rate. But an above-average change in Federal funds rate redicts a below-average change in GDP. This is kinda consistant to the debt-GDP cycle in the real life.
+
+## Question (b)
+```{r fig.width=8, fig.asp=1}
+var.fit = VAR(macro.data, lag.max=8)
+var.fit$p
+summary(var.fit)
+```
+
+A model of $p=7$ is chosen in this cased based on AIC criterion.
+
+## Question (c)
+```{r fig.width=8, fig.asp=1}
+acf(residuals(var.fit))
+mLjungBox(residuals(var.fit), lag=20)
+```
+
+**Comments**
+
+- The multivariate Ljung-Box test has a p-value = 0.971. Meaning that we fail to reject the null hypothesis: the residual series has no serial correlation within or between all variables.
+- The ACF plots of residuals also display no significant serial correlation for the residuals. Thus we conclude that the VAR fit is likely to be adequate.
+
+# Ruppert & Matteson R Lab
+## Problem 7
+```{r}
+TbGdpPi = read.csv("TbGdpPi.csv", header=TRUE)
+TbPi.diff = ts(apply(TbGdpPi[,-2], 2, diff), start=c(1955, 2), freq=4)
+plot(TbPi.diff)
+```
+
+```{r fig.width=8, fig.asp=0.8}
+acf(TbPi.diff^2)
+mLjungBox(TbPi.diff^2, lag=8)
+```
+
+**Answer**:
+Yes, the joint series exhibit conditional heteroskedasticity. Because both series has clear volatility clustering pattern: $r_t$ has high variance in early 1980s, while $\pi_t$ has high variance during 2000s.
+
+## Problem 8
+```{r fig.width=8, fig.asp=0.8}
+EWMA.param = est.ewma(lambda.0 = 0.95, innov=TbPi.diff)
+EWMA.param$lambda.hat
+EWMA.Sigma = sigma.ewma(lambda = EWMA.param$lambda.hat, innov=TbPi.diff)
+
+par(mfrow = c(2,2))
+plot(ts(EWMA.Sigma[1,1,]^.5, start = c(1955, 2), frequency = 4),
+     type = 'l', xlab = "year", ylab = NULL,
+     main = expression(paste("(a) ", {hat(sigma)[{"1,t"}]})))
+plot(ts(EWMA.Sigma[1,2,], start = c(1955, 2), frequency = 4),
+     type = 'l', xlab = "year", ylab = NULL,
+     main = expression(paste("(b) ", {hat(sigma)[{"12,t"}]})))
+plot(ts(EWMA.Sigma[1,2,]/(sqrt(EWMA.Sigma[1,1,]* EWMA.Sigma[2,2,])),
+        start = c(1955, 2), frequency = 4),type = 'l', xlab = "year", 
+     ylab = NULL,main = expression(paste("(c) ", {hat(rho)[{"12,t"}]})))
+plot(ts(EWMA.Sigma[2,2,]^.5, start = c(1955, 2), frequency = 4),
+     type = 'l', xlab = "year", ylab = NULL,
+     main = expression(paste("(d) ", {hat(sigma)[{"2,t"}]})))
+```
+
+**Answer**: The estimated persisitence parameter is $\hat{\lambda} = 0.8665812$.
+
+## Problem 9
+```{r fig.width=8, fig.asp=0.8}
+n = dim(TbPi.diff)[1]
+d = dim(TbPi.diff)[2]
+stdResid.EWMA = matrix(0,n,d)
+for(t in 1:n){
+  stdResid.EWMA[t,] = TbPi.diff[t,] %*% matrix.sqrt.inv(EWMA.Sigma[,,t])}
+mLjungBox(stdResid.EWMA^2, lag=8)
+acf(stdResid.EWMA^2)
+```
+
+**Answer**: It is likely that the EWMA model is not very adequate based on the results of multivariate Ljung-Box test. Because:
+
+- The p-value of the test is $0.002$, small. Therefore we can reject the null hypothesis $H_0: \{\text{The standardized residual series have neither serial correlation within series nor between series up to lag 8}\}$. 
+- The ACF plots of the standardized residual series also suggests that there are significant amount of remaining serial correlations (the parts beyond the dashed blue line thresholds).
